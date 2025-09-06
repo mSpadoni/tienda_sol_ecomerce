@@ -16,6 +16,13 @@ app.get("/hello", (req, res) => {
   res.json({ message: "hello world" });
 });
 
+app.get("/health", (req, res) => {
+  res.status(200).json({
+    status: "ok",
+    timestamp: new Date().toISOString(),
+  });
+});
+
 app.listen(process.env.SERVER_PORT, () => {
   console.log(`Backend escuchando en puerto ${process.env.SERVER_PORT}`);
 });

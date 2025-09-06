@@ -8,9 +8,11 @@ import { FactoryNotificacion } from "./FactoryNotificacion";
 import { randomUUID } from "crypto";
 
 export class Pedido {
+  
   constructor(usuario, items, moneda, direccionEntrega, fechaCreacion) {
     this.id = randomUUID();
     this.comprador = usuario;
+    this.vendedor = obtenerVendedor();
     this.items = items;
     this.total = calcularTotal();
     this.moneda = moneda;
@@ -18,6 +20,8 @@ export class Pedido {
     this.estado = EstadoPedido.PENDIENTE;
     this.fechaCreacion = fechaCreacion;
     this.historialEstado = [];
+    this.notificadorFactory = FactoryNotificacion.getInstance()
+    notificadorFactory.crearSegunPedido(this)
   }
 
   calcularTotal() {
@@ -36,6 +40,7 @@ export class Pedido {
       motivo,
     );
     this.historialEstado.push(cambioEstadoPedido);
+    //notificadorFactory.crearSegunPedido(this) A ultra chequear
   }
 
   validarStock() {

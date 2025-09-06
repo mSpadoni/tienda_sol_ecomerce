@@ -13,7 +13,7 @@ export class Producto {
     moneda,
     stock,
     fotos,
-    activo,
+    activo
   ) {
     this.id = randomUUID();
     this.vendedor = vendedor;
