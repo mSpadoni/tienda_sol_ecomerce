@@ -13,7 +13,7 @@ export class Producto {
     moneda,
     stock,
     fotos,
-    activo
+    activo,
   ) {
     this.id = randomUUID();
     this.vendedor = vendedor;
@@ -39,7 +39,7 @@ export class Producto {
     this.stock += cantidad;
   }
 
-  getVendedor(){
-    return this.vendedor
+  getVendedor() {
+    return this.vendedor;
   }
 }

@@ -8,7 +8,6 @@ import { FactoryNotificacion } from "./FactoryNotificacion";
 import { randomUUID } from "crypto";
 
 export class Pedido {
-  
   constructor(usuario, items, moneda, direccionEntrega, fechaCreacion) {
     this.id = randomUUID();
     this.comprador = usuario;
@@ -20,8 +19,8 @@ export class Pedido {
     this.estado = EstadoPedido.PENDIENTE;
     this.fechaCreacion = fechaCreacion;
     this.historialEstado = [];
-    this.notificadorFactory = FactoryNotificacion.getInstance()
-    notificadorFactory.crearSegunPedido(this)
+    this.notificadorFactory = FactoryNotificacion.getInstance();
+    notificadorFactory.crearSegunPedido(this);
   }
 
   calcularTotal() {
@@ -47,7 +46,7 @@ export class Pedido {
     return this.items.every((item) => item.estaDisponible());
   }
 
-  obtenerVendedor(){
+  obtenerVendedor() {
     return this.items[0].obtenerVendedor();
   }
 }
