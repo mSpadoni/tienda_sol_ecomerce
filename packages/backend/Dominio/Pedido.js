@@ -20,7 +20,7 @@ export class Pedido {
     this.fechaCreacion = fechaCreacion;
     this.historialEstado = [];
     this.notificadorFactory = FactoryNotificacion.getInstance();
-    notificadorFactory.crearSegunPedido(this);
+    //notificadorFactory.crearSegunPedido(this);
   }
 
   calcularTotal() {
@@ -39,7 +39,7 @@ export class Pedido {
       motivo,
     );
     this.historialEstado.push(cambioEstadoPedido);
-    //notificadorFactory.crearSegunPedido(this) A ultra chequear
+    //notificadorFactory.crearSegunPedido(this);
   }
 
   validarStock() {
