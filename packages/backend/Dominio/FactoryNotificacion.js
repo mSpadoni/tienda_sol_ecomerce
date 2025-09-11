@@ -18,10 +18,6 @@ export class FactoryNotificacion {
   }
 
   crearSegunEstadoPedido(estado) {
-    return `El pedido ha pasado a estado ${estado}`;
-  }
-
-  crearSegunEstadoPedido(estado) {
     switch (estado) {
       case EstadoPedido.PENDIENTE:
         return "Se ha creado un nuevo pedido y está pendiente de confirmación, ";
