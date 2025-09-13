@@ -1,7 +1,7 @@
 import { randomUUID } from "crypto";
-import { Usuario } from "./Usuario";
+import Usuario from "./Usuario";
 
-export class Notificacion {
+export default class Notificacion {
   constructor(usuario, mensaje, fechaAlta) {
     this.id = randomUUID();
     this.usuario = usuario;

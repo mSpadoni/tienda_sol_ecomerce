@@ -1,6 +1,6 @@
-import { Producto } from "./Producto.js";
+import Producto from "./Producto.js";
 
-export class ItemPedido {
+export default class ItemPedido {
   constructor(producto, cantidad, precioUnitario) {
     this.producto = producto;
     this.cantidad = cantidad;

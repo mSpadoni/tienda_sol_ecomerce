@@ -1,4 +1,4 @@
-export class CambioEstadoPedido {
+export default class CambioEstadoPedido {
   constructor(fecha, estado, pedido, usuario, motivo) {
     this.fecha = fecha;
     this.estado = estado;

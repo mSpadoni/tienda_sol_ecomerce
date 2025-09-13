@@ -1,26 +1,22 @@
-import { CambioEstadoPedido } from "./CambioEstadoPedido";
-import { ItemPedido } from "./ItemPedido";
-import { Moneda } from "./Moneda";
-import { Usuario } from "./Usuario";
-import { DireccionEntrega } from "./DireccionEntrega";
+import CambioEstadoPedido  from "./CambioEstadoPedido";
+import ItemPedido from "./ItemPedido";
+import  { Moneda }from "./Moneda";
+import Usuario from "./Usuario";
+import DireccionEntrega from "./DireccionEntrega";
 import { EstadoPedido } from "./EstadoPedido";
-import { FactoryNotificacion } from "./FactoryNotificacion";
+import  FactoryNotificacion from "./FactoryNotificacion";
 import { randomUUID } from "crypto";
 
-export class Pedido {
+export default class Pedido {
   constructor(usuario, items, moneda, direccionEntrega, fechaCreacion) {
     this.id = randomUUID();
     this.comprador = usuario;
-    this.vendedor = obtenerVendedor();
     this.items = items;
-    this.total = calcularTotal();
     this.moneda = moneda;
     this.direccionEntrega = direccionEntrega;
     this.estado = EstadoPedido.PENDIENTE;
     this.fechaCreacion = fechaCreacion;
     this.historialEstado = [];
-    this.notificadorFactory = FactoryNotificacion.getInstance();
-    //notificadorFactory.crearSegunPedido(this);
   }
 
   calcularTotal() {
@@ -31,7 +27,7 @@ export class Pedido {
 
   actualizarEstado(nuevoEstado, usuario, motivo) {
     this.estado = nuevoEstado;
-    let cambioEstadoPedido = new CambioEstadoPedido(
+    const cambioEstadoPedido = new CambioEstadoPedido(
       new Date(),
       nuevoEstado,
       this,
@@ -39,7 +35,7 @@ export class Pedido {
       motivo,
     );
     this.historialEstado.push(cambioEstadoPedido);
-    //notificadorFactory.crearSegunPedido(this);
+    // notificadorFactory.crearSegunPedido(this);
   }
 
   validarStock() {
