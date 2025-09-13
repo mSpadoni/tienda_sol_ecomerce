@@ -1,7 +1,7 @@
 import { randomUUID } from "crypto";
-import { TipoUsuario } from "./TipoUsuario";
+import { TipoUsuario } from "./TipoUsuario.js";
 
-export class Usuario {
+export default class Usuario {
   constructor(nombre, email, telefono, tipo, fechaAlta) {
     this.id = randomUUID();
     this.nombre = nombre;

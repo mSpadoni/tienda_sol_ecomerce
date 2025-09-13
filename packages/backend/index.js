@@ -1,8 +1,18 @@
-import "dotenv/config";
+import dotenv from "dotenv";
 import express from "express";
 import cors from "cors";
+import NotificacionesRepository  from "./models/repository/notificacionesRepository.js";
+import NotificacionesService from "./service/notificacionesService.js";
+import NotificacionesController from "./controller/notificacionesController.js";
+import routes from "./routes/routes.js"
+import { Server } from "./server.js"
 
 const app = express();
+
+const port = process.env.SERVER_PORT || 3001;
+dotenv.config();
+const server = new Server(app, port);
+
 app.use(express.json());
 app.use(
   cors({
@@ -11,10 +21,6 @@ app.use(
       : true,
   }),
 );
-
-app.get("/hello", (req, res) => {
-  res.json({ message: "hello world" });
-});
 
 app.get("/health", (req, res) => {
   res.status(200).json({
@@ -26,3 +32,13 @@ app.get("/health", (req, res) => {
 app.listen(process.env.SERVER_PORT, () => {
   console.log(`Backend escuchando en puerto ${process.env.SERVER_PORT}`);
 });
+
+const notificacionesRepository = new NotificacionesRepository();
+const notificacionesService = new NotificacionesService(notificacionesRepository);
+const notificacionesController = new NotificacionesController(notificacionesService);
+
+server.setController(NotificacionesController, notificacionesController)
+
+routes.forEach(route  => {server.addRoute(route)});
+server.configureRoutes();
+server.launch();

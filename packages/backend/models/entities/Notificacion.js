@@ -1,5 +1,5 @@
 import { randomUUID } from "crypto";
-import Usuario from "./Usuario";
+import Usuario from "./Usuario.js";
 
 export default class Notificacion {
   constructor(usuario, mensaje, fechaAlta) {
@@ -14,5 +14,9 @@ export default class Notificacion {
   marcarComoLeida() {
     this.leida = true;
     this.fechaLeida = new Date();
+  }
+  
+  estaLeida(){
+    return this.leida === true;
   }
 }
