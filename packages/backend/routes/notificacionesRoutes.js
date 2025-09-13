@@ -9,7 +9,6 @@ export default function notificacionesRoutes(getController) {
 
     router.get(pathNotificaciones, (req, res) => controller.getNotificaciones(req, res));
     router.get(pathNotificaciones + "/:id", (req, res) => controller.getNotificacionById(req, res));
-    router.post(pathNotificaciones + "/:id/leer", (req, res) => controller.marcarNotificacionComoLeida(req, res));
-    router.put(pathNotificaciones + "/:id/leer", (req, res) => controller.marcarNotificacionComoLeida(req, res));
+    router.patch(pathNotificaciones + "/:id/leer", (req, res) => controller.marcarNotificacionComoLeida(req, res));
     return router;
 }

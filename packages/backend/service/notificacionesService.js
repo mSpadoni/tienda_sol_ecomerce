@@ -7,4 +7,11 @@ export default class NotificacionesService{
         return this.notificacionesRepository.getNotificaciones(filtros)
     }
 
+    marcarNotificacionComoLeida(id){
+        return this.notificacionesRepository.marcarNotificacionComoLeida(id);
+    }
+
+    getNotificacionById(id){
+        return this.notificacionesRepository.findById(id);
+    }
 } 

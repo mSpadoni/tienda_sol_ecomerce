@@ -22,10 +22,12 @@ export default class NotificacionesRepository {
     marcarNotificacionComoLeida(id){
         const notificacion = this.findById(id);
         if(notificacion){
-            notificacion.marcarComoLeida;
+            notificacion.marcarComoLeida();
         }
+        return notificacion
     }
+
     findById(id){
-        return this.notificaciones.find(n => n.id === id);
+        return this.notificaciones.find(n => n.id == id);
     }
 }
