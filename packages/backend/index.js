@@ -4,6 +4,7 @@ import cors from "cors";
 import  Server from "./Server.js";
 import { ControllerPedido } from "./controllers/ControllerPedido.js";
 import routes from "./routes/routesPedido.js";
+import { PedidoRepository } from "./repository/pedidoRepository.js";
 
 const app = express();
 app.use(express.json());
@@ -30,10 +31,14 @@ app.use(
    
 const port = process.env.SERVER_PORT || 3000
 
-// Se envía al server el puerto
+// Crear Server pedidos
 const serverPedido = new Server(app, port);
-const controllerPedido = new ControllerPedido();
+
+const repositorioPedido = new PedidoRepository();
+const servicePedido = new pedidoService(repositorioPedido);
+const controllerPedido = new ControllerPedido(servicePedido);
 serverPedido.setController(ControllerPedido, controllerPedido);
+
 
 routes.forEach(route => serverPedido.addRoute(route));
 server.configureRoutes();
