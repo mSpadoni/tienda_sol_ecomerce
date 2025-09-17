@@ -1,7 +1,4 @@
 import { randomUUID } from "crypto";
-import Usuario from "./Usuario";
-import Categoria from "./Categoria";
-import { Moneda } from "./Moneda";
 
 export default class Producto {
   constructor(
