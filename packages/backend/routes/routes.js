@@ -1,6 +1,8 @@
 import notificacionesRoutes from "./notificacionesRoutes.js";
+import productosRoutes from "./productosRoutes.js";
 
 const routes = [
-    notificacionesRoutes
+    notificacionesRoutes,
+    productosRoutes,
 ]
 export default routes

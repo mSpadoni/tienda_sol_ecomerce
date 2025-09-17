@@ -1,7 +1,7 @@
 import { randomUUID } from "crypto";
-import Usuario from "./Usuario";
-import Categoria from "./Categoria";
-import { Moneda } from "./Moneda";
+import Usuario from "./Usuario.js";
+import Categoria from "./Categoria.js";
+import { Moneda } from "./Moneda.js";
 
 export default class Producto {
   constructor(
@@ -41,5 +41,25 @@ export default class Producto {
 
   getVendedor() {
     return this.vendedor;
+  }
+  
+  contieneCategoria(categoriaBuscada) {
+    return this.categorias.some(categoria => categoria == categoriaBuscada);
+  }
+
+  getNombre(){
+    return this.nombre;
+  }
+
+  getDescripcion(){
+    return this.descripcion;
+  }
+
+  getIdVendedor(){
+    return this.vendedor.getId();
+  }
+
+  getActivo(){
+    return this.activo;
   }
 }
