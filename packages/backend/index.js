@@ -1,16 +1,20 @@
-import "dotenv/config";
+import dotenv from "dotenv";
 import express from "express";
 import cors from "cors";
-import  Server from "./Server.js";
-import { ControllerPedido } from "./controllers/ControllerPedido.js";
-import routes from "./routes/routesPedido.js";
-import { PedidoRepository } from "./repository/pedidoRepository.js";
+import Server from "./Server.js";
+import ControllerUsuarios from "./controller/ControllerUsuarios.js";
+import ControllerPedido from "./controller/ControllerPedidos.js";
+import UsuarioService from "./service/usuarioService.js";
+import PedidoService from "./service/pedidoService.js";
+import PedidoRepository from "./repository/pedidoRepository.js";
+import ProductoRepository from "./repository/productoRepository.js";
+import UsuarioRepository from "./repository/usuariosRepository.js";
+import routes from "./routes/routes.js";
 
 const app = express();
 app.use(express.json());
+
 dotenv.config();
-
-
 app.use(
   cors({
     origin: process.env.ALLOWED_ORIGINS
@@ -19,27 +23,41 @@ app.use(
   }),
 );
 
- 
-  app.get("/health", (req, res) => {
-       res.status(200).json({
+app.get("/health", (req, res) => {
+  res.status(200).json({
     status: "ok",
     timestamp: new Date().toISOString(),
-   })
-  })
+  });
+});
 
-   
-   
-const port = process.env.SERVER_PORT || 3000
+// Configurar el puerto
+const port = process.env.SERVER_PORT || 3000;
 
-// Crear Server pedidos
-const serverPedido = new Server(app, port);
+// Crear instancia del servidor
+const server = new Server(app, port);
 
-const repositorioPedido = new PedidoRepository();
-const servicePedido = new pedidoService(repositorioPedido);
+// Crear instancias de repositorios
+const pedidoRepository = new PedidoRepository();
+const usuarioRepository = new UsuarioRepository();
+const productoRepository = new ProductoRepository();
+
+// Crear instancias de servicios
+const usuarioService = new UsuarioService(pedidoRepository);
+const servicePedido = new PedidoService(
+  pedidoRepository,
+  usuarioRepository,
+  productoRepository,
+);
+
+// Crear instancias de controladores
+const controllerUsuarios = new ControllerUsuarios(usuarioService);
 const controllerPedido = new ControllerPedido(servicePedido);
-serverPedido.setController(ControllerPedido, controllerPedido);
 
-
-routes.forEach(route => serverPedido.addRoute(route));
+// Configurar rutas y controladores en el servidor
+server.setController(ControllerUsuarios, controllerUsuarios);
+server.setController(ControllerPedido, controllerPedido);
+routes.forEach((route) => server.addRoute(route));
 server.configureRoutes();
+
+// Iniciar el servidor
 server.launch();

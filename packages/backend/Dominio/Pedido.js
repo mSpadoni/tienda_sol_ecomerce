@@ -1,10 +1,5 @@
-import CambioEstadoPedido  from "./CambioEstadoPedido";
-import ItemPedido from "./ItemPedido";
-import  { Moneda }from "./Moneda";
-import Usuario from "./Usuario";
-import DireccionEntrega from "./DireccionEntrega";
-import { EstadoPedido } from "./EstadoPedido";
-import  FactoryNotificacion from "./FactoryNotificacion";
+import CambioEstadoPedido from "./CambioEstadoPedido.js";
+import { EstadoPedido } from "./EstadoPedido.js";
 import { randomUUID } from "crypto";
 
 export default class Pedido {

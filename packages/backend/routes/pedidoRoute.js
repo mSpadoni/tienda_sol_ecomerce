@@ -1,18 +1,17 @@
 import express from "express";
-
-const pathPedidos = "/pedidos";
+import { pathPedidos } from "./paths.js";
 
 export default function pedidoRoute(getController) {
-    const router = express.Router();
-    const controler=getController(ControllerPedidos)
+  const router = express.Router();
+  const controler = getController(ControllerPedidos);
 
-    router.post(pathPedidos, async (req, res) => {
+  router.post(pathPedidos, async (req, res) => {
     try {
       await controler.crear(req, res);
     } catch (err) {
       next(err);
     }
-    })
+  });
 
-    return router;
+  return router;
 }

@@ -1,6 +1,4 @@
-import pedidoRoute from "./pedidoRoute.js"
+import usuarioRoute from "./usuariosRoute.js";
 
-const routes = [
-    pedidoRoute
-]
-export default routes
+const routes = [usuarioRoute];
+export default routes;

@@ -1,5 +1,4 @@
 import { randomUUID } from "crypto";
-import { TipoUsuario } from "./TipoUsuario";
 
 export class Usuario {
   constructor(nombre, email, telefono, tipo, fechaAlta) {
