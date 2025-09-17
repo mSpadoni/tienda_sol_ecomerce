@@ -4,43 +4,42 @@ import { TipoUsuario } from "../Dominio/TipoUsuario.js";
 import formatearErroresZod from "../errors/formatErroresZod.js";
 import logger from "../../logger/logger.js";
 
-
-
 export default class ControllerUsuarios {
-    
-    constructor(serviceUsuarios) 
-    {
-        this.serviceUsuarios = serviceUsuarios;
+  constructor(serviceUsuarios) {
+    this.serviceUsuarios = serviceUsuarios;
+  }
+
+  async findPedidosByID(req, res) {
+    logger.info(
+      `Buscando pedidos del usuario con id: ${req.params.id} en el controlador`,
+    );
+    const resultId = idTransform.safeParse(req.params.id);
+
+    if (resultId.error) {
+      logger.warm(`Error de validacion del id del usuario: ${resultId.error}`);
+      res.status(404).json({ error: formatearErroresZod(resultId.error) });
+      return;
     }
 
-    async findPedidosByID(req,res) {
-        logger.info(`Buscando pedidos del usuario con id: ${req.params.id} en el controlador`)
-        const resultId=idTransform.safeParse(req.params.id);
+    const idUsuario = resultId.data;
 
-         if (resultId.error) {
-          logger.warm(`Error de validacion del id del usuario: ${resultId.error}`)
-         res.status(404).json({ error: formatearErroresZod(resultId.error) });
-         return;
-        }
+    logger.info(`Id del usuario valido: ${idUsuario}`);
 
-        
+    const pedidos =
+      await this.serviceUsuarios.findPedidosByUsuariosId(idUsuario);
 
-        const idUsuario=resultId.data
-
-        logger.info(`Id del usuario valido: ${idUsuario}`)
-        
-        const pedidos=await this.serviceUsuarios.findPedidosByUsuariosId(idUsuario)
-       
-        if(pedidos.length===0){
-           throw new ErrorNoEncontrado(idUsuario,"Pedido que tenga un comprador");
-        }
-        
-        logger.http(`Pedidos del usuario con id: ${idUsuario} encontrados: ${JSON.stringify(pedidos)}`)
-        
-        res.status(200).json(pedidos);
+    if (pedidos.length === 0) {
+      throw new ErrorNoEncontrado(idUsuario, "Pedido que tenga un comprador");
     }
 
-    /*async createUsuario(req,res){
+    logger.http(
+      `Pedidos del usuario con id: ${idUsuario} encontrados: ${JSON.stringify(pedidos)}`,
+    );
+
+    res.status(200).json(pedidos);
+  }
+
+  /*async createUsuario(req,res){
        logger.info("Validando datos para crear un usuario: "+JSON.stringify(req.body))
         const usuarioRespuesta=usuarioSchema.parse(req.body)
 
@@ -61,7 +60,6 @@ export default class ControllerUsuarios {
     }*/
 }
 
-
 const idTransform = z.string().transform((val, ctx) => {
   const num = Number(val);
   if (isNaN(num)) {
@@ -71,7 +69,7 @@ const idTransform = z.string().transform((val, ctx) => {
     });
     return z.NEVER;
   }
-  if (num<=0) {
+  if (num <= 0) {
     ctx.addIssue({
       code: "INVALID_ID",
       message: "id must be a positive",
@@ -81,10 +79,10 @@ const idTransform = z.string().transform((val, ctx) => {
   return num;
 });
 
- export const usuarioSchema = z.object({
+export const usuarioSchema = z.object({
   nombre: z.string().min(1),
   email: z.string().email(),
   direccion: z.string().min(1),
   telefono: z.string().min(1),
-  tipo: z.enum(Object.values(TipoUsuario))
+  tipo: z.enum(Object.values(TipoUsuario)),
 });

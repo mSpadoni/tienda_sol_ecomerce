@@ -1,4 +1,4 @@
-export default class usuarioRepository {
+export default class ProductoRepository {
   constructor() {
     this.usuarios = [];
     this.currentId = 1;

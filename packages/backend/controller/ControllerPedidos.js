@@ -1,7 +1,7 @@
 import Pedido from "../model/Pedido.js";
 import { z } from "zod";
 
-export class ControllerUsuarios {
+export default class ControllerUsuarios {
   constructor(servicePedido) {
     this.servicePedido = servicePedido;
   }

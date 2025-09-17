@@ -1,2 +1,2 @@
-export const pathPedidos = "pedidos";
-export const pathUsuarios = "usuarios";
+export const pathPedidos = "/pedidos";
+export const pathUsuarios = "/usuarios";

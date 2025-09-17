@@ -25,22 +25,25 @@ const customLevels = {
   },
 };
 
-
 winston.addColors(customLevels.colors);
 
 const baseFormat = combine(
   timestamp({ format: "YYYY-MM-DD HH:mm:ss" }),
-  printf(({ level, message, timestamp }) => `[${timestamp}] ${level}: ${message}`)
+  printf(
+    ({ level, message, timestamp }) => `[${timestamp}] ${level}: ${message}`,
+  ),
 );
 
 const consoleFormat = combine(
   timestamp({ format: "YYYY-MM-DD HH:mm:ss" }),
-  colorize({ all: true }), 
-  printf(({ level, message, timestamp }) => `[${timestamp}] ${level}: ${message}`)
+  colorize({ all: true }),
+  printf(
+    ({ level, message, timestamp }) => `[${timestamp}] ${level}: ${message}`,
+  ),
 );
 
 const logger = winston.createLogger({
-  levels: customLevels.levels, 
+  levels: customLevels.levels,
   level: "debug",
   transports: [
     new winston.transports.File({

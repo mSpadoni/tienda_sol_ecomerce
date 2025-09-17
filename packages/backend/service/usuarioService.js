@@ -7,7 +7,9 @@ export default class UsuarioService {
   }
 
   findPedidosByUsuariosId(idUsuario) {
-    logger.info(`Buscando pedidos del usuario con id:  ${idUsuario} en el servicio`);
+    logger.info(
+      `Buscando pedidos del usuario con id:  ${idUsuario} en el servicio`,
+    );
     const pedidos = this.pedidoRepository.findByUsuariosId(idUsuario);
     return pedidos;
   }
