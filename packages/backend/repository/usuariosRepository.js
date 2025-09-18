@@ -4,13 +4,12 @@ export default class usuarioRepository {
     this.currentId = 1;
     this.idBorrados = [];
   }
-
-
-  obtenerUsuarioById(id) {
+   
+  findById(id) {
     return this.usuarios.find((usuario) => usuario.id === id);
   }
 
-  obtenerUsuarioByUsernameAndPassword(username, password) {
+  findByUsernameAndPassword(username, password) {
     return this.usuarios.find(
       (usuario) => ((usuario.nombre === username || usuario.email===username) && usuario.password === password),
     );
@@ -19,7 +18,7 @@ export default class usuarioRepository {
 
 
 const usuarioEjemplo={
-  id: '1',
+  id: 1,
   nombre: 'admin',
   password: 'admin',
   email: 'admin@gmail.com'

@@ -5,9 +5,15 @@ export default class ProductoRepository {
     this.idBorrados = [];
   }
 
-  /*create(usuario) {       
+
+  findById(id) {
+    return this.usuarios.find((usuario) => usuario.id === id);
+  }
+
+  
+    create(usuario) {       
     if (this.idBorrados.length > 0) {
       usuario.id = this.idBorrados.shift();
-
-    }*/
+    }
+  }
 }

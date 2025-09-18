@@ -3,6 +3,7 @@ import express from "express";
 import pedidoRepository from "../repository/pedidoRepository.js";
 import Pedido from "../Dominio/Pedido.js";
 import logger from "../../logger/logger.js";
+import { FactoryNotificacion } from "../Dominio/FactoryNotificacion.js";
 export default class pedidoService {
   constructor(repositorioPedido, repositorioUsuario, repositorioProducto) {
     this.repositorioPedido = repositorioPedido;
@@ -39,5 +40,15 @@ export default class pedidoService {
       pedidoData.direccionEntrega,
       pedidoData.fecha,
     );
+
+    this.repositorioPedido.save(nuevoPedido);
+
+    notificacion = new FactoryNotificacion().crearSegunPedido(nuevoPedido);
+
+    //todo: enviar notificacion
+
+    //todo: persistir notificacion
   }
+
+
 }

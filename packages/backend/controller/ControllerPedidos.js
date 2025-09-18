@@ -9,9 +9,10 @@ export default class ControllerPedidos {
   }
   async crear(req, res) {
     //TODO: Validar datos de entrada
-    const resultBody = alojamientoSchema.safeParse(body);
+    const resultBody = pedidoSchema.safeParse(req.body);
 
     if (!resultBody.success) {
+      logger.error("Error de validacion", { errors: resultBody.error.issues });
       return res.status(400).json({ error: resultBody.error.issues });
     }
 
@@ -19,3 +20,15 @@ export default class ControllerPedidos {
     res.status(201).json(nuevoPedido);
   }
 }
+
+const pedidoSchema = z.object({
+  usuario: z.number().min(1),
+  moneda: z.string().min(1),
+  direccionEntrega: z.string().min(1),
+  fecha: z.string().min(1), //todo:pasarlo a date
+  items: z.array(z.object({
+    productoId: z.string().min(1),
+    cantidad: z.number().min(1)
+    })
+    )
+})
