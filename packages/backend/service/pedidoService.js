@@ -1,13 +1,16 @@
 import express from "express";
 
 import pedidoRepository from "../repository/pedidoRepository.js";
-import Pedido from "../model/Pedido.js";
-
+import Pedido from "../Dominio/Pedido.js";
+import logger from "../../logger/logger.js";
 export default class pedidoService {
   constructor(repositorioPedido, repositorioUsuario, repositorioProducto) {
     this.repositorioPedido = repositorioPedido;
     this.repositorioUsuario = repositorioUsuario;
     this.repositorioProducto = repositorioProducto;
+    logger.info({repositorioPedido: this.repositorioPedido.constructor.name});
+    logger.info({repositorioUsuario: this.repositorioUsuario.constructor.name});
+    logger.info({repositorioProducto: this.repositorioProducto.constructor.name});
   }
 
   crear(pedidoData) {

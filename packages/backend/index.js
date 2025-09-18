@@ -10,9 +10,26 @@ import PedidoRepository from "./repository/pedidoRepository.js";
 import ProductoRepository from "./repository/productoRepository.js";
 import UsuarioRepository from "./repository/usuariosRepository.js";
 import routes from "./routes/routes.js";
+import passport from "passport";
+import cookieParser from "cookie-parser";
+import session from "express-session";
+import { Strategy as LocalStrategy } from "passport-local";
+import authMiddleware from "./middlewares/autentificacionMiddlewares.js";
 
 const app = express();
 app.use(express.json());
+//app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser(`mi secreto `));
+app.use(
+  session({
+    secret: `mi secreto `,
+    resave: false,
+    saveUninitialized: false, 
+  }));
+app.use(passport.initialize());
+app.use(passport.session());
+
+    
 
 dotenv.config();
 app.use(
@@ -23,12 +40,6 @@ app.use(
   }),
 );
 
-app.get("/health", (req, res) => {
-  res.status(200).json({
-    status: "ok",
-    timestamp: new Date().toISOString(),
-  });
-});
 
 // Configurar el puerto
 const port = process.env.SERVER_PORT || 3000;
@@ -42,7 +53,7 @@ const usuarioRepository = new UsuarioRepository();
 const productoRepository = new ProductoRepository();
 
 // Crear instancias de servicios
-const usuarioService = new UsuarioService(pedidoRepository);
+const usuarioService = new UsuarioService(pedidoRepository, usuarioRepository);
 const servicePedido = new PedidoService(
   pedidoRepository,
   usuarioRepository,
@@ -61,3 +72,39 @@ server.configureRoutes();
 
 // Iniciar el servidor
 server.launch();
+
+passport.use(new LocalStrategy(
+  function(username, password, done) {
+     const usuario=usuarioRepository.obtenerUsuarioByUsernameAndPassword(username, password);
+      if(!usuario){ return done(null, false,{message:"Usuario o contraseña incorrecta"});
+      }
+      return done(null, usuario);
+  }
+))
+
+passport.serializeUser(function(user, done) {
+  done(null, user.id);
+});
+
+passport.deserializeUser(function(id, done) {
+  const usuario=usuarioRepository.obtenerUsuarioById(id);    
+  done(null, usuario);
+});
+
+
+app.post("/login", passport.authenticate({
+  successRedirect:"/",
+  failureRedirect:"/login"
+}))
+
+app.get("/health", (req, res) => {
+  res.status(200).json({
+    status: "ok",
+    timestamp: new Date().toISOString(),
+  });
+});
+
+app.get("/", (req, res,next) => {
+  authMiddleware(req, res,next)
+  res.status(200).json({message:"Bienvenido "+req.user.nombre});
+});

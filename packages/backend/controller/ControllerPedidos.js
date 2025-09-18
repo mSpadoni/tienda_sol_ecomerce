@@ -1,9 +1,11 @@
-import Pedido from "../model/Pedido.js";
+import Pedido from "../Dominio/Pedido.js";
 import { z } from "zod";
+import logger from "../../logger/logger.js";
 
-export default class ControllerUsuarios {
+export default class ControllerPedidos {
   constructor(servicePedido) {
     this.servicePedido = servicePedido;
+    logger.info({servicePedido: this.servicePedido.constructor.name})
   }
   async crear(req, res) {
     //TODO: Validar datos de entrada

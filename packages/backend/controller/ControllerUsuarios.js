@@ -1,12 +1,12 @@
 import { z } from "zod";
 import ErrorNoEncontrado from "../errors/errorNoEncontrado.js";
 import { TipoUsuario } from "../Dominio/TipoUsuario.js";
-import formatearErroresZod from "../errors/formatErroresZod.js";
 import logger from "../../logger/logger.js";
 
 export default class ControllerUsuarios {
   constructor(serviceUsuarios) {
     this.serviceUsuarios = serviceUsuarios;
+    logger.info({serviceUsuarios: this.serviceUsuarios.constructor.name});
   }
 
   async findPedidosByID(req, res) {
@@ -15,9 +15,9 @@ export default class ControllerUsuarios {
     );
     const resultId = idTransform.safeParse(req.params.id);
 
-    if (resultId.error) {
-      logger.warm(`Error de validacion del id del usuario: ${resultId.error}`);
-      res.status(404).json({ error: formatearErroresZod(resultId.error) });
+    if (!resultId.success) {
+      logger.warn(`Error de validacion del id del usuario: ${req.params.id}`);
+      res.status(404).json({ error: resultId.error.issues});
       return;
     }
 
@@ -38,6 +38,8 @@ export default class ControllerUsuarios {
 
     res.status(200).json(pedidos);
   }
+
+
 
   /*async createUsuario(req,res){
        logger.info("Validando datos para crear un usuario: "+JSON.stringify(req.body))

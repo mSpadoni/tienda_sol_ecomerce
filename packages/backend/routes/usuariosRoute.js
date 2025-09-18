@@ -2,13 +2,15 @@ import express from "express";
 import pedidosErrorHandler from "../middlewares/pedidosMiddlewares.js";
 import ControllerUsuarios from "../controller/ControllerUsuarios.js";
 import logger from "../../logger/logger.js";
+import { pathPedidos,pathUsuarios } from "./paths.js";
 
 export default function usuarioRoute(getController) {
   const router = express.Router();
   const usuariosControler = getController(ControllerUsuarios);
 
-  router.get("/usuarios/:id/pedidos", async (req, res, next) => {
-    try {
+
+  router.get(pathUsuarios+"/:id"+pathPedidos, async (req, res, next) => {
+   try {
       logger.http("Solicitud de pedidos del usuario id: " + req.params.id);
       await usuariosControler.findPedidosByID(req, res);
     } catch (err) {

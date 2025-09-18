@@ -1,5 +1,5 @@
 import logger from "../../logger/logger.js";
-import Pedido from "../model/Pedido.js";
+import Pedido from "../Dominio/Pedido.js";
 /*import pedido from "../Dominio/pedido.js";
 import fs from "node:fs/promises";
 import path from "node:path";*/

@@ -4,6 +4,8 @@ export default class UsuarioService {
   constructor(pedidoRepository, usuarioRepository) {
     this.usuarioRepository = usuarioRepository;
     this.pedidoRepository = pedidoRepository;
+    logger.info({usuarioRepository: this.usuarioRepository.constructor.name});
+    logger.info({pedidoRepository: this.pedidoRepository.constructor.name});
   }
 
   findPedidosByUsuariosId(idUsuario) {
