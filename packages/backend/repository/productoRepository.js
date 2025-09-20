@@ -1,19 +1,24 @@
+import Producto from "../Dominio/Producto.js";
+
+const prodEjemplo= new Producto(1,null,"milanesa","rica milanesa",["comida"],5000,"Peso Argentino",10,[],true);
+
+
 export default class ProductoRepository {
   constructor() {
-    this.usuarios = [];
-    this.currentId = 1;
-    this.idBorrados = [];
+    this.productos = [prodEjemplo];
   }
 
 
   findById(id) {
-    return this.usuarios.find((usuario) => usuario.id === id);
+    return this.productos.find((producto) => producto.id === id);
   }
 
   
-    create(usuario) {       
+    create(producto) {       
     if (this.idBorrados.length > 0) {
-      usuario.id = this.idBorrados.shift();
+      producto.id = this.idBorrados.shift();
     }
   }
 }
+
+

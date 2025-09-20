@@ -2,6 +2,7 @@ import { randomUUID } from "crypto";
 
 export default class Producto {
   constructor(
+    id,
     vendedor,
     titulo,
     descripcion,
@@ -12,7 +13,7 @@ export default class Producto {
     fotos,
     activo,
   ) {
-    this.id = randomUUID();
+    this.id = id;
     this.vendedor = vendedor;
     this.titulo = titulo;
     this.descripcion = descripcion;

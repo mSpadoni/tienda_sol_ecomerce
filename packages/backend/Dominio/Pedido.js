@@ -3,8 +3,8 @@ import { EstadoPedido } from "./EstadoPedido.js";
 import { randomUUID } from "crypto";
 
 export default class Pedido {
-  constructor(usuario, items, moneda, direccionEntrega, fechaCreacion) {
-    this.id = randomUUID();
+  constructor(id,usuario, items, moneda, direccionEntrega, fechaCreacion) {
+    this.id = id;
     this.comprador = usuario;
     this.items = items;
     this.moneda = moneda;
@@ -20,7 +20,15 @@ export default class Pedido {
     }, 0);
   }
 
+
   actualizarEstado(nuevoEstado, usuario, motivo) {
+    if (nuevoEstado===EstadoPedido.CANCELADO && usuario.id != this.comprador.id){
+      throw new Error("Solo el comprador puede cancelar el pedido");
+    }
+     if (nuevoEstado===EstadoPedido.ENVIADO && usuario.id !=this.obtenerVendedor().id) {
+      throw new Error("Solo el vendedor puede enviar el pedido");
+    }
+
     this.estado = nuevoEstado;
     const cambioEstadoPedido = new CambioEstadoPedido(
       new Date(),

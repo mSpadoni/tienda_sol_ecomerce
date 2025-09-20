@@ -1,8 +1,8 @@
 import { randomUUID } from "crypto";
 
-export class Usuario {
-  constructor(nombre, email,password, telefono, tipo, fechaAlta) {
-    this.id = randomUUID();
+export default class Usuario {
+  constructor(id,nombre, email,password, telefono, tipo, fechaAlta) {
+    this.id = id;
     this.nombre = nombre;
     this.password=password;
     this.email = email;

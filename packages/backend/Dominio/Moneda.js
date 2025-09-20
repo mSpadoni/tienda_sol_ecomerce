@@ -3,3 +3,9 @@ export const Moneda = Object.freeze({
   DOLAR_USA: "Dolar USA",
   REAL: "Real",
 });
+
+
+
+export function monedaValida(value) {
+  return Object.values(Moneda).includes(value);
+}
