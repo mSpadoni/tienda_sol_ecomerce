@@ -11,6 +11,7 @@ import NoEsTipoUsuarioCorecto from "../errors/errorNoEsTipoUsuarioCorrecto.js";
 import FaltaStock from "../errors/errorFaltaDeStock.js";
 import { mensajesConocidos } from "./mensajesPersonalizadosZod.js";
 import { ZodError } from "zod";
+import YaEstaEnEseEstado from "../errors/errorYaEstaEnEseEstado.js";
 
 export default function pedidosErrorHandler(err, _req, res, _next) {
  
@@ -55,7 +56,8 @@ const errores400 = Object.freeze({
   ERROR_MONEDA_NO_PERMITIDA: ErrorMonedaNoPermitida.name,
   ERROR_ESTADO_NO_VALIDO: ErrorEstadoNoValido.name,
   CANT_NEGATIVA: CantNegativa.name,
-  NO_ES_TIPO_USUARIO_CORRECTO: NoEsTipoUsuarioCorecto.name
+  NO_ES_TIPO_USUARIO_CORRECTO: NoEsTipoUsuarioCorecto.name,
+  YA_ESTA_EN_ESE_ESTADO: YaEstaEnEseEstado.name
 });
 
 function esError400(errorAEvaluar) {

@@ -6,6 +6,7 @@ import SoloElCompradorPuedeCancelarUnPedido from "../errors/errorSoloElComprador
 import SoloElVendedorPuedeEnviarUnPedido from "../errors/errorSoloElVendedorPuedeEnviarUnPedido.js";
 import { TipoUsuario } from "./TipoUsuario.js";
 import NoEsTipoUsuarioCorecto from "../errors/errorNoEsTipoUsuarioCorrecto.js";
+import YaEstaEnEseEstado from "../errors/errorYaEstaEnEseEstado.js";
 export default class Pedido {
   constructor(id, usuario, items, moneda, direccionEntrega) {
    if(usuario.tipo!==TipoUsuario.COMPRADOR){
@@ -33,6 +34,9 @@ export default class Pedido {
       usuario.id != this.comprador.id
     ) {
       throw new SoloElCompradorPuedeCancelarUnPedido();
+    }
+    if (nuevoEstado===this.estado){
+      throw new YaEstaEnEseEstado(nuevoEstado.valor)
     }
     if (
       nuevoEstado === EstadoPedido.ENVIADO &&

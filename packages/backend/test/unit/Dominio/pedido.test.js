@@ -13,7 +13,7 @@ import SoloElVendedorPuedeEnviarUnPedido from "../../../errors/errorSoloElVended
 import NoSePuedeCancelarUnPedidoEnviado from "../../../errors/errorNoSePuedeCancelarUnPedidoEnviado.js";
 import NoSePuedeEnviarUnPedidoCancelado from "../../../errors/errorNoSePuedeEnviarUnPedidoCancelado.js";
 import Pedido from "../../../Dominio/Pedido.js";
-
+import YaEstaEnEseEstado from "../../../errors/errorYaEstaEnEseEstado.js";
 describe("test pedido", () => {
   const pedidoBase = () => new Pedido(
     2,
@@ -155,6 +155,22 @@ describe("test pedido", () => {
       expect.objectContaining({
         estado: EstadoPedido.ENVIADO,
         usuario: usuario4,
+        motivo: "",
+        fecha: expect.any(Date),
+        pedido: expect.any(Object),
+      })
+    );
+  });
+   test("No se puede cambiar a un estado si el pedido ya esta en ese estado", () => {
+     const pedido = pedidoBase();
+    expect(() =>
+      pedido.actualizarEstado(EstadoPedido.PENDIENTE,usuario2,"")
+    ).toThrow(YaEstaEnEseEstado);
+
+    expect(pedido.historialEstado).not.toContainEqual(
+      expect.objectContaining({
+        estado: EstadoPedido.PENDIENTE,
+        usuario: usuario2,
         motivo: "",
         fecha: expect.any(Date),
         pedido: expect.any(Object),
