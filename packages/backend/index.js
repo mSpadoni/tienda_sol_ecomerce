@@ -4,10 +4,11 @@ import cors from "cors";
 import Server from "./Server.js";
 import ControllerPedido from "./controller/ControllerPedidos.js";
 import PedidoService from "./service/pedidoService.js";
+import NotificacionService from "./service/notifyServiceAux.js";
 import PedidoRepository from "./repository/pedidoRepository.js";
 import ProductoRepository from "./repository/productoRepository.js";
 import UsuarioRepository from "./repository/usuariosRepository.js";
-import  NotificacionesRepository  from "./repository/notificacionesRepository.js";
+import NotificacionesRepository from "./repository/notificacionesRepository.js";
 import routes from "./routes/routes.js";
 //import passport from "passport";
 /*import cookieParser from "cookie-parser";
@@ -28,8 +29,6 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());*/
 
-    
-
 dotenv.config();
 app.use(
   cors({
@@ -38,7 +37,6 @@ app.use(
       : true,
   }),
 );
-
 
 // Configurar el puerto
 const port = process.env.SERVER_PORT || 3000;
@@ -57,11 +55,14 @@ const servicePedido = new PedidoService(
   pedidoRepository,
   usuarioRepository,
   productoRepository,
-  notificacionesRepository
 );
+const serviceNotificaciones = new NotificacionService(notificacionesRepository);
 
 // Crear instancias de controladores
-const controllerPedido = new ControllerPedido(servicePedido);
+const controllerPedido = new ControllerPedido(
+  servicePedido,
+  serviceNotificaciones,
+);
 
 // Configurar rutas y controladores en el servidor
 server.setController(ControllerPedido, controllerPedido);
@@ -104,5 +105,5 @@ app.get("/health", (req, res) => {
 
 app.get("/", (req, res) => {
   // authMiddleware(req, res,next)
-  res.status(200).json({message:"Bienvenido "+req.user.nombre});
+  res.status(200).json({ message: "Bienvenido " + req.user.nombre });
 });

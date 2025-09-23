@@ -3,7 +3,7 @@ export default function authMiddleware(req, res, next) {
     return res.status(401).json({
       error: "No logueado",
       message: "Por favor inicie sesión",
-      redirect: "/login"
+      redirect: "/login",
     });
   }
   next();

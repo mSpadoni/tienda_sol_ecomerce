@@ -1,4 +1,4 @@
-export class FactoryNotificacion {
+export default class FactoryNotificacion {
   constructor() {
     if (FactoryNotificacion.instance) {
       return FactoryNotificacion.instance;

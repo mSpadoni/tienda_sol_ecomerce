@@ -1,28 +1,33 @@
-import Notificacion from "./Notificacion.js";
-
-
-
+import Notificacion from "./Notificacion.js"; /*
+import { obtenerSimbolo } from "./Moneda.js";*/
 
 export const EstadoPedido = Object.freeze({
   PENDIENTE: {
     valor: "pendiente",
     crearNotificacion: (pedido) => {
-      var mensaje = `Se ha creado un nuevo pedido y está pendiente de confirmación, con ID ${pedido.id}, realizado por el cliente ${pedido.comprador}, incluyendo ${pedido.items} por un total de ${pedido.total} en 
-      ${pedido.moneda}, a enviar a la direccion ${pedido.direccionEntrega}. El pedido tiene los siguientes productos: `;
-      pedido.items.reduce((acc,item) => {
-        acc + item.producto.titulo + ", ";
-      },{mensaje});
-      return new Notificacion(pedido.vendedor, mensaje, new Date());
+      const productos = pedido.items.reduce(
+        (mensaje, item) => mensaje + item.producto.titulo,
+        "",
+      );
+      const mensaje =
+        `El usuario ${pedido.comprador.nombre} a hecho un pedido por los siguientes productos: ` +
+        productos +
+        ` a un total de ${pedido.moneda.simbolo}${pedido.calcularTotal()} en ${pedido.direccionEntrega.calle} en piso ${pedido.direccionEntrega.piso} departamento ${pedido.direccionEntrega.departamento} en ${pedido.direccionEntrega.ciudad}, ${pedido.direccionEntrega.provincia}, ${pedido.direccionEntrega.pais}`;
+      return new Notificacion(pedido.obtenerVendedor(), mensaje, new Date());
     },
   },
 
   ACEPTADO: {
     valor: "aceptado",
-    crearNotificacion: (Pedido) => {},
+    crearNotificacion: (Pedido) => {
+      return null;
+    },
   },
   RECHAZADO: {
     valor: "rechazado",
-    crearNotificacion: (Pedido) => {},
+    crearNotificacion: (Pedido) => {
+      return null;
+    },
   },
 
   ENVIADO: {
@@ -39,7 +44,7 @@ export const EstadoPedido = Object.freeze({
     valor: "cancelado",
     crearNotificacion: (pedido) => {
       return new Notificacion(
-        pedido.vendedor,
+        pedido.obtenerVendedor(),
         crearMensajeSegunEstado(EstadoPedido.CANCELADO.valor),
         new Date(),
       );
@@ -48,14 +53,16 @@ export const EstadoPedido = Object.freeze({
 
   FINALIZADO: {
     valor: "finalizado",
-    crearNotificacion: (Pedido) => {},
+    crearNotificacion: (Pedido) => {
+      return null;
+    },
   },
 });
 
+export 
 function crearMensajeSegunEstado(estado) {
   return `El pedido esta en estado: ${estado}`;
 }
-
 
 const findEstado = (estado) =>
   Object.values(EstadoPedido).find((value) => value.valor === estado);

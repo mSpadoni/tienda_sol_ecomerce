@@ -1,146 +1,80 @@
-import Pedido from "../Dominio/Pedido.js";
-import { string, z } from "zod";
-import ErrorNoEncontrado from "../errors/errorNoEncontrado.js";
-import { TipoUsuario } from "../Dominio/TipoUsuario.js";
 import logger from "../../logger/logger.js";
-import { id } from "zod/locales";
-import CambioEstadoPedido from "../Dominio/CambioEstadoPedido.js";
+import { pedidoPatchSchema,
+         pedidoSchema,
+         idTransform
+ } from "./validacionesZOD.js";
+import { adaptarPedidoToJson,
+         adaptarNotificacion
+ } from "./adaptadoresJSON.js";
 
 export default class ControllerPedidos {
- 
-  constructor(servicePedido) {
+  constructor(servicePedido, serviceNotificaciones) {
     this.servicePedido = servicePedido;
-    logger.info({servicePedido: this.servicePedido.constructor.name})
-  }
+    this.serviceNotificaciones = serviceNotificaciones;
+    logger.info({ servicePedido: this.servicePedido.constructor.name });
+    logger.info({
+      serviceNotificaciones: this.serviceNotificaciones.constructor.name,
+    });
+  } parse
 
   async crear(req, res) {
-    //TODO: Validar datos de entrada
-    const resultBody = pedidoSchema.safeParse(req.body);
+   const resultBody = pedidoSchema.parse(req.body);
+const nuevoPedido = await this.servicePedido.crear(resultBody); 
 
-    if (!resultBody.success) {
-      logger.error("Error de validacion", { errors: resultBody.error.issues });
-      return res.status(400).json({ error: resultBody.error.issues });
-    }
+    logger.http(`Pedido creado`);
+    const notificacion =
+      this.serviceNotificaciones.crearNotificacion(nuevoPedido);
 
-    const nuevoPedido = await this.servicePedido.crear(resultBody.data);
-    res.status(201).json(nuevoPedido);
+    logger.http(`Notificacion creada: ${JSON.stringify(notificacion)}`);
+
+    const JSONresponse = {
+      pedido: adaptarPedidoToJson(nuevoPedido),
+      notificacion: adaptarNotificacion(notificacion),
+    };
+
+    res.status(201).json(JSONresponse);
   }
 
   async findPedidosByID(req, res) {
-    logger.info(
-      `Buscando pedidos del usuario con id: ${req.params.id} en el controlador`,
-    );
-    const resultId = idTransform.safeParse(req.params.id);
+    logger.info(`Buscando pedidos del usuario con id: ${req.params.id} en el controlador`);
 
-    if (!resultId.success) {
-      logger.warn(`Error de validacion del id del usuario: ${req.params.id}`);
-      res.status(404).json({ error: resultId.error.issues});
-      return;
-    }
+    const resultId = idTransform.parse(req.params.id);
 
-    const idUsuario = resultId.data;
+    logger.info(`Id del usuario valido: ${resultId}`);
 
-    logger.info(`Id del usuario valido: ${idUsuario}`);
+    const pedidos = await this.servicePedido.findPedidosByUsuariosId(resultId)
 
-    const pedidos =
-      await this.servicePedido.findPedidosByUsuariosId(idUsuario);
+    logger.http(`Pedidos del usuario con id: ${resultId} encontrados: ${JSON.stringify(pedidos)}`);
 
-    if (pedidos.length === 0) {
-      throw new ErrorNoEncontrado(idUsuario, "Pedido que tenga un comprador");
-    }
+    const pedidosAPTJ = pedidos.map((pedido) => adaptarPedidoToJson(pedido));
 
-    logger.http(
-      `Pedidos del usuario con id: ${idUsuario} encontrados: ${JSON.stringify(pedidos)}`,
-    );
-
-    res.status(200).json(pedidos);
+    res.status(200).json(pedidosAPTJ);
   }
-
 
   async actualizar(req, res) {
-
     logger.info("actualizando pedido");
 
-    const pedidoID = idTransform.safeParse(req.params.id);
+    const pedidoID = idTransform.parse(req.params.id);
 
-    if (!pedidoID.success) {
-      logger.warn(`Error de validacion del id del pedido: ${req.params.id}`);
-      res.status(400).json({ error: pedidoID.error.issues});
-      return;
-    } 
-    
-    const resultBody = pedidoPatclhSchema.safeParse(req.body);
+    const resultBody = pedidoPatchSchema.parse(req.body);
 
-    if (!resultBody.success) {    
-      logger.error("Error de validacion", { errors: resultBody.error.issues });
-      return res.status(400).json({ error: resultBody.error.issues });
-    }
     logger.info("Datos validados, actualizando pedido");
 
-    const pedidosActualizados= await this.servicePedido.actualizar(pedidoID.data,resultBody.data);
-    
-    pedidosActualizados.historialEstado = pedidosActualizados.historialEstado.map(ce => new CambioEstadoPedido(ce.fecha,ce.estado,null,ce.usuario.id,ce.motivo));
+    const pedidosActualizados = await this.servicePedido.actualizar(pedidoID,resultBody);
+   
+    logger.info("Pedido actualizado");
 
+    const notificacion =
+      this.serviceNotificaciones.crearNotificacion(pedidosActualizados);
 
-    logger.http(`Pedido con id: ${pedidoID.data} actualizado`);
-    res.status(200).json(pedidosActualizados);
+    logger.info("Notificacion creada");
+    const JSONresponse = {
+      pedido: adaptarPedidoToJson(pedidosActualizados),
+      notificacion: adaptarNotificacion(notificacion),
+    };
+
+    logger.http(`Notificacion creada: ${JSON.stringify(JSONresponse)}`);
+    res.status(200).json(JSONresponse);
   }
-  
 }
 
-
-
-
-const pedidoPatclhSchema = z.object({
-  estado: z.string().min(1),
-  usuario: z.number(),
-  motivo: z.string(),
-});
-
-const direccionSchema = z.object({
-   calle: z.string().min(1),
-   altura: z.string().min(1),
-   piso: z.string(),
-   departamento: z.string(),
-   codigoPostal: z.string(),
-   ciudad: z.string(),
-   provincia: z.string(),
-   pais: z.string(),
-   lat: z.string(),
-   long: z.string(),
-})
-
-
-
-const pedidoSchema = z.object({
-  usuario: z.number().min(1),
-  moneda: z.string().min(1),
-  direccionEntrega: direccionSchema,
-  fecha: z.iso.date(), //todo:pasarlo a date
-  items: z.array(z.object({
-    productoId: z.number(),
-    cantidad: z.number()
-    })
-    )
-})
-
-
-
-const idTransform = z.string().transform((val, ctx) => {
-  const num = Number(val);
-  if (isNaN(num)) {
-    ctx.addIssue({
-      code: "INVALID_ID",
-      message: "id must be a number",
-    });
-    return z.NEVER;
-  }
-  if (num <= 0) {
-    ctx.addIssue({
-      code: "INVALID_ID",
-      message: "id must be a positive",
-    });
-    return z.NEVER;
-  }
-  return num;
-});

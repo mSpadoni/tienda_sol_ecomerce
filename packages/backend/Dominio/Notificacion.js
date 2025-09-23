@@ -1,5 +1,3 @@
-import { randomUUID } from "crypto";
-
 export default class Notificacion {
   constructor(usuario, mensaje, fechaAlta) {
     this.usuario = usuario;

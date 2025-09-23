@@ -1,0 +1,10 @@
+{
+  "configurations": [
+    {
+      "type": "chrome",
+      "name": "http://localhost:3001/pedidos",
+      "request": "launch",
+      "url": "http://localhost:3001/pedidos"
+    }
+  ]
+}

@@ -1,16 +1,23 @@
 import CambioEstadoPedido from "./CambioEstadoPedido.js";
 import { EstadoPedido } from "./EstadoPedido.js";
-import { randomUUID } from "crypto";
-
+import NoSePuedeCancelarUnPedidoEnviado from "../errors/errorNoSePuedeCancelarUnPedidoEnviado.js";
+import NoSePuedeEnviarUnPedidoCancelado from "../errors/errorNoSePuedeEnviarUnPedidoCancelado.js";
+import SoloElCompradorPuedeCancelarUnPedido from "../errors/errorSoloElCompradorPuedeCancelarUnPedido.js";
+import SoloElVendedorPuedeEnviarUnPedido from "../errors/errorSoloElVendedorPuedeEnviarUnPedido.js";
+import { TipoUsuario } from "./TipoUsuario.js";
+import NoEsTipoUsuarioCorecto from "../errors/errorNoEsTipoUsuarioCorrecto.js";
 export default class Pedido {
-  constructor(id,usuario, items, moneda, direccionEntrega, fechaCreacion) {
+  constructor(id, usuario, items, moneda, direccionEntrega) {
+   if(usuario.tipo!==TipoUsuario.COMPRADOR){
+    throw new NoEsTipoUsuarioCorecto(TipoUsuario.COMPRADOR)
+   }
     this.id = id;
     this.comprador = usuario;
     this.items = items;
     this.moneda = moneda;
     this.direccionEntrega = direccionEntrega;
     this.estado = EstadoPedido.PENDIENTE;
-    this.fechaCreacion = fechaCreacion;
+    this.fechaCreacion = new Date();
     this.historialEstado = [];
   }
 
@@ -20,13 +27,30 @@ export default class Pedido {
     }, 0);
   }
 
-
   actualizarEstado(nuevoEstado, usuario, motivo) {
-    if (nuevoEstado===EstadoPedido.CANCELADO && usuario.id != this.comprador.id){
-      throw new Error("Solo el comprador puede cancelar el pedido");
+    if (
+      nuevoEstado === EstadoPedido.CANCELADO &&
+      usuario.id != this.comprador.id
+    ) {
+      throw new SoloElCompradorPuedeCancelarUnPedido();
     }
-     if (nuevoEstado===EstadoPedido.ENVIADO && usuario.id !=this.obtenerVendedor().id) {
-      throw new Error("Solo el vendedor puede enviar el pedido");
+    if (
+      nuevoEstado === EstadoPedido.ENVIADO &&
+      usuario.id != this.obtenerVendedor().id
+    ) {
+      throw new SoloElVendedorPuedeEnviarUnPedido();
+    }
+    if (
+      this.estado === EstadoPedido.ENVIADO &&
+      nuevoEstado === EstadoPedido.CANCELADO
+    ) {
+      throw new NoSePuedeCancelarUnPedidoEnviado();
+    }
+    if (
+      this.estado === EstadoPedido.CANCELADO &&
+      nuevoEstado === EstadoPedido.ENVIADO
+    ) {
+      throw new NoSePuedeEnviarUnPedidoCancelado();
     }
 
     this.estado = nuevoEstado;
@@ -38,11 +62,6 @@ export default class Pedido {
       motivo,
     );
     this.historialEstado.push(cambioEstadoPedido);
-    // notificadorFactory.crearSegunPedido(this);
-  }
-
-  validarStock() {
-    return this.items.every((item) => item.estaDisponible());
   }
 
   obtenerVendedor() {
