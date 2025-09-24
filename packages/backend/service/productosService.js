@@ -4,14 +4,14 @@ export default class ProductosService {
         this.productosRepository = productosRepository;
     }
 
-    getProductos(filtros, activo, page, limit) {
+    async getProductos(filtros, activo, page, limit, sort, order) {
         
         const numeroPagina = Math.max(Number(page), 1)
         const elementosXPagina = Math.min(Math.max(Number(limit), 1), 100)
 
-        const productos = this.productosRepository.findByPage(filtros, activo, numeroPagina, elementosXPagina);
+        const productos = await this.productosRepository.findByPage(filtros, activo, numeroPagina, elementosXPagina, sort, order);
 
-        const total = this.productosRepository.contarTodos()
+        const total = await this.productosRepository.contarTodos()
         const totalPaginas = Math.ceil(total / elementosXPagina)
         
         return {
@@ -22,4 +22,22 @@ export default class ProductosService {
             data: productos
         }
     }
+
+
+    precioAsc(productos) { 
+        return this.productosRepository.precioAsc(productos);
+    }
+
+    precioDesc(productos) {
+        return this.productosRepository.precioAsc(productos);
+    }
+
+    masVendidos(productos) {
+        return this.productosRepository.masVendidos(productos);
+    }
+
+    menosVendidos(productos) {
+        return this.productosRepository.menosVendidos(productos);
+    }
+
 }

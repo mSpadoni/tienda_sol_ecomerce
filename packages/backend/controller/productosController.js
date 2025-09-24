@@ -12,27 +12,23 @@ const idTransform = z.string().transform(((val, ctx)  => {
     return num;
 }))
 
+const activoHandler = {
+    true: true,
+    false: false
+}
+
 export default class ProductosController {
     constructor(productosService){
         this.productosService = productosService;
     }
 
-    getProductos(req,res){
-        let {activo} = req.query
+    async getProductos(req,res){
         const {page=1, limit=10} = req.query
+        const {sort="ventas", order="desc"} = req.query
         const filtros = req.query
-        if (activo !== undefined){
-            if(activo === "true"){
-                activo = true
-            }
-            else if (activo === "false"){
-                activo = false
-            }
-            else {
-                activo = undefined
-            }
-        }
-        const ProductosPaginados = this.productosService.getProductos(filtros, activo, page, limit);
+        const {activo} = req.query
+        const activoFinal = activoHandler[activo];
+        const ProductosPaginados = await this.productosService.getProductos(filtros, activoFinal, page, limit, sort, order);
         if(ProductosPaginados === null){
             return res.status(204).send("No se encontraron Productos");
         }

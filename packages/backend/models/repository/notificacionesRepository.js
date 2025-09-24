@@ -43,7 +43,7 @@ export default class NotificacionesRepository {
 function mapToNotificacion(dataObject) {
     const { id, mensaje, fecha, leida } = dataObject;
     const notificacion = new Notificacion(id, mensaje, fecha);
-    notificacion.leida = leida;
+    notificacion.id = dataObject.id;
     return notificacion;
 }
 

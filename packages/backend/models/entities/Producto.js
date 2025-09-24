@@ -14,6 +14,7 @@ export default class Producto {
     stock,
     fotos,
     activo,
+    ventas
   ) {
     this.id = randomUUID();
     this.vendedor = vendedor;
@@ -25,6 +26,7 @@ export default class Producto {
     this.stock = stock;
     this.fotos = fotos;
     this.activo = activo;
+    this.ventas = ventas;
   }
 
   estaDisponible(cantidad) {
@@ -61,5 +63,13 @@ export default class Producto {
 
   getActivo(){
     return this.activo;
+  }
+
+  getPrecio(){
+    return this.precio;
+  }
+
+  getVentas(){
+    return this.ventas;
   }
 }
