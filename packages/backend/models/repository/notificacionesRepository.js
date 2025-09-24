@@ -1,33 +1,52 @@
 import Notificacion from "../entities/Notificacion.js";
+import data from "../../data/notificaciones.json" with { type: "json" }
+import fs from "node:fs/promises";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 
 export default class NotificacionesRepository {
-
-    constructor(){
-        this.notificaciones = []
-        const noti1 = new Notificacion(null,"Tienes un nuevo pedido de Juan Perez",new Date())
-        const noti2 = new Notificacion(null,"El pedido #1234 esta en camino",new Date())
-        noti2.leida = true
-        this.notificaciones.push(noti1)
-        this.notificaciones.push(noti2)
-    }
-
-    getNotificaciones(filtros){
+    static notificacionesPath = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../../data/notificaciones.json");
+    
+    async getNotificaciones(filtros){
         const {leida} = filtros
-        if(leida === undefined){
-            return this.notificaciones
+        const data = await fs.readFile(NotificacionesRepository.notificacionesPath, 'utf8')
+        const dataObjects = JSON.parse(data)
+
+        let notificacionesADevolver = mapToNotificaciones(dataObjects)
+        if(leida !== undefined){
+            notificacionesADevolver = this.estaLeida(leida, notificacionesADevolver)
         }
-        return this.notificaciones.filter(n => n.estaLeida() === leida)
+        return notificacionesADevolver
     }
 
-    marcarNotificacionComoLeida(id){
-        const notificacion = this.findById(id);
+    async marcarNotificacionComoLeida(id){
+        const notificacion = await this.findById(id);
         if(notificacion){
             notificacion.marcarComoLeida();
         }
-        return notificacion
     }
 
-    findById(id){
-        return this.notificaciones.find(n => n.id == id);
+    async findById(id){
+        const data = await fs.readFile(NotificacionesRepository.notificacionesPath)
+        const dataObjects = await JSON.parse(data)
+        const notificaciones = mapToNotificaciones(dataObjects)
+        const notificacion = notificaciones.find(n => n.id === id);
+        return notificacion;
     }
+
+//----------------------------------------------------------------
+    estaLeida(leida, notificaciones){
+        return notificaciones.filter(n => n.estaLeida() === leida)
+    }
+}
+
+function mapToNotificacion(dataObject) {
+    const { id, mensaje, fecha, leida } = dataObject;
+    const notificacion = new Notificacion(id, mensaje, fecha);
+    notificacion.leida = leida;
+    return notificacion;
+}
+
+function mapToNotificaciones(dataObjects) {
+    return dataObjects.map(mapToNotificacion);
 }

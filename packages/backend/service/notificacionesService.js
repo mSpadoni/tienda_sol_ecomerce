@@ -3,15 +3,17 @@ export default class NotificacionesService{
         this.notificacionesRepository = notificacionesRepository;
     }
 
-    getNotificaciones(filtros){
-        return this.notificacionesRepository.getNotificaciones(filtros)
+    async getNotificaciones(filtros){
+        const notificaciones = await this.notificacionesRepository.getNotificaciones(filtros);
+        return notificaciones;
     }
 
-    marcarNotificacionComoLeida(id){
-        return this.notificacionesRepository.marcarNotificacionComoLeida(id);
+    async marcarNotificacionComoLeida(id){
+        await this.notificacionesRepository.marcarNotificacionComoLeida(id);
     }
 
-    getNotificacionById(id){
-        return this.notificacionesRepository.findById(id);
+    async getNotificacionById(id){
+        const notificacion = await this.notificacionesRepository.findById(id);
+        return notificacion;
     }
 } 
