@@ -19,6 +19,7 @@ export default class ProductosController {
 
     getProductos(req,res){
         let {activo} = req.query
+        const {page=1, limit=10} = req.query
         const filtros = req.query
         if (activo !== undefined){
             if(activo === "true"){
@@ -31,10 +32,10 @@ export default class ProductosController {
                 activo = undefined
             }
         }
-        const Productos = this.productosService.getProductos(filtros, activo);
-        if(Productos === null){
+        const ProductosPaginados = this.productosService.getProductos(filtros, activo, page, limit);
+        if(ProductosPaginados === null){
             return res.status(204).send("No se encontraron Productos");
         }
-        return res.status(200).json(Productos);
+        return res.status(200).json(ProductosPaginados);
     }
 }

@@ -120,4 +120,15 @@ export default class ProductosRepository {
     filtrarPorActivo(activo, productos) {
         return productos.filter(p => p.getActivo() === activo)
     }
+
+    findByPage(filtros, activo, numeroPagina, elementosXPagina) {
+        const productosFiltrados = this.getProductos(filtros, activo);
+        const offsetInicio = (numeroPagina - 1) * elementosXPagina;
+        const offsetFinal = offsetInicio + elementosXPagina;
+        return productosFiltrados.slice(offsetInicio, offsetFinal);
+    }
+
+    contarTodos() {
+        return this.productos.length;
+    }
 }
