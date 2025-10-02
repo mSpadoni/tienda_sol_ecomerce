@@ -26,6 +26,11 @@ export default class NotificacionesRepository {
         return notificacionesADevolver
     }
 
+    /*async getNotificaciones(filtros){
+        const{leida} = filtros
+        return await this.model.find(filtros).populate('notificacion');
+    }*/
+
     async marcarNotificacionComoLeida(id){
         const notificacion = await this.findById(id);
         if(notificacion){

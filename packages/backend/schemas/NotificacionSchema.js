@@ -2,8 +2,8 @@ import mongoose from 'mongoose';
 import Notificacion from '../models/entities/Notificacion.js';
 
 const notificacionSchema = new mongoose.Schema({
-    titulo: { 
-        type: String, 
+    usuario: {
+        type: String,
         required: true,
         trim: true,
     },
@@ -11,7 +11,7 @@ const notificacionSchema = new mongoose.Schema({
         type: String, 
         required: true 
     },
-    fecha: { 
+    fechaAlta: { 
         type: Date, 
         default: Date.now 
     },
