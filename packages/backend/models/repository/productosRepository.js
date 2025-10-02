@@ -61,8 +61,8 @@ export default class ProductosRepository {
 //------------------------------------
 
     async findByPage(filtros, activo, numeroPagina, elementosXPagina, sort, order) {
-        const productosFiltrados = await this.getProductos(filtros, activo, sort, order);
         const offsetInicio = (numeroPagina - 1) * elementosXPagina;
+        const productosFiltrados = await this.getProductos(filtros, activo, sort, order);
         const offsetFinal = offsetInicio + elementosXPagina;
         return productosFiltrados.slice(offsetInicio, offsetFinal);
     }

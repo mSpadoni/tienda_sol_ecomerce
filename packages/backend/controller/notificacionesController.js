@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { NotificacionDoesNotExist } from "../errors/NotificacionDoesNotExist.js";
 
 const idTransform = z.string().transform(((val, ctx)  => {
     const num = Number(val);
