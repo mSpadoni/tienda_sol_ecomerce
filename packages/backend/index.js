@@ -9,6 +9,7 @@ import ProductosService from "./service/productosService.js";
 import ProductosController from "./controller/productosController.js";
 import routes from "./routes/routes.js"
 import { Server } from "./server.js"
+import { MongoDBClient } from "./config/database.js";
 
 const app = express();
 
@@ -51,3 +52,5 @@ server.setController(ProductosController, productosController)
 routes.forEach(route  => {server.addRoute(route)});
 server.configureRoutes();
 server.launch();
+
+MongoDBClient.connect();
