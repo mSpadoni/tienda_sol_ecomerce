@@ -1,12 +1,19 @@
 import Notificacion from "../entities/Notificacion.js";
-import data from "../../data/notificaciones.json" with { type: "json" }
 import fs from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { NotificacionModel } from "../../schemas/NotificacionSchema.js";
 
 export default class NotificacionesRepository {
-    static notificacionesPath = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../../data/notificaciones.json");
-    
+
+    constructor(){
+        this.model = NotificacionModel;
+    }
+
+    async findById(id){
+        return await this.model.findById(id);
+    }
+
     async getNotificaciones(filtros){
         const {leida} = filtros
         const data = await fs.readFile(NotificacionesRepository.notificacionesPath, 'utf8')
@@ -24,14 +31,6 @@ export default class NotificacionesRepository {
         if(notificacion){
             notificacion.marcarComoLeida();
         }
-    }
-
-    async findById(id){
-        const data = await fs.readFile(NotificacionesRepository.notificacionesPath)
-        const dataObjects = await JSON.parse(data)
-        const notificaciones = mapToNotificaciones(dataObjects)
-        const notificacion = notificaciones.find(n => n.id === id);
-        return notificacion;
     }
 
 //----------------------------------------------------------------
