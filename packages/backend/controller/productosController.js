@@ -5,7 +5,7 @@ const idTransform = z.string().transform(((val, ctx)  => {
     if (isNaN(num)) {
         ctx.addIssue({
             code: "INVALID_ID",
-            message: "id must be a number"
+            message: "id debe ser un numero"
         });
         return z.NEVER;
     }
