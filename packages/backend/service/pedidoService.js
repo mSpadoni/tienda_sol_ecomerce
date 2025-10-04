@@ -9,7 +9,6 @@ import {
   obtenerMoneda,
   obtenerDireccion,
   validarStock,
-  actualizarProductosPorCambioDeStock,
   actualizarStock
 } from "./funcionesDelService.js";
 import { EstadoPedido } from "../Dominio/EstadoPedido.js";
@@ -32,9 +31,9 @@ export default class pedidoService {
     const usuario = obtenerUsuario(pedidoData.usuario, this.repositorioUsuario);
    let items = obtenerItems(pedidoData, this.repositorioProducto);
 
-validarStock(items);
+  validarStock(items);
 
-items = actualizarStock(items, this.repositorioProducto, EstadoPedido.PENDIENTE);
+  items = actualizarStock(items, this.repositorioProducto, EstadoPedido.PENDIENTE);
     const moneda = obtenerMoneda(pedidoData.moneda);
 
     const direccionEntrega = obtenerDireccion(pedidoData);

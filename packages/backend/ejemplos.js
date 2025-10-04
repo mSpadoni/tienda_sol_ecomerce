@@ -6,6 +6,8 @@ import Producto from "./Dominio/Producto.js";
 import Notificacion from "./Dominio/Notificacion.js";
 import { EstadoPedido,crearMensajeSegunEstado } from "./Dominio/EstadoPedido.js";
 import { TipoUsuario } from "./Dominio/TipoUsuario.js";
+
+//usuarios de ejemplo
 export
  const usuario1=new Usuario(
     1,
@@ -39,7 +41,23 @@ export
   export
   const usuario4=new Usuario(4, "admin", "@gmail.com", " ", TipoUsuario.VENDEDOR, new Date())
 
+
+//productos de ejemplo
   export
+  const prodEjemplo1 = new Producto(
+  1,
+  new Usuario(3, "admin", "@gmail.com", " ", "Admin", new Date()),
+  "milanesa",
+  "rica milanesa",
+  ["comida"],
+  5000,
+  "Peso Argentino",
+  10,
+  [],
+  true,
+);
+
+export
 const prodEjemplo2 = new Producto(
   2,
  usuario4,
@@ -110,9 +128,12 @@ const mensaje1="El usuario Juan Perez a hecho un pedido por los siguientes produ
 const mensaje2=crearMensajeSegunEstado(EstadoPedido.CANCELADO.valor)
 const mensaje3=crearMensajeSegunEstado(EstadoPedido.ENVIADO.valor)
 
+//notificaciones de ejemplo
 export
 const noti1= new Notificacion(usuario4,mensaje1,new Date())
 export
 const noti2=new Notificacion(usuario4,mensaje2,new Date())
 export
 const noti3=new Notificacion(usuario1,mensaje3,new Date())
+
+
