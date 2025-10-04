@@ -139,4 +139,70 @@ describe("pedidoService (modo ESM)", () => {
     expect(mockRepoPedido.updateById).toHaveBeenCalledWith(10, pedidoExistente);
     expect(resultado.items).toEqual(itemsActualizados);
   });
+    // ---------- CAMINOS TRISTES ----------
+
+  test("crear debe lanzar error si el usuario no es un comprador", () => {
+    const usuarioVendedor = { id: 10, tipo: "VENDEDOR" };
+
+    // Simulamos que la función auxiliar devuelve un usuario incorrecto
+    funciones.obtenerUsuario.mockReturnValue(usuarioVendedor);
+
+    const pedidoData = { usuario: usuarioVendedor, moneda: "Peso Argentino" };
+
+    // Suponemos que validarStock no llega a llamarse porque hay un error antes
+    funciones.obtenerItems.mockImplementation(() => {
+      throw new Error("El usuario no tiene permisos para crear pedidos");
+    });
+
+    expect(() => service.crear(pedidoData)).toThrow(
+      "El usuario no tiene permisos para crear pedidos"
+    );
+  });
+
+  test("crear debe lanzar error si no hay stock disponible", () => {
+    const usuarioMock = { id: 1, tipo: "COMPRADOR" };
+    const itemsMock = [{ id: 1, nombre: "milanesa", stock: 0 }];
+
+    funciones.obtenerUsuario.mockReturnValue(usuarioMock);
+    funciones.obtenerItems.mockReturnValue(itemsMock);
+    funciones.validarStock.mockImplementation(() => {
+      throw new Error("Stock insuficiente");
+    });
+
+    const pedidoData = { usuario: usuarioMock, items: itemsMock };
+
+    expect(() => service.crear(pedidoData)).toThrow("Stock insuficiente");
+  });
+
+  test("findPedidosByUsuariosId debe devolver lista vacía si el usuario no tiene pedidos", () => {
+    funciones.obtenerPedidosPorUsuario.mockReturnValue([]);
+
+    const pedidos = service.findPedidosByUsuariosId(123);
+
+    expect(pedidos).toEqual([]);
+    expect(funciones.obtenerPedidosPorUsuario).toHaveBeenCalledWith(
+      123,
+      mockRepoPedido
+    );
+  });
+
+  test("actualizar debe lanzar error si el pedido no existe", async () => {
+    funciones.obtenerPedido.mockImplementation(() => {
+      throw new Error("Pedido no encontrado");
+    });
+
+    await expect(service.actualizar(99, {})).rejects.toThrow("Pedido no encontrado");
+  });
+
+  test("actualizar debe lanzar error si el estado es inválido", async () => {
+    const pedidoExistente = { id: 1, items: [], actualizarEstado: jest.fn() };
+    funciones.obtenerPedido.mockReturnValue(pedidoExistente);
+    funciones.obtenerEstado.mockImplementation(() => {
+      throw new Error("Estado inválido");
+    });
+
+    await expect(service.actualizar(1, { estado: "DESCONOCIDO" })).rejects.toThrow(
+      "Estado inválido"
+    );
+  });
 });
