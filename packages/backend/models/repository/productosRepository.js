@@ -1,10 +1,17 @@
 import Producto from "../entities/Producto.js";
+import { ProductoModel } from "../../schemas/ProductoSchema.js";
 import fs from "node:fs/promises";
-import path from "node:path";
 
 export default class ProductosRepository {
-    static productoPath = path.resolve("data", "productos.json");
     
+        /*async getNotificaciones(filtros){
+        const{leida} = filtros
+        return await this.model.find(filtros).populate('notificacion');
+        }*/
+    constructor(){
+        this.model = ProductoModel
+    }
+
     async getProductos(filtros, activo, sort, order){
         const data = await fs.readFile(ProductosRepository.productoPath);
         const dataObjects = await JSON.parse(data);
@@ -68,23 +75,25 @@ export default class ProductosRepository {
     }
 
     async contarTodos() {
-        const data = await fs.readFile(ProductosRepository.productoPath);
-        const dataObjects = await JSON.parse(data);
-        const productos = mapToProductos(dataObjects);
-        return productos.length;
+        return ProductoModel.countDocuments();
     }
 
     orderBy(productos, sort, order) {
         return productos.sort(tipoOrdenamiento[sort][order]);
     }
 
-findById(id) {
-    return this.productos.find((producto) => producto.id === id);
+  async findById(id) {
+      return await ProductoModel.findById(id);
   }
 
-  create(producto) {
-    this.productos.push(producto);
+  async create(producto) {
+    await this.save(producto)
   }
+
+  async save(producto) {
+        const nuevoProducto = new ProductoModel(producto);
+        return await nuevoProducto.save();
+    }
 
   updateProducto(producto){
     const index = this.productos.findIndex((p) => p.id === producto.id)

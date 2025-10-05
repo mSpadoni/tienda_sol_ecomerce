@@ -11,7 +11,7 @@ export default class NotificacionesRepository {
     }
 
     async findById(id){
-        return await this.model.findById(id);
+        return await NotificacionModel.findById(id);
     }
 
     async getNotificaciones(filtros){

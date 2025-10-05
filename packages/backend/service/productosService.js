@@ -23,7 +23,6 @@ export default class ProductosService {
         }
     }
 
-
     precioAsc(productos) { 
         return this.productosRepository.precioAsc(productos);
     }
