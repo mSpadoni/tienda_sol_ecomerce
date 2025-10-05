@@ -19,7 +19,7 @@ export default class ControllerPedidos {
 
   async crear(req, res) {
    const resultBody = pedidoSchema.parse(req.body);
-    const nuevoPedido = await this.servicePedido.crear(resultBody); 
+    const nuevoPedido = await this.servicePedido.crear(resultBody);
 
     logger.http(`Pedido creado`);
     const notificacion =

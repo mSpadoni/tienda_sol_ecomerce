@@ -1,10 +1,8 @@
 
-import {usuario1, usuario2, usuario3, usuario4 } from "../ejemplos.js";
-
 
 export default class usuarioRepository {
   constructor() {
-    this.usuarios = [usuario1, usuario2, usuario3, usuario4];
+    this.usuarios = [];
     this.currentId = 1;
     this.idBorrados = [];
   }

@@ -42,6 +42,10 @@ export default class NotificacionesRepository {
     estaLeida(leida, notificaciones){
         return notificaciones.filter(n => n.estaLeida() === leida)
     }
+
+    save(notificacion) {
+    this.model.save(notificacion);
+  }
 }
 
 function mapToNotificacion(dataObject) {

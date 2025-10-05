@@ -1,7 +1,7 @@
-import { monedaValida } from "../Dominio/Moneda.js";
-import ItemPedido from "../Dominio/ItemPedido.js";
-import findEstado, { EstadoPedido } from "../Dominio/EstadoPedido.js";
-import DireccionEntrega from "../Dominio/DireccionEntrega.js";
+import { monedaValida } from "../models/entities/Moneda.js";
+import ItemPedido from "../models/entities/ItemPedido.js";
+import findEstado, { EstadoPedido } from "../models/entities/EstadoPedido.js";
+import DireccionEntrega from "../models/entities/DireccionEntrega.js";
 import ErrorNoEncontrado from "../errors/errorNoEncontrado.js";
 import ErrorMonedaNoPermitida from "../errors/errorMonedaNoPernitida.js";
 import ErrorEstadoNoValido from "../errors/errorEstadoNoValido.js";

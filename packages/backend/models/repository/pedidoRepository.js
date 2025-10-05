@@ -1,18 +1,11 @@
-import logger from "../../logger/logger.js";
-import {jsonPedidosEjemplo1,
-      jsonPedidosEjemplo2,
-      jsonPedidosEjemplo3,} from "../ejemplos.js"
+import logger from "../../../logger/logger.js";
 /*import pedido from "../Dominio/pedido.js";
 import fs from "node:fs/promises";
 import path from "node:path";*/
 
 export default class pedidoRepository {
   constructor() {
-    this.pedidos = [
-      jsonPedidosEjemplo1,
-      jsonPedidosEjemplo2,
-      jsonPedidosEjemplo3,
-    ];
+    this.pedidos = [];
     this.idAponer = 1;
   }
 

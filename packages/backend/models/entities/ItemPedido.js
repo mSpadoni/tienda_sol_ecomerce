@@ -1,4 +1,4 @@
-import CantNegativa from "../errors/errorCantNegativa.js"
+import CantNegativa from "../../errors/errorCantNegativa.js"
 export default class ItemPedido {
   constructor(producto, cantidad, precioUnitario) {
     if(cantidad<=0){

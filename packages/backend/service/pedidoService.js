@@ -1,4 +1,4 @@
-import Pedido from "../Dominio/Pedido.js";
+import Pedido from "../models/entities/Pedido.js";
 import logger from "../../logger/logger.js";
 import {
   obtenerEstado,
@@ -11,7 +11,7 @@ import {
   validarStock,
   actualizarStock
 } from "./funcionesDelService.js";
-import { EstadoPedido } from "../Dominio/EstadoPedido.js";
+import { EstadoPedido } from "../models/entities/EstadoPedido.js";
 export default class pedidoService {
   constructor(repositorioPedido, repositorioUsuario, repositorioProducto) {
     this.repositorioPedido = repositorioPedido;

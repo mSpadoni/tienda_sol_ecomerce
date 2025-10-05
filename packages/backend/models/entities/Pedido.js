@@ -1,12 +1,12 @@
 import CambioEstadoPedido from "./CambioEstadoPedido.js";
 import { EstadoPedido } from "./EstadoPedido.js";
-import NoSePuedeCancelarUnPedidoEnviado from "../errors/errorNoSePuedeCancelarUnPedidoEnviado.js";
-import NoSePuedeEnviarUnPedidoCancelado from "../errors/errorNoSePuedeEnviarUnPedidoCancelado.js";
-import SoloElCompradorPuedeCancelarUnPedido from "../errors/errorSoloElCompradorPuedeCancelarUnPedido.js";
-import SoloElVendedorPuedeEnviarUnPedido from "../errors/errorSoloElVendedorPuedeEnviarUnPedido.js";
+import NoSePuedeCancelarUnPedidoEnviado from "../../errors/errorNoSePuedeCancelarUnPedidoEnviado.js";
+import NoSePuedeEnviarUnPedidoCancelado from "../../errors/errorNoSePuedeEnviarUnPedidoCancelado.js";
+import SoloElCompradorPuedeCancelarUnPedido from "../../errors/errorSoloElCompradorPuedeCancelarUnPedido.js";
+import SoloElVendedorPuedeEnviarUnPedido from "../../errors/errorSoloElVendedorPuedeEnviarUnPedido.js";
 import { TipoUsuario } from "./TipoUsuario.js";
-import NoEsTipoUsuarioCorecto from "../errors/errorNoEsTipoUsuarioCorrecto.js";
-import YaEstaEnEseEstado from "../errors/errorYaEstaEnEseEstado.js";
+import NoEsTipoUsuarioCorecto from "../../errors/errorNoEsTipoUsuarioCorrecto.js";
+import YaEstaEnEseEstado from "../../errors/errorYaEstaEnEseEstado.js";
 export default class Pedido {
   constructor(id, usuario, items, moneda, direccionEntrega) {
    if(usuario.tipo!==TipoUsuario.COMPRADOR){

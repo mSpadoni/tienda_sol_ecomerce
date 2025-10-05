@@ -1,7 +1,7 @@
 import express from "express";
 import { pathPedidos, pathUsuarios } from "./paths.js";
 import ControllerPedidos from "../controller/ControllerPedidos.js";
-import pedidosErrorHandler from "../middlewares/pedidosMiddlewares.js";
+import pedidosErrorHandler from "../middleware/pedidosMiddlewares.js";
 import logger from "../../logger/logger.js";
 
 export default function pedidoRoute(getController) {

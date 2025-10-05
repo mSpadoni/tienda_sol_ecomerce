@@ -77,6 +77,21 @@ export default class ProductosRepository {
     orderBy(productos, sort, order) {
         return productos.sort(tipoOrdenamiento[sort][order]);
     }
+
+findById(id) {
+    return this.productos.find((producto) => producto.id === id);
+  }
+
+  create(producto) {
+    this.productos.push(producto);
+  }
+
+  updateProducto(producto){
+    const index = this.productos.findIndex((p) => p.id === producto.id)
+    if (index !== -1) {
+      this.productos[index].stock=producto.stock
+    }
+  }
 }
 
 const tipoOrdenamiento = {
@@ -89,6 +104,7 @@ const tipoOrdenamiento = {
         desc: (a, b) => b.getVentas() - a.getVentas(),
     },
 };
+
 
 function mapToProducto(dataObject) {
     const {vendedor, titulo, descripcion, categorias, precio, moneda, stock, fotos,activo, ventas} = dataObject;
