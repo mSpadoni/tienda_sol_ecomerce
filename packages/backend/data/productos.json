@@ -1,0 +1,67 @@
+[
+    {
+    "id": 1,
+    "vendedor": "vendedor1",                       
+    "titulo": "Camiseta Argentina",            
+    "descripcion": "Camiseta oficial de la Selección",
+    "categorias": ["Ropa", "Deportes"],              
+    "precio": 25000,                             
+    "moneda": "ARS",                             
+    "stock": 10,                                
+    "fotos": ["camiseta1.jpg"],                  
+    "activo": true,
+    "ventas": 150                      
+    },
+    {
+    "id": 2,
+    "vendedor": "vendedor2",
+    "titulo": "Notebook Lenovo",
+    "descripcion": "Notebook Lenovo i5 8GB RAM 256GB SSD",
+    "categorias": ["Tecnología", "Computadoras"],
+    "precio": 650000,
+    "moneda": "ARS",
+    "stock": 5,
+    "fotos": ["notebook.jpg"],
+    "activo": true,
+    "ventas": 100
+    },
+    {
+    "id": 3,
+    "vendedor": "vendedor1",
+    "titulo": "Auriculares Bluetooth",
+    "descripcion": "Auriculares inalámbricos con cancelación de ruido",
+    "categorias": ["Tecnología", "Audio"],
+    "precio": 75000,
+    "moneda": "ARS",
+    "stock": 15,
+    "fotos": ["auriculares.jpg"],
+    "activo": true,
+    "ventas": 200
+    },
+    {
+    "id": 4,
+    "vendedor": "vendedor3",
+    "titulo": "Silla Gamer",
+    "descripcion": "Silla ergonómica con soporte lumbar",
+    "categorias": ["Muebles", "Gaming"],
+    "precio": 120000,
+    "moneda": "ARS",
+    "stock": 8,
+    "fotos": ["silla.jpg"],
+    "activo": false,
+    "ventas": 50
+    },
+    {
+    "id": 5,
+    "vendedor": "vendedor2",
+    "titulo": "Pelota de fútbol",
+    "descripcion": "Pelota tamaño 5 oficial FIFA",
+    "categorias": ["Deportes"],
+    "precio": 18000,
+    "moneda": "ARS",
+    "stock": 30,
+    "fotos": ["pelota.jpg"],
+    "activo": true,
+    "ventas": 300
+    }
+]

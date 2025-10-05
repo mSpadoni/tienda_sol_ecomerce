@@ -4,8 +4,12 @@ import cors from "cors";
 import NotificacionesRepository  from "./models/repository/notificacionesRepository.js";
 import NotificacionesService from "./service/notificacionesService.js";
 import NotificacionesController from "./controller/notificacionesController.js";
+import ProductosRepository  from "./models/repository/productosRepository.js";
+import ProductosService from "./service/productosService.js";
+import ProductosController from "./controller/productosController.js";
 import routes from "./routes/routes.js"
 import { Server } from "./server.js"
+import { MongoDBClient } from "./config/database.js";
 
 const app = express();
 
@@ -37,8 +41,16 @@ const notificacionesRepository = new NotificacionesRepository();
 const notificacionesService = new NotificacionesService(notificacionesRepository);
 const notificacionesController = new NotificacionesController(notificacionesService);
 
+// productos 
+const productosRepository = new ProductosRepository();
+const productosService = new ProductosService(productosRepository);
+const productosController = new ProductosController(productosService);
+
 server.setController(NotificacionesController, notificacionesController)
+server.setController(ProductosController, productosController)
 
 routes.forEach(route  => {server.addRoute(route)});
 server.configureRoutes();
 server.launch();
+
+MongoDBClient.connect();

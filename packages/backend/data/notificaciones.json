@@ -1,0 +1,16 @@
+[
+    {
+        "id": 1,
+        "usuario": null,
+        "mensaje": "Tienes un nuevo pedido de Juan Perez",
+        "fecha": "2024-10-01T10:00:00Z",
+        "leida": false
+    },
+    {
+        "id": 2,
+        "usuario": null,
+        "mensaje": "El pedido #1234 esta en camino",
+        "fecha": "2024-10-01T10:00:00Z",
+        "leida": false
+    }
+]

@@ -10,4 +10,8 @@ export default class Usuario {
     this.tipo = tipo;
     this.fechaAlta = fechaAlta;
   }
+
+  getId(){
+    return this.id
+  }
 }
