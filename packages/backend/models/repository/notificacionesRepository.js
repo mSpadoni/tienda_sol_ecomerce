@@ -14,7 +14,9 @@ export default class NotificacionesRepository {
         return await NotificacionModel.findById(id);
     }
 
-    async getNotificaciones(filtros){
+    async getNotificaciones(filtros = {}){
+        return await NotificacionModel.find(filtros);
+        /*
         const {leida} = filtros
         const data = await fs.readFile(NotificacionesRepository.notificacionesPath, 'utf8')
         const dataObjects = JSON.parse(data)
@@ -24,6 +26,7 @@ export default class NotificacionesRepository {
             notificacionesADevolver = this.estaLeida(leida, notificacionesADevolver)
         }
         return notificacionesADevolver
+        */
     }
 
     /*async getNotificaciones(filtros){
@@ -47,7 +50,7 @@ export default class NotificacionesRepository {
     this.model.save(notificacion);
   }
 }
-
+/*
 function mapToNotificacion(dataObject) {
     const { id, mensaje, fecha, leida } = dataObject;
     const notificacion = new Notificacion(id, mensaje, fecha);
@@ -58,3 +61,4 @@ function mapToNotificacion(dataObject) {
 function mapToNotificaciones(dataObjects) {
     return dataObjects.map(mapToNotificacion);
 }
+*/

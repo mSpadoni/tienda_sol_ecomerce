@@ -15,6 +15,10 @@ const notificacionSchema = new mongoose.Schema({
         type: Date, 
         default: Date.now 
     },
+    leida: {
+        type: Boolean,
+        default: false
+    },
 },{
     timestamps: true,
     collection: 'notificaciones'

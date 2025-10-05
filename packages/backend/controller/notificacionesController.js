@@ -1,17 +1,12 @@
 import { z } from "zod";
 import { NotificacionDoesNotExist } from "../errors/NotificacionDoesNotExist.js";
+import mongoose from "mongoose";
 
-const idTransform = z.string().transform(((val, ctx)  => {
-    const num = Number(val);
-    if (isNaN(num)) {
-        ctx.addIssue({
-            code: "INVALID_ID",
-            message: "id must be a number"
-        });
-        return z.NEVER;
-    }
-    return num;
-}))
+const idTransform = z.string().refine((val) => {
+    return mongoose.Types.ObjectId.isValid(val);
+}, {
+    message: "ID debe ser un ObjectId válido de MongoDB"
+});
 
 export default class NotificacionesController {
     constructor(notificacionesService){
