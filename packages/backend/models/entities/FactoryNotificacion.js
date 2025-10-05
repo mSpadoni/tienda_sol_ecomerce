@@ -1,8 +1,4 @@
-import  Notificacion from "./Notificacion.js";
-import  Pedido from "./Pedido.js";
-import EstadoPedido from "./EstadoPedido.js";
-
-export  class FactoryNotificacion {
+export default class FactoryNotificacion {
   constructor() {
     if (FactoryNotificacion.instance) {
       return FactoryNotificacion.instance;
@@ -16,8 +12,8 @@ export  class FactoryNotificacion {
     }
     return FactoryNotificacion.instance;
   }
-  
+
   crearSegunPedido(pedido) {
-    return pedido.estado.crearNotificacion(pedido)
+    return pedido.estado.crearNotificacion(pedido);
   }
 }

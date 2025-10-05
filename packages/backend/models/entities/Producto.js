@@ -5,6 +5,7 @@ import { Moneda } from "./Moneda.js";
 
 export default class Producto {
   constructor(
+    id,
     vendedor,
     titulo,
     descripcion,
@@ -16,7 +17,7 @@ export default class Producto {
     activo,
     ventas
   ) {
-    this.id = randomUUID();
+    this.id = id;
     this.vendedor = vendedor;
     this.titulo = titulo;
     this.descripcion = descripcion;
