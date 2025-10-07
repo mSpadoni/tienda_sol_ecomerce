@@ -1,5 +1,4 @@
-export
-function adaptarPedidoToJson(pedido) {
+export function adaptarPedidoToJson(pedido) {
   return {
     id: pedido.id,
     usuario: pedido.comprador,
@@ -11,16 +10,15 @@ function adaptarPedidoToJson(pedido) {
       descripcion: item.producto.descripcion,
       cantidad: item.cantidad,
       precioUnitario: item.precioUnitario,
-      stock: item.producto.stock
+      stock: item.producto.stock,
     })),
-    estado: pedido.estado.valor,
+    estado: pedido.estado,
     total: pedido.calcularTotal(),
     moneda: pedido.moneda,
   };
 }
 
-export
-function adaptarNotificacion(Notificacion) {
+export function adaptarNotificacion(Notificacion) {
   if (!Notificacion) {
     return "";
   }

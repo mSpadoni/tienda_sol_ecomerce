@@ -1,15 +1,20 @@
-import z
-from "zod";
+import z from "zod";
 
-export
-const pedidoPatchSchema = z.object({
+import mongoose from "mongoose";
+
+export const objectIdSchema = z
+  .string()
+  .refine((val) => mongoose.Types.ObjectId.isValid(val), {
+    message: "ID no válido",
+  });
+
+export const pedidoPatchSchema = z.object({
   estado: z.string().min(1),
-  usuario: z.number(),
+  usuario: objectIdSchema,
   motivo: z.string(),
 });
 
-export
-const direccionSchema = z.object({
+export const direccionSchema = z.object({
   calle: z.string().min(1),
   altura: z.string().min(1),
   piso: z.string(),
@@ -22,33 +27,14 @@ const direccionSchema = z.object({
   long: z.string(),
 });
 
-export
-const pedidoSchema = z.object({
-  usuario: z.number().min(1),
+export const pedidoSchema = z.object({
+  usuario: objectIdSchema,
   moneda: z.string().min(1),
   direccionEntrega: direccionSchema,
   items: z.array(
     z.object({
-      productoId: z.coerce.number(),
+      productoId: objectIdSchema,
       cantidad: z.coerce.number(),
     }),
   ),
-});
-
-export
-const idTransform = z.string().transform((val, ctx) => {
-  const num = Number(val);
-  if (isNaN(num)) {
-    ctx.addIssue({
-      code: "INVALID_ID"
-    });
-    return z.NEVER;
-  }
-  if (num <= 0) {
-    ctx.addIssue({
-      code: "INVALID_ID"
-    });
-    return z.NEVER;
-  }
-  return num;
 });

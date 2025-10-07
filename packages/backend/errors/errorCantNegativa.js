@@ -1,5 +1,5 @@
-export default class CantNegativa extends Error{
+export default class CantNegativa extends Error {
   constructor(estado) {
-    super("Los item deben tener cantidad positiva")
+    super("Los item deben tener cantidad positiva");
   }
 }

@@ -2,9 +2,9 @@ import express from "express";
 import logger from "../logger/logger.js";
 // El server recibe las rutas y recibe el puerto
 export default class Server {
-  #controllers = {}
-  #app
-  #routes
+  #controllers = {};
+  #app;
+  #routes;
 
   constructor(app, port) {
     this.#app = app;

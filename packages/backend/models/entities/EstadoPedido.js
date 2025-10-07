@@ -59,8 +59,7 @@ export const EstadoPedido = Object.freeze({
   },
 });
 
-export 
-function crearMensajeSegunEstado(estado) {
+export function crearMensajeSegunEstado(estado) {
   return `El pedido esta en estado: ${estado}`;
 }
 

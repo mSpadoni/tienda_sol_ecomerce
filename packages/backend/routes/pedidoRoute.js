@@ -14,10 +14,10 @@ export default function pedidoRoute(getController) {
 
   router.post(pathPedidos, async (req, res, next) => {
     logger.http("Solicitud POST a /pedidos");
-    try {
-      await controler.crear(req, res);
-    } catch (err) {
-      next(err);
+    try{
+    await controler.crear(req, res);}
+    catch(err){
+      next(err)
     }
   });
 
@@ -39,6 +39,6 @@ export default function pedidoRoute(getController) {
     }
   });
 
-router.use(pedidosErrorHandler);
+  router.use(pedidosErrorHandler);
   return router;
 }

@@ -1,11 +1,10 @@
 import logger from "../../logger/logger.js";
-import { pedidoPatchSchema,
-         pedidoSchema,
-         idTransform
- } from "./validacionesZOD.js";
-import { adaptarPedidoToJson,
-         adaptarNotificacion
- } from "./adaptadoresJSON.js";
+import {
+  pedidoPatchSchema,
+  pedidoSchema,
+  objectIdSchema,
+} from "./validacionesZOD.js";
+import { adaptarPedidoToJson, adaptarNotificacion } from "./adaptadoresJSON.js";
 
 export default class ControllerPedidos {
   constructor(servicePedido, serviceNotificaciones) {
@@ -15,15 +14,16 @@ export default class ControllerPedidos {
     logger.info({
       serviceNotificaciones: this.serviceNotificaciones.constructor.name,
     });
-  } parse
+  }
+  parse;
 
   async crear(req, res) {
-   const resultBody = pedidoSchema.parse(req.body);
+    const resultBody = pedidoSchema.parse(req.body);
     const nuevoPedido = await this.servicePedido.crear(resultBody);
-
+     logger.info(`${JSON.stringify(nuevoPedido)}`)
     logger.http(`Pedido creado`);
     const notificacion =
-      this.serviceNotificaciones.crearNotificacion(nuevoPedido);
+      await this.serviceNotificaciones.crearNotificacion(nuevoPedido);
 
     logger.http(`Notificacion creada: ${JSON.stringify(notificacion)}`);
 
@@ -36,15 +36,19 @@ export default class ControllerPedidos {
   }
 
   async findPedidosByID(req, res) {
-    logger.info(`Buscando pedidos del usuario con id: ${req.params.id} en el controlador`);
+    logger.info(
+      `Buscando pedidos del usuario con id: ${req.params.id} en el controlador`,
+    );
 
-    const resultId = idTransform.parse(req.params.id);
+    const resultId = objectIdSchema.parse(req.params.id);
 
     logger.info(`Id del usuario valido: ${resultId}`);
 
-    const pedidos = await this.servicePedido.findPedidosByUsuariosId(resultId)
+    const pedidos = await this.servicePedido.findPedidosByUsuariosId(resultId);
 
-    logger.http(`Pedidos del usuario con id: ${resultId} encontrados: ${JSON.stringify(pedidos)}`);
+    logger.http(
+      `Pedidos del usuario con id: ${resultId} encontrados: ${JSON.stringify(pedidos)}`,
+    );
 
     const pedidosAPTJ = pedidos.map((pedido) => adaptarPedidoToJson(pedido));
 
@@ -54,18 +58,19 @@ export default class ControllerPedidos {
   async actualizar(req, res) {
     logger.info("actualizando pedido");
 
-    const pedidoID = idTransform.parse(req.params.id);
+    const pedidoID = objectIdSchema.parse(req.params.id);
 
     const resultBody = pedidoPatchSchema.parse(req.body);
 
     logger.info("Datos validados, actualizando pedido");
 
-    const pedidosActualizados = await this.servicePedido.actualizar(pedidoID,resultBody);
-   
-    logger.info("Pedido actualizado");
+    const pedidosActualizados = await this.servicePedido.actualizar(
+      pedidoID,
+      resultBody,
+    );
 
     const notificacion =
-      this.serviceNotificaciones.crearNotificacion(pedidosActualizados);
+      await this.serviceNotificaciones.crearNotificacion(pedidosActualizados);
 
     logger.info("Notificacion creada");
     const JSONresponse = {
@@ -77,4 +82,3 @@ export default class ControllerPedidos {
     res.status(200).json(JSONresponse);
   }
 }
-

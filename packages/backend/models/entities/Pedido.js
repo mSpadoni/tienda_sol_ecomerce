@@ -8,11 +8,11 @@ import { TipoUsuario } from "./TipoUsuario.js";
 import NoEsTipoUsuarioCorecto from "../../errors/errorNoEsTipoUsuarioCorrecto.js";
 import YaEstaEnEseEstado from "../../errors/errorYaEstaEnEseEstado.js";
 export default class Pedido {
-  constructor(id, usuario, items, moneda, direccionEntrega) {
-   if(usuario.tipo!==TipoUsuario.COMPRADOR){
-    throw new NoEsTipoUsuarioCorecto(TipoUsuario.COMPRADOR)
-   }
-    this.id = id;
+  id;
+  constructor(usuario, items, moneda, direccionEntrega) {
+    if (usuario.tipo !== TipoUsuario.COMPRADOR) {
+      throw new NoEsTipoUsuarioCorecto(TipoUsuario.COMPRADOR);
+    }
     this.comprador = usuario;
     this.items = items;
     this.moneda = moneda;
@@ -29,44 +29,55 @@ export default class Pedido {
   }
 
   actualizarEstado(nuevoEstado, usuario, motivo) {
-    if (
-      nuevoEstado === EstadoPedido.CANCELADO &&
-      usuario.id != this.comprador.id
-    ) {
-      throw new SoloElCompradorPuedeCancelarUnPedido();
-    }
-    if (nuevoEstado===this.estado){
-      throw new YaEstaEnEseEstado(nuevoEstado.valor)
-    }
-    if (
-      nuevoEstado === EstadoPedido.ENVIADO &&
-      usuario.id != this.obtenerVendedor().id
-    ) {
-      throw new SoloElVendedorPuedeEnviarUnPedido();
-    }
-    if (
-      this.estado === EstadoPedido.ENVIADO &&
-      nuevoEstado === EstadoPedido.CANCELADO
-    ) {
-      throw new NoSePuedeCancelarUnPedidoEnviado();
-    }
-    if (
-      this.estado === EstadoPedido.CANCELADO &&
-      nuevoEstado === EstadoPedido.ENVIADO
-    ) {
-      throw new NoSePuedeEnviarUnPedidoCancelado();
-    }
-
-    this.estado = nuevoEstado;
-    const cambioEstadoPedido = new CambioEstadoPedido(
-      new Date(),
-      nuevoEstado,
-      this,
-      usuario,
-      motivo,
-    );
-    this.historialEstado.push(cambioEstadoPedido);
+  // Validaciones
+  if (
+    nuevoEstado === EstadoPedido.CANCELADO &&
+    usuario.id !== this.comprador.id
+  ) {
+    throw new SoloElCompradorPuedeCancelarUnPedido();
   }
+
+  if (this.estado?.valor === nuevoEstado.valor) {
+    throw new YaEstaEnEseEstado(nuevoEstado.valor);
+  }
+
+  if (
+    nuevoEstado === EstadoPedido.ENVIADO &&
+    usuario.id !== this.obtenerVendedor().id
+  ) {
+    throw new SoloElVendedorPuedeEnviarUnPedido();
+  }
+
+  if (
+    this.estado === EstadoPedido.ENVIADO &&
+    nuevoEstado === EstadoPedido.CANCELADO
+  ) {
+    throw new NoSePuedeCancelarUnPedidoEnviado();
+  }
+
+  if (
+    this.estado === EstadoPedido.CANCELADO &&
+    nuevoEstado === EstadoPedido.ENVIADO
+  ) {
+    throw new NoSePuedeEnviarUnPedidoCancelado();
+  }
+
+  // Asignación
+  this.estado = nuevoEstado;
+
+  // Crear historial
+  const cambioEstadoPedido = new CambioEstadoPedido(
+    new Date(),
+    nuevoEstado.valor,
+    this,
+    usuario,
+    motivo
+  );
+
+  this.historialEstado.push(cambioEstadoPedido);
+
+  console.log(`Estado actualizado: ${JSON.stringify(this.estado)}`);
+}
 
   obtenerVendedor() {
     return this.items[0].obtenerVendedor();

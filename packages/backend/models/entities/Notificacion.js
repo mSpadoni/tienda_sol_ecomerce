@@ -1,9 +1,9 @@
-import { randomInt  } from "crypto";
+import { randomInt } from "crypto";
 import Usuario from "./Usuario.js";
 
 export default class Notificacion {
+  id;
   constructor(usuario, mensaje, fechaAlta) {
-    this.id = this.randomNumericId(12);
     this.usuario = usuario;
     this.mensaje = mensaje;
     this.fechaAlta = fechaAlta;
@@ -15,8 +15,8 @@ export default class Notificacion {
     this.leida = true;
     this.fechaLeida = new Date();
   }
-  
-  estaLeida(){
+
+  estaLeida() {
     return this.leida === true;
   }
 
@@ -26,5 +26,5 @@ export default class Notificacion {
       result += randomInt(0, 10); // genera dígitos del 0 al 9
     }
     return result;
-}
+  }
 }

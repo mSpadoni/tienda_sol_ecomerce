@@ -7,20 +7,17 @@ jest.unstable_mockModule("../../../../logger/logger.js", () => ({
 }));
 
 // 🔹 Mock de las funciones auxiliares
-jest.unstable_mockModule(
-  "../../../service/funcionesDelService.js",
-  () => ({
-    obtenerUsuario: jest.fn(),
-    obtenerItems: jest.fn(),
-    validarStock: jest.fn(),
-    actualizarStock: jest.fn(),
-    obtenerMoneda: jest.fn(),
-    obtenerDireccion: jest.fn(),
-    obtenerPedidosPorUsuario: jest.fn(),
-    obtenerPedido: jest.fn(),
-    obtenerEstado: jest.fn(),
-  })
-);
+jest.unstable_mockModule("../../../service/funcionesDelService.js", () => ({
+  obtenerUsuario: jest.fn(),
+  obtenerItems: jest.fn(),
+  validarStock: jest.fn(),
+  actualizarStock: jest.fn(),
+  obtenerMoneda: jest.fn(),
+  obtenerDireccion: jest.fn(),
+  obtenerPedidosPorUsuario: jest.fn(),
+  obtenerPedido: jest.fn(),
+  obtenerEstado: jest.fn(),
+}));
 
 // 🔹 Importamos lo mockeado
 const funciones = await import("../../../service/funcionesDelService.js");
@@ -53,13 +50,13 @@ describe("pedidoService (modo ESM)", () => {
     service = new pedidoService(
       mockRepoPedido,
       mockRepoUsuario,
-      mockRepoProducto
+      mockRepoProducto,
     );
   });
 
   // ---------- TEST crear ----------
   test("crear debe generar y guardar un nuevo pedido correctamente", () => {
-    const usuarioMock = { id: 1, nombre: "Juan",tipo: TipoUsuario.COMPRADOR};
+    const usuarioMock = { id: 1, nombre: "Juan", tipo: TipoUsuario.COMPRADOR };
     const itemsMock = [{ id: 1, nombre: "milanesa" }];
     const monedaMock = "Peso Argentino";
     const direccionMock = { calle: "Falsa 123" };
@@ -79,11 +76,10 @@ describe("pedidoService (modo ESM)", () => {
     };
 
     const nuevoPedido = service.crear(pedidoData);
-    
 
     expect(funciones.obtenerUsuario).toHaveBeenCalledWith(
       usuarioMock.id,
-      mockRepoUsuario
+      mockRepoUsuario,
     );
     expect(funciones.validarStock).toHaveBeenCalledWith(itemsMock);
     expect(mockRepoPedido.save).toHaveBeenCalled();
@@ -100,7 +96,7 @@ describe("pedidoService (modo ESM)", () => {
 
     expect(funciones.obtenerPedidosPorUsuario).toHaveBeenCalledWith(
       99,
-      mockRepoPedido
+      mockRepoPedido,
     );
     expect(result).toEqual(pedidosMock);
   });
@@ -134,12 +130,12 @@ describe("pedidoService (modo ESM)", () => {
     expect(pedidoExistente.actualizarEstado).toHaveBeenCalledWith(
       estadoMock,
       usuarioMock,
-      "corrección"
+      "corrección",
     );
     expect(mockRepoPedido.updateById).toHaveBeenCalledWith(10, pedidoExistente);
     expect(resultado.items).toEqual(itemsActualizados);
   });
-    // ---------- CAMINOS TRISTES ----------
+  // ---------- CAMINOS TRISTES ----------
 
   test("crear debe lanzar error si el usuario no es un comprador", () => {
     const usuarioVendedor = { id: 10, tipo: "VENDEDOR" };
@@ -155,7 +151,7 @@ describe("pedidoService (modo ESM)", () => {
     });
 
     expect(() => service.crear(pedidoData)).toThrow(
-      "El usuario no tiene permisos para crear pedidos"
+      "El usuario no tiene permisos para crear pedidos",
     );
   });
 
@@ -182,7 +178,7 @@ describe("pedidoService (modo ESM)", () => {
     expect(pedidos).toEqual([]);
     expect(funciones.obtenerPedidosPorUsuario).toHaveBeenCalledWith(
       123,
-      mockRepoPedido
+      mockRepoPedido,
     );
   });
 
@@ -191,7 +187,9 @@ describe("pedidoService (modo ESM)", () => {
       throw new Error("Pedido no encontrado");
     });
 
-    await expect(service.actualizar(99, {})).rejects.toThrow("Pedido no encontrado");
+    await expect(service.actualizar(99, {})).rejects.toThrow(
+      "Pedido no encontrado",
+    );
   });
 
   test("actualizar debe lanzar error si el estado es inválido", async () => {
@@ -201,8 +199,8 @@ describe("pedidoService (modo ESM)", () => {
       throw new Error("Estado inválido");
     });
 
-    await expect(service.actualizar(1, { estado: "DESCONOCIDO" })).rejects.toThrow(
-      "Estado inválido"
-    );
+    await expect(
+      service.actualizar(1, { estado: "DESCONOCIDO" }),
+    ).rejects.toThrow("Estado inválido");
   });
 });
