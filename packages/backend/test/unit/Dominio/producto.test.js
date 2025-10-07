@@ -1,4 +1,4 @@
-import Producto from "../../../Dominio/Producto.js";
+import Producto from "../../../models/entities/Producto.js";
 import { prodEjemplo1, prodEjemplo2, usuario4 } from "../../../ejemplos.js";
 
 describe("Clase Producto", () => {

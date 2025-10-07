@@ -1,14 +1,14 @@
-import Pedido from "./Dominio/Pedido.js";
-import Usuario from "./Dominio/Usuario.js";
-import DireccionEntrega from "./Dominio/DireccionEntrega.js";
-import ItemProducto from "./Dominio/ItemPedido.js";
-import Producto from "./Dominio/Producto.js";
-import Notificacion from "./Dominio/Notificacion.js";
+import Pedido from "./models/entities/Pedido.js";
+import Usuario from "./models/entities/Usuario.js";
+import DireccionEntrega from "./models/entities/DireccionEntrega.js";
+import ItemProducto from "./models/entities/ItemPedido.js";
+import Producto from "./models/entities/Producto.js";
+import Notificacion from "./models/entities/Notificacion.js";
 import {
   EstadoPedido,
   crearMensajeSegunEstado,
-} from "./Dominio/EstadoPedido.js";
-import { TipoUsuario } from "./Dominio/TipoUsuario.js";
+} from "./models/entities/EstadoPedido.js";
+import { TipoUsuario } from "./models/entities/TipoUsuario.js";
 
 //usuarios de ejemplo
 export const usuario1 = new Usuario(
@@ -67,7 +67,10 @@ export const prodEjemplo2 = new Producto(
   [],
   true,
 );
-
+usuario1.id=1
+usuario2.id=2
+usuario3.id=3
+usuario4.id=4
 export const item = new ItemProducto(prodEjemplo2, 2, 1000);
 export const item2 = new ItemProducto(prodEjemplo2, 4, 1000);
 
@@ -94,7 +97,7 @@ export const jsonPedidosEjemplo1 = new Pedido(
 );
 
 export const jsonPedidosEjemplo2 = new Pedido(
-  usuario2,
+  usuario1,
   [item, item2],
   "Peso Argentino",
   direccion,
@@ -102,7 +105,7 @@ export const jsonPedidosEjemplo2 = new Pedido(
 );
 
 export const jsonPedidosEjemplo3 = new Pedido(
-  usuario3,
+  usuario1,
   [item],
   "Peso Argentino",
   direccion,

@@ -1,5 +1,5 @@
 import { jest } from "@jest/globals";
-import { TipoUsuario } from "../../../Dominio/TipoUsuario.js";
+import { TipoUsuario } from "../../../models/entities/TipoUsuario.js";
 
 // 🔹 Mock del logger (tiene que hacerse ANTES del import del módulo que lo usa)
 jest.unstable_mockModule("../../../../logger/logger.js", () => ({
@@ -21,8 +21,8 @@ jest.unstable_mockModule("../../../service/funcionesDelService.js", () => ({
 
 // 🔹 Importamos lo mockeado
 const funciones = await import("../../../service/funcionesDelService.js");
-const { EstadoPedido } = await import("../../../Dominio/EstadoPedido.js");
-const { default: Pedido } = await import("../../../Dominio/Pedido.js");
+const { EstadoPedido } = await import("../../../models/entities/EstadoPedido.js");
+const { default: Pedido } = await import("../../../models/entities/Pedido.js");
 
 // 🔹 Importamos el servicio (DESPUÉS de los mocks)
 const { default: pedidoService } = await import(

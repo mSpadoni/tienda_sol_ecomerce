@@ -1,6 +1,6 @@
-import FactoryNotification from "../../../Dominio/FactoryNotificacion.js";
+import FactoryNotification from "../../../models/entities/FactoryNotificacion.js";
 import { jsonPedidosEjemplo1, noti1, noti2, noti3 } from "../../../ejemplos.js";
-import { EstadoPedido } from "../../../Dominio/EstadoPedido.js";
+import { EstadoPedido } from "../../../models/entities/EstadoPedido.js";
 
 describe("test factoryNotification", () => {
   test("Si no hay una instancia previa se crea una nueva", () => {

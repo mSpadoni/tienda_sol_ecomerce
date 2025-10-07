@@ -1,5 +1,5 @@
-import CambioEstadoPedido from "../../../Dominio/CambioEstadoPedido.js";
-import { EstadoPedido } from "../../../Dominio/EstadoPedido.js";
+
+import { EstadoPedido } from "../../../models/entities/EstadoPedido.js";
 import {
   usuario1,
   usuario2,
@@ -12,12 +12,11 @@ import SoloElCompradorPuedeCancelarUnPedido from "../../../errors/errorSoloElCom
 import SoloElVendedorPuedeEnviarUnPedido from "../../../errors/errorSoloElVendedorPuedeEnviarUnPedido.js";
 import NoSePuedeCancelarUnPedidoEnviado from "../../../errors/errorNoSePuedeCancelarUnPedidoEnviado.js";
 import NoSePuedeEnviarUnPedidoCancelado from "../../../errors/errorNoSePuedeEnviarUnPedidoCancelado.js";
-import Pedido from "../../../Dominio/Pedido.js";
+import Pedido from "../../../models/entities/Pedido.js";
 import YaEstaEnEseEstado from "../../../errors/errorYaEstaEnEseEstado.js";
 describe("test pedido", () => {
   const pedidoBase = () =>
     new Pedido(
-      2,
       usuario2,
       [item, item2],
       "Peso Argentino",
@@ -35,7 +34,7 @@ describe("test pedido", () => {
     expect(pedido.estado === EstadoPedido.ACEPTADO).toBe(true);
     expect(pedido.historialEstado).toContainEqual(
       expect.objectContaining({
-        estado: EstadoPedido.ACEPTADO.valor,
+        estado: EstadoPedido.ACEPTADO,
         usuario: usuario1,
         motivo: "",
         fecha: expect.any(Date),
@@ -50,7 +49,7 @@ describe("test pedido", () => {
     expect(pedido.estado === EstadoPedido.RECHAZADO).toBe(true);
     expect(pedido.historialEstado).toContainEqual(
       expect.objectContaining({
-        estado: EstadoPedido.RECHAZADO.valor,
+        estado: EstadoPedido.RECHAZADO,
         usuario: usuario1,
         motivo: "",
         fecha: expect.any(Date),
@@ -62,13 +61,13 @@ describe("test pedido", () => {
   test("Un pedido no puede ser cancelado por alguien que no sea el comprador", () => {
     const pedido = pedidoBase();
     expect(() =>
-      pedido.actualizarEstado(EstadoPedido.CANCELADO, usuario1, ""),
+      pedido.actualizarEstado(EstadoPedido.CANCELADO, usuario4, ""),
     ).toThrow(SoloElCompradorPuedeCancelarUnPedido);
 
     expect(pedido.estado === EstadoPedido.CANCELADO).toBe(false);
     expect(pedido.historialEstado).not.toContainEqual(
       expect.objectContaining({
-        estado: EstadoPedido.CANCELADO.valor,
+        estado: EstadoPedido.CANCELADO,
         usuario: usuario1,
         motivo: "",
         fecha: expect.any(Date),
@@ -86,7 +85,7 @@ describe("test pedido", () => {
     expect(pedido.estado === EstadoPedido.ENVIADO).toBe(false);
     expect(pedido.historialEstado).not.toContainEqual(
       expect.objectContaining({
-        estado: EstadoPedido.ENVIADO.valor,
+        estado: EstadoPedido.ENVIADO,
         usuario: usuario1,
         motivo: "",
         fecha: expect.any(Date),
@@ -105,7 +104,7 @@ describe("test pedido", () => {
     expect(pedido.estado === EstadoPedido.CANCELADO).toBe(false);
     expect(pedido.historialEstado).not.toContainEqual(
       expect.objectContaining({
-        estado: EstadoPedido.CANCELADO.valor,
+        estado: EstadoPedido.CANCELADO,
         usuario: usuario2,
         motivo: "",
         fecha: expect.any(Date),
@@ -124,7 +123,7 @@ describe("test pedido", () => {
     expect(pedido.estado === EstadoPedido.ENVIADO).toBe(false);
     expect(pedido.historialEstado).not.toContainEqual(
       expect.objectContaining({
-        estado: EstadoPedido.ENVIADO.valor,
+        estado: EstadoPedido.ENVIADO,
         usuario: usuario4,
         motivo: "",
         fecha: expect.any(Date),
@@ -139,7 +138,7 @@ describe("test pedido", () => {
     expect(pedido.estado === EstadoPedido.CANCELADO).toBe(true);
     expect(pedido.historialEstado).toContainEqual(
       expect.objectContaining({
-        estado: EstadoPedido.CANCELADO.valor,
+        estado: EstadoPedido.CANCELADO,
         usuario: usuario2,
         motivo: "",
         fecha: expect.any(Date),
@@ -154,7 +153,7 @@ describe("test pedido", () => {
     expect(pedido.estado === EstadoPedido.ENVIADO).toBe(true);
     expect(pedido.historialEstado).toContainEqual(
       expect.objectContaining({
-        estado: EstadoPedido.ENVIADO.valor,
+        estado: EstadoPedido.ENVIADO,
         usuario: usuario4,
         motivo: "",
         fecha: expect.any(Date),
@@ -170,7 +169,7 @@ describe("test pedido", () => {
 
     expect(pedido.historialEstado).not.toContainEqual(
       expect.objectContaining({
-        estado: EstadoPedido.PENDIENTE.valor,
+        estado: EstadoPedido.PENDIENTE,
         usuario: usuario2,
         motivo: "",
         fecha: expect.any(Date),
