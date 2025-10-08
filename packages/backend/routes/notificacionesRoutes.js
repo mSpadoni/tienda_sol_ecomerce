@@ -11,7 +11,7 @@ export default function notificacionesRoutes(getController) {
 
     router.use(loggerMiddleware);
 
-    router.get(pathNotificaciones, async (req, res) => {
+    router.get(pathNotificaciones, async (req, res, next) => {
         try {
             await controller.getNotificaciones(req, res);
         } catch (err) {

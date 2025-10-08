@@ -1,21 +1,13 @@
 
+import { UsuarioModel } from "../../schemas/UsuarioSchema";
 
 export default class usuarioRepository {
   constructor() {
-    this.usuarios = [];
-    this.currentId = 1;
-    this.idBorrados = [];
+    this.model=UsuarioModel
   }
 
   findById(id) {
-    return this.usuarios.find((usuario) => usuario.id === id);
+    return this.model.findById(id)
   }
 
-  findByUsernameAndPassword(username, password) {
-    return this.usuarios.find(
-      (usuario) =>
-        (usuario.nombre === username || usuario.email === username) &&
-        usuario.password === password,
-    );
-  }
 }
