@@ -79,6 +79,6 @@ export default class ControllerPedidos {
     };
 
     logger.http(`Notificacion creada: ${JSON.stringify(JSONresponse)}`);
-    res.status(200).json(JSONresponse);
+    res.status(201).json(JSONresponse);
   }
 }
