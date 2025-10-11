@@ -2,10 +2,15 @@ import mongoose from 'mongoose';
 import Notificacion from '../models/entities/Notificacion.js';
 
 const notificacionSchema = new mongoose.Schema({
+    // id: {
+    //     type: String,
+    //     required: true,
+    //     unique: true
+    // },
     usuario: {
-        type: String,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Usuario',
         required: true,
-        trim: true,
     },
     mensaje: { 
         type: String, 
@@ -19,6 +24,10 @@ const notificacionSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
+    fechaLeida: {
+        type: Date,
+        default: null
+    }
 },{
     timestamps: true,
     collection: 'notificaciones'

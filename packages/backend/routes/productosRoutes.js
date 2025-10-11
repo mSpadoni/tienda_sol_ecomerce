@@ -8,12 +8,12 @@ const pathProductos = "/productos";
 export default function productosRoutes(getController) {
     const router = express.Router();
     const controller = getController(ProductosController);
-
+    
     router.use(loggerMiddleware);
 
-    router.get(pathProductos, async (req, res) => {
+        router.get(pathProductos, async (req, res, next) => {
         try{
-            await controller.getProductos(req, res);
+            await controller.getProductos(req, res,next);
         }catch(err){
             next(err);
         }

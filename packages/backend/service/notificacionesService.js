@@ -7,13 +7,12 @@ export default class NotificacionesService{
         this.factoryNotificacion = new FactoryNotificacion().getInstance();
     }
 
-    async getNotificaciones(filtros){
-        const notificaciones = await this.notificacionesRepository.getNotificaciones(filtros);
-        return notificaciones;
+    async getNotificaciones(filtros) {
+        return await this.notificacionesRepository.getNotificaciones(filtros);
     }
 
     async marcarNotificacionComoLeida(id){
-        await this.notificacionesRepository.marcarNotificacionComoLeida(id);
+        return await this.notificacionesRepository.marcarNotificacionComoLeida(id);
     }
 
     async getNotificacionById(id){
@@ -21,10 +20,10 @@ export default class NotificacionesService{
         return notificacion;
     }
 
-    crearNotificacion(pedido) {
+    async crearNotificacion(pedido) {
     const notificacion = this.factoryNotificacion.crearSegunPedido(pedido);
     logger.info(`${JSON.stringify(notificacion)}`);
-    this.notificacionesRepository.save(notificacion);
+    await this.notificacionesRepository.save(notificacion);
     logger.info(`Notificacion creada: ${JSON.stringify(notificacion)}`);
     return notificacion;
   }

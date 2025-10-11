@@ -20,7 +20,7 @@ export default function notificacionesRoutes(getController) {
     });
 
     router.get(pathNotificaciones + "/:id", async (req, res, next) => {
-        try {
+        try {  
            await controller.getNotificacionById(req, res);
         }catch(err){
             next(err);

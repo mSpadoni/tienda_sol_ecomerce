@@ -1,127 +1,105 @@
 import Producto from "../entities/Producto.js";
 import { ProductoModel } from "../../schemas/ProductoSchema.js";
 import fs from "node:fs/promises";
+import mongoose from "mongoose";
 
 export default class ProductosRepository {
     
-        /*async getNotificaciones(filtros){
-        const{leida} = filtros
-        return await this.model.find(filtros).populate('notificacion');
-        }*/
     constructor(){
         this.model = ProductoModel
     }
 
-    async getProductos(filtros, activo, sort, order){
-        const data = await fs.readFile(ProductosRepository.productoPath);
-        const dataObjects = await JSON.parse(data);
-        const reglas = {
-            idVendedor: (valor, productos) => this.perteneceAVendedor(valor, productos),
-            nombre: (valor, productos) => this.contieneNombre(valor, productos),
-            categoria: (valor, productos) => this.contieneCategoria(valor, productos),
-            descripcion: (valor, productos) => this.contieneDescripcion(valor, productos),
-            precioMin: (valor, productos) => this.precioMayorQue(valor, productos),
-            precioMax: (valor, productos) => this.precioMenorQue(valor, productos),
-        };
-
-        let productosADevolver = mapToProductos(dataObjects);
-
-        if (activo !== undefined) {
-            productosADevolver = this.filtrarPorActivo(activo, productosADevolver);
-        }
-        const productosADevolverFiltrados = Object.entries(filtros).reduce(
-            (productosADevolver, [clave, valor]) =>
-                reglas[clave] ? reglas[clave](valor, productosADevolver) : productosADevolver,
-            productosADevolver
-        );
-        return this.orderBy(productosADevolverFiltrados, sort, order);
-    }
 //------------Filtros----------------
-    precioMenorQue(precio, productos) {
-        return productos.filter(p => p.precio < precio)
+
+    rangoPrecios(filtros, query){
+        const precio = {};
+        if (filtros.precioMax !== undefined) precio.$lt = Number(filtros.precioMax);
+        if (filtros.precioMin !== undefined) precio.$gt = Number(filtros.precioMin);
+        if (Object.keys(precio).length) query.precio = precio;
     }
 
-    precioMayorQue(precio, productos) {
-        return productos.filter(p => p.precio > precio)
+    contieneTitulo(filtros, query){
+        if (filtros.titulo) {
+            const t = filtros.titulo;
+            query.titulo = { $regex: t, $options: "i" };
+        }
     }
 
-    contieneNombre(nombreBuscado, productos) {
-        return productos.filter(p => p.getNombre().includes(nombreBuscado))
+    contieneDescripcion(filtros, query){
+        if (filtros.descripcion) {
+            const d = filtros.descripcion;
+            query.descripcion = { $regex: d, $options: "i" };
+        }
     }
 
-    contieneCategoria(categoria, productos) {
-        return productos.filter(p => p.contieneCategoria(categoria))
+    contieneCategoria(filtros, query){
+        if (filtros.categoria) {
+            const c = filtros.categoria;
+            query.categoria = { $in: [c] };
+        }
     }
-
-    contieneDescripcion(descripcionBuscada, productos) {
-        return productos.filter(p => p.getDescripcion().includes(descripcionBuscada))
+    
+    contieneVendedor(filtros, query){
+                if (filtros.vendedor) {
+            const v = filtros.vendedor;
+            if (typeof v === "string" && mongoose.Types.ObjectId.isValid(v)) {
+                query.vendedor = new mongoose.Types.ObjectId(v);
+            } else {
+                query.vendedor = v;
+            }
+        }
     }
+    
+    metodosFiltros = [this.rangoPrecios, this.contieneTitulo, this.contieneDescripcion, this.contieneCategoria, this.contieneVendedor];
+    
+    async findByPage(filtros = {}, activo, numeroPagina = 1, elementosXPagina = 10, sort = "ventas", order = "desc") {
+        // Construir query a partir de filtros
+        let query = {};
 
-    perteneceAVendedor(idVendedor, productos) {
-        //return productos.filter(p => p.getIdVendedor() == idVendedor)
-        return productos.filter(p => p.getVendedor() == idVendedor)
-    }
+        // activo por parámetro separado
+        if (activo !== undefined) query.activo = activo;
 
-    filtrarPorActivo(activo, productos) {
-        return productos.filter(p => p.getActivo() === activo)
-    }
-//------------------------------------
+        this.metodosFiltros.forEach(metodo => metodo.call(this, filtros, query));
+        // Mapeo de campo de ordenamiento
+        const sortFieldMap = {
+            precio: "precio",
+            ventas: "ventas",
+        };
+        const sortField = sortFieldMap[sort] ||  "ventas";
+        const sortOrder = order === "asc" ? 1 : -1;
 
-    async findByPage(filtros, activo, numeroPagina, elementosXPagina, sort, order) {
-        const offsetInicio = (numeroPagina - 1) * elementosXPagina;
-        const productosFiltrados = await this.getProductos(filtros, activo, sort, order);
-        const offsetFinal = offsetInicio + elementosXPagina;
-        return productosFiltrados.slice(offsetInicio, offsetFinal);
+        const skip = Math.max(0, (numeroPagina - 1)) * elementosXPagina;
+
+        // Ejecutar consulta en MongoDB (paginada y ordenada)
+        const productos = await this.model
+            .find(query)
+            .sort({ [sortField]: sortOrder })
+            .skip(skip)
+            .limit(elementosXPagina)
+            .lean();
+
+        return productos;
     }
 
     async contarTodos() {
-        return ProductoModel.countDocuments();
+        return await this.model.countDocuments();
     }
 
-    orderBy(productos, sort, order) {
-        return productos.sort(tipoOrdenamiento[sort][order]);
+    async findById(id) {
+      return await this.model.findById(id);
     }
 
-  async findById(id) {
-      return await ProductoModel.findById(id);
-  }
-
-  async create(producto) {
-    await this.save(producto)
-  }
-
-  async save(producto) {
-        const nuevoProducto = new ProductoModel(producto);
+    async create(producto) {
+        const nuevoProducto = new this.model(producto);
         return await nuevoProducto.save();
     }
 
-  updateProducto(producto){
-    const index = this.productos.findIndex((p) => p.id === producto.id)
-    if (index !== -1) {
-      this.productos[index].stock=producto.stock
+    async updateProducto(id, data) {
+        return await this.model.findByIdAndUpdate(id, data, { new: true });
     }
-  }
-}
 
-const tipoOrdenamiento = {
-    precio: {
-        asc: (a, b) => a.getPrecio() - b.getPrecio(),
-        desc: (a, b) => b.getPrecio() - a.getPrecio(),
-    },
-    ventas: {
-        asc: (a, b) => a.getVentas() - b.getVentas(),
-        desc: (a, b) => b.getVentas() - a.getVentas(),
-    },
-};
-
-
-function mapToProducto(dataObject) {
-    const {vendedor, titulo, descripcion, categorias, precio, moneda, stock, fotos,activo, ventas} = dataObject;
-    const producto = new Producto(vendedor, titulo, descripcion, categorias, precio, moneda, stock, fotos, activo, ventas);
-    producto.id = dataObject.id;
-    return producto;
-}
-
-function mapToProductos(dataObjects) {
-    return dataObjects.map(mapToProducto);
+    async save(producto) {
+        const nuevoProducto = new this.model(producto);
+        return await nuevoProducto.save();
+    }
 }

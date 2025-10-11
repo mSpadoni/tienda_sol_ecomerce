@@ -5,7 +5,7 @@ import { Moneda } from "./Moneda.js";
 
 export default class Producto {
   constructor(
-    id,
+    _id,
     vendedor,
     titulo,
     descripcion,
@@ -17,7 +17,7 @@ export default class Producto {
     activo,
     ventas
   ) {
-    this.id = id;
+    this._id = _id;
     this.vendedor = vendedor;
     this.titulo = titulo;
     this.descripcion = descripcion;
@@ -50,8 +50,8 @@ export default class Producto {
     return this.categorias.some(categoria => categoria == categoriaBuscada);
   }
 
-  getNombre(){
-    return this.nombre;
+  getTitulo(){
+    return this.titulo;
   }
 
   getDescripcion(){

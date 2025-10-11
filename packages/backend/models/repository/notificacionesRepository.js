@@ -14,19 +14,27 @@ export default class NotificacionesRepository {
         return await NotificacionModel.findById(id);
     }
 
-    async getNotificaciones(filtros = {}){
-        return await NotificacionModel.find(filtros);
-        /*
-        const {leida} = filtros
-        const data = await fs.readFile(NotificacionesRepository.notificacionesPath, 'utf8')
-        const dataObjects = JSON.parse(data)
+    // async getNotificaciones(filtros){
+    //     const {leida} = filtros
+    //     const data = await fs.readFile(NotificacionesRepository.notificacionesPath, 'utf8')
+    //     const dataObjects = JSON.parse(data)
 
-        let notificacionesADevolver = mapToNotificaciones(dataObjects)
-        if(leida !== undefined){
-            notificacionesADevolver = this.estaLeida(leida, notificacionesADevolver)
+    //     let notificacionesADevolver = mapToNotificaciones(dataObjects)
+    //     if(leida !== undefined){
+    //         notificacionesADevolver = this.estaLeida(leida, notificacionesADevolver)
+    //     }
+    //     return notificacionesADevolver
+    // }
+//----------------------------------------------------------------
+    async getNotificaciones(filtros) {
+        const query = {};
+        if (filtros.leida !== undefined) {
+            query.leida = filtros.leida;
         }
-        return notificacionesADevolver
-        */
+        if (filtros.usuario !== undefined) {
+            query.usuario = filtros.usuario;
+        }
+        return await NotificacionModel.find(query).lean();
     }
 
     /*async getNotificaciones(filtros){
@@ -34,11 +42,22 @@ export default class NotificacionesRepository {
         return await this.model.find(filtros).populate('notificacion');
     }*/
 
-    async marcarNotificacionComoLeida(id){
-        const notificacion = await this.findById(id);
-        if(notificacion){
-            notificacion.marcarComoLeida();
+    // async marcarNotificacionComoLeida(id){
+    //     const notificacion = await this.findById(id);
+    //     if(notificacion){
+    //         notificacion.marcarComoLeida();
+    //     }
+    // }
+
+    async marcarNotificacionComoLeida(id) {
+        const notificacion = await NotificacionModel.findById(id);
+        if (notificacion) {
+            notificacion.leida = true;
+            notificacion.fechaLeida = new Date();
+            await notificacion.save();
+            return notificacion;
         }
+        return null;
     }
 
 //----------------------------------------------------------------
@@ -46,19 +65,15 @@ export default class NotificacionesRepository {
         return notificaciones.filter(n => n.estaLeida() === leida)
     }
 
-    save(notificacion) {
-    this.model.save(notificacion);
-  }
+    async save(notificacion) {
+        const data = {
+            usuario: notificacion.usuario,
+            mensaje: notificacion.mensaje,
+            fechaAlta: notificacion.fechaAlta,
+            leida: notificacion.leida,
+            fechaLeida: notificacion.fechaLeida
+        };
+        const created = await NotificacionModel.create(data);
+        return created;
+    }
 }
-/*
-function mapToNotificacion(dataObject) {
-    const { id, mensaje, fecha, leida } = dataObject;
-    const notificacion = new Notificacion(id, mensaje, fecha);
-    notificacion.id = dataObject.id;
-    return notificacion;
-}
-
-function mapToNotificaciones(dataObjects) {
-    return dataObjects.map(mapToNotificacion);
-}
-*/

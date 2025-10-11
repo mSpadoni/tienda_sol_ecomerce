@@ -14,21 +14,22 @@ export default class NotificacionesController {
     }
 
     async getNotificaciones(req,res){
-        const {leida} = req.query
-        let filtros = {}
-        if (leida !== undefined){
-            if(leida === "true"){
-                filtros.leida = true
-            }
-            else if (leida === "false"){
-                filtros.leida = false
-            }
-            else {
+        const { leida, usuario } = req.query;
+        let filtros = {};
+        if (leida !== undefined) {
+            if (leida === "true") {
+                filtros.leida = true;
+            } else if (leida === "false") {
+                filtros.leida = false;
+            } else {
                 return res.status(400).send("El parámetro 'leida' debe ser 'true' o 'false'");
             }
         }
+        if (usuario !== undefined) {
+            filtros.usuario = usuario;
+        }
         const notificaciones = await this.notificacionesService.getNotificaciones(filtros);
-        if(notificaciones === null){
+        if (notificaciones === null) {
             return res.status(404).send("No se encontraron notificaciones");
         }
         return res.status(200).json(notificaciones);
@@ -47,13 +48,16 @@ export default class NotificacionesController {
         res.status(200).json(notificacion);
     }
     
-    marcarNotificacionComoLeida(req, res){
+    async marcarNotificacionComoLeida(req, res){
         const validationResult = this.validarId(req.params.id)
         if (!validationResult.success) {
             return res.status(400).json(validationResult.error)
         }
         const id = validationResult.data
-        const notificacion = this.notificacionesService.marcarNotificacionComoLeida(id);
+        const notificacion = await this.notificacionesService.marcarNotificacionComoLeida(id);
+        if (!notificacion) {
+            return res.status(404).send("Notificación no encontrada");
+        }
         res.status(200).json(notificacion);
     }
 
