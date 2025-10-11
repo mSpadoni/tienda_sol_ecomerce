@@ -47,13 +47,16 @@ export default class NotificacionesController {
         res.status(200).json(notificacion);
     }
     
-    marcarNotificacionComoLeida(req, res){
+    async marcarNotificacionComoLeida(req, res){
         const validationResult = this.validarId(req.params.id)
         if (!validationResult.success) {
             return res.status(400).json(validationResult.error)
         }
         const id = validationResult.data
-        const notificacion = this.notificacionesService.marcarNotificacionComoLeida(id);
+        const notificacion = await this.notificacionesService.marcarNotificacionComoLeida(id);
+        if (!notificacion) {
+            return res.status(404).send("Notificación no encontrada");
+        }
         res.status(200).json(notificacion);
     }
 

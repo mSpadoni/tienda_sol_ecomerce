@@ -7,7 +7,7 @@ const productoSchema = new mongoose.Schema({
     ref: 'Usuario', 
     required: true 
 },
-  nombre: { 
+  titulo: { 
     type: String, 
     required: true 
 },
@@ -19,27 +19,42 @@ const productoSchema = new mongoose.Schema({
     type: Number, 
     required: true 
 },
-  categoria: { 
+  categorias: { 
     type: String, 
     required: true 
 },
-  imagen: { 
+  fotos: { 
     type: String, 
+    required: true 
+},
+  stock: { 
+    type: Number, 
+    required: true 
+},
+  activo: { 
+    type: Boolean, 
+    required: true 
+},
+  ventas: { 
+    type: Number, 
     required: true 
 },
   fechaCreacion: { 
     type: Date, 
     default: Date.now
-}
+  }
+},{
+    toJSON: {getters: true},
+    toObject: {getters: true},
+    timestamps: true,
+    collection: 'productos'
 });
-
 
 productoSchema.pre(/^find/, function(next) {
     this.populate('vendedor', '');
     next();
 });
 
-
 productoSchema.loadClass(Producto);
 
-export const ProductoModel = mongoose.model('Producto', productoSchema);
+export const ProductoModel = mongoose.model('productos', productoSchema);

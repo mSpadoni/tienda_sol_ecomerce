@@ -4,6 +4,23 @@ export default class ProductosService {
         this.productosRepository = productosRepository;
     }
 
+            //Aca como mas nos guste podemos transformar el objeto a un DTO
+    toDTO(producto) {
+        return {
+            id: producto.id || producto._id, //validacion de if default de mongo
+            vendedor: producto.vendedor,
+            titulo: producto.titulo,
+            descripcion: producto.descripcion,
+            categorias: producto.categorias,
+            precio: producto.precio,
+            moneda: producto.moneda,
+            stock: producto.stock,
+            fotos: producto.fotos,
+            activo: producto.activo,
+            ventas: producto.ventas
+        };
+    }
+
     async getProductos(filtros, activo, page, limit, sort, order) {
         
         const numeroPagina = Math.max(Number(page), 1)
@@ -19,8 +36,12 @@ export default class ProductosService {
             perPage: elementosXPagina,
             total: total, 
             totalPaginas: totalPaginas,
-            data: productos
+            data: productos.map(producto => this.toDTO(producto))
         }
+    }
+
+    precioAsc(productos) { 
+        return this.productosRepository.precioAsc(productos);
     }
 
     precioAsc(productos) { 
