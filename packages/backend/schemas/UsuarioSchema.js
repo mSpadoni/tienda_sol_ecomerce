@@ -29,4 +29,6 @@ const UsuarioSchema = new mongoose.Schema({
   }
 });
 
-export default mongoose.model('Usuario', UsuarioSchema);
+UsuarioSchema.loadClass(Producto);
+
+export const UsuarioModel = mongoose.model('Producto', UsuarioSchema);
