@@ -1,5 +1,5 @@
-import CambioEstadoPedido from "../../../Dominio/CambioEstadoPedido.js";
-import { EstadoPedido } from "../../../Dominio/EstadoPedido.js";
+import CambioEstadoPedido from "../../../models/entities/CambioEstadoPedido.js";
+import { EstadoPedido } from "../../../models/entities/EstadoPedido.js";
 import {
    usuario1,
    usuario2,
@@ -12,7 +12,7 @@ import SoloElCompradorPuedeCancelarUnPedido from "../../../errors/errorSoloElCom
 import SoloElVendedorPuedeEnviarUnPedido from "../../../errors/errorSoloElVendedorPuedeEnviarUnPedido.js";
 import NoSePuedeCancelarUnPedidoEnviado from "../../../errors/errorNoSePuedeCancelarUnPedidoEnviado.js";
 import NoSePuedeEnviarUnPedidoCancelado from "../../../errors/errorNoSePuedeEnviarUnPedidoCancelado.js";
-import Pedido from "../../../Dominio/Pedido.js";
+import Pedido from "../../../models/entities/Pedido.js";
 import YaEstaEnEseEstado from "../../../errors/errorYaEstaEnEseEstado.js";
 describe("test pedido", () => {
   const pedidoBase = () => new Pedido(

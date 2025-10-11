@@ -1,11 +1,11 @@
-import Pedido from "./Dominio/Pedido.js";
-import Usuario from "./Dominio/Usuario.js";
-import DireccionEntrega from "./Dominio/DireccionEntrega.js";
-import ItemProducto from "./Dominio/ItemPedido.js";
-import Producto from "./Dominio/Producto.js";
-import Notificacion from "./Dominio/Notificacion.js";
-import { EstadoPedido,crearMensajeSegunEstado } from "./Dominio/EstadoPedido.js";
-import { TipoUsuario } from "./Dominio/TipoUsuario.js";
+import Pedido from "./models/entities/Pedido.js";
+import Usuario from "./models/entities/Usuario.js";
+import DireccionEntrega from "./models/entities/DireccionEntrega.js";
+import ItemProducto from "./models/entities/ItemPedido.js";
+import Producto from "./models/entities/Producto.js";
+import Notificacion from "./models/entities/Notificacion.js";
+import { EstadoPedido,crearMensajeSegunEstado } from "./models/entities/EstadoPedido.js";
+import { TipoUsuario } from "./models/entities/TipoUsuario.js";
 
 //usuarios de ejemplo
 export

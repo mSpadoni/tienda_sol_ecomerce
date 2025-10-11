@@ -1,12 +1,13 @@
 import { jest } from "@jest/globals";
-import { TipoUsuario } from "../../../Dominio/TipoUsuario.js";
-
-// 🔹 Mock del logger (tiene que hacerse ANTES del import del módulo que lo usa)
+import { TipoUsuario } from "../../../models/entities/TipoUsuario.js";
+import  SoloElCompradorPuedeCancelarUnPedido  from "../../../errors/errorSoloElCompradorPuedeCancelarUnPedido.js";
+import  ErrorNoEncontrado from "../../../errors/errorNoEncontrado.js";
+import  FaltaStock from "../../../errors/errorFaltaDeStock.js";
+import ErrorEstadoNoValido from "../../../errors/errorEstadoNoValido.js";
+// Mocks
 jest.unstable_mockModule("../../../../logger/logger.js", () => ({
   default: { info: jest.fn() },
 }));
-
-// 🔹 Mock de las funciones auxiliares
 jest.unstable_mockModule(
   "../../../service/funcionesDelService.js",
   () => ({
@@ -22,12 +23,11 @@ jest.unstable_mockModule(
   })
 );
 
-// 🔹 Importamos lo mockeado
+// Imports de lo mockeado
 const funciones = await import("../../../service/funcionesDelService.js");
-const { EstadoPedido } = await import("../../../Dominio/EstadoPedido.js");
-const { default: Pedido } = await import("../../../Dominio/Pedido.js");
+const { EstadoPedido } = await import("../../../models/entities/EstadoPedido.js");
+const { default: Pedido } = await import("../../../models/entities/Pedido.js");
 
-// 🔹 Importamos el servicio (DESPUÉS de los mocks)
 const { default: pedidoService } = await import(
   "../../../service/pedidoService.js"
 );
@@ -151,27 +151,27 @@ describe("pedidoService (modo ESM)", () => {
 
     // Suponemos que validarStock no llega a llamarse porque hay un error antes
     funciones.obtenerItems.mockImplementation(() => {
-      throw new Error("El usuario no tiene permisos para crear pedidos");
+      throw new SoloElCompradorPuedeCancelarUnPedido("Comprador");
     });
 
     expect(() => service.crear(pedidoData)).toThrow(
-      "El usuario no tiene permisos para crear pedidos"
+      "Solo el comprador puede cancelar el pedido"
     );
   });
 
   test("crear debe lanzar error si no hay stock disponible", () => {
-    const usuarioMock = { id: 1, tipo: "COMPRADOR" };
+    const usuarioMock = { id: 1, tipo: TipoUsuario.COMPRADOR };
     const itemsMock = [{ id: 1, nombre: "milanesa", stock: 0 }];
 
     funciones.obtenerUsuario.mockReturnValue(usuarioMock);
     funciones.obtenerItems.mockReturnValue(itemsMock);
     funciones.validarStock.mockImplementation(() => {
-      throw new Error("Stock insuficiente");
+      throw new FaltaStock();
     });
 
     const pedidoData = { usuario: usuarioMock, items: itemsMock };
 
-    expect(() => service.crear(pedidoData)).toThrow("Stock insuficiente");
+    expect(() => service.crear(pedidoData)).toThrow("No hay stock suficiente en algun producto para crear el pedido");
   });
 
   test("findPedidosByUsuariosId debe devolver lista vacía si el usuario no tiene pedidos", () => {
@@ -188,21 +188,21 @@ describe("pedidoService (modo ESM)", () => {
 
   test("actualizar debe lanzar error si el pedido no existe", async () => {
     funciones.obtenerPedido.mockImplementation(() => {
-      throw new Error("Pedido no encontrado");
+      throw new ErrorNoEncontrado(1, "pedido");
     });
 
-    await expect(service.actualizar(99, {})).rejects.toThrow("Pedido no encontrado");
+    await expect(service.actualizar(99, {})).rejects.toThrow("No existe un pedido con el id: 1");
   });
 
   test("actualizar debe lanzar error si el estado es inválido", async () => {
     const pedidoExistente = { id: 1, items: [], actualizarEstado: jest.fn() };
     funciones.obtenerPedido.mockReturnValue(pedidoExistente);
     funciones.obtenerEstado.mockImplementation(() => {
-      throw new Error("Estado inválido");
+      throw new ErrorEstadoNoValido("DESCONOCIDO");
     });
 
     await expect(service.actualizar(1, { estado: "DESCONOCIDO" })).rejects.toThrow(
-      "Estado inválido"
+      `Estado DESCONOCIDO no valido`
     );
   });
 });
