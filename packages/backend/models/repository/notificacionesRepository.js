@@ -31,6 +31,9 @@ export default class NotificacionesRepository {
         if (filtros.leida !== undefined) {
             query.leida = filtros.leida;
         }
+        if (filtros.usuario !== undefined) {
+            query.usuario = filtros.usuario;
+        }
         return await NotificacionModel.find(query).lean();
     }
 
@@ -46,7 +49,7 @@ export default class NotificacionesRepository {
     //     }
     // }
 
-        async marcarNotificacionComoLeida(id) {
+    async marcarNotificacionComoLeida(id) {
         const notificacion = await NotificacionModel.findById(id);
         if (notificacion) {
             notificacion.leida = true;
@@ -64,7 +67,6 @@ export default class NotificacionesRepository {
 
     async save(notificacion) {
         const data = {
-            id: notificacion.id,
             usuario: notificacion.usuario,
             mensaje: notificacion.mensaje,
             fechaAlta: notificacion.fechaAlta,

@@ -11,7 +11,7 @@ export default class ProductosService {
             vendedor: producto.vendedor,
             titulo: producto.titulo,
             descripcion: producto.descripcion,
-            categorias: producto.categorias,
+            categoria: producto.categoria,
             precio: producto.precio,
             moneda: producto.moneda,
             stock: producto.stock,
@@ -44,12 +44,8 @@ export default class ProductosService {
         return this.productosRepository.precioAsc(productos);
     }
 
-    precioAsc(productos) { 
-        return this.productosRepository.precioAsc(productos);
-    }
-
     precioDesc(productos) {
-        return this.productosRepository.precioAsc(productos);
+        return this.productosRepository.precioDesc(productos);
     }
 
     masVendidos(productos) {

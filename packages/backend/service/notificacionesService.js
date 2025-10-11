@@ -12,7 +12,7 @@ export default class NotificacionesService{
     }
 
     async marcarNotificacionComoLeida(id){
-        await this.notificacionesRepository.marcarNotificacionComoLeida(id);
+        return await this.notificacionesRepository.marcarNotificacionComoLeida(id);
     }
 
     async getNotificacionById(id){

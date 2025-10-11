@@ -1,6 +1,7 @@
 import Producto from "../entities/Producto.js";
 import { ProductoModel } from "../../schemas/ProductoSchema.js";
 import fs from "node:fs/promises";
+import mongoose from "mongoose";
 
 export default class ProductosRepository {
     
@@ -8,80 +9,80 @@ export default class ProductosRepository {
         this.model = ProductoModel
     }
 
-    async devolverProductos(){
-        const productos = await this.model.find().lean();
-        return productos.map(p => new Producto(p))
-    }
-
-    async getProductos(filtros = {}, activo, sort = "ventas", order = "desc") {
-        const query = { ...filtros };
-        if (activo !== undefined) query.activo = activo;
-
-        let productos = await this.model.find(query);
-
-        if (sort && order && tipoOrdenamiento[sort] && tipoOrdenamiento[sort][order]) {
-            productos = productos.sort(tipoOrdenamiento[sort][order]);
-        }
-        return productos;
-    }
-
 //------------Filtros----------------
-    precioMenorQue(precio, productos) {
-        return productos.filter(p => p.precio < precio)
+
+    rangoPrecios(filtros, query){
+        const precio = {};
+        if (filtros.precioMax !== undefined) precio.$lt = Number(filtros.precioMax);
+        if (filtros.precioMin !== undefined) precio.$gt = Number(filtros.precioMin);
+        if (Object.keys(precio).length) query.precio = precio;
     }
 
-    precioMayorQue(precio, productos) {
-        return productos.filter(p => p.precio > precio)
+    contieneTitulo(filtros, query){
+        if (filtros.titulo) {
+            const t = filtros.titulo;
+            query.titulo = { $regex: t, $options: "i" };
+        }
     }
 
-    contieneTitulo(tituloBuscado, productos) {
-        return productos.filter(p => p.getTitulo().includes(tituloBuscado))
+    contieneDescripcion(filtros, query){
+        if (filtros.descripcion) {
+            const d = filtros.descripcion;
+            query.descripcion = { $regex: d, $options: "i" };
+        }
     }
 
-    contieneCategoria(categoria, productos) {
-        return productos.filter(p => p.contieneCategoria(categoria))
+    contieneCategoria(filtros, query){
+        if (filtros.categoria) {
+            const c = filtros.categoria;
+            query.categoria = { $in: [c] };
+        }
     }
-
-    contieneDescripcion(descripcionBuscada, productos) {
-        return productos.filter(p => p.getDescripcion().includes(descripcionBuscada))
+    
+    contieneVendedor(filtros, query){
+                if (filtros.vendedor) {
+            const v = filtros.vendedor;
+            if (typeof v === "string" && mongoose.Types.ObjectId.isValid(v)) {
+                query.vendedor = new mongoose.Types.ObjectId(v);
+            } else {
+                query.vendedor = v;
+            }
+        }
     }
+    
+    metodosFiltros = [this.rangoPrecios, this.contieneTitulo, this.contieneDescripcion, this.contieneCategoria, this.contieneVendedor];
+    
+    async findByPage(filtros = {}, activo, numeroPagina = 1, elementosXPagina = 10, sort = "ventas", order = "desc") {
+        // Construir query a partir de filtros
+        let query = {};
 
-    perteneceAVendedor(idVendedor, productos) {
-        //return productos.filter(p => p.getIdVendedor() == idVendedor)
-        return productos.filter(p => p.getVendedor() == idVendedor)
-    }
-
-    filtrarPorActivo(activo, productos) {
-        return productos.filter(p => p.getActivo() === activo)
-    }
-//------------------------------------
-
-    async findByPage(filtros, activo, numeroPagina, elementosXPagina, sort, order) {
-        const query = { ...filtros };
+        // activo por parámetro separado
         if (activo !== undefined) query.activo = activo;
 
-        console.log(query);
-        let productos = await this.model
+        this.metodosFiltros.forEach(metodo => metodo.call(this, filtros, query));
+        // Mapeo de campo de ordenamiento
+        const sortFieldMap = {
+            precio: "precio",
+            ventas: "ventas",
+        };
+        const sortField = sortFieldMap[sort] ||  "ventas";
+        const sortOrder = order === "asc" ? 1 : -1;
+
+        const skip = Math.max(0, (numeroPagina - 1)) * elementosXPagina;
+
+        // Ejecutar consulta en MongoDB (paginada y ordenada)
+        const productos = await this.model
             .find(query)
-            .skip((numeroPagina - 1) * elementosXPagina)
+            .sort({ [sortField]: sortOrder })
+            .skip(skip)
             .limit(elementosXPagina)
             .lean();
 
-        if (sort && order && tipoOrdenamiento[sort] && tipoOrdenamiento[sort][order]) {
-            productos = productos.sort(tipoOrdenamiento[sort][order]);
-        }
         return productos;
     }
 
     async contarTodos() {
         return await this.model.countDocuments();
-    }
-
-    orderBy(productos, sort, order) {
-        if (tipoOrdenamiento[sort] && tipoOrdenamiento[sort][order]) {
-            return productos.sort(tipoOrdenamiento[sort][order]);
-        }
-        return productos;
     }
 
     async findById(id) {
@@ -101,26 +102,4 @@ export default class ProductosRepository {
         const nuevoProducto = new this.model(producto);
         return await nuevoProducto.save();
     }
-}
-
-const tipoOrdenamiento = {
-    precio: {
-        asc: (a, b) => a.getPrecio() - b.getPrecio(),
-        desc: (a, b) => b.getPrecio() - a.getPrecio(),
-    },
-    ventas: {
-        asc: (a, b) => a.getVentas() - b.getVentas(),
-        desc: (a, b) => b.getVentas() - a.getVentas(),
-    },
-};
-
-function mapToProducto(dataObject) {
-    const {vendedor, titulo, descripcion, categorias, precio, moneda, stock, fotos,activo, ventas} = dataObject;
-    const producto = new Producto(vendedor, titulo, descripcion, categorias, precio, moneda, stock, fotos, activo, ventas);
-    producto.id = dataObject.id;
-    return producto;
-}
-
-function mapToProductos(dataObjects) {
-    return dataObjects.map(mapToProducto);
 }

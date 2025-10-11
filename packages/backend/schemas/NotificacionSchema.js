@@ -2,15 +2,15 @@ import mongoose from 'mongoose';
 import Notificacion from '../models/entities/Notificacion.js';
 
 const notificacionSchema = new mongoose.Schema({
-    id: {
-        type: String,
-        required: true,
-        unique: true
-    },
+    // id: {
+    //     type: String,
+    //     required: true,
+    //     unique: true
+    // },
     usuario: {
-        type: String,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Usuario',
         required: true,
-        trim: true,
     },
     mensaje: { 
         type: String, 
