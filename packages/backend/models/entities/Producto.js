@@ -4,6 +4,7 @@ import Categoria from "./Categoria.js";
 import { Moneda } from "./Moneda.js";
 
 export default class Producto {
+  id;
   constructor(
     _id,
     vendedor,
@@ -27,7 +28,6 @@ export default class Producto {
     this.stock = stock;
     this.fotos = fotos;
     this.activo = activo;
-    this.ventas = ventas;
   }
 
   estaDisponible(cantidad) {
@@ -35,7 +35,9 @@ export default class Producto {
   }
 
   reducirStock(cantidad) {
+    console.log(cantidad);
     this.stock -= cantidad;
+    console.log(this.stock);
   }
 
   aumentarStock(cantidad) {
@@ -46,7 +48,9 @@ export default class Producto {
     return this.vendedor;
   }
 
+
   contieneCategoria(categoriaBuscada) {
+    return this.categorias.some((categoria) => categoria == categoriaBuscada);
     return this.categorias.some((categoria) => categoria == categoriaBuscada);
   }
 
@@ -54,21 +58,26 @@ export default class Producto {
     return this.titulo;
   }
 
+ 
   getDescripcion() {
     return this.descripcion;
   }
+
 
   getIdVendedor() {
     return this.vendedor.getId();
   }
 
+
   getActivo() {
     return this.activo;
   }
 
+
   getPrecio() {
     return this.precio;
   }
+
 
   getVentas() {
     return this.ventas;

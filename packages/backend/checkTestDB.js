@@ -1,5 +1,7 @@
 import mongoose from "mongoose";
 import dotenv from "dotenv";
+import mongoose from "mongoose";
+import dotenv from "dotenv";
 
 dotenv.config();
 
@@ -41,3 +43,4 @@ export async function checkTestDB() {
 }
 
 checkTestDB();
+

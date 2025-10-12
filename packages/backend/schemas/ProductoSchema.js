@@ -1,6 +1,8 @@
 import mongoose from "mongoose";
 import Producto from "../models/entities/Producto.js";
 
+
+
 const productoSchema = new mongoose.Schema(
   {
     vendedor: {
@@ -16,40 +18,36 @@ const productoSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    precio: {
-      type: Number,
-      required: true,
-    },
     categorias: {
       type: String,
       required: true,
     },
-    fotos: {
-      type: String,
+    precio: {
+      type: Number,
+      required: true,
+    },
+    moneda: {
+      type: Object,
       required: true,
     },
     stock: {
       type: Number,
       required: true,
     },
+    fotos: {
+      type: String,
+      required: true,
+    },
     activo: {
       type: Boolean,
       required: true,
-    },
-    ventas: {
-      type: Number,
-      required: true,
-    },
-    fechaCreacion: {
-      type: Date,
-      default: Date.now,
     },
   },
   {
     toJSON: { getters: true },
     toObject: { getters: true },
     timestamps: true,
-    collection: "productos",
+    collection: "Producto",
   },
 );
 
@@ -60,4 +58,4 @@ productoSchema.pre(/^find/, function (next) {
 
 productoSchema.loadClass(Producto);
 
-export const ProductoModel = mongoose.model("productos", productoSchema);
+export const ProductoModel = mongoose.model("Producto", productoSchema);

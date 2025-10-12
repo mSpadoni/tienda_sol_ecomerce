@@ -2,7 +2,7 @@ import logger from "../../logger/logger.js";
 import {
   pedidoPatchSchema,
   pedidoSchema,
-  idTransform,
+  objectIdSchema,
 } from "./validacionesZOD.js";
 import { adaptarPedidoToJson, adaptarNotificacion } from "./adaptadoresJSON.js";
 
@@ -20,10 +20,10 @@ export default class ControllerPedidos {
   async crear(req, res) {
     const resultBody = pedidoSchema.parse(req.body);
     const nuevoPedido = await this.servicePedido.crear(resultBody);
-
+     logger.info(`${JSON.stringify(nuevoPedido)}`)
     logger.http(`Pedido creado`);
     const notificacion =
-      this.serviceNotificaciones.crearNotificacion(nuevoPedido);
+      await this.serviceNotificaciones.crearNotificacion(nuevoPedido);
 
     logger.http(`Notificacion creada: ${JSON.stringify(notificacion)}`);
 
@@ -40,7 +40,7 @@ export default class ControllerPedidos {
       `Buscando pedidos del usuario con id: ${req.params.id} en el controlador`,
     );
 
-    const resultId = idTransform.parse(req.params.id);
+    const resultId = objectIdSchema.parse(req.params.id);
 
     logger.info(`Id del usuario valido: ${resultId}`);
 
@@ -58,7 +58,7 @@ export default class ControllerPedidos {
   async actualizar(req, res) {
     logger.info("actualizando pedido");
 
-    const pedidoID = idTransform.parse(req.params.id);
+    const pedidoID = objectIdSchema.parse(req.params.id);
 
     const resultBody = pedidoPatchSchema.parse(req.body);
 
@@ -69,10 +69,8 @@ export default class ControllerPedidos {
       resultBody,
     );
 
-    logger.info("Pedido actualizado");
-
     const notificacion =
-      this.serviceNotificaciones.crearNotificacion(pedidosActualizados);
+      await this.serviceNotificaciones.crearNotificacion(pedidosActualizados);
 
     logger.info("Notificacion creada");
     const JSONresponse = {

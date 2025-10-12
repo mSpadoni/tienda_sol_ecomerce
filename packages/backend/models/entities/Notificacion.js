@@ -1,7 +1,8 @@
-import { randomInt } from "crypto";
+
 import Usuario from "./Usuario.js";
 
 export default class Notificacion {
+  id;
   constructor(usuario, mensaje, fechaAlta) {
     this.usuario = usuario;
     this.mensaje = mensaje;

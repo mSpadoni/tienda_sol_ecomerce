@@ -2,43 +2,48 @@ import logger from "../../../logger/logger.js";
 /*import pedido from "../Dominio/pedido.js";
 import fs from "node:fs/promises";
 import path from "node:path";*/
+import { PedidoModel } from "../../schemas/PedidoSchema.js";
+
 
 export default class pedidoRepository {
   constructor() {
-    this.pedidos = [];
-    this.idAponer = 1;
+    this.modelo = PedidoModel;
   }
 
-  /*async buscarTodos() {
-    
-    return JSON.parse(data);
-  }*/
-
-  generarID() {
-    return this.idAponer++;
-  }
   async findByUsuariosId(idUsuario) {
     //const data = await this.buscarTodos();
     logger.info(`Buscando pedidos del usuario con id: ${idUsuario} en el repo`);
-    return this.pedidos.filter((pedido) => pedido.comprador.id === idUsuario);
+    return await this.modelo
+      .find({ comprador: idUsuario })
+      .populate("comprador")
+  .populate("items.producto") // <--- esto es clave
+  .populate("historialEstado.usuario")
+  
   }
 
-  save(pedido) {
-    this.pedidos.push(pedido);
+  async save(pedido) {
+  let pedidoDoc;
+
+  if (pedido.id) {
+    pedidoDoc = await this.modelo.findById(pedido.id).populate("comprador")
+  .populate("items.producto") 
+  .populate("historialEstado.usuario")
+
+    Object.assign(pedidoDoc, pedido); 
+  } else {
+    pedidoDoc = new this.modelo(pedido);
   }
-  findAll() {
-    return this.pedidos;
-  }
-  findById(id) {
-    return this.pedidos.find((p) => p.id === id);
-  }
-  deleteById(id) {
-    this.pedidos = this.pedidos.filter((p) => p.id !== id);
-  }
-  updateById(id, updatedPedido) {
-    const index = this.pedidos.findIndex((p) => p.id === id);
-    if (index !== -1) {
-      this.pedidos[index].estado = updatedPedido.estado;
-    }
+
+  return await pedidoDoc.save();
+}
+
+ 
+  async findById(id) {
+    return await this.modelo
+      .findById(id)
+      .populate("comprador")
+  .populate("items.producto") 
+  .populate("historialEstado.usuario")
+
   }
 }

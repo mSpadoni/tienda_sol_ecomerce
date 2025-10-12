@@ -1,7 +1,3 @@
-import Notificacion from "../entities/Notificacion.js";
-import fs from "node:fs/promises";
-import path from "node:path";
-import { fileURLToPath } from "node:url";
 import { NotificacionModel } from "../../schemas/NotificacionSchema.js";
 
 export default class NotificacionesRepository {
@@ -9,6 +5,10 @@ export default class NotificacionesRepository {
     this.model = NotificacionModel;
   }
 
+
+  async findById(id) {
+    return await NotificacionModel.findById(id);
+  }
   async findById(id) {
     return await NotificacionModel.findById(id);
   }
@@ -36,6 +36,7 @@ export default class NotificacionesRepository {
     return await NotificacionModel.find(query).lean();
   }
 
+  /*async getNotificaciones(filtros){
   /*async getNotificaciones(filtros){
         const{leida} = filtros
         return await this.model.find(filtros).populate('notificacion');

@@ -30,11 +30,13 @@ describe("Clase Producto", () => {
       5,
       [],
       false,
+      false,
     );
     expect(prodInactivo.estaDisponible(1)).toBe(false);
   });
 
   test("reducirStock disminuye el stock", () => {
+
     const p = new Producto(
       3,
       usuario4,
@@ -72,3 +74,4 @@ describe("Clase Producto", () => {
     expect(prodEjemplo2.getVendedor()).toBe(usuario4);
   });
 });
+

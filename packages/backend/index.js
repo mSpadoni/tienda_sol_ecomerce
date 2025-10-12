@@ -7,8 +7,7 @@ import ProductosRepository from "./models/repository/productosRepository.js";
 import UsuarioRepository from "./models/repository/usuariosRepository.js";
 import NotificacionesRepository from "./models/repository/notificacionesRepository.js";
 import PedidoService from "./service/pedidoService.js";
-import NotificacionService from "./service/notifyServiceAux.js";
-import NotificacionesService from "./service/notificacionesService.js";
+import NotificacionService from "./service/notificacionesService.js";
 import ProductosService from "./service/productosService.js";
 import ControllerPedido from "./controller/ControllerPedidos.js";
 import NotificacionesController from "./controller/notificacionesController.js";
@@ -53,6 +52,7 @@ const productosController = new ProductosController(productosService);
 const notificacionesController = new NotificacionesController(
   notificacionesService,
 );
+
 const controllerPedido = new ControllerPedido(
   servicePedido,
   serviceNotificaciones,
@@ -74,9 +74,12 @@ app.get("/", (req, res) => {
 server.setController(ControllerPedido, controllerPedido);
 server.setController(NotificacionesController, notificacionesController);
 server.setController(ProductosController, productosController);
+server.setController(NotificacionesController, notificacionesController);
+server.setController(ProductosController, productosController);
 
 routes.forEach((route) => server.addRoute(route));
 server.configureRoutes();
 server.launch();
 
 MongoDBClient.connect();
+

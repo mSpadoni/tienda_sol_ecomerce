@@ -3,6 +3,7 @@ export default class ProductosService {
     this.productosRepository = productosRepository;
   }
 
+
   //Aca como mas nos guste podemos transformar el objeto a un DTO
   toDTO(producto) {
     return {

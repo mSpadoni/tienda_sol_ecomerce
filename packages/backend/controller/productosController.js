@@ -11,7 +11,7 @@ export default class ProductosController {
   constructor(productosService) {
     this.productosService = productosService;
   }
-
+ 
   async getProductos(req, res, next) {
     try {
       const {

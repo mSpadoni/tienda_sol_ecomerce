@@ -1,40 +1,39 @@
-import mongoose from 'mongoose';
-import {TipoUsuario} from "../models/entities/TipoUsuario.js"
-import Usuario from "../models/entities/Usuario.js"
+import mongoose from "mongoose";
+import { TipoUsuario } from "../models/entities/TipoUsuario.js";
+import Usuario from "../models/entities/Usuario.js";
 
-const UsuarioSchema = new mongoose.Schema({
-  nombre: {
-    type: String,
-    required: true
+const UsuarioSchema = new mongoose.Schema(
+  {
+    nombre: {
+      type: String,
+      required: true,
+    },
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+      lowercase: true,
+      trim: true,
+    },
+    telefono: {
+      type: String,
+      required: true,
+    },
+    tipo: {
+      type: String,
+      enum: [TipoUsuario.COMPRADOR, TipoUsuario.VENDEDOR, TipoUsuario.ADMIN],
+      required: true,
+    },
+    fechaAlta: {
+      type: Date,
+      required: true,
+    },
   },
-  email: {
-    type: String,
-    required: true,
-    unique: true,
-    lowercase: true,
-    trim: true
-  },
-  telefono: {
-    type: String,
-    required: true
-  },
-  tipo: {
-    type: String,
-    enum: [TipoUsuario.COMPRADOR,TipoUsuario.VENDEDOR,TipoUsuario.ADMIN],
-    required: true
-  },
-  fechaAlta: {
-    type: Date,
-    required: true
-  }
-},
-{
+  {
     timestamps: true,
-    collection: 'usuario'
-}
-)
-;
-
+    collection: "usuario",
+  },
+);
 UsuarioSchema.loadClass(Usuario);
 
 export const UsuarioModel = mongoose.model('Usuario', UsuarioSchema);

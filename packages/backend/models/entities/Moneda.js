@@ -13,13 +13,7 @@ export const Moneda = Object.freeze({
   },
 });
 
-export function monedaValida(value) {
+export function obtenerMoneda(value) {
   return Object.values(Moneda).find((moneda) => moneda.nombre === value);
 }
 
-export function obtenerSimbolo(nombreMoneda) {
-  const monedaBuscada = Object.values(Moneda).find(
-    (moneda) => moneda.nombre === nombreMoneda,
-  );
-  return monedaBuscada.simbolo;
-}

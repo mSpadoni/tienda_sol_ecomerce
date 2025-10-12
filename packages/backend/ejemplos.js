@@ -12,7 +12,6 @@ import { TipoUsuario } from "./models/entities/TipoUsuario.js";
 
 //usuarios de ejemplo
 export const usuario1 = new Usuario(
-  1,
   "Juan Perez",
   "juanperez@gmail.com",
   " ",
@@ -21,7 +20,6 @@ export const usuario1 = new Usuario(
 );
 
 export const usuario2 = new Usuario(
-  2,
   "Ana Gomez",
   "anaGomez@frba.utn.edu,ar",
   " ",
@@ -30,7 +28,6 @@ export const usuario2 = new Usuario(
 );
 
 export const usuario3 = new Usuario(
-  3,
   "Ana Gomez",
   "anaGomez@frba.utn.edu,ar",
   " ",
@@ -39,7 +36,6 @@ export const usuario3 = new Usuario(
 );
 
 export const usuario4 = new Usuario(
-  4,
   "admin",
   "@gmail.com",
   " ",
@@ -49,20 +45,6 @@ export const usuario4 = new Usuario(
 
 //productos de ejemplo
 export const prodEjemplo1 = new Producto(
-  1,
-  new Usuario(3, "admin", "@gmail.com", " ", "Admin", new Date()),
-  "milanesa",
-  "rica milanesa",
-  ["comida"],
-  5000,
-  "Peso Argentino",
-  10,
-  [],
-  true,
-);
-
-export const prodEjemplo2 = new Producto(
-  2,
   usuario4,
   "milanesa",
   "rica milanesa",
@@ -74,6 +56,21 @@ export const prodEjemplo2 = new Producto(
   true,
 );
 
+export const prodEjemplo2 = new Producto(
+  usuario4,
+  "milanesa",
+  "rica milanesa",
+  ["comida"],
+  5000,
+  "Peso Argentino",
+  10,
+  [],
+  true,
+);
+usuario1.id=1
+usuario2.id=2
+usuario3.id=3
+usuario4.id=4
 export const item = new ItemProducto(prodEjemplo2, 2, 1000);
 export const item2 = new ItemProducto(prodEjemplo2, 4, 1000);
 
@@ -92,7 +89,6 @@ export const direccion = new DireccionEntrega(
 );
 
 export const jsonPedidosEjemplo1 = new Pedido(
-  1,
   usuario1,
   [item],
   "Peso Argentino",
@@ -101,8 +97,7 @@ export const jsonPedidosEjemplo1 = new Pedido(
 );
 
 export const jsonPedidosEjemplo2 = new Pedido(
-  2,
-  usuario2,
+  usuario1,
   [item, item2],
   "Peso Argentino",
   direccion,
@@ -110,8 +105,7 @@ export const jsonPedidosEjemplo2 = new Pedido(
 );
 
 export const jsonPedidosEjemplo3 = new Pedido(
-  1,
-  usuario3,
+  usuario1,
   [item],
   "Peso Argentino",
   direccion,

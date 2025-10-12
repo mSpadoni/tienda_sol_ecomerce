@@ -12,7 +12,7 @@ export function adaptarPedidoToJson(pedido) {
       precioUnitario: item.precioUnitario,
       stock: item.producto.stock,
     })),
-    estado: pedido.estado.valor,
+    estado: pedido.estado,
     total: pedido.calcularTotal(),
     moneda: pedido.moneda,
   };

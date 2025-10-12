@@ -1,5 +1,5 @@
 import { item, prodEjemplo2 } from "../../../ejemplos.js";
-import ItemPedido from "../../..//models/entities/ItemPedido.js";
+import ItemPedido from "../../../models/entities/ItemPedido.js";
 import CantNegativa from "../../../errors/errorCantNegativa.js";
 
 describe("test item pedido", () => {

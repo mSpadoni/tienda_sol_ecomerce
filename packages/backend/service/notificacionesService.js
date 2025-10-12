@@ -19,12 +19,20 @@ export default class NotificacionesService {
     const notificacion = await this.notificacionesRepository.findById(id);
     return notificacion;
   }
+  async getNotificacionById(id) {
+    const notificacion = await this.notificacionesRepository.findById(id);
+    return notificacion;
+  }
+
 
   async crearNotificacion(pedido) {
     const notificacion = this.factoryNotificacion.crearSegunPedido(pedido);
     logger.info(`${JSON.stringify(notificacion)}`);
     await this.notificacionesRepository.save(notificacion);
+    await this.notificacionesRepository.save(notificacion);
     logger.info(`Notificacion creada: ${JSON.stringify(notificacion)}`);
     return notificacion;
   }
 }
+
+

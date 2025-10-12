@@ -4,7 +4,14 @@ import mongoose from "mongoose";
 
 const idTransform = z.string().refine(
   (val) => {
+const idTransform = z.string().refine(
+  (val) => {
     return mongoose.Types.ObjectId.isValid(val);
+  },
+  {
+    message: "ID debe ser un ObjectId válido de MongoDB",
+  },
+);
   },
   {
     message: "ID debe ser un ObjectId válido de MongoDB",
@@ -76,4 +83,12 @@ export default class NotificacionesController {
     }
     return { success: true, data: resultId.data };
   }
+  validarId(id) {
+    const resultId = idTransform.safeParse(id);
+    if (resultId.error) {
+      return { success: false, error: resultId.error.issues };
+    }
+    return { success: true, data: resultId.data };
+  }
 }
+

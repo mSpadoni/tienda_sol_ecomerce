@@ -3,6 +3,7 @@ import { pathPedidos, pathUsuarios } from "./paths.js";
 import ControllerPedidos from "../controller/ControllerPedidos.js";
 import pedidosErrorHandler from "../middleware/pedidosMiddlewares.js";
 import logger from "../../logger/logger.js";
+import zodErrorHandler from "../middleware/zodMilware.js";
 
 export default function pedidoRoute(getController) {
   const router = express.Router();
@@ -14,10 +15,10 @@ export default function pedidoRoute(getController) {
 
   router.post(pathPedidos, async (req, res, next) => {
     logger.http("Solicitud POST a /pedidos");
-    try {
-      await controler.crear(req, res);
-    } catch (err) {
-      next(err);
+    try{
+    await controler.crear(req, res);}
+    catch(err){
+      next(err)
     }
   });
 
@@ -40,5 +41,6 @@ export default function pedidoRoute(getController) {
   });
 
   router.use(pedidosErrorHandler);
+  router.use(zodErrorHandler)
   return router;
 }

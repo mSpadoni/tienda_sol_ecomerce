@@ -1,4 +1,4 @@
-import CambioEstadoPedido from "../../../models/entities/CambioEstadoPedido.js";
+
 import { EstadoPedido } from "../../../models/entities/EstadoPedido.js";
 import {
   usuario1,
@@ -17,7 +17,6 @@ import YaEstaEnEseEstado from "../../../errors/errorYaEstaEnEseEstado.js";
 describe("test pedido", () => {
   const pedidoBase = () =>
     new Pedido(
-      2,
       usuario2,
       [item, item2],
       "Peso Argentino",
@@ -62,7 +61,7 @@ describe("test pedido", () => {
   test("Un pedido no puede ser cancelado por alguien que no sea el comprador", () => {
     const pedido = pedidoBase();
     expect(() =>
-      pedido.actualizarEstado(EstadoPedido.CANCELADO, usuario1, ""),
+      pedido.actualizarEstado(EstadoPedido.CANCELADO, usuario4, ""),
     ).toThrow(SoloElCompradorPuedeCancelarUnPedido);
 
     expect(pedido.estado === EstadoPedido.CANCELADO).toBe(false);

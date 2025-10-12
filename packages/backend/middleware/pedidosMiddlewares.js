@@ -9,11 +9,10 @@ import ErrorEstadoNoValido from "../errors/errorEstadoNoValido.js";
 import CantNegativa from "../errors/errorCantNegativa.js";
 import NoEsTipoUsuarioCorecto from "../errors/errorNoEsTipoUsuarioCorrecto.js";
 import FaltaStock from "../errors/errorFaltaDeStock.js";
-import { mensajesConocidos } from "./mensajesPersonalizadosZod.js";
 import { ZodError } from "zod";
 import YaEstaEnEseEstado from "../errors/errorYaEstaEnEseEstado.js";
 
-export default function pedidosErrorHandler(err, _req, res, _next) {
+export default function pedidosErrorHandler(err, _req, res, next) {
   if (err.constructor.name !== ZodError.name) {
     logger.error(err.message);
   }
@@ -26,23 +25,12 @@ export default function pedidosErrorHandler(err, _req, res, _next) {
     res.status(400).json({ error: err.message });
     return;
   }
-  if (err.constructor.name === ZodError.name) {
-    const errores = err.issues.map((issue) => ({
-      message: mensajesConocidos[issue.code] || issue.message,
-      ...(issue.path.length > 0 && { path: issue.path }),
-      code: issue.code,
-      expected: issue.expected,
-    }));
-    logger.warn(errores);
-    res.status(400).json({ errors: errores });
-    return;
-  }
   if (err.constructor.name === FaltaStock.name) {
     res.status(409).json({ error: err.message });
     return;
   }
 
-  res.status(500).json({ error: "Ups. Algo sucedio en el servidor." });
+  next(err)
 }
 
 const errores400 = Object.freeze({
