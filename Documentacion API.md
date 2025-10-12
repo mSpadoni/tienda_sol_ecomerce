@@ -4,7 +4,6 @@ Esta API permite crear, consultar y actualizar pedidos dentro del sistema de e-c
 Incluye la generación automática de notificaciones según el estado del pedido.
 
 ---
-
 ## 🟢 **POST** `/pedidos`
 
 Crea un nuevo pedido.
