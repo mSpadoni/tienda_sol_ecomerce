@@ -39,6 +39,6 @@ export default function pedidoRoute(getController) {
     }
   });
 
-router.use(pedidosErrorHandler);
+  router.use(pedidosErrorHandler);
   return router;
 }

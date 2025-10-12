@@ -27,8 +27,14 @@ const UsuarioSchema = new mongoose.Schema({
     type: Date,
     required: true
   }
-});
+},
+{
+    timestamps: true,
+    collection: 'usuario'
+}
+)
+;
 
-UsuarioSchema.loadClass(Producto);
+UsuarioSchema.loadClass(Usuario);
 
-export const UsuarioModel = mongoose.model('Producto', UsuarioSchema);
+export const UsuarioModel = mongoose.model('Usuario', UsuarioSchema);

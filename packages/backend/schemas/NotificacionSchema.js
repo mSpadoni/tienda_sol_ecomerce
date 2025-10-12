@@ -1,29 +1,44 @@
-import mongoose from 'mongoose';
-import Notificacion from '../models/entities/Notificacion.js';
+import mongoose from "mongoose";
+import Notificacion from "../models/entities/Notificacion.js";
 
-const notificacionSchema = new mongoose.Schema({
+const notificacionSchema = new mongoose.Schema(
+  {
+    // id: {
+    //     type: String,
+    //     required: true,
+    //     unique: true
+    // },
     usuario: {
-        type: String,
-        required: true,
-        trim: true,
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Usuario",
+      required: true,
     },
-    mensaje: { 
-        type: String, 
-        required: true 
+    mensaje: {
+      type: String,
+      required: true,
     },
-    fechaAlta: { 
-        type: Date, 
-        default: Date.now 
+    fechaAlta: {
+      type: Date,
+      default: Date.now,
     },
     leida: {
-        type: Boolean,
-        default: false
+      type: Boolean,
+      default: false,
     },
-},{
+    fechaLeida: {
+      type: Date,
+      default: null,
+    },
+  },
+  {
     timestamps: true,
-    collection: 'notificaciones'
-});
+    collection: "notificaciones",
+  },
+);
 
 notificacionSchema.loadClass(Notificacion);
 
-export const NotificacionModel = mongoose.model('Notificacion', notificacionSchema);
+export const NotificacionModel = mongoose.model(
+  "Notificacion",
+  notificacionSchema,
+);
