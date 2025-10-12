@@ -15,7 +15,7 @@ export default class Producto {
     stock,
     fotos,
     activo,
-    ventas
+    ventas,
   ) {
     this._id = _id;
     this.vendedor = vendedor;
@@ -45,32 +45,32 @@ export default class Producto {
   getVendedor() {
     return this.vendedor;
   }
-  
+
   contieneCategoria(categoriaBuscada) {
-    return this.categorias.some(categoria => categoria == categoriaBuscada);
+    return this.categorias.some((categoria) => categoria == categoriaBuscada);
   }
 
-  getTitulo(){
+  getTitulo() {
     return this.titulo;
   }
 
-  getDescripcion(){
+  getDescripcion() {
     return this.descripcion;
   }
 
-  getIdVendedor(){
+  getIdVendedor() {
     return this.vendedor.getId();
   }
 
-  getActivo(){
+  getActivo() {
     return this.activo;
   }
 
-  getPrecio(){
+  getPrecio() {
     return this.precio;
   }
 
-  getVentas(){
+  getVentas() {
     return this.ventas;
   }
 }

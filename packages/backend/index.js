@@ -39,7 +39,9 @@ const productosRepository = new ProductosRepository();
 const notificacionesRepository = new NotificacionesRepository();
 
 const productosService = new ProductosService(productosRepository);
-const notificacionesService = new NotificacionesService(notificacionesRepository);
+const notificacionesService = new NotificacionesService(
+  notificacionesRepository,
+);
 const serviceNotificaciones = new NotificacionService(notificacionesRepository);
 const servicePedido = new PedidoService(
   pedidoRepository,
@@ -48,12 +50,13 @@ const servicePedido = new PedidoService(
 );
 
 const productosController = new ProductosController(productosService);
-const notificacionesController = new NotificacionesController(notificacionesService);
+const notificacionesController = new NotificacionesController(
+  notificacionesService,
+);
 const controllerPedido = new ControllerPedido(
   servicePedido,
   serviceNotificaciones,
 );
-
 
 app.get("/health", (req, res) => {
   res.status(200).json({
@@ -69,8 +72,8 @@ app.get("/", (req, res) => {
 
 // Configurar rutas y controladores en el servidor
 server.setController(ControllerPedido, controllerPedido);
-server.setController(NotificacionesController, notificacionesController)
-server.setController(ProductosController, productosController)
+server.setController(NotificacionesController, notificacionesController);
+server.setController(ProductosController, productosController);
 
 routes.forEach((route) => server.addRoute(route));
 server.configureRoutes();

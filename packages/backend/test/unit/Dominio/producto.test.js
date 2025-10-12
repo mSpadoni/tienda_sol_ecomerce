@@ -29,19 +29,41 @@ describe("Clase Producto", () => {
       "Peso Argentino",
       5,
       [],
-      false
+      false,
     );
     expect(prodInactivo.estaDisponible(1)).toBe(false);
   });
 
   test("reducirStock disminuye el stock", () => {
-    const p = new Producto(3, usuario4, "p", "d", [], 100, "Peso Argentino", 10, [], true);
+    const p = new Producto(
+      3,
+      usuario4,
+      "p",
+      "d",
+      [],
+      100,
+      "Peso Argentino",
+      10,
+      [],
+      true,
+    );
     p.reducirStock(3);
     expect(p.stock).toBe(7);
   });
 
   test("aumentarStock incrementa el stock", () => {
-    const p = new Producto(4, usuario4, "p", "d", [], 100, "Peso Argentino", 5, [], true);
+    const p = new Producto(
+      4,
+      usuario4,
+      "p",
+      "d",
+      [],
+      100,
+      "Peso Argentino",
+      5,
+      [],
+      true,
+    );
     p.aumentarStock(5);
     expect(p.stock).toBe(10);
   });

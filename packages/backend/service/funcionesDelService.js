@@ -8,11 +8,10 @@ import ErrorEstadoNoValido from "../errors/errorEstadoNoValido.js";
 import FaltaStock from "../errors/errorFaltaDeStock.js";
 import logger from "../../logger/logger.js";
 
-
 export function obtenerUsuario(idUsuario, repositorioUsuario) {
   const usuario = repositorioUsuario.findById(idUsuario);
   if (!usuario) {
-    throw new ErrorNoEncontrado(idUsuario, "ususario ");
+    throw new ErrorNoEncontrado(idUsuario, "usuario ");
   }
   return usuario;
 }
@@ -49,47 +48,49 @@ export function obtenerItems(pedidoData, repositorioProducto) {
     const producto = repositorioProducto.findById(item.productoId);
     if (!producto) {
       throw new ErrorNoEncontrado(item.productoId, "producto ");
-    }
-    else {
+    } else {
       items.push(new ItemPedido(producto, item.cantidad, producto.precio));
     }
   });
   return items;
 }
 
-export function reducirStocks(items){
-   logger.info(`${JSON.stringify(items)}`)
-  items.forEach(item=>item.producto.reducirStock(item.cantidad))
-  return items
+export function reducirStocks(items) {
+  logger.info(`${JSON.stringify(items)}`);
+  items.forEach((item) => item.producto.reducirStock(item.cantidad));
+  return items;
 }
 
-export function aumentarStocks(items){
-   logger.info(`${JSON.stringify(items)}`)
-  items.forEach(item=>item.producto.reducirStock(item.cantidad))
-  return items
+export function aumentarStocks(items) {
+  logger.info(`${JSON.stringify(items)}`);
+  items.forEach((item) => item.producto.reducirStock(item.cantidad));
+  return items;
 }
 
-export function actualizarProductosPorCambioDeStock(repositorioProducto,items){
-  logger.info(`${JSON.stringify(items)}`)
-  items.forEach(item=>repositorioProducto.updateProducto(item.producto))
+export function actualizarProductosPorCambioDeStock(
+  repositorioProducto,
+  items,
+) {
+  logger.info(`${JSON.stringify(items)}`);
+  items.forEach((item) => repositorioProducto.updateProducto(item.producto));
 }
 
-export function actualizarStock(items,repositorioProducto,estado){
-  let itemsActualizados=items
-  if(estado===EstadoPedido.PENDIENTE){
-    itemsActualizados=reducirStocks(items)
-    actualizarProductosPorCambioDeStock(repositorioProducto,itemsActualizados)
+export function actualizarStock(items, repositorioProducto, estado) {
+  let itemsActualizados = items;
+  if (estado === EstadoPedido.PENDIENTE) {
+    itemsActualizados = reducirStocks(items);
+    actualizarProductosPorCambioDeStock(repositorioProducto, itemsActualizados);
   }
-  if(estado===EstadoPedido.RECHAZADO || estado===EstadoPedido.CANCELADO){
-    itemsActualizados=aumentarStocks(items)
-    actualizarProductosPorCambioDeStock(repositorioProducto,itemsActualizados)
+  if (estado === EstadoPedido.RECHAZADO || estado === EstadoPedido.CANCELADO) {
+    itemsActualizados = aumentarStocks(items);
+    actualizarProductosPorCambioDeStock(repositorioProducto, itemsActualizados);
   }
-  return itemsActualizados
+  return itemsActualizados;
 }
 
-export function validarStock(items){
-  if(!items.every(item=>item.estaDisponible())){
-    throw new FaltaStock()
+export function validarStock(items) {
+  if (!items.every((item) => item.estaDisponible())) {
+    throw new FaltaStock();
   }
 }
 

@@ -9,7 +9,7 @@ import {
   obtenerMoneda,
   obtenerDireccion,
   validarStock,
-  actualizarStock
+  actualizarStock,
 } from "./funcionesDelService.js";
 import { EstadoPedido } from "../models/entities/EstadoPedido.js";
 export default class pedidoService {
@@ -29,11 +29,15 @@ export default class pedidoService {
 
   crear(pedidoData) {
     const usuario = obtenerUsuario(pedidoData.usuario, this.repositorioUsuario);
-   let items = obtenerItems(pedidoData, this.repositorioProducto);
+    let items = obtenerItems(pedidoData, this.repositorioProducto);
 
-  validarStock(items);
+    validarStock(items);
 
-  items = actualizarStock(items, this.repositorioProducto, EstadoPedido.PENDIENTE);
+    items = actualizarStock(
+      items,
+      this.repositorioProducto,
+      EstadoPedido.PENDIENTE,
+    );
     const moneda = obtenerMoneda(pedidoData.moneda);
 
     const direccionEntrega = obtenerDireccion(pedidoData);
@@ -66,7 +70,11 @@ export default class pedidoService {
     const usuario = obtenerUsuario(pedidoData.usuario, this.repositorioUsuario);
 
     pedidoExistente.actualizarEstado(estado, usuario, pedidoData.motivo);
-    pedidoExistente.items= actualizarStock( pedidoExistente.items, this.repositorioProducto, EstadoPedido.PENDIENTE);
+    pedidoExistente.items = actualizarStock(
+      pedidoExistente.items,
+      this.repositorioProducto,
+      EstadoPedido.PENDIENTE,
+    );
     this.repositorioPedido.updateById(id, pedidoExistente);
 
     return pedidoExistente;

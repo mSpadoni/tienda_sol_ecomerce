@@ -1,4 +1,4 @@
-import { randomInt  } from "crypto";
+import { randomInt } from "crypto";
 import Usuario from "./Usuario.js";
 
 export default class Notificacion {
@@ -14,9 +14,8 @@ export default class Notificacion {
     this.leida = true;
     this.fechaLeida = new Date();
   }
-  
-  estaLeida(){
+
+  estaLeida() {
     return this.leida === true;
   }
-
 }

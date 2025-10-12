@@ -1,15 +1,12 @@
-import z
-from "zod";
+import z from "zod";
 
-export
-const pedidoPatchSchema = z.object({
+export const pedidoPatchSchema = z.object({
   estado: z.string().min(1),
   usuario: z.number(),
   motivo: z.string(),
 });
 
-export
-const direccionSchema = z.object({
+export const direccionSchema = z.object({
   calle: z.string().min(1),
   altura: z.string().min(1),
   piso: z.string(),
@@ -22,8 +19,7 @@ const direccionSchema = z.object({
   long: z.string(),
 });
 
-export
-const pedidoSchema = z.object({
+export const pedidoSchema = z.object({
   usuario: z.number().min(1),
   moneda: z.string().min(1),
   direccionEntrega: direccionSchema,
@@ -35,18 +31,17 @@ const pedidoSchema = z.object({
   ),
 });
 
-export
-const idTransform = z.string().transform((val, ctx) => {
+export const idTransform = z.string().transform((val, ctx) => {
   const num = Number(val);
   if (isNaN(num)) {
     ctx.addIssue({
-      code: "INVALID_ID"
+      code: "INVALID_ID",
     });
     return z.NEVER;
   }
   if (num <= 0) {
     ctx.addIssue({
-      code: "INVALID_ID"
+      code: "INVALID_ID",
     });
     return z.NEVER;
   }

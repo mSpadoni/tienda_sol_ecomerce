@@ -6,19 +6,19 @@ import { loggerMiddleware } from "../middleware/loggerMiddleware.js";
 const pathProductos = "/productos";
 
 export default function productosRoutes(getController) {
-    const router = express.Router();
-    const controller = getController(ProductosController);
-    
-    router.use(loggerMiddleware);
+  const router = express.Router();
+  const controller = getController(ProductosController);
 
-        router.get(pathProductos, async (req, res, next) => {
-        try{
-            await controller.getProductos(req, res,next);
-        }catch(err){
-            next(err);
-        }
-    });
+  router.use(loggerMiddleware);
 
-    router.use(productosErrorHandler);
-    return router;
+  router.get(pathProductos, async (req, res, next) => {
+    try {
+      await controller.getProductos(req, res, next);
+    } catch (err) {
+      next(err);
+    }
+  });
+
+  router.use(productosErrorHandler);
+  return router;
 }

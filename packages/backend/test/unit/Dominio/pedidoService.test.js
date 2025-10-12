@@ -1,31 +1,30 @@
 import { jest } from "@jest/globals";
 import { TipoUsuario } from "../../../models/entities/TipoUsuario.js";
-import  SoloElCompradorPuedeCancelarUnPedido  from "../../../errors/errorSoloElCompradorPuedeCancelarUnPedido.js";
-import  ErrorNoEncontrado from "../../../errors/errorNoEncontrado.js";
-import  FaltaStock from "../../../errors/errorFaltaDeStock.js";
+import SoloElCompradorPuedeCancelarUnPedido from "../../../errors/errorSoloElCompradorPuedeCancelarUnPedido.js";
+import ErrorNoEncontrado from "../../../errors/errorNoEncontrado.js";
+import FaltaStock from "../../../errors/errorFaltaDeStock.js";
 import ErrorEstadoNoValido from "../../../errors/errorEstadoNoValido.js";
 // Mocks
 jest.unstable_mockModule("../../../../logger/logger.js", () => ({
   default: { info: jest.fn() },
 }));
-jest.unstable_mockModule(
-  "../../../service/funcionesDelService.js",
-  () => ({
-    obtenerUsuario: jest.fn(),
-    obtenerItems: jest.fn(),
-    validarStock: jest.fn(),
-    actualizarStock: jest.fn(),
-    obtenerMoneda: jest.fn(),
-    obtenerDireccion: jest.fn(),
-    obtenerPedidosPorUsuario: jest.fn(),
-    obtenerPedido: jest.fn(),
-    obtenerEstado: jest.fn(),
-  })
-);
+jest.unstable_mockModule("../../../service/funcionesDelService.js", () => ({
+  obtenerUsuario: jest.fn(),
+  obtenerItems: jest.fn(),
+  validarStock: jest.fn(),
+  actualizarStock: jest.fn(),
+  obtenerMoneda: jest.fn(),
+  obtenerDireccion: jest.fn(),
+  obtenerPedidosPorUsuario: jest.fn(),
+  obtenerPedido: jest.fn(),
+  obtenerEstado: jest.fn(),
+}));
 
 // Imports de lo mockeado
 const funciones = await import("../../../service/funcionesDelService.js");
-const { EstadoPedido } = await import("../../../models/entities/EstadoPedido.js");
+const { EstadoPedido } = await import(
+  "../../../models/entities/EstadoPedido.js"
+);
 const { default: Pedido } = await import("../../../models/entities/Pedido.js");
 
 const { default: pedidoService } = await import(
@@ -53,13 +52,13 @@ describe("pedidoService (modo ESM)", () => {
     service = new pedidoService(
       mockRepoPedido,
       mockRepoUsuario,
-      mockRepoProducto
+      mockRepoProducto,
     );
   });
 
   // ---------- TEST crear ----------
   test("crear debe generar y guardar un nuevo pedido correctamente", () => {
-    const usuarioMock = { id: 1, nombre: "Juan",tipo: TipoUsuario.COMPRADOR};
+    const usuarioMock = { id: 1, nombre: "Juan", tipo: TipoUsuario.COMPRADOR };
     const itemsMock = [{ id: 1, nombre: "milanesa" }];
     const monedaMock = "Peso Argentino";
     const direccionMock = { calle: "Falsa 123" };
@@ -79,11 +78,10 @@ describe("pedidoService (modo ESM)", () => {
     };
 
     const nuevoPedido = service.crear(pedidoData);
-    
 
     expect(funciones.obtenerUsuario).toHaveBeenCalledWith(
       usuarioMock.id,
-      mockRepoUsuario
+      mockRepoUsuario,
     );
     expect(funciones.validarStock).toHaveBeenCalledWith(itemsMock);
     expect(mockRepoPedido.save).toHaveBeenCalled();
@@ -100,7 +98,7 @@ describe("pedidoService (modo ESM)", () => {
 
     expect(funciones.obtenerPedidosPorUsuario).toHaveBeenCalledWith(
       99,
-      mockRepoPedido
+      mockRepoPedido,
     );
     expect(result).toEqual(pedidosMock);
   });
@@ -134,12 +132,12 @@ describe("pedidoService (modo ESM)", () => {
     expect(pedidoExistente.actualizarEstado).toHaveBeenCalledWith(
       estadoMock,
       usuarioMock,
-      "corrección"
+      "corrección",
     );
     expect(mockRepoPedido.updateById).toHaveBeenCalledWith(10, pedidoExistente);
     expect(resultado.items).toEqual(itemsActualizados);
   });
-    // ---------- CAMINOS TRISTES ----------
+  // ---------- CAMINOS TRISTES ----------
 
   test("crear debe lanzar error si el usuario no es un comprador", () => {
     const usuarioVendedor = { id: 10, tipo: "VENDEDOR" };
@@ -155,7 +153,7 @@ describe("pedidoService (modo ESM)", () => {
     });
 
     expect(() => service.crear(pedidoData)).toThrow(
-      "Solo el comprador puede cancelar el pedido"
+      "Solo el comprador puede cancelar el pedido",
     );
   });
 
@@ -171,7 +169,9 @@ describe("pedidoService (modo ESM)", () => {
 
     const pedidoData = { usuario: usuarioMock, items: itemsMock };
 
-    expect(() => service.crear(pedidoData)).toThrow("No hay stock suficiente en algun producto para crear el pedido");
+    expect(() => service.crear(pedidoData)).toThrow(
+      "No hay stock suficiente en algun producto para crear el pedido",
+    );
   });
 
   test("findPedidosByUsuariosId debe devolver lista vacía si el usuario no tiene pedidos", () => {
@@ -182,7 +182,7 @@ describe("pedidoService (modo ESM)", () => {
     expect(pedidos).toEqual([]);
     expect(funciones.obtenerPedidosPorUsuario).toHaveBeenCalledWith(
       123,
-      mockRepoPedido
+      mockRepoPedido,
     );
   });
 
@@ -191,7 +191,9 @@ describe("pedidoService (modo ESM)", () => {
       throw new ErrorNoEncontrado(1, "pedido");
     });
 
-    await expect(service.actualizar(99, {})).rejects.toThrow("No existe un pedido con el id: 1");
+    await expect(service.actualizar(99, {})).rejects.toThrow(
+      "No existe un pedido con el id: 1",
+    );
   });
 
   test("actualizar debe lanzar error si el estado es inválido", async () => {
@@ -201,8 +203,8 @@ describe("pedidoService (modo ESM)", () => {
       throw new ErrorEstadoNoValido("DESCONOCIDO");
     });
 
-    await expect(service.actualizar(1, { estado: "DESCONOCIDO" })).rejects.toThrow(
-      `Estado DESCONOCIDO no valido`
-    );
+    await expect(
+      service.actualizar(1, { estado: "DESCONOCIDO" }),
+    ).rejects.toThrow(`Estado DESCONOCIDO no valido`);
   });
 });

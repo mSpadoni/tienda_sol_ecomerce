@@ -12,7 +12,9 @@
     "start:dev": "concurrently \"npm run dev:backend\" \"npm run start:frontend\"",
     "lint": "eslint .",
     "format": "prettier . --write",
-    "test": "cross-env NODE_OPTIONS=--experimental-vm-modules jest"
+    "test": "cross-env NODE_OPTIONS=--experimental-vm-modules jest",
+    "test:unit": "cross-env NODE_OPTIONS=--experimental-vm-modules jest --testPathPatterns=unit",
+    "test:integration": "cross-envNODE_OPTIONS=--experimental-vm-modules jest --testPathPatterns=integration"
   },
   "keywords": [],
   "author": "",
