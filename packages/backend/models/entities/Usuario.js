@@ -1,5 +1,3 @@
-import { randomUUID } from "crypto";
-import { TipoUsuario } from "./TipoUsuario.js";
 
 export default class Usuario {
   id;

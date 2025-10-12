@@ -1,5 +1,4 @@
-import { z } from "zod";
-import { idTransform } from "./validacionesZOD.js";
+
 import ErrorProductosNoEncontrados from "../errors/errorProductosNoEncontrado.js";
 
 const activoHandler = {

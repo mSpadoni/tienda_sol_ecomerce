@@ -1,5 +1,5 @@
 
-import Usuario from "./Usuario.js";
+
 
 export default class Notificacion {
   id;

@@ -4,14 +4,7 @@ import mongoose from "mongoose";
 
 const idTransform = z.string().refine(
   (val) => {
-const idTransform = z.string().refine(
-  (val) => {
     return mongoose.Types.ObjectId.isValid(val);
-  },
-  {
-    message: "ID debe ser un ObjectId válido de MongoDB",
-  },
-);
   },
   {
     message: "ID debe ser un ObjectId válido de MongoDB",

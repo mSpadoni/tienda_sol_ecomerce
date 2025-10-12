@@ -38,9 +38,6 @@ const productosRepository = new ProductosRepository();
 const notificacionesRepository = new NotificacionesRepository();
 
 const productosService = new ProductosService(productosRepository);
-const notificacionesService = new NotificacionesService(
-  notificacionesRepository,
-);
 const serviceNotificaciones = new NotificacionService(notificacionesRepository);
 const servicePedido = new PedidoService(
   pedidoRepository,
@@ -50,7 +47,7 @@ const servicePedido = new PedidoService(
 
 const productosController = new ProductosController(productosService);
 const notificacionesController = new NotificacionesController(
-  notificacionesService,
+  serviceNotificaciones,
 );
 
 const controllerPedido = new ControllerPedido(

@@ -1,6 +1,4 @@
-import Producto from "../entities/Producto.js";
 import { ProductoModel } from "../../schemas/ProductoSchema.js";
-import fs from "node:fs/promises";
 import mongoose from "mongoose";
 
 export default class ProductosRepository {
