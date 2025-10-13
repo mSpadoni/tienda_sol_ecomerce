@@ -1,4 +1,4 @@
-import Producto from "../../..//models/entities/Producto.js";
+import Producto from "../../../models/entities/Producto.js";
 import { prodEjemplo1, prodEjemplo2, usuario4 } from "../../../ejemplos.js";
 
 describe("Clase Producto", () => {
@@ -20,7 +20,6 @@ describe("Clase Producto", () => {
 
   test("estaDisponible devuelve false si el producto no está activo", () => {
     const prodInactivo = new Producto(
-      99,
       usuario4,
       "Producto inactivo",
       "desc",
@@ -30,15 +29,12 @@ describe("Clase Producto", () => {
       5,
       [],
       false,
-      false,
     );
     expect(prodInactivo.estaDisponible(1)).toBe(false);
   });
 
   test("reducirStock disminuye el stock", () => {
-
     const p = new Producto(
-      3,
       usuario4,
       "p",
       "d",
@@ -55,7 +51,6 @@ describe("Clase Producto", () => {
 
   test("aumentarStock incrementa el stock", () => {
     const p = new Producto(
-      4,
       usuario4,
       "p",
       "d",
@@ -74,4 +69,3 @@ describe("Clase Producto", () => {
     expect(prodEjemplo2.getVendedor()).toBe(usuario4);
   });
 });
-

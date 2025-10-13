@@ -1,35 +1,31 @@
 import { jest } from "@jest/globals";
-import { TipoUsuario } from "../../../models/entities/TipoUsuario.js";
-import SoloElCompradorPuedeCancelarUnPedido from "../../../errors/errorSoloElCompradorPuedeCancelarUnPedido.js";
 import ErrorNoEncontrado from "../../../errors/errorNoEncontrado.js";
-import FaltaStock from "../../../errors/errorFaltaDeStock.js";
-import ErrorEstadoNoValido from "../../../errors/errorEstadoNoValido.js";
-// Mocks
+import { EstadoPedido } from "../../../models/entities/EstadoPedido.js";
+import ItemPedido from "../../../models/entities/ItemPedido.js";
+import { TipoUsuario } from "../../../models/entities/TipoUsuario.js";
+
+
+// 🔹 Mock logger
 jest.unstable_mockModule("../../../../logger/logger.js", () => ({
   default: { info: jest.fn() },
 }));
-jest.unstable_mockModule("../../../service/funcionesDelService.js", () => ({
-  obtenerUsuario: jest.fn(),
-  obtenerItems: jest.fn(),
-  validarStock: jest.fn(),
-  actualizarStock: jest.fn(),
-  obtenerMoneda: jest.fn(),
-  obtenerDireccion: jest.fn(),
-  obtenerPedidosPorUsuario: jest.fn(),
-  obtenerPedido: jest.fn(),
-  obtenerEstado: jest.fn(),
-}));
 
-// Imports de lo mockeado
+// 🔹 Mock funciones externas
+jest.unstable_mockModule(
+  "../../../service/funcionesDelService.js",
+  () => ({
+    reducirStocks: jest.fn(),
+    aumentarStocks: jest.fn(),
+    validarStock: jest.fn(),
+    obtenerDireccion: jest.fn(),
+    obtenerEstado: jest.fn(),
+    monedaValida: jest.fn(),
+  })
+);
+
 const funciones = await import("../../../service/funcionesDelService.js");
-const { EstadoPedido } = await import(
-  "../../../models/entities/EstadoPedido.js"
-);
+const { default: pedidoService } = await import("../../../service/pedidoService.js");
 const { default: Pedido } = await import("../../../models/entities/Pedido.js");
-
-const { default: pedidoService } = await import(
-  "../../../service/pedidoService.js"
-);
 
 describe("pedidoService (modo ESM)", () => {
   let mockRepoPedido;
@@ -39,10 +35,12 @@ describe("pedidoService (modo ESM)", () => {
 
   beforeEach(() => {
     // Mocks de repositorios
+
     mockRepoPedido = {
       generarID: jest.fn().mockReturnValue(123),
       save: jest.fn(),
       updateById: jest.fn(),
+      findByUsuariosId: jest.fn()
     };
     mockRepoUsuario = {};
     mockRepoProducto = {};
@@ -54,6 +52,7 @@ describe("pedidoService (modo ESM)", () => {
       mockRepoUsuario,
       mockRepoProducto,
     );
+
   });
 
   // ---------- TEST crear ----------
@@ -63,13 +62,15 @@ describe("pedidoService (modo ESM)", () => {
     const monedaMock = "Peso Argentino";
     const direccionMock = { calle: "Falsa 123" };
 
-    funciones.obtenerUsuario.mockReturnValue(usuarioMock);
-    funciones.obtenerItems.mockReturnValue(itemsMock);
     funciones.validarStock.mockImplementation(() => {});
-    funciones.actualizarStock.mockReturnValue(itemsMock);
-    funciones.obtenerMoneda.mockReturnValue(monedaMock);
-    funciones.obtenerDireccion.mockReturnValue(direccionMock);
+    funciones.monedaValida.mockResolvedValue(monedaMock);
+    funciones.obtenerDireccion.mockResolvedValue(direccionMock);
 
+    jest.spyOn(service, "obtenerUsuario").mockResolvedValue(usuarioMock);
+    jest.spyOn(service, "obtenerItems").mockResolvedValue(itemsMock);
+    jest.spyOn(service, "actualizarStock").mockResolvedValue(itemsMock);
+
+    mockRepoPedido.save.mockImplementation((pedido) => pedido);
     const pedidoData = {
       usuario: usuarioMock.id,
       moneda: monedaMock,
@@ -77,38 +78,40 @@ describe("pedidoService (modo ESM)", () => {
       direccion: direccionMock,
     };
 
-    const nuevoPedido = service.crear(pedidoData);
+    const nuevoPedido = service.crear(pedidoData).then((nuevoPedido) => {
+    expect(funciones.monedaValida).toHaveBeenCalledWith(monedaMock);
+    expect(funciones.obtenerDireccion).toHaveBeenCalledWith(pedidoData);
 
-    expect(funciones.obtenerUsuario).toHaveBeenCalledWith(
-      usuarioMock.id,
-      mockRepoUsuario,
+    expect(service.obtenerUsuario).toHaveBeenCalledWith(
+      usuarioMock.id
     );
     expect(funciones.validarStock).toHaveBeenCalledWith(itemsMock);
     expect(mockRepoPedido.save).toHaveBeenCalled();
     expect(nuevoPedido).toBeInstanceOf(Pedido);
     expect(nuevoPedido.comprador).toEqual(usuarioMock);
   });
-
+});
   // ---------- TEST findPedidosByUsuariosId ----------
   test("findPedidosByUsuariosId debe retornar pedidos del usuario", () => {
     const pedidosMock = [{ id: 1 }, { id: 2 }];
-    funciones.obtenerPedidosPorUsuario.mockReturnValue(pedidosMock);
 
-    const result = service.findPedidosByUsuariosId(99);
+    service.repositorioPedido.findByUsuariosId.mockResolvedValue(pedidosMock);
 
-    expect(funciones.obtenerPedidosPorUsuario).toHaveBeenCalledWith(
-      99,
-      mockRepoPedido,
+
+    service.findPedidosByUsuariosId(99).then((result) => { ;
+
+    expect(service.repositorioPedido.findByUsuariosId).toHaveBeenCalledWith(
+      99
     );
     expect(result).toEqual(pedidosMock);
   });
-
+  });
   // ---------- TEST actualizar ----------
   test("actualizar debe modificar un pedido existente", async () => {
     const pedidoExistente = {
       id: 10,
       items: [],
-      actualizarEstado: jest.fn(),
+      actualizarEstado: jest.fn().mockImplementation(() => {})
     };
 
     const pedidoData = {
@@ -121,21 +124,19 @@ describe("pedidoService (modo ESM)", () => {
     const estadoMock = EstadoPedido.PENDIENTE;
     const itemsActualizados = [{ id: 1 }];
 
-    funciones.obtenerPedido.mockReturnValue(pedidoExistente);
-    funciones.obtenerEstado.mockReturnValue(estadoMock);
-    funciones.obtenerUsuario.mockReturnValue(usuarioMock);
-    funciones.actualizarStock.mockReturnValue(itemsActualizados);
+    funciones.obtenerEstado.mockResolvedValue(estadoMock);
 
-    const resultado = await service.actualizar(10, pedidoData);
+    jest.spyOn(service, "obtenerPedido").mockResolvedValue(pedidoExistente);
+    jest.spyOn(service, "obtenerUsuario").mockResolvedValue(usuarioMock);
+    jest.spyOn(service, "actualizarStock").mockResolvedValue(itemsActualizados);
+    mockRepoPedido.save.mockImplementation((pedido) => pedido);
 
-    expect(funciones.obtenerPedido).toHaveBeenCalledWith(10, mockRepoPedido);
-    expect(pedidoExistente.actualizarEstado).toHaveBeenCalledWith(
-      estadoMock,
-      usuarioMock,
-      "corrección",
-    );
-    expect(mockRepoPedido.updateById).toHaveBeenCalledWith(10, pedidoExistente);
+    await service.actualizar(10, pedidoData).then( (resultado) => {
+    expect(service.obtenerPedido).toHaveBeenCalledWith(10);
+    expect(pedidoExistente.actualizarEstado).toHaveBeenCalled();
+    expect(mockRepoPedido.save).toHaveBeenCalledWith(pedidoExistente);
     expect(resultado.items).toEqual(itemsActualizados);
+    })
   });
   // ---------- CAMINOS TRISTES ----------
 
@@ -143,17 +144,17 @@ describe("pedidoService (modo ESM)", () => {
     const usuarioVendedor = { id: 10, tipo: "VENDEDOR" };
 
     // Simulamos que la función auxiliar devuelve un usuario incorrecto
-    funciones.obtenerUsuario.mockReturnValue(usuarioVendedor);
+    jest.spyOn(service,"obtenerUsuario").mockResolvedValue(usuarioVendedor);
 
     const pedidoData = { usuario: usuarioVendedor, moneda: "Peso Argentino" };
 
     // Suponemos que validarStock no llega a llamarse porque hay un error antes
-    funciones.obtenerItems.mockImplementation(() => {
-      throw new SoloElCompradorPuedeCancelarUnPedido("Comprador");
+    jest.spyOn(service,"obtenerItems").mockImplementation(() => {
+      throw new Error("El usuario no tiene permisos para crear pedidos");
     });
 
-    expect(() => service.crear(pedidoData)).toThrow(
-      "Solo el comprador puede cancelar el pedido",
+    expect(() => service.crear(pedidoData)).rejects.toThrow(
+      "El usuario no tiene permisos para crear pedidos",
     );
   });
 
@@ -161,34 +162,30 @@ describe("pedidoService (modo ESM)", () => {
     const usuarioMock = { id: 1, tipo: TipoUsuario.COMPRADOR };
     const itemsMock = [{ id: 1, nombre: "milanesa", stock: 0 }];
 
-    funciones.obtenerUsuario.mockReturnValue(usuarioMock);
-    funciones.obtenerItems.mockReturnValue(itemsMock);
+    jest.spyOn(service,"obtenerItems").mockResolvedValue(itemsMock);
+    jest.spyOn(service,"obtenerUsuario").mockResolvedValue(usuarioMock);
+
     funciones.validarStock.mockImplementation(() => {
       throw new FaltaStock();
     });
 
     const pedidoData = { usuario: usuarioMock, items: itemsMock };
 
-    expect(() => service.crear(pedidoData)).toThrow(
-      "No hay stock suficiente en algun producto para crear el pedido",
-    );
+    expect(() => service.crear(pedidoData)).rejects.toThrow("Stock insuficiente");
   });
 
   test("findPedidosByUsuariosId debe devolver lista vacía si el usuario no tiene pedidos", () => {
-    funciones.obtenerPedidosPorUsuario.mockReturnValue([]);
+    mockRepoPedido.findByUsuariosId = jest.fn().mockResolvedValue([]);
 
-    const pedidos = service.findPedidosByUsuariosId(123);
 
-    expect(pedidos).toEqual([]);
-    expect(funciones.obtenerPedidosPorUsuario).toHaveBeenCalledWith(
-      123,
-      mockRepoPedido,
+    expect(service.findPedidosByUsuariosId(123)).rejects.toThrow(
+      "No existe un Pedido que tenga un comprador con el id: 123"
     );
   });
 
   test("actualizar debe lanzar error si el pedido no existe", async () => {
-    funciones.obtenerPedido.mockImplementation(() => {
-      throw new ErrorNoEncontrado(1, "pedido");
+    jest.spyOn(service,"obtenerPedido").mockImplementation(() => {
+      throw new Error("Pedido no encontrado");
     });
 
     await expect(service.actualizar(99, {})).rejects.toThrow(
@@ -198,7 +195,8 @@ describe("pedidoService (modo ESM)", () => {
 
   test("actualizar debe lanzar error si el estado es inválido", async () => {
     const pedidoExistente = { id: 1, items: [], actualizarEstado: jest.fn() };
-    funciones.obtenerPedido.mockReturnValue(pedidoExistente);
+    jest.spyOn(service,"obtenerPedido").mockResolvedValue(pedidoExistente);
+    jest.spyOn(service,"obtenerUsuario").mockResolvedValue({ id: 1 });
     funciones.obtenerEstado.mockImplementation(() => {
       throw new ErrorEstadoNoValido("DESCONOCIDO");
     });

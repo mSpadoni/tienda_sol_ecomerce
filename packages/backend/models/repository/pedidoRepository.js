@@ -11,12 +11,12 @@ export default class pedidoRepository {
   }
 
   async findByUsuariosId(idUsuario) {
-    //const data = await this.buscarTodos();
+
     logger.info(`Buscando pedidos del usuario con id: ${idUsuario} en el repo`);
     return await this.modelo
       .find({ comprador: idUsuario })
       .populate("comprador")
-  .populate("items.producto") // <--- esto es clave
+  .populate("items.producto") 
   .populate("historialEstado.usuario")
   
   }

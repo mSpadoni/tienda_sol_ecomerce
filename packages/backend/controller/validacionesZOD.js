@@ -4,9 +4,7 @@ import mongoose from "mongoose";
 
 export const objectIdSchema = z
   .string()
-  .refine((val) => mongoose.Types.ObjectId.isValid(val), {
-    message: "ID no válido",
-  });
+  .refine((val) => mongoose.Types.ObjectId.isValid(val));
 
 export const pedidoPatchSchema = z.object({
   estado: z.string().min(1),
