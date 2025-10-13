@@ -159,14 +159,14 @@ describe("pedidoService (modo ESM)", () => {
   });
 
   test("crear debe lanzar error si no hay stock disponible", () => {
-    const usuarioMock = { id: 1, tipo: TipoUsuario.COMPRADOR };
+    const usuarioMock = { id: 1, tipo: "COMPRADOR" };
     const itemsMock = [{ id: 1, nombre: "milanesa", stock: 0 }];
 
     jest.spyOn(service,"obtenerItems").mockResolvedValue(itemsMock);
     jest.spyOn(service,"obtenerUsuario").mockResolvedValue(usuarioMock);
 
     funciones.validarStock.mockImplementation(() => {
-      throw new FaltaStock();
+      throw new Error("Stock insuficiente");
     });
 
     const pedidoData = { usuario: usuarioMock, items: itemsMock };
@@ -189,7 +189,7 @@ describe("pedidoService (modo ESM)", () => {
     });
 
     await expect(service.actualizar(99, {})).rejects.toThrow(
-      "No existe un pedido con el id: 1",
+      "Pedido no encontrado",
     );
   });
 
@@ -198,11 +198,11 @@ describe("pedidoService (modo ESM)", () => {
     jest.spyOn(service,"obtenerPedido").mockResolvedValue(pedidoExistente);
     jest.spyOn(service,"obtenerUsuario").mockResolvedValue({ id: 1 });
     funciones.obtenerEstado.mockImplementation(() => {
-      throw new ErrorEstadoNoValido("DESCONOCIDO");
+      throw new Error("Estado inválido");
     });
 
     await expect(
       service.actualizar(1, { estado: "DESCONOCIDO" }),
-    ).rejects.toThrow(`Estado DESCONOCIDO no valido`);
+    ).rejects.toThrow("Estado inválido");
   });
 });
