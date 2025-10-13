@@ -11,7 +11,9 @@ import {
 import { EstadoPedido } from "../models/entities/EstadoPedido.js";
 import ItemPedido from "../models/entities/ItemPedido.js";
 import ErrorNoEncontrado from "../errors/errorNoEncontrado.js";
-
+import repositorioPedido from "../models/repository/pedidoRepository.js";
+import repositorioUsuario from "../models/repository/usuariosRepository.js";
+import repositorioProducto from "../models/repository/productosRepository.js";  
 
 export default class pedidoService {
   constructor(repositorioPedido, repositorioUsuario, repositorioProducto) {
@@ -60,7 +62,7 @@ export default class pedidoService {
   }
 
   async actualizar(id, pedidoData) {
-    console.log("hola")
+
     const pedidoExistente = await this.obtenerPedido(id);
 
     const usuario = await this.obtenerUsuario(pedidoData.usuario);
@@ -81,7 +83,7 @@ export default class pedidoService {
   async obtenerUsuario(idUsuario) {
     const usuario = await this.repositorioUsuario.findById(idUsuario);
     if (!usuario) {
-      throw new ErrorNoEncontrado(idUsuario, "ususario ");
+      throw new ErrorNoEncontrado(idUsuario, "usuario");
     }
     return usuario;
   }
@@ -119,7 +121,7 @@ export default class pedidoService {
     if (estado === EstadoPedido.PENDIENTE) {
       itemsActualizados = reducirStocks(items);
       await this.actualizarProductosPorCambioDeStock(itemsActualizados);
-      console.log("hola X3");
+
       console.log(`${JSON.stringify(items)}`);
     }
     if (
@@ -129,7 +131,7 @@ export default class pedidoService {
       itemsActualizados = aumentarStocks(items);
       await this.actualizarProductosPorCambioDeStock(itemsActualizados);
     }
-    console.log("hola");
+
     return itemsActualizados;
   }
 }
