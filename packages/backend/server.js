@@ -14,6 +14,7 @@ export default class Server {
   }
 
   app() {
+    
     return this.#app;
   }
 
