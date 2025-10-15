@@ -36,13 +36,9 @@ const productoSchema = new mongoose.Schema(
       type: Boolean,
       required: true,
     },
-    ventas: {
-      type: Number,
+    moneda: {
+      type: Object,
       required: true,
-    },
-    fechaCreacion: {
-      type: Date,
-      default: Date.now,
     },
   },
   {
@@ -60,4 +56,4 @@ productoSchema.pre(/^find/, function (next) {
 
 productoSchema.loadClass(Producto);
 
-export const ProductoModel = mongoose.model("productos", productoSchema);
+export const ProductoModel = mongoose.model("Producto", productoSchema);

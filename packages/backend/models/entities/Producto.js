@@ -48,7 +48,6 @@ export default class Producto {
 
   contieneCategoria(categoriaBuscada) {
     return this.categorias.some((categoria) => categoria == categoriaBuscada);
-    return this.categorias.some((categoria) => categoria == categoriaBuscada);
   }
 
   getTitulo() {

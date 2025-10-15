@@ -31,7 +31,7 @@ const UsuarioSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
-    collection: "usuario",
+    collection: "usuarios",
   },
 );
 UsuarioSchema.loadClass(Usuario);

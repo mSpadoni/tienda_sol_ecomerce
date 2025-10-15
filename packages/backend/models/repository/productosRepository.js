@@ -85,8 +85,7 @@ export default class ProductosRepository {
       .find(query)
       .sort({ [sortField]: sortOrder })
       .skip(skip)
-      .limit(elementosXPagina)
-      .lean();
+      .limit(elementosXPagina);
 
     return productos;
   }
