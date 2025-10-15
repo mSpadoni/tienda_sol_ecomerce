@@ -1,0 +1,112 @@
+openapi: 3.0.3
+info:
+  title: API Pedidos / Productos / Notificaciones
+  version: 1.0.0
+servers:
+  - url: http://localhost:3001
+
+paths:
+  /notificaciones:
+    get:
+      summary: Listar notificaciones
+      responses:
+        '200':
+          description: OK
+  /notificaciones/{id}:
+    get:
+      summary: Obtener notificación por id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+  /notificaciones/{id}/leer:
+    patch:
+      summary: Marcar notificación como leída
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+
+  /productos:
+    get:
+      summary: Listar productos
+      responses:
+        '200':
+          description: OK
+
+  /pedidos:
+    post:
+      summary: Crear pedido
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PedidoInput'
+      responses:
+        '201':
+          description: Creado
+
+  /pedidos/{id}:
+    patch:
+      summary: Actualizar pedido
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+
+  /usuarios/{id}/pedidos:
+    get:
+      summary: Pedidos por usuario
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+
+components:
+  schemas:
+    ObjectId:
+      type: string
+      pattern: '^[a-fA-F0-9]{24}$'
+      example: '68ea59726c6d360495a91a84'
+    PedidoInput:
+      type: object
+      properties:
+        usuario:
+          $ref: '#/components/schemas/ObjectId'
+        moneda:
+          type: string
+        direccionEntrega:
+          type: object
+        items:
+          type: array
+          items:
+            type: object
+            properties:
+              productoId:
+                $ref: '#/components/schemas/ObjectId'
+              cantidad:
+                type: integer
+      required:
+        - usuario
+        - items
