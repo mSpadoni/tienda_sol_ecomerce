@@ -16,31 +16,27 @@ const productoSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    categorias: {
-      type: String,
-      required: true,
-    },
     precio: {
       type: Number,
       required: true,
     },
-    // moneda: {
-    //   type: Object,
-    //   required: true,
-    // },
-    stock: {
-      type: Number,
+    categorias: {
+      type: String,
       required: true,
     },
     fotos: {
       type: String,
       required: true,
     },
+    stock: {
+      type: Number,
+      required: true,
+    },
     activo: {
       type: Boolean,
       required: true,
     },
-        ventas: {
+    ventas: {
       type: Number,
       required: true,
     },
@@ -53,7 +49,7 @@ const productoSchema = new mongoose.Schema(
     toJSON: { getters: true },
     toObject: { getters: true },
     timestamps: true,
-    collection: "Producto",
+    collection: "productos",
   },
 );
 
@@ -64,4 +60,4 @@ productoSchema.pre(/^find/, function (next) {
 
 productoSchema.loadClass(Producto);
 
-export const ProductoModel = mongoose.model("Producto", productoSchema);
+export const ProductoModel = mongoose.model("productos", productoSchema);
