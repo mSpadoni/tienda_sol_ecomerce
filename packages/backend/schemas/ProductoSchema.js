@@ -1,8 +1,6 @@
 import mongoose from "mongoose";
 import Producto from "../models/entities/Producto.js";
 
-
-
 const productoSchema = new mongoose.Schema(
   {
     vendedor: {
@@ -26,10 +24,10 @@ const productoSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
-    moneda: {
-      type: Object,
-      required: true,
-    },
+    // moneda: {
+    //   type: Object,
+    //   required: true,
+    // },
     stock: {
       type: Number,
       required: true,
@@ -41,6 +39,14 @@ const productoSchema = new mongoose.Schema(
     activo: {
       type: Boolean,
       required: true,
+    },
+        ventas: {
+      type: Number,
+      required: true,
+    },
+    fechaCreacion: {
+      type: Date,
+      default: Date.now,
     },
   },
   {
