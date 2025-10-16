@@ -9,6 +9,7 @@ export default class NotificacionesService {
 
   async getNotificaciones(filtros) {
     return await this.notificacionesRepository.getNotificaciones(filtros);
+    
   }
 
   async marcarNotificacionComoLeida(id) {
@@ -19,11 +20,6 @@ export default class NotificacionesService {
     const notificacion = await this.notificacionesRepository.findById(id);
     return notificacion;
   }
-  async getNotificacionById(id) {
-    const notificacion = await this.notificacionesRepository.findById(id);
-    return notificacion;
-  }
-
 
   async crearNotificacion(pedido) {
     const notificacion = this.factoryNotificacion.crearSegunPedido(pedido);

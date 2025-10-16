@@ -4,13 +4,10 @@ import { EstadoPedido } from "../../../models/entities/EstadoPedido.js";
 import ItemPedido from "../../../models/entities/ItemPedido.js";
 import { TipoUsuario } from "../../../models/entities/TipoUsuario.js";
 
-
-// 🔹 Mock logger
 jest.unstable_mockModule("../../../../logger/logger.js", () => ({
   default: { info: jest.fn() },
 }));
 
-// 🔹 Mock funciones externas
 jest.unstable_mockModule(
   "../../../service/funcionesDelService.js",
   () => ({
@@ -34,7 +31,7 @@ describe("pedidoService (modo ESM)", () => {
   let service;
 
   beforeEach(() => {
-    // Mocks de repositorios
+    
 
     mockRepoPedido = {
       generarID: jest.fn().mockReturnValue(123),
@@ -55,7 +52,7 @@ describe("pedidoService (modo ESM)", () => {
 
   });
 
-  // ---------- TEST crear ----------
+
   test("crear debe generar y guardar un nuevo pedido correctamente", () => {
     const usuarioMock = { id: 1, nombre: "Juan", tipo: TipoUsuario.COMPRADOR };
     const itemsMock = [{ id: 1, nombre: "milanesa" }];
@@ -91,7 +88,7 @@ describe("pedidoService (modo ESM)", () => {
     expect(nuevoPedido.comprador).toEqual(usuarioMock);
   });
 });
-  // ---------- TEST findPedidosByUsuariosId ----------
+
   test("findPedidosByUsuariosId debe retornar pedidos del usuario", () => {
     const pedidosMock = [{ id: 1 }, { id: 2 }];
 
@@ -106,7 +103,7 @@ describe("pedidoService (modo ESM)", () => {
     expect(result).toEqual(pedidosMock);
   });
   });
-  // ---------- TEST actualizar ----------
+
   test("actualizar debe modificar un pedido existente", async () => {
     const pedidoExistente = {
       id: 10,
@@ -138,17 +135,15 @@ describe("pedidoService (modo ESM)", () => {
     expect(resultado.items).toEqual(itemsActualizados);
     })
   });
-  // ---------- CAMINOS TRISTES ----------
 
   test("crear debe lanzar error si el usuario no es un comprador", () => {
     const usuarioVendedor = { id: 10, tipo: "VENDEDOR" };
 
-    // Simulamos que la función auxiliar devuelve un usuario incorrecto
+
     jest.spyOn(service,"obtenerUsuario").mockResolvedValue(usuarioVendedor);
 
     const pedidoData = { usuario: usuarioVendedor, moneda: "Peso Argentino" };
 
-    // Suponemos que validarStock no llega a llamarse porque hay un error antes
     jest.spyOn(service,"obtenerItems").mockImplementation(() => {
       throw new Error("El usuario no tiene permisos para crear pedidos");
     });

@@ -4,27 +4,11 @@ export default class NotificacionesRepository {
   constructor() {
     this.model = NotificacionModel;
   }
-
-
-  async findById(id) {
-    return await NotificacionModel.findById(id);
-  }
+  
   async findById(id) {
     return await NotificacionModel.findById(id);
   }
 
-  // async getNotificaciones(filtros){
-  //     const {leida} = filtros
-  //     const data = await fs.readFile(NotificacionesRepository.notificacionesPath, 'utf8')
-  //     const dataObjects = JSON.parse(data)
-
-  //     let notificacionesADevolver = mapToNotificaciones(dataObjects)
-  //     if(leida !== undefined){
-  //         notificacionesADevolver = this.estaLeida(leida, notificacionesADevolver)
-  //     }
-  //     return notificacionesADevolver
-  // }
-  //----------------------------------------------------------------
   async getNotificaciones(filtros) {
     const query = {};
     if (filtros.leida !== undefined) {
@@ -35,19 +19,6 @@ export default class NotificacionesRepository {
     }
     return await NotificacionModel.find(query).lean();
   }
-
-  /*async getNotificaciones(filtros){
-  /*async getNotificaciones(filtros){
-        const{leida} = filtros
-        return await this.model.find(filtros).populate('notificacion');
-    }*/
-
-  // async marcarNotificacionComoLeida(id){
-  //     const notificacion = await this.findById(id);
-  //     if(notificacion){
-  //         notificacion.marcarComoLeida();
-  //     }
-  // }
 
   async marcarNotificacionComoLeida(id) {
     const notificacion = await NotificacionModel.findById(id);

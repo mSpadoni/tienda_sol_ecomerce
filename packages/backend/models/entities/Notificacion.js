@@ -1,6 +1,3 @@
-
-
-
 export default class Notificacion {
   id;
   constructor(usuario, mensaje, fechaAlta) {

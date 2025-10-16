@@ -9,7 +9,6 @@ export const mensajesConocidos = {
   invalid_string: "Cadena inválida",
 };
 
-
 export default function zodErrorHandler(err, _req, res, _next) {
  
   if (err.constructor.name === ZodError.name) {

@@ -9,8 +9,6 @@ export default function productosRoutes(getController) {
   const router = express.Router();
   const controller = getController(ProductosController);
 
-
-  router.use(loggerMiddleware);
   router.use(loggerMiddleware);
 
   router.get(pathProductos, async (req, res, next) => {

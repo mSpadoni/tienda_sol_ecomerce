@@ -22,14 +22,14 @@ export default class pedidoRepository {
   }
 
   async save(pedido) {
-  let pedidoDoc;
+    let pedidoDoc;
 
-  if (pedido.id) {
-    pedidoDoc = await this.modelo.findById(pedido.id).populate("comprador")
-  .populate("items.producto") 
-  .populate("historialEstado.usuario")
+    if (pedido.id) {
+     pedidoDoc = await this.modelo.findById(pedido.id).populate("comprador")
+    .populate("items.producto") 
+    .populate("historialEstado.usuario")
 
-    Object.assign(pedidoDoc, pedido); 
+      Object.assign(pedidoDoc, pedido); 
   } else {
     pedidoDoc = new this.modelo(pedido);
   }
@@ -37,7 +37,6 @@ export default class pedidoRepository {
   return await pedidoDoc.save();
 }
 
- 
   async findById(id) {
     return await this.modelo
       .findById(id)

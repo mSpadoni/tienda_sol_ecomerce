@@ -47,7 +47,6 @@ describe("ProductosService - getProductos", () => {
       "asc",
     );
     expect(repoMock.contarTodos).toHaveBeenCalled();
-    // Ajustá según el shape real que devuelva tu service:
     expect(res).toBeDefined();
   });
 
@@ -57,15 +56,13 @@ describe("ProductosService - getProductos", () => {
     repoMock.contarTodos.mockResolvedValue(1);
 
     const out = await svc.getProductos({}, undefined, 1, 10, "ventas", "desc");
-
-    // Si tu service devuelve { data, total, pagina, perPage }
+    
     if (out && out.data) {
       expect(out.data[0]).toHaveProperty("titulo", "Remera Negra");
       expect(out.data[0]).toHaveProperty("precio", 1000);
       expect(out.data[0]).toHaveProperty("ventas", 5);
       expect(out.data[0].id || out.data[0]._id).toBeDefined();
     } else {
-      // fallback: si devuelve array directamente
       expect(Array.isArray(out)).toBe(true);
       expect(out[0]).toHaveProperty("titulo", "Remera Negra");
     }

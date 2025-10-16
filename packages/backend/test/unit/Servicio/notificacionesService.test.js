@@ -36,7 +36,7 @@ describe("NotificacionesService", () => {
     };
     svc = new NotificacionesService(repoMock);
 
-    // reemplazamos la factory por un mock inspeccionable
+    // reemplazamos la factory por un mock
     svc.factoryNotificacion = { crearSegunPedido: jest.fn() };
   });
 
@@ -62,13 +62,13 @@ describe("NotificacionesService", () => {
   });
 
   test("getNotificacionById retorna la notificacion cuando existe", async () => {
-    const n = makeNotificacion({ _id: "nidX" });
+    const notificacion = makeNotificacion({ _id: "nidX" });
     repoMock.findById.mockResolvedValue(n);
 
     const res = await svc.getNotificacionById("nidX");
 
     expect(repoMock.findById).toHaveBeenCalledWith("nidX");
-    expect(res).toBe(n);
+    expect(res).toBe(notificacion);
   });
 
   test("crearNotificacion usa la factory y guarda la notificacion en repo", async () => {

@@ -1,4 +1,3 @@
-
 export default class Usuario {
   id;
   constructor(nombre, email, telefono, tipo, fechaAlta) {

@@ -36,8 +36,6 @@ export function monedaValida(monedaABuscar) {
   return moneda;
 }
 
-
-
 export function validarStock(items) {
   if (!items.every((item) => item.estaDisponible())) {
     throw new FaltaStock();

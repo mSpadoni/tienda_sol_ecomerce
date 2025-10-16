@@ -3,11 +3,9 @@ export default class ProductosService {
     this.productosRepository = productosRepository;
   }
 
-
-  //Aca como mas nos guste podemos transformar el objeto a un DTO
   toDTO(producto) {
     return {
-      id: producto.id || producto._id, //validacion de if default de mongo
+      id: producto.id || producto._id,
       vendedor: producto.vendedor,
       titulo: producto.titulo,
       descripcion: producto.descripcion,

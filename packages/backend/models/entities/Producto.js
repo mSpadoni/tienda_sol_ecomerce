@@ -45,7 +45,6 @@ export default class Producto {
     return this.vendedor;
   }
 
-
   contieneCategoria(categoriaBuscada) {
     return this.categorias.some((categoria) => categoria == categoriaBuscada);
   }
@@ -53,27 +52,22 @@ export default class Producto {
   getTitulo() {
     return this.titulo;
   }
-
  
   getDescripcion() {
     return this.descripcion;
   }
 
-
   getIdVendedor() {
     return this.vendedor.getId();
   }
-
 
   getActivo() {
     return this.activo;
   }
 
-
   getPrecio() {
     return this.precio;
   }
-
 
   getVentas() {
     return this.ventas;
