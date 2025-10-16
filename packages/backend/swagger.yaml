@@ -66,6 +66,23 @@ paths:
           required: true
           schema:
             type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                usuario:
+                  $ref: '#/components/schemas/ObjectId'
+                estado:
+                  type: string
+                motivo:
+                  type: string
+              example:
+                usuario: "68eee925735dc2cb4b77ed65"
+                estado: "cancelado"
+                motivo: "hola"
       responses:
         '200':
           description: OK
