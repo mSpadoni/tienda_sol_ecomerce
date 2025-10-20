@@ -1,15 +1,13 @@
 import NotificacionesController from "../controller/notificacionesController.js";
 import express from "express";
 import { notificacionesErrorHandler } from "../middleware/NotificacionesMiddleware.js";
-import { loggerMiddleware } from "../middleware/loggerMiddleware.js";
+
 
 const pathNotificaciones = "/notificaciones";
 
 export default function notificacionesRoutes(getController) {
   const router = express.Router();
   const controller = getController(NotificacionesController);
-
-  router.use(loggerMiddleware);
 
   router.get(pathNotificaciones, async (req, res, next) => {
     try {

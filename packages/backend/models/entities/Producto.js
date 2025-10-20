@@ -32,9 +32,9 @@ export default class Producto {
   }
 
   reducirStock(cantidad) {
-    console.log(cantidad);
+
     this.stock -= cantidad;
-    console.log(this.stock);
+
   }
 
   aumentarStock(cantidad) {

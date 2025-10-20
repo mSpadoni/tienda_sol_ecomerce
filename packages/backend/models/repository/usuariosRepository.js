@@ -5,7 +5,13 @@ export default class usuarioRepository {
     this.model = UsuarioModel;
   }
 
-  findById(id) {
-    return this.model.findById(id);
+  async findById(id) {
+    return await this.model.findOne({ idKeycloark: id });
   }
+
+  async obtnerId(idKeycloark){
+    return await this.model.findOne({idKeycloark:idKeycloark},"_id");
+  }
+
+
 }

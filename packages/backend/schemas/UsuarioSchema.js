@@ -3,7 +3,12 @@ import { TipoUsuario } from "../models/entities/TipoUsuario.js";
 import Usuario from "../models/entities/Usuario.js";
 
 const UsuarioSchema = new mongoose.Schema(
-  {
+  { 
+    idKeycloark: {
+      type: String,
+      required: true,
+      unique: true,
+    },
     nombre: {
       type: String,
       required: true,

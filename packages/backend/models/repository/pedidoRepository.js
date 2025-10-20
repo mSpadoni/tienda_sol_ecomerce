@@ -10,16 +10,24 @@ export default class pedidoRepository {
     this.modelo = PedidoModel;
   }
 
-  async findByUsuariosId(idUsuario) {
+  async findByUsuarioId(idUsuario) {
+    const idABuscar = idUsuario._id.toString();
+  logger.info(`Buscando pedidos donde participa el usuario con id: ${idABuscar}`);
 
-    logger.info(`Buscando pedidos del usuario con id: ${idUsuario} en el repo`);
-    return await this.modelo
-      .find({ comprador: idUsuario })
-      .populate("comprador")
-  .populate("items.producto") 
-  .populate("historialEstado.usuario")
-  
-  }
+  const pedidos = await this.modelo
+    .find()
+    .populate("comprador")
+    .populate(
+    "items.producto"
+      )
+    .populate("historialEstado.usuario");
+
+  return pedidos.filter((pedido) => {
+    const compradorId = pedido.comprador._id.toString();
+    const vendedorId = pedido.items[0].producto.vendedor._id.toString();
+    return compradorId === idABuscar || vendedorId === idABuscar;
+  });
+}
 
   async save(pedido) {
     let pedidoDoc;

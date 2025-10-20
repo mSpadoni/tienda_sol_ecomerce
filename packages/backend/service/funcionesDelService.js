@@ -7,20 +7,17 @@ import { obtenerMoneda } from "../models/entities/Moneda.js";
 import ErrorMonedaNoPermitida from "../errors/errorMonedaNoPernitida.js";
 
 export function reducirStocks(items){
-   logger.info(`${JSON.stringify(items)}`)
   items.forEach(item=>item.producto.reducirStock(item.cantidad))
   return items
 }
 
 export function aumentarStocks(items){
-   logger.info(`${JSON.stringify(items)}`)
   items.forEach(item=>item.producto.aumentarStock(item.cantidad))
   return items
 }
 
 export function obtenerEstado(estado) {
   const estadoRequerido = findEstado(estado);
-  logger.info(`${JSON.stringify(estadoRequerido)}`);
   if (!estadoRequerido) {
     throw new ErrorEstadoNoValido(estado);
   }
@@ -32,7 +29,6 @@ export function monedaValida(monedaABuscar) {
   if (!moneda) {
     throw new ErrorMonedaNoPermitida(monedaABuscar);
   }
-  logger.info(`${JSON.stringify(moneda)}`);
   return moneda;
 }
 

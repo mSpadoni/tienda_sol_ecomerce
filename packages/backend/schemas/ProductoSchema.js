@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import Producto from "../models/entities/Producto.js";
 
-const productoSchema = new mongoose.Schema(
+export const productoSchema = new mongoose.Schema(
   {
     vendedor: {
       type: mongoose.Schema.Types.ObjectId,

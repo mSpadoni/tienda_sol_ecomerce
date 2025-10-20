@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import logger from "../../logger/logger";
 import "./App.css";
 
 function App() {
@@ -8,7 +9,7 @@ function App() {
     fetch("http://localhost:8000/hello")
       .then((response) => response.json())
       .then((data) => setMessage(data.message))
-      .catch((error) => console.error("Error cargando mensaje.", error));
+      .catch((error) => logger.error("Error cargando mensaje.", error));
   }, []);
 
   return (

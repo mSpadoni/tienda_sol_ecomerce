@@ -2,7 +2,7 @@ export function adaptarPedidoToJson(pedido) {
   return {
     id: pedido.id,
     usuario: pedido.comprador,
-    vendedor: pedido.obtenerVendedor(),
+    //vendedor: pedido.obtenerVendedor(),
     direccionEntrega: pedido.direccionEntrega,
     fechaCreacion: pedido.fechaCreacion,
     items: pedido.items.map((item) => ({

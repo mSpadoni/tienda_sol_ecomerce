@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-
+import logger from "../../logger/logger.js";
 export class MongoDBClient {
   static async connect() {
     try {
@@ -7,9 +7,9 @@ export class MongoDBClient {
         `${process.env.MONGODB_URI}?authSource=admin`,
       );
 
-      console.log(`MongoDB is Connected: ${conn.connection.host}`);
+      logger.info(`MongoDB is Connected: ${conn.connection.host}`);
     } catch (error) {
-      console.error(`Error: ${error.message}`);
+      logger.error(`Error: ${error.message}`);
       process.exit(1);
     }
   }
