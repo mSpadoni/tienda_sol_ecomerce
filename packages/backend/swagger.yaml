@@ -8,19 +8,20 @@ servers:
 paths:
   /notificaciones:
     get:
-      summary: Listar notificaciones
-      responses:
-        '200':
-          description: OK
-  /notificaciones/{id}:
-    get:
-      summary: Obtener notificación por id
+      summary: Obtener notificaciones de un usuario
       parameters:
-        - name: id
-          in: path
+        - name: usuario
+          in: query
           required: true
           schema:
-            type: string
+            $ref: '#/components/schemas/ObjectId'
+          description: ID del usuario para filtrar notificaciones
+        - name: leida
+          in: query
+          required: false
+          schema:
+            type: boolean
+          description: Filtrar por notificaciones leídas (true) o no leídas (false)
       responses:
         '200':
           description: OK

@@ -51,10 +51,10 @@ const cambioEstadoPedidoSchema = new mongoose.Schema({
   type: String,
   enum: Object.values(EstadoPedido).map((e) => e.valor),
   required: true,
-  get: (estado) => findEstado(estado),   // convierte string a objeto al leer
+  get: (estado) => findEstado(estado), 
   set: (estadoObj) => {
-    if (typeof estadoObj === "string") return estadoObj; // si se asigna string, guardar tal cual
-    return estadoObj.valor; // si se asigna objeto, guardar solo el valor
+    if (typeof estadoObj === "string") return estadoObj;  
+    return estadoObj.valor; 
   }
 },
   pedido: {
@@ -98,10 +98,10 @@ const PedidoSchema = new mongoose.Schema(
   type: String,
   enum: Object.values(EstadoPedido).map((e) => e.valor),
   required: true,
-  get: (estado) => findEstado(estado),   // convierte string a objeto al leer
+  get: (estado) => findEstado(estado),  
   set: (estadoObj) => {
-    if (typeof estadoObj === "string") return estadoObj; // si se asigna string, guardar tal cual
-    return estadoObj.valor; // si se asigna objeto, guardar solo el valor
+    if (typeof estadoObj === "string") return estadoObj;
+    return estadoObj.valor; 
   }
 },
     fechaCreacion: {
