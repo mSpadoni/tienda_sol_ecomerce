@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from "react";
 import "./App.css";
+import Header from "./components/headers/Header.jsx";
+import Navbar from "./components/headers/Navbar.jsx";
+import ProductDetailPage from "./components/ProductDetailPage/ProductDetailPage.jsx";
 
 function App() {
   const [message, setMessage] = useState("");
@@ -12,12 +15,12 @@ function App() {
   }, []);
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <h1>Monorepo Demo</h1>
-        <p>{message ? message : "Cargando mensaje del backend..."}</p>
-      </header>
-    </div>
+    <>
+      <Header></Header>
+      <Navbar></Navbar>
+      <ProductDetailPage id='2'></ProductDetailPage>
+
+    </>
   );
 }
 

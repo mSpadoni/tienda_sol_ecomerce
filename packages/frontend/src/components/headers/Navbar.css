@@ -1,0 +1,20 @@
+.navbar-bg {
+    background-color: var(--secondary);
+    font-size: 1.5rem;
+    height: 8rem;
+    padding: 10px 20px;
+}
+
+.navbar{
+    color: var(--ring);
+    margin: 0 2rem;
+}
+
+.menu-icon {
+    color: var(--ring);
+}
+
+.cart-icon {
+    margin: 0 0 0 1rem;
+    color: var(--ring);
+}

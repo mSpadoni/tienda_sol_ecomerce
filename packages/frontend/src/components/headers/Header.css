@@ -1,0 +1,7 @@
+.header{
+    text-align: center;
+    color: var(--ring);
+    /* --secondary-background is not defined in :root; use --secondary instead */
+    background-color: var(--secondary);
+    padding: 0.5rem 0;
+} 
