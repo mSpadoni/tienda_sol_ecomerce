@@ -8,7 +8,6 @@ export const objectIdSchema = z
 
 export const pedidoPatchSchema = z.object({
   estado: z.string().min(1),
-  usuario: objectIdSchema,
   motivo: z.string(),
 });
 
@@ -26,7 +25,6 @@ export const direccionSchema = z.object({
 });
 
 export const pedidoSchema = z.object({
-  usuario: objectIdSchema,
   moneda: z.string().min(1),
   direccionEntrega: direccionSchema,
   items: z.array(
@@ -34,5 +32,8 @@ export const pedidoSchema = z.object({
       productoId: objectIdSchema,
       cantidad: z.coerce.number(),
     }),
-  ),
+  ).min(1),
 });
+
+export const validadIdkecloark = z.string().min(1);
+

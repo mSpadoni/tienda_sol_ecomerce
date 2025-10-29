@@ -1,5 +1,6 @@
 export default class Usuario {
   id;
+  idKeycloak;
   constructor(nombre, email, telefono, tipo, fechaAlta) {
     this.nombre = nombre;
     this.email = email;
@@ -7,7 +8,5 @@ export default class Usuario {
     this.tipo = tipo;
     this.fechaAlta = fechaAlta;
   }
-  getId() {
-    return this.id;
-  }
+
 }

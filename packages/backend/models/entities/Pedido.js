@@ -76,7 +76,6 @@ export default class Pedido {
 
   this.historialEstado.push(cambioEstadoPedido);
 
-  console.log(`Estado actualizado: ${JSON.stringify(this.estado)}`);
 }
 
   obtenerVendedor() {

@@ -23,10 +23,7 @@ export default class NotificacionesService {
 
   async crearNotificacion(pedido) {
     const notificacion = this.factoryNotificacion.crearSegunPedido(pedido);
-    logger.info(`${JSON.stringify(notificacion)}`);
     await this.notificacionesRepository.save(notificacion);
-    await this.notificacionesRepository.save(notificacion);
-    logger.info(`Notificacion creada: ${JSON.stringify(notificacion)}`);
     return notificacion;
   }
 }
