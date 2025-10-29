@@ -1,12 +1,10 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { useParams } from 'react-router-dom';
-import productos from '../mockData/Productos.js';
+import productos from '../../components/mockData/Productos.js';
 import './ProductDetailPage.css';
 
 const ProductDetailPage = (props) => {
-  const params = useParams();
-  const id = props.id || params.id;
+  const id = props.id;
   const producto = productos.find(p => p.id === id);
 
   if (!producto) {
@@ -55,5 +53,5 @@ const ProductDetailPage = (props) => {
 export default ProductDetailPage;
 
 ProductDetailPage.propTypes = {
-  id: PropTypes.string,
+  id: PropTypes.string.isRequired,
 };
