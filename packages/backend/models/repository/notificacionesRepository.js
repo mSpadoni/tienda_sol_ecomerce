@@ -14,10 +14,8 @@ export default class NotificacionesRepository {
     if (filtros.leida !== undefined) {
       query.leida = filtros.leida;
     }
-    if (filtros.usuario !== undefined) {
-      query.usuario = filtros.usuario;
-    }
-    return await NotificacionModel.find(query).lean();
+    const notificacionesUsuario = await NotificacionModel.find(query).lean();
+    return notificacionesUsuario.filter((notificacion)=>notificacion.usuario.idKeycloak===filtros.usuario);
   }
 
   async marcarNotificacionComoLeida(id) {

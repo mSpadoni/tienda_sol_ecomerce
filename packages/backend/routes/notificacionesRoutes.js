@@ -17,15 +17,7 @@ export default function notificacionesRoutes(getController) {
     }
   });
 
-  router.get(pathNotificaciones, async (req, res, next) => {
-    try {
-      await controller.getNotificacionById(req, res);
-    } catch (err) {
-      next(err);
-    }
-  });
-
-  router.patch(pathNotificaciones + "/lectura", (req, res) =>
+  router.patch(pathNotificaciones + "/:idNotificacion/lectura", (req, res) =>
     controller.marcarNotificacionComoLeida(req, res),
   );
 

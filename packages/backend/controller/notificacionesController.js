@@ -30,6 +30,8 @@ export default class NotificacionesController {
           .send("El parámetro 'leida' debe ser 'true' o 'false'");
       }
     }
+    
+    filtros.usuario=req.user.sub
 
     const notificaciones =
       await this.notificacionesService.getNotificaciones(filtros);
@@ -39,22 +41,8 @@ export default class NotificacionesController {
     return res.status(200).json(notificaciones);
   }
 
-  async getNotificacionById(req, res) {
-    const validationResult = this.validarId(req.params.id);
-    if (!validationResult.success) {
-      return res.status(400).json(validationResult.error);
-    }
-    const id = validationResult.data;
-    const notificacion =
-      await this.notificacionesService.getNotificacionById(id);
-    if (!notificacion) {
-      throw new NotificacionDoesNotExist(id);
-    }
-    res.status(200).json(notificacion);
-  }
-
   async marcarNotificacionComoLeida(req, res) {
-    const validationResult = this.validarId(req.params.id);
+    const validationResult = this.validarId(req.params.idNotificacion);
     if (!validationResult.success) {
       return res.status(400).json(validationResult.error);
     }

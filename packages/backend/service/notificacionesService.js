@@ -16,11 +16,6 @@ export default class NotificacionesService {
     return await this.notificacionesRepository.marcarNotificacionComoLeida(id);
   }
 
-  async getNotificacionById(id) {
-    const notificacion = await this.notificacionesRepository.findById(id);
-    return notificacion;
-  }
-
   async crearNotificacion(pedido) {
     const notificacion = this.factoryNotificacion.crearSegunPedido(pedido);
     await this.notificacionesRepository.save(notificacion);
