@@ -17,7 +17,7 @@ export default function notificacionesRoutes(getController) {
     }
   });
 
-  router.get(pathNotificaciones + "/:id", async (req, res, next) => {
+  router.get(pathNotificaciones, async (req, res, next) => {
     try {
       await controller.getNotificacionById(req, res);
     } catch (err) {
@@ -25,7 +25,7 @@ export default function notificacionesRoutes(getController) {
     }
   });
 
-  router.patch(pathNotificaciones + "/:id/leer", (req, res) =>
+  router.patch(pathNotificaciones + "/lectura", (req, res) =>
     controller.marcarNotificacionComoLeida(req, res),
   );
 
