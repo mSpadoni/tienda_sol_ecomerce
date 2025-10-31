@@ -10,7 +10,7 @@ const productos = [
     activo: true,
     vendedor: "Juan Pérez",
     ventas: 5,
-    moneda: { nombre: "Peso Argentino", simbolo: "$" }
+    moneda: { nombre: "ARS", simbolo: "$" }
   },
   {
     id: "2",
@@ -23,7 +23,7 @@ const productos = [
     activo: true,
     vendedor: "Ana López",
     ventas: 12,
-    moneda: { nombre: "Peso Argentino", simbolo: "$" }
+    moneda: { nombre: "ARS", simbolo: "$" }
   },
   {
     id: "3",
@@ -36,7 +36,7 @@ const productos = [
     activo: false,
     vendedor: "Carlos Gómez",
     ventas: 3,
-    moneda: { nombre: "Peso Argentino", simbolo: "$" }
+    moneda: { nombre: "ARS", simbolo: "$" }
   }
 ];
 

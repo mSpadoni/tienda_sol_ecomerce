@@ -1,14 +1,14 @@
 export const Moneda = Object.freeze({
   PESO_ARG: {
-    nombre: "Peso Argentino",
+    nombre: "ARS",
     simbolo: "$",
   },
   DOLAR_USA: {
-    nombre: "Dólar",
+    nombre: "USD",
     simbolo: "U$S",
   },
   REAL: {
-    nombre: "Real",
+    nombre: "BRL",
     simbolo: "R$",
   },
 });

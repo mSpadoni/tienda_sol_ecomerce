@@ -6,12 +6,13 @@ const AccomodationSearchBar = () => {
   return (
     <div className="accommodation-search">
       <div className='search-field'>
-        <label className='field-label'>DESTINO</label>
         <div className='input-wrapper'>
-          <FaMapMarkerAlt className='search-icon' />
+          {/* <FaMapMarkerAlt className='search-icon' /> */}
+          <FaSearch className='search-icon' />
           <input 
             type="text" 
             className='search-input' 
+            placeholder="¿A dónde vas?"
           />
         </div>
       </div>

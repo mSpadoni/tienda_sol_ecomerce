@@ -14,6 +14,7 @@ import NotificacionesController from "./controller/notificacionesController.js";
 import ProductosController from "./controller/productosController.js";
 import routes from "./routes/routes.js";
 import { MongoDBClient } from "./config/database.js";
+// import axios from "axios";
 
 const app = express();
 
@@ -66,6 +67,16 @@ app.get("/", (req, res) => {
   // authMiddleware(req, res,next)
   res.status(200).json({ message: "Bienvenido " + req.user.nombre });
 });
+
+// app.get("/api/rates", async (req, res) => {
+//   try {
+//     const response = await axios.get("https://api.exchangerate.host/latest?base=USD");
+//     res.json(response.data);
+//   } catch (error) {
+//     console.error("Error obteniendo tasas", error);
+//     res.status(500).json({ error: "No se pudo obtener las tasas" });
+//   }
+// });
 
 // Configurar rutas y controladores en el servidor
 server.setController(ControllerPedido, controllerPedido);

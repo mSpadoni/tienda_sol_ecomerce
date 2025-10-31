@@ -1,0 +1,111 @@
+/* Contenedor general del carrito */
+.rappi-carrito {
+  width: 350px;              /* ancho fijo */
+  max-width: 90%;            /* responsive */
+  background: #fff;           /* fondo blanco */
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+  position: relative;
+  font-family: "Arial", sans-serif;
+}
+
+/* Título del carrito */
+.rappi-carrito h2 {
+  margin: 0 0 12px 0;
+  font-size: 18px;
+  font-weight: bold;
+  text-align: center;
+}
+
+/* Lista de items */
+.rappi-items-list {
+  max-height: 300px;          /* alto máximo con scroll */
+  overflow-y: auto;
+  padding-right: 4px;         /* espacio para scrollbar */
+}
+
+/* Cada item */
+.carrito-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid #eee;
+}
+
+/* Imagen del producto */
+.item-img {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+/* Info del producto */
+.item-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Título */
+.item-title {
+  margin: 0 0 4px 0;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+/* Precio */
+.item-price {
+  font-size: 13px;
+  color: #555;
+  margin-bottom: 6px;
+}
+
+/* Controles de eliminar unidades */
+.item-eliminar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Botones + - */
+.item-eliminar button {
+  width: 28px;
+  height: 28px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #fff;
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 0;
+}
+
+/* Botón eliminar */
+.item-eliminar .eliminar {
+  background-color: #f33;
+  color: #fff;
+  border: none;
+  padding: 4px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* Total */
+.rappi-total {
+  margin-top: 12px;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: right;
+}
+
+/* Scrollbar personalizado opcional */
+.rappi-items-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.rappi-items-list::-webkit-scrollbar-thumb {
+  background-color: rgba(0,0,0,0.2);
+  border-radius: 3px;
+}
