@@ -9,7 +9,7 @@ const Home = () => {
     return (
       <>
       <div className="home-body">
-        <AccomodationSearchBar></AccomodationSearchBar>
+        {/* <AccomodationSearchBar></AccomodationSearchBar> */}
       </div>
       <div>
         <ProductsCarousel />
