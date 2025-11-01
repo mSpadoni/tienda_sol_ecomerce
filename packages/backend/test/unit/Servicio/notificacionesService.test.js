@@ -63,7 +63,7 @@ describe("NotificacionesService", () => {
 
   test("getNotificacionById retorna la notificacion cuando existe", async () => {
     const notificacion = makeNotificacion({ _id: "nidX" });
-    repoMock.findById.mockResolvedValue(n);
+    repoMock.findById.mockResolvedValue(notificacion);
 
     const res = await svc.getNotificacionById("nidX");
 

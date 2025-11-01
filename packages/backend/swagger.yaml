@@ -2,6 +2,7 @@ openapi: 3.0.3
 info:
   title: API Pedidos / Productos / Notificaciones
   version: 1.0.0
+  description: API del backend (productos, pedidos, notificaciones)
 servers:
   - url: http://localhost:3001
 
@@ -9,9 +10,34 @@ paths:
   /notificaciones:
     get:
       summary: Listar notificaciones
+      description: Filtra por query params (usuario, leida)
+      parameters:
+        - name: usuario
+          in: query
+          schema:
+            $ref: '#/components/schemas/ObjectId'
+          description: Id del usuario (ObjectId 24 hex)
+        - name: leida
+          in: query
+          schema:
+            type: boolean
+          description: Filtrar por leída
       responses:
         '200':
-          description: OK
+          description: Lista de notificaciones
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Notificacion'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
   /notificaciones/{id}:
     get:
       summary: Obtener notificación por id
@@ -20,10 +46,19 @@ paths:
           in: path
           required: true
           schema:
-            type: string
+            $ref: '#/components/schemas/ObjectId'
       responses:
         '200':
-          description: OK
+          description: Notificación encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Notificacion'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
   /notificaciones/{id}/leer:
     patch:
       summary: Marcar notificación como leída
@@ -32,17 +67,46 @@ paths:
           in: path
           required: true
           schema:
-            type: string
+            $ref: '#/components/schemas/ObjectId'
       responses:
         '200':
-          description: OK
+          description: Notificación actualizada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Notificacion'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalError'
 
   /productos:
     get:
       summary: Listar productos
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            default: 10
       responses:
         '200':
-          description: OK
+          description: Lista de productos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Producto'
+        '500':
+          $ref: '#/components/responses/InternalError'
 
   /pedidos:
     post:
@@ -53,59 +117,178 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/PedidoInput'
+            example:
+              usuario: "68ea59726c6d360495a91a84"
+              moneda: "Peso Argentino"
+              direccionEntrega:
+                calle: "Av. Corrientes"
+                altura: "1234"
+                piso: "7"
+                departamento: "B"
+                codigoPostal: "1043"
+                ciudad: "Buenos Aires"
+                provincia: "Buenos Aires"
+                pais: "Argentina"
+                lat: "-34.6037"
+                long: "-58.3816"
+              items:
+                - productoId: "68e9af2b34b18d57a2de0950"
+                  cantidad: 1
+                - productoId: "68e9af2b34b18d57a2df0950"
+                  cantidad: 1
       responses:
         '201':
-          description: Creado
+          description: Pedido creado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PedidoResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalError'
 
   /pedidos/{id}:
     patch:
-      summary: Actualizar pedido
+      summary: Actualizar un pedido (parcial)
       parameters:
         - name: id
           in: path
           required: true
           schema:
-            type: string
+            $ref: '#/components/schemas/ObjectId'
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                usuario:
-                  $ref: '#/components/schemas/ObjectId'
-                estado:
-                  type: string
-                motivo:
-                  type: string
-              example:
-                usuario: "68eee925735dc2cb4b77ed65"
-                estado: "cancelado"
-                motivo: "hola"
+              $ref: '#/components/schemas/PedidoUpdate'
+            example:
+              estado: "enviado"
+              usuario: "68ea59726c6d360495a91a84"
+              motivo: "Enviado por el vendedor"
       responses:
         '200':
-          description: OK
+          description: Pedido actualizado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PedidoResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalError'
 
   /usuarios/{id}/pedidos:
     get:
-      summary: Pedidos por usuario
+      summary: Obtener pedidos de un usuario
       parameters:
         - name: id
           in: path
           required: true
           schema:
-            type: string
+            $ref: '#/components/schemas/ObjectId'
+        - name: page
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 10
       responses:
         '200':
-          description: OK
+          description: Lista de pedidos del usuario
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PedidoListItem'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalError'
 
 components:
   schemas:
     ObjectId:
       type: string
+      description: MongoDB ObjectId (24 hex)
       pattern: '^[a-fA-F0-9]{24}$'
       example: '68ea59726c6d360495a91a84'
+
+    Usuario:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/ObjectId'
+        nombre:
+          type: string
+        email:
+          type: string
+        telefono:
+          type: string
+        tipo:
+          type: string
+        fechaAlta:
+          type: string
+          format: date-time
+
+    Producto:
+      type: object
+      properties:
+        _id:
+          $ref: '#/components/schemas/ObjectId'
+        titulo:
+          type: string
+        descripcion:
+          type: string
+        precio:
+          type: number
+        moneda:
+          type: string
+        stock:
+          type: integer
+        vendedor:
+          $ref: '#/components/schemas/Usuario'
+
+    DireccionEntrega:
+      type: object
+      properties:
+        calle: { type: string }
+        altura: { type: string }
+        piso: { type: string }
+        departamento: { type: string }
+        codigoPostal: { type: string }
+        ciudad: { type: string }
+        provincia: { type: string }
+        pais: { type: string }
+        lat: { type: string }
+        long: { type: string }
+
+    PedidoItemInput:
+      type: object
+      properties:
+        productoId:
+          $ref: '#/components/schemas/ObjectId'
+        cantidad:
+          type: integer
+      required:
+        - productoId
+        - cantidad
+
     PedidoInput:
       type: object
       properties:
@@ -114,7 +297,39 @@ components:
         moneda:
           type: string
         direccionEntrega:
-          type: object
+          $ref: '#/components/schemas/DireccionEntrega'
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/PedidoItemInput'
+      required:
+        - usuario
+        - items
+
+    PedidoUpdate:
+      type: object
+      properties:
+        estado:
+          type: string
+        usuario:
+          $ref: '#/components/schemas/ObjectId'
+        motivo:
+          type: string
+
+    PedidoListItem:
+      type: object
+      properties:
+        _id:
+          $ref: '#/components/schemas/ObjectId'
+        estado:
+          type: string
+        fechaCreacion:
+          type: string
+          format: date-time
+        moneda:
+          type: string
+        direccionEntrega:
+          $ref: '#/components/schemas/DireccionEntrega'
         items:
           type: array
           items:
@@ -124,6 +339,81 @@ components:
                 $ref: '#/components/schemas/ObjectId'
               cantidad:
                 type: integer
-      required:
-        - usuario
-        - items
+
+    PedidoResponse:
+      type: object
+      properties:
+        pedido:
+          type: object
+          properties:
+            _id:
+              $ref: '#/components/schemas/ObjectId'
+            comprador:
+              $ref: '#/components/schemas/Usuario'
+            items:
+              type: array
+              items:
+                type: object
+                properties:
+                  producto:
+                    $ref: '#/components/schemas/Producto'
+                  cantidad:
+                    type: integer
+                  precioUnitario:
+                    type: number
+            moneda:
+              type: string
+            direccionEntrega:
+              $ref: '#/components/schemas/DireccionEntrega'
+            estado:
+              type: string
+            fechaCreacion:
+              type: string
+              format: date-time
+        notificacion:
+          $ref: '#/components/schemas/Notificacion'
+
+    Notificacion:
+      type: object
+      properties:
+        _id:
+          $ref: '#/components/schemas/ObjectId'
+        usuario:
+          $ref: '#/components/schemas/Usuario'
+        mensaje:
+          type: string
+        fechaAlta:
+          type: string
+          format: date-time
+        leida:
+          type: boolean
+        fechaLeida:
+          type: string
+          format: date-time
+          nullable: true
+
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+
+  responses:
+    BadRequest:
+      description: Parámetros inválidos
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Recurso no encontrado
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    InternalError:
+      description: Error interno
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
