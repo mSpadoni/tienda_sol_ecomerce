@@ -37,7 +37,7 @@ const Navbar = () => {
         <div className="navbar-section center nav-links">
           <Link to="/" className="nav-link">Productos</Link>
           <Link to="/pedidos/hechos" className="nav-link">Pedidos Hechos</Link>
-          <Link to="/pedidos/realizados" className="nav-link">Pedidos Realizados</Link>
+          <Link to="/pedidos/recibidos" className="nav-link">Pedidos Realizados</Link>
           <Link to="/" className="nav-link">Notificaciones</Link>
         </div>
 

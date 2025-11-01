@@ -1,18 +1,28 @@
 import "./pedido.css";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useCurrency } from "../../provieder/CurrencyProvider.jsx";
 import { CURRENCIES } from "../../provieder/currencies.js";
 import PropTypes from "prop-types";
+import Store from "../mockData/Pedidos.js";
 
 
 
-export default function ListaPedidos({ pedidos, estadoACambiar}) {
+
+export default function ListaPedidos({ funcionDeFiltrado, estadoACambiar,mensaje}) {
   const [openId, setOpenId] = useState(null);
+  const [pedidos, setPedidos] = useState([]);
   const { currency } = useCurrency();
   
+ useEffect(() => {setPedidos(funcionDeFiltrado(Store.Pedidos));
+  }, [funcionDeFiltrado]);
+
   const cambiarEstado=(idPedido)=>{
     // Lógica para cambiar el estado del pedido con idPedido
     console.log(`Cambiar estado del pedido con ID: ${idPedido} a ${estadoACambiar}`);
+  }
+
+  if (pedidos.length === 0) {
+    return <div style={{ padding: 20 }}>{mensaje}</div>;
   }
 
   return (
@@ -28,7 +38,7 @@ export default function ListaPedidos({ pedidos, estadoACambiar}) {
           }}
         >
           <div className="pedido-info">
-            <div className="pedido-header">
+            <div className="pedido-info-visible">
               <h4>Productos:</h4>
               <ul>
                 {pedido.items.map((item) => (
@@ -40,8 +50,8 @@ export default function ListaPedidos({ pedidos, estadoACambiar}) {
             </div>
 
             <div className="pedido-precio">
-              Total: 
-              {pedido.total.toLocaleString()}
+              Total: {`${CURRENCIES[pedido.moneda].symbol}
+              ${pedido.total.toLocaleString(CURRENCIES[pedido.moneda].locale)} `}
             </div>
 
             <div className="pedido-desplegable">
@@ -58,7 +68,7 @@ export default function ListaPedidos({ pedidos, estadoACambiar}) {
                 <div style={{ marginTop: 10 }}>
                   <p>
                     <strong>Dirección:</strong>{" "}
-                    {`${pedido.direccionEntrega.calle} ${pedido.direccionEntrega.altura} ${
+                    {`${pedido.direccionEntrega.calle}, ${pedido.direccionEntrega.altura} ${
                       pedido.direccionEntrega.piso ? "Piso " + pedido.direccionEntrega.piso : ""
                     } ${pedido.direccionEntrega.departamento || ""}, ${pedido.direccionEntrega.ciudad}`}
                   </p>
@@ -68,14 +78,14 @@ export default function ListaPedidos({ pedidos, estadoACambiar}) {
          
                   <p>
                     <strong>Fecha:</strong>{" "}
-                    {pedido.Fecha.toLocaleDateString(CURRENCIES[currency].locale)}
+                    {pedido.Fecha.toLocaleDateString(CURRENCIES[currency].locale)}{" "}
                   </p>
                 </div>
               )}
             </div>
 
             <div className="pedido-cambiar-estado">
-              <button onClick={() => cambiarEstado(pedido.id)}>{estadoACambiar}</button>
+              <button onClick={() => cambiarEstado(pedido.id)}>{botonesNombreSegunEstado[estadoACambiar]}</button>
             </div>
           </div>
         </div>
@@ -84,38 +94,14 @@ export default function ListaPedidos({ pedidos, estadoACambiar}) {
   );
 }
 
-const PedidoPropType = PropTypes.shape({
-  id: PropTypes.number.isRequired,
-  usuario: PropTypes.number.isRequired,
-  vendedor: PropTypes.number.isRequired,
-  items: PropTypes.arrayOf(
-    PropTypes.shape({
-      producto: PropTypes.shape({
-        id: PropTypes.number.isRequired,
-        titulo: PropTypes.string.isRequired,
-      }).isRequired,
-      cantidad: PropTypes.number.isRequired,
-    })
-  ).isRequired,
-  direccionEntrega: PropTypes.shape({
-    calle: PropTypes.string.isRequired,
-    altura: PropTypes.string.isRequired,
-    piso: PropTypes.string,
-    departamento: PropTypes.string,
-    codigoPostal: PropTypes.string.isRequired,
-    ciudad: PropTypes.string.isRequired,
-    provincia: PropTypes.string.isRequired,
-    pais: PropTypes.string.isRequired,
-    lat: PropTypes.string,
-    long: PropTypes.string,
-  }).isRequired,
-  moneda: PropTypes.string.isRequired, // <--- ahora es string
-  estado: PropTypes.string.isRequired,
-  total: PropTypes.number.isRequired,
-  Fecha: PropTypes.instanceOf(Date).isRequired,
-});
 
 ListaPedidos.propTypes = {
-  pedidos: PropTypes.arrayOf(PedidoPropType).isRequired,
+  funcionDeFiltrado: PropTypes.func.isRequired,
   estadoACambiar: PropTypes.string.isRequired,
+  mensaje: PropTypes.string,
 };
+
+const botonesNombreSegunEstado=Object.freeze({
+  "cancelado":"Cancelar Pedido",
+  "enviado":"Marcar como Enviado",
+});

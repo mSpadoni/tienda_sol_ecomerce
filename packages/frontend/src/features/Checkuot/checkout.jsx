@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { Card, TextField, Button } from '@mui/material';
 import { useNavigate } from "react-router-dom";
 import { useCarrito } from '../../provieder/carritoProvider.jsx';
-import Pedido from '../../components/mockData/Pedidos.js';
-import { useCurrency } from '../../provieder/CurrencyProvider.jsx';
 
+import { useCurrency } from '../../provieder/CurrencyProvider.jsx';
+import Store from "../../components/mockData/Pedidos.js";
 
 import './checkout.css';
 import { CURRENCIES } from '../../provieder/currencies.js';
@@ -47,7 +47,7 @@ const Checkout = () => {
 
   const handleGuardar = () => {
     alert('¡Compra realizada con éxito!')
-    Pedido.push({
+    Store.Pedidos.push({
         id: id,
         usuario: 1,
         vendedor: 2,
@@ -67,7 +67,7 @@ const Checkout = () => {
             lat: campos.lat.valor,
             long: campos.lon.valor,
         },
-        moneda: CURRENCIES[currency].symbol,
+        moneda: currency,
         estado: 'Pendiente',
         total: totalPrecio(),
         Fecha: new Date(),
@@ -75,6 +75,7 @@ const Checkout = () => {
     setCarrito([]);
     id++
     navigate("/")
+    console.log(Store.Pedidos)
   };
 
   return (

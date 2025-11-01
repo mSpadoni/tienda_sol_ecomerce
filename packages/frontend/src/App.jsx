@@ -9,11 +9,13 @@ import { CarritoProvider } from "./provieder/carritoProvider.jsx";
 import {CurrencyProvider} from "./provieder/CurrencyProvider.jsx";
 import Checkout from "./features/Checkuot/checkout.jsx";
 import ListaPedidos from "./components/Pedidos/pedido.jsx";
-import Pedidos from "./components/mockData/Pedidos.js";
+
+import Store from "./components/mockData/Pedidos.js";
 
 
 function App() {
   const [message, setMessage] = useState("");
+  
 
   useEffect(() => {
     fetch("http://localhost:8000/hello")
@@ -21,7 +23,15 @@ function App() {
       .then((data) => setMessage(data.message))
       .catch((error) => console.log("Error cargando mensaje.", error));
   }, []);
+  
+  const pedidosHechos=(pedidos)=>{
+    return pedidos.filter(pedido=>pedido.usuario===1)
+  }
 
+  const pedidosRecibidos=(pedidos)=>{
+    return pedidos.filter(pedido=>pedido.vendedor===1)
+  }
+   
   return (
     <CurrencyProvider>
     <CarritoProvider>
@@ -31,8 +41,9 @@ function App() {
           <Route index element={<Home />} />
           <Route path="/productos/:id" element={<ProductDetailPage/>} />
           <Route path="/checkout" element={<Checkout/>} />
-          <Route path="/pedidos/hechos" element={<ListaPedidos estadoACambiar="cancelado" 
-          pedidos={Pedidos.filter(pedido => pedido.usuario === 1)}/>} />
+          <Route path="/pedidos/hechos" element={<ListaPedidos funcionDeFiltrado={pedidosHechos} estadoACambiar="cancelado" mensaje="Todavía no has hechos ningún pedido ..."/>} />
+          <Route path="/pedidos/recibidos" element={<ListaPedidos funcionDeFiltrado={pedidosRecibidos} estadoACambiar="enviado" mensaje="No te hicieron ningún pedido aún ..."
+          />} />
           <Route path="*" element={<div>404 Not Found</div>} />
         </Route>
       </Routes>
