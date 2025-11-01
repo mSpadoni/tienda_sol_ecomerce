@@ -1,12 +1,14 @@
 import React from 'react'
 import './AccomodationSearchBar.css';
-import { FaMapMarkerAlt, FaSearch } from 'react-icons/fa';
+import { FaSearch } from 'react-icons/fa';
 import { Button, TextField } from '@mui/material';
+import { useState } from 'react';
+import PropTypes from 'prop-types';
 
-const AccomodationSearchBar = (filtrarProductos) => {
+const AccomodationSearchBar = ({ filtrarProductos }) => {
 
   const [searchText, setSearchText] = useState("");
-
+  
   return (
     <div className="accommodation-search">
       <div className='search-field'>
@@ -25,6 +27,7 @@ const AccomodationSearchBar = (filtrarProductos) => {
       </div>
       
       <Button variant="outlined" onClick={() => filtrarProductos(searchText)}>
+        <FaSearch className='button-icon' />
         Buscar
       </Button>
       {/* <button className='search-button'>
@@ -36,3 +39,7 @@ const AccomodationSearchBar = (filtrarProductos) => {
 }
 
 export default AccomodationSearchBar
+
+AccomodationSearchBar.propTypes = {
+  filtrarProductos: PropTypes.func,
+};

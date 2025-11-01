@@ -25,14 +25,15 @@ const theme = createTheme({
 function App() {
   const [message, setMessage] = useState("");
   
-
+  /*
   useEffect(() => {
     fetch("http://localhost:8000/hello")
       .then((response) => response.json())
       .then((data) => setMessage(data.message))
       .catch((error) => console.log("Error cargando mensaje.", error));
   }, []);
-  
+  */
+
   const pedidosHechos=(pedidos)=>{
     return pedidos.filter(pedido=>pedido.usuario===1)
   }
