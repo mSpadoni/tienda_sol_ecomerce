@@ -1,26 +1,36 @@
 import React from 'react'
 import './AccomodationSearchBar.css';
 import { FaMapMarkerAlt, FaSearch } from 'react-icons/fa';
+import { Button, TextField } from '@mui/material';
 
-const AccomodationSearchBar = () => {
+const AccomodationSearchBar = (filtrarProductos) => {
+
+  const [searchText, setSearchText] = useState("");
+
   return (
     <div className="accommodation-search">
       <div className='search-field'>
         <div className='input-wrapper'>
           {/* <FaMapMarkerAlt className='search-icon' /> */}
           <FaSearch className='search-icon' />
-          <input 
-            type="text" 
-            className='search-input' 
-            placeholder="¿A dónde vas?"
+
+          <TextField
+            value={searchText}
+            onChange={(e) => {setSearchText(e.target.value)}}
+            fullWidth
+            variant="standard"
+            placeholder="Buscar productos..."
           />
         </div>
       </div>
       
-      <button className='search-button'>
+      <Button variant="outlined" onClick={() => filtrarProductos(searchText)}>
+        Buscar
+      </Button>
+      {/* <button className='search-button'>
         <FaSearch className='button-icon' />
         Buscar
-      </button>
+      </button> */}
     </div>
   )
 }

@@ -38,7 +38,7 @@ const Navbar = () => {
           <Link to="/" className="nav-link">Productos</Link>
           <Link to="/pedidos/hechos" className="nav-link">Pedidos Hechos</Link>
           <Link to="/pedidos/recibidos" className="nav-link">Pedidos Realizados</Link>
-          <Link to="/" className="nav-link">Notificaciones</Link>
+          <Link to="/notificacionesNoLeidas" className="nav-link">Notificaciones</Link>
         </div>
 
         <div className="navbar-section right right-section" ref={carritoRef}>

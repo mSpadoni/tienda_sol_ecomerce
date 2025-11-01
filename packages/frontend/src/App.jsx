@@ -9,9 +9,18 @@ import { CarritoProvider } from "./provieder/carritoProvider.jsx";
 import {CurrencyProvider} from "./provieder/CurrencyProvider.jsx";
 import Checkout from "./features/Checkuot/checkout.jsx";
 import ListaPedidos from "./components/Pedidos/pedido.jsx";
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 import Store from "./components/mockData/Pedidos.js";
+import ListaNotificaciones from "./components/Notificacion/notificacion.jsx";
 
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: '#ffd1dc',
+    },
+  },
+});
 
 function App() {
   const [message, setMessage] = useState("");
@@ -32,24 +41,35 @@ function App() {
     return pedidos.filter(pedido=>pedido.vendedor===1)
   }
    
+  const notificacionesLeidas=(notificaciones)=>{
+    return notificaciones.filter(notificacion=>notificacion.leida===true)
+
+  }
+  const notificacionesNoLeidas=(notificaciones)=>{
+    return notificaciones.filter(notificacion=>notificacion.leida===false)
+  }
+
   return (
+    <ThemeProvider theme={theme}>
     <CurrencyProvider>
     <CarritoProvider>
-  <BrowserRouter>
+    <BrowserRouter>
       <Routes>
         <Route path="/" element={<Layout/>}>
           <Route index element={<Home />} />
           <Route path="/productos/:id" element={<ProductDetailPage/>} />
           <Route path="/checkout" element={<Checkout/>} />
           <Route path="/pedidos/hechos" element={<ListaPedidos funcionDeFiltrado={pedidosHechos} estadoACambiar="cancelado" mensaje="Todavía no has hechos ningún pedido ..."/>} />
-          <Route path="/pedidos/recibidos" element={<ListaPedidos funcionDeFiltrado={pedidosRecibidos} estadoACambiar="enviado" mensaje="No te hicieron ningún pedido aún ..."
-          />} />
+          <Route path="/pedidos/recibidos" element={<ListaPedidos funcionDeFiltrado={pedidosRecibidos} estadoACambiar="enviado" mensaje="No te hicieron ningún pedido aún ..."/>} />
+          <Route path="/notificacionesNoLeidas" element={<ListaNotificaciones   mensaje="No se recibieron notificaciones ..."/>} />
+          <Route path="/notificacionesLeidas" element={<ListaNotificaciones   mensaje="No se recibieron notificaciones ..."/>} />
           <Route path="*" element={<div>404 Not Found</div>} />
         </Route>
       </Routes>
     </BrowserRouter>
     </CarritoProvider>
     </CurrencyProvider>
+    </ThemeProvider>
   );
 }
 
