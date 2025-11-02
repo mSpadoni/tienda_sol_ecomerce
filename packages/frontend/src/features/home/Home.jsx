@@ -69,12 +69,10 @@ const Home = () => {
           </div>
         ) : (
           <>
-            {/* OFERTAS / CARRUSEL */}
             <section className="home-section">
               <ProductsCarousel productos={productosFiltrados} />
             </section>
 
-            {/* LISTA / GRID DE PRODUCTOS */}
             <section className="home-section">
               <div className="section-header between">
                   <h2>Todos los productos</h2>

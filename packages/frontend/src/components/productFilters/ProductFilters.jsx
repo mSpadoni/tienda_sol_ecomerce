@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import { FiArrowRight } from 'react-icons/fi';
 import './ProductFilters.css';
 
 const ProductFilters = ({ onApply, initial = {} }) => {
@@ -82,8 +83,11 @@ const ProductFilters = ({ onApply, initial = {} }) => {
         <option value="asc">Ascendente</option>
       </select>
 
-      <button type="submit">Aplicar</button>
-      <button type="button" onClick={handleReset}>Limpiar</button>
+      <button type="submit" className="btn btn-primary">
+        <span>Aplicar</span>
+        <FiArrowRight className="icon" />
+      </button>
+      <button type="button" className="btn btn-secondary" onClick={handleReset}>Limpiar</button>
       </form>
     </div>
   );
