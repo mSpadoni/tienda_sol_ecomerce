@@ -16,9 +16,9 @@ const CarouselItem = ({ product }) => {
       <Link to={`/productos/${product._id}`} className="link-no-style">
         <div className="product-card">
           <img
-            src={"/images/Calza-deportiva-para-mujer-SWAN-370x444.jpg"}
+            src={`/images/${product.fotos}`}
             alt={product.titulo}
-            className="product-image"
+          className="product-imagen"
           />
           <div className="product-info">
             <h3 className="product-name">{product.titulo}</h3>

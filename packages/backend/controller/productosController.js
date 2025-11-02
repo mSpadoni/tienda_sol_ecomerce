@@ -22,6 +22,7 @@ export default class ProductosController {
         ...filtros
       } = req.query;
       const activoFinal = activoHandler[activo];
+    
       const ProductosPaginados = await this.productosService.getProductos(
         filtros,
         activoFinal,

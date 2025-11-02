@@ -1,168 +1,111 @@
 .carousel-container {
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 1rem;
+  position: relative;
+  width: 100%;
+  margin-top: 1.5rem;
 }
 
 .carousel-title {
-  font-size: 1.5rem;
-  font-weight: 600;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #0f172a;
   margin-bottom: 1rem;
-  color: #222;
+  padding-left: 0.4rem;
 }
 
 .carousel-wrapper {
   position: relative;
+  background: transparent;
+  padding: 0.25rem 2.5rem; /* espacio para las flechas */
 }
 
 .carousel-viewport {
   overflow: hidden;
+  width: 100%;
 }
 
 .carousel-track {
   display: flex;
-  transition: transform 0.5s ease-in-out;
-  width: 100%;
-  flex-wrap: nowrap;
+  transition: transform 0.3s ease;
+  /* no gap porque calculás en JS el 100/visible */
 }
 
-.carousel-card {
-  width: 33.3333%;
-  padding: 0.5rem;
-  box-sizing: border-box;
-  flex-shrink: 0;
-}
-
-.product-card {
-  
-  background-color: white;
-  border-radius: 1rem;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-  overflow: hidden;
-  transition: transform 0.2s ease;
-}
-
-.product-card:hover {
-  transform: translateY(-4px);
-}
-
-.product-image {
-  width: 100%;
-  height: 190px;
-  object-fit: cover;
-}
-
-.product-info {
-  padding: 1rem;
-}
-
-.product-name {
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: #333;
-}
-
-.product-location {
+.carousel-empty {
+  text-align: center;
+  color: #94a3b8;
   font-size: 0.9rem;
-  color: #777;
-  margin-top: 0.25rem;
+  padding: 2rem 0;
 }
 
-.product-details {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 0.50rem;
-}
-
-.product-score {
-  background-color: #1e40af;
-  color: white;
-  font-size: 0.9rem;
-  font-weight: bold;
-  padding: 0.25rem 0.5rem;
-  border-radius: 0.5rem;
-}
-
-.product-price {
-  font-weight: 600;
-  color: #111;
-}
-
+/* -------- flechas -------- */
 .carousel-btn {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background-color: white;
+  width: 38px;
+  height: 38px;
+  border-radius: 999px;
   border: none;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
-  border-radius: 50%;
-  width: 36px;
-  height: 36px;
-  font-size: 1rem;
+  background: #ffffff;
+  box-shadow: 0 10px 25px rgba(15, 23, 42, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
-  transition: background 0.2s ease, transform 0.1s ease;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
+  font-size: 0.9rem;
+  color: #0f172a;
+  z-index: 10;
 }
 
 .carousel-btn:hover {
-  background-color: #f3f3f3;
-  transform: translateY(-50%) scale(1.1);
-}
-
-.carousel-btn.disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
+  transform: translateY(-50%) scale(1.03);
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.18);
 }
 
 .left-btn {
-  left: 8px;
+  left: 0.5rem;
 }
 
 .right-btn {
-  right: 8px;
+  right: 0.5rem;
 }
 
-
-.carousel-wrapper {
-  position: relative;
-  padding: 0 48px; 
-}
-
-.carousel-btn {
-  position: absolute;
-  top: 50%;
+.carousel-btn.disabled,
+.carousel-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+  box-shadow: none;
   transform: translateY(-50%);
-  background-color: white;
-  border: none;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
-  border-radius: 50%;
-  width: 36px;
-  height: 36px;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: background 0.2s ease, transform 0.1s ease;
-  z-index: 5;
 }
 
-.carousel-btn.left-btn {
-  left: 8px; 
-}
-
-.carousel-btn.right-btn {
-  right: 8px; 
-}
-
-.carousel-btn.disabled {
-  opacity: 0.4;
-  cursor: default;
-}
-
-@media (max-width: 900px) {
+/* -------- responsive -------- */
+@media (max-width: 992px) {
   .carousel-wrapper {
-    padding: 0 24px;
+    padding: 0.25rem 2.1rem;
+  }
+  .carousel-title {
+    padding-left: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .carousel-wrapper {
+    padding: 0.25rem 1.5rem;
   }
   .carousel-btn {
-    width: 38px;
-    height: 38px;
+    width: 32px;
+    height: 32px;
+  }
+}
+
+@media (max-width: 600px) {
+  .carousel-wrapper {
+    padding: 0.25rem 0.6rem;
+  }
+  .left-btn {
+    left: 0rem;
+  }
+  .right-btn {
+    right: 0rem;
   }
 }

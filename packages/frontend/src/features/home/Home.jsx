@@ -104,12 +104,6 @@ const Home = () => {
                         <p className="product-card-price">
                           Precio: ${producto.precio?.toLocaleString("es-AR")}
                         </p>
-                        <div className="product-card-categorias">
-                          <span className="categoria-label">Categorías:</span>
-                          <span className="categoria-pill">
-                            {producto.categoria || "Sin categoría"}
-                          </span>
-                        </div>
                       </div>
                       <div className="product-card-actions">
                         <Link to={`/productos/${producto._id}`} className="product-card-link">
