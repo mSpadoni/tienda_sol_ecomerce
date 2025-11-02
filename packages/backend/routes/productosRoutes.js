@@ -12,8 +12,15 @@ export default function productosRoutes(getController) {
 
   router.get(pathProductos, async (req, res, next) => {
     try {
-      console.log('[DEBUG] Incoming request to /productos: ', req.query);
       await controller.getProductos(req, res, next);
+    } catch (err) {
+      next(err);
+    }
+  });
+
+  router.get(pathProductos + "/:id", async (req, res, next) => {
+    try {
+      await controller.getProductoById(req, res, next);
     } catch (err) {
       next(err);
     }

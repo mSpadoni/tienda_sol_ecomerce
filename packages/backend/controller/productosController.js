@@ -38,4 +38,17 @@ export default class ProductosController {
       next(err);
     }
   }
+
+  async getProductoById(req, res, next) {
+    try {
+      const { id } = req.params;
+      const producto = await this.productosService.getProductoById(id);
+      if (!producto) {
+        throw new ErrorProductosNoEncontrados();
+      }
+      return res.status(200).json(producto);
+    } catch (err) {
+      next(err);
+    }
+  }
 }

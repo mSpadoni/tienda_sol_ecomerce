@@ -15,6 +15,16 @@ export const getProductos = async (page) => {
     }
 }
 
+export const getProductoById = async (id) => {
+    try {
+        const response = await axios.get(`${API_BASE_URL}/productos/${id}`, { headers: { 'Cache-Control': 'no-cache' } });
+        return response.data;
+    } catch (error) {
+        console.error("Error obteniendo el producto:", error);
+        throw error;
+    }
+};
+
 export const getProductosSlowly = () =>
     new Promise((resolve) => {
         setTimeout(() => {

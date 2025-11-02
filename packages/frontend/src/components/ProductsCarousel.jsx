@@ -45,7 +45,7 @@ const ProductsCarousel = ({ productos }) => {
             }}
           >
             {items.map((product) => (
-              <CarouselItem product={product} key={product.id} />
+              <CarouselItem product={product} key={product._id} />
             ))}
           </div>
         </div>

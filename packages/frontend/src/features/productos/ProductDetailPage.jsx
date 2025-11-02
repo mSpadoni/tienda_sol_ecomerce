@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { ButtonGroup, Button } from "@mui/material";
-import productos from "../../components/mockData/Productos.js";
+import { getProductoById } from "../../services/ProductosService.js";
 import { useCarrito } from "../../provieder/carritoProvider.jsx";
 import { useCurrency } from "../../provieder/CurrencyProvider.jsx";
 import { CURRENCIES } from "../../provieder/currencies.js";
@@ -9,10 +9,19 @@ import "./ProductDetailPage.css";
 
 const ProductDetailPage = () => {
   const { id } = useParams();
-  const producto = productos.find((p) => p.id === id);
+  const [producto, setProducto] = useState(null);
   const { agregarAlCarrito } = useCarrito();
   const [stock, setStock] = useState(0);
   const { currency } = useCurrency();
+
+  const cargarProducto = async (productId) => {
+      const producto = await getProductoById(productId);
+      setProducto(producto);
+    }
+  
+    useEffect(() => {
+      cargarProducto(id);
+    }, [id]);
 
 
   // Reiniciar stock cuando cambia el producto
