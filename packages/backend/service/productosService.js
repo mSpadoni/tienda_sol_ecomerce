@@ -5,16 +5,15 @@ export default class ProductosService {
 
   toDTO(producto) {
     return {
-      id: producto.id || producto._id,
       vendedor: producto.vendedor,
       titulo: producto.titulo,
       descripcion: producto.descripcion,
-      categoria: producto.categoria,
       precio: producto.precio,
-      moneda: producto.moneda,
-      stock: producto.stock,
+      categorias: producto.categorias,
       fotos: producto.fotos,
+      stock: producto.stock,
       activo: producto.activo,
+      moneda: producto.moneda,
       ventas: producto.ventas,
     };
   }

@@ -6,7 +6,7 @@ const API_BASE_URL = process.env.REACT_APP_API_URL
 
 export const getProductos = async (page) => {
     try{
-        console.log(API_BASE_URL);
+        
         const response = await axios.get(`${API_BASE_URL}/productos?page=${page}`, {headers: {'Cache-Control': 'no-cache'}});
         return response.data;
     } catch (error) {

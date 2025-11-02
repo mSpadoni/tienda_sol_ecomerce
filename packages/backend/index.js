@@ -22,6 +22,25 @@ const port = process.env.SERVER_PORT || 3001;
 dotenv.config();
 const server = new Server(app, port);
 
+const raw = process.env.ALLOWED_ORIGINS || "";
+const allowedOrigins = raw ? raw.split(",").map((o) => o.trim()) : [];
+
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      // requests sin origin (curl, server-to-server) => permitir
+      if (!origin) return callback(null, true);
+      // si no hay lista configurada => permitir todos (dev)
+      if (allowedOrigins.length === 0) return callback(null, true);
+      // si el origin está en la lista => permitir
+      if (allowedOrigins.includes(origin)) return callback(null, true);
+      // denegar CORS
+      return callback(null, false);
+    },
+    credentials: true,
+  }),
+);
+
 app.use(express.json());
 
 dotenv.config();
