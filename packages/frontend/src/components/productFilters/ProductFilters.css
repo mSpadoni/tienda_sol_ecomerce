@@ -1,0 +1,47 @@
+.product-filters-wrapper {
+    margin: 12px 0;
+}
+
+.product-filters {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.product-filters input[type="text"],
+.product-filters input[type="number"],
+.product-filters select {
+  padding: 6px 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.product-filters input[type="number"] {
+  width: 120px;
+}
+
+.product-filters button {
+  padding: 6px 12px;
+  border-radius: 4px;
+   border: none;
+  background: #1976d2;
+  color: white;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.product-filters button[type="button"] {
+  background: #6c757d; /* secondary */
+}
+
+@media (max-width: 640px) {
+.product-filters {
+    gap: 6px;
+}
+.product-filters input[type="number"] {
+    width: 100px;
+}
+}
+    

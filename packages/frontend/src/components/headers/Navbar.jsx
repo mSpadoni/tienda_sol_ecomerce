@@ -31,7 +31,7 @@ const Navbar = () => {
     <header className="navbar-bg">
       <nav className="navbar">
         <div className="navbar-section left">
-          <Link to="/" className="logo">TiendaSol.com</Link>
+          <Link to="/" className="logo">TiendaSol</Link>
         </div>
 
         <div className="navbar-section center nav-links">

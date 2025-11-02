@@ -121,3 +121,48 @@
 .right-btn {
   right: 8px;
 }
+
+
+.carousel-wrapper {
+  position: relative;
+  padding: 0 48px; 
+}
+
+.carousel-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: white;
+  border: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.1s ease;
+  z-index: 5;
+}
+
+.carousel-btn.left-btn {
+  left: 8px; 
+}
+
+.carousel-btn.right-btn {
+  right: 8px; 
+}
+
+.carousel-btn.disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+@media (max-width: 900px) {
+  .carousel-wrapper {
+    padding: 0 24px;
+  }
+  .carousel-btn {
+    width: 38px;
+    height: 38px;
+  }
+}

@@ -17,7 +17,7 @@ import ListaNotificaciones from "./components/Notificacion/notificacion.jsx";
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#ffd1dc',
+      main: '#272323ff',
     },
   },
 });
