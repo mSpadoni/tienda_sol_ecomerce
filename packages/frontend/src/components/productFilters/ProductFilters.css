@@ -1,0 +1,91 @@
+.product-filters-wrapper {
+  margin: 0.75rem 0;
+}
+
+.product-filters {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.product-filters input,
+.product-filters select {
+  padding: 0.45rem 0.6rem;
+  border: 1px solid var(--border, #d9d9d9);
+  border-radius: var(--radius, 0.25rem);
+  font-size: 0.95rem;
+  color: var(--foreground, #242424);
+  background: var(--input, #fff);
+}
+
+.product-filters input[type="number"] {
+  width: 120px;
+}
+
+.product-filters button {
+  padding: 0.45rem 0.9rem;
+  border-radius: var(--radius, 0.25rem);
+  border: none;
+  background: #000; 
+  color: var(--primary-white, #fff);
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+
+.product-filters button[type="button"] {
+  background: #333; /* secundario en gris oscuro */
+}
+
+.product-filters .btn {
+  padding: 0.45rem 0.9rem;
+  border-radius: var(--radius, 0.25rem);
+  border: none;
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: transform 120ms ease, box-shadow 120ms ease, opacity 120ms ease;
+}
+
+.product-filters .btn:hover {
+  opacity: 0.95;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+}
+
+.product-filters .btn:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(36, 4, 78, 0.12);
+}
+
+.product-filters .btn-primary {
+  background: #000; /* botón primario en negro */
+  color: var(--primary-white, #fff);
+  border: 1px solid rgba(255,255,255,0.04);
+}
+
+.product-filters .btn-secondary {
+  background: #333; /* secundario en gris oscuro */
+  color: var(--primary-white, #fff);
+}
+
+.product-filters .btn .icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (max-width: 640px) {
+  .product-filters {
+    gap: 0.4rem;
+  }
+  .product-filters input[type="number"] {
+    width: 100px;
+  }
+}
+    

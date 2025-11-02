@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { ButtonGroup, Button } from "@mui/material";
-import productos from "../../components/mockData/Productos.js";
+import { getProductoById } from "../../services/ProductosService.js";
 import { useCarrito } from "../../provieder/carritoProvider.jsx";
 import { useCurrency } from "../../provieder/CurrencyProvider.jsx";
 import { CURRENCIES } from "../../provieder/currencies.js";
@@ -9,57 +9,120 @@ import "./ProductDetailPage.css";
 
 const ProductDetailPage = () => {
   const { id } = useParams();
-  const producto = productos.find((p) => p.id === id);
+  const [producto, setProducto] = useState(null);
   const { agregarAlCarrito } = useCarrito();
-  const [stock, setStock] = useState(0);
+  const [cantidad, setCantidad] = useState(0);
   const { currency } = useCurrency();
 
+  const cargarProducto = async (productId) => {
+    const prod = await getProductoById(productId);
+    setProducto(prod);
+  };
 
-  // Reiniciar stock cuando cambia el producto
-  useEffect(() => setStock(0), [id]);
+  useEffect(() => {
+    cargarProducto(id);
+  }, [id]);
 
+  useEffect(() => {
+    if (producto) setCantidad(producto.stock > 0 ? 1 : 0);
+  }, [producto]);
 
+  const aumentarCantidad = () => {
+    if (producto && cantidad < producto.stock) setCantidad(cantidad + 1);
+  };
 
-  const aumentarStock = () => setStock(stock + 1);
-  const disminuirStock = () => stock > 0 && setStock(stock - 1);
+  const disminuirCantidad = () => {
+    if (cantidad > 1) setCantidad(cantidad - 1);
+  };
 
-  if (!producto) return <div>Producto no encontrado</div>;
+  if (!producto) return <div className="producto-detail-container loading">Cargando producto...</div>;
+
+  const codigoMoneda = producto.moneda?.tipo || currency;
+  const monedaConfig = CURRENCIES[codigoMoneda] || CURRENCIES[currency];
+  const precioFormateado = `${monedaConfig.symbol}${producto.precio.toLocaleString(monedaConfig.locale)}`;
+
+  const hayStock = producto.activo && producto.stock > 0;
+  const placeholder = `https://via.placeholder.com/480x360?text=${encodeURIComponent(producto.titulo || "Producto")}`;
 
   return (
     <div className="producto-detail-container">
       <div className="producto-header">
-        <h1 className="producto-nombre">{producto.titulo}</h1>
+        <div>
+          <p className="producto-mini-badge">
+            {producto.categoria || "Sin categoría"}
+          </p>
+          <h1 className="producto-nombre">{producto.titulo}</h1>
+        </div>
+        <div className={`producto-stock-badge ${hayStock ? "en-stock" : "sin-stock"}`}>
+          {hayStock ? `En stock (${producto.stock})` : "Sin stock"}
+        </div>
       </div>
 
       <div className="producto-content">
         <div className="producto-image-section">
-          <img src={producto.imagen} alt={producto.titulo} className="producto-imagen" />
+          <img
+            src={producto.fotos ? `/images/${producto.fotos}` : placeholder}
+            alt={producto.titulo}
+          className="producto-imagen"
+          />
         </div>
 
-        <div className="producto-info-section">
-          <p className="producto-description">{producto.descripcion}</p>
-          <div className="producto-price-section">
-            <div className="producto-precio">
-              
-              Precio: {`${CURRENCIES[currency].symbol}${producto.precio.toLocaleString(CURRENCIES[currency].locale)}`}
-            </div>
-            <div className="price-details">Impuestos incluidos</div>
 
-            <div className="comprar-container">
-              <ButtonGroup variant="outlined" aria-label="outlined button group">
-                <Button onClick={disminuirStock} disabled={stock === 0}>-</Button>
-                <Button disabled>{stock}</Button>
-                <Button onClick={aumentarStock}>+</Button>
-              </ButtonGroup>
-              <Button
-                className="comprar"
-                disabled={stock === 0}
-                onClick={() => agregarAlCarrito(producto, stock)}
-              >
-                Comprar
-              </Button>
-            </div>
+        <div className="producto-info-section">
+          <p className="producto-description">
+            {producto.descripcion || "Este producto no tiene descripción cargada."}
+          </p>
+
+          <div className="producto-price-section">
+            <div className="producto-precio">{precioFormateado}</div>
+            <div className="price-details">Impuestos incluidos</div>
           </div>
+
+          <div className="producto-categorias">
+            <span className="categoria-label">Categoría:</span>
+             <div className="categoria-pills">
+              <span className="categoria-pill">
+               {producto.categoria || "Sin categoría"}
+              </span>
+             </div>
+          </div>
+
+          <div className="producto-metadata">
+            <p>
+              <strong>Vendedor:</strong>{" "}
+              {producto.vendedor ? producto.vendedor : "Tienda Sol"}
+            </p>
+            <p>
+              <strong>Estado:</strong>{" "}
+              {producto.activo ? "Publicado" : "No disponible"}
+            </p>
+          </div>
+
+          <div className="comprar-container">
+            <ButtonGroup variant="outlined" aria-label="cantidad de producto">
+              <Button onClick={disminuirCantidad} disabled={!hayStock || cantidad <= 1}>
+                -
+              </Button>
+              <Button disabled>{cantidad}</Button>
+              <Button onClick={aumentarCantidad} disabled={!hayStock || cantidad >= producto.stock}>
+                +
+              </Button>
+            </ButtonGroup>
+
+            <Button
+              className="comprar"
+              disabled={!hayStock || cantidad === 0}
+              onClick={() => agregarAlCarrito(producto, cantidad)}
+            >
+              Agregar al carrito
+            </Button>
+          </div>
+
+          {!hayStock && (
+            <p className="producto-warning">
+              Este producto no tiene stock en este momento.
+            </p>
+          )}
         </div>
       </div>
     </div>
@@ -67,4 +130,3 @@ const ProductDetailPage = () => {
 };
 
 export default ProductDetailPage;
-

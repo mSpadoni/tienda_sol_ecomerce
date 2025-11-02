@@ -9,12 +9,14 @@ import { CURRENCIES } from "../../provieder/currencies.js";
 
 const CarouselItem = ({ product }) => {
   const { currency } = useCurrency();
+   // debug temporal: inspecciona la estructura del producto si sigues viendo undefined
+  console.debug("CarouselItem product:", product, "resolved id:", product._id);
   return (
-    <div key={product.id} className="carousel-card">
-      <Link to={`/productos/${product.id}`} className="link-no-style">
+    <div key={product._id} className="carousel-card">
+      <Link to={`/productos/${product._id}`} className="link-no-style">
         <div className="product-card">
           <img
-            src={product.imagen}
+            src={"/images/Calza-deportiva-para-mujer-SWAN-370x444.jpg"}
             alt={product.titulo}
             className="product-image"
           />
@@ -34,7 +36,7 @@ const CarouselItem = ({ product }) => {
 
 CarouselItem.propTypes = {
   product: PropTypes.shape({
-    id: PropTypes.string.isRequired,
+    _id: PropTypes.string.isRequired,
     imagen: PropTypes.string,
     titulo: PropTypes.string,
     precio: PropTypes.number,

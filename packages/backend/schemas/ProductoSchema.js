@@ -3,6 +3,10 @@ import Producto from "../models/entities/Producto.js";
 
 export const productoSchema = new mongoose.Schema(
   {
+    id: {
+      type: mongoose.Schema.Types.ObjectId,
+      default: () => new mongoose.Types.ObjectId(),
+    },
     vendedor: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Usuario",
@@ -20,7 +24,7 @@ export const productoSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
-    categorias: {
+    categoria: {
       type: String,
       required: true,
     },

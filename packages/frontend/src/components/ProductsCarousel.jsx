@@ -29,12 +29,7 @@ const ProductsCarousel = ({ productos }) => {
 
   return (
     <div className="carousel-container">
-      <h2 className="carousel-title">Ofertas para el fin de semana</h2>
-
-      <div className="carousel-controls">
-        <button onClick={anterior} disabled={index === 0} className="carousel-btn">◀</button>
-        <button onClick={siguiente} disabled={index >= items.length - visible} className="carousel-btn">▶</button>
-      </div>
+      <h2 className="carousel-title">Lo mas vendido</h2>
 
       <div className="carousel-wrapper">
         <div className="carousel-viewport">
@@ -45,7 +40,7 @@ const ProductsCarousel = ({ productos }) => {
             }}
           >
             {items.map((product) => (
-              <CarouselItem product={product} key={product.id} />
+              <CarouselItem product={product} key={product._id} />
             ))}
           </div>
         </div>
