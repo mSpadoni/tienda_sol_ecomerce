@@ -1,31 +1,24 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import { FaShoppingCart } from "react-icons/fa";
-import CarritoCuerpo from "../carritoCuerpo/carritoCuerpo.jsx";
-import { useCarrito} from "../../provieder/carritoProvider.jsx";
-import { useCurrency } from "../../provieder/CurrencyProvider.jsx";
-
 import { Link } from "react-router-dom";
+import CarritoCuerpo from "../carritoCuerpo/carritoCuerpo.jsx";
+import { useCarrito } from "../../provieder/carritoProvider.jsx";
+import { useCurrency } from "../../provieder/CurrencyProvider.jsx";
+import { useKeycloak } from "../../provieder/keyCloak.jsx";
+
 import "./Navbar.css";
 
 const Navbar = () => {
   const [moneda, setMoneda] = useState("ARS");
   const [carritoAbierto, setCarritoAbierto] = useState(false);
-  const {carrito} = useCarrito();
-  const carritoLongitud = carrito.length;
+  const { carrito } = useCarrito();
   const carritoRef = useRef();
   const { setCurrency } = useCurrency();
+  const {isAuthenticated, login, logout }=useKeycloak()
 
 
-  // Cerrar carrito si clickeas fuera
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (carritoRef.current && !carritoRef.current.contains(event.target)) {
-        setCarritoAbierto(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
+  const carritoLongitud = carrito.length;
+
 
   return (
     <header className="navbar-bg">
@@ -41,14 +34,30 @@ const Navbar = () => {
           <Link to="/notificacionesNoLeidas" className="nav-link">Notificaciones</Link>
         </div>
 
-        <div className="navbar-section right right-section" ref={carritoRef}>
-          <select value={moneda} onChange={(e) => {setMoneda(e.target.value);setCurrency(e.target.value)}} className="currency-select">
+        <div className="navbar-section right" ref={carritoRef}>
+          <select
+            value={moneda}
+            onChange={(e) => { setMoneda(e.target.value); setCurrency(e.target.value); }}
+            className="currency-select"
+          >
             <option value="ARS">ARS — Peso Argentino</option>
             <option value="BRL">BRL — Real Brasileño</option>
             <option value="USD">USD — Dólar Estadounidense</option>
           </select>
 
-          <button className="cart" disabled={carritoLongitud === 0} onClick={() => setCarritoAbierto(!carritoAbierto)}>
+          <div>
+      {!isAuthenticated ? (
+        <button onClick={login}>Login</button>
+      ) : (
+        <button onClick={logout}>Logout</button>
+       )}
+     </div>
+
+          <button
+            className="cart"
+            disabled={carritoLongitud === 0}
+            onClick={() => setCarritoAbierto(!carritoAbierto)}
+          >
             <FaShoppingCart color="black" />
             <span className="cart-count">{carritoLongitud}</span>
           </button>
@@ -65,5 +74,4 @@ const Navbar = () => {
 };
 
 export default Navbar;
-
 

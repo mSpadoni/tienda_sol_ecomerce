@@ -10,7 +10,8 @@ import {CurrencyProvider} from "./provieder/CurrencyProvider.jsx";
 import Checkout from "./features/Checkuot/checkout.jsx";
 import ListaPedidos from "./components/Pedidos/pedido.jsx";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-
+import {KeycloakProvider} from "./provieder/keyCloak.jsx";
+import SessionTimeout from "./provieder/SessionTimeOut.jsx";
 import Store from "./components/mockData/Pedidos.js";
 import ListaNotificaciones from "./components/Notificacion/notificacion.jsx";
 
@@ -32,7 +33,8 @@ function App() {
       .then((data) => setMessage(data.message))
       .catch((error) => console.log("Error cargando mensaje.", error));
   }, []);
-  
+
+ 
   const pedidosHechos=(pedidos)=>{
     return pedidos.filter(pedido=>pedido.usuario===1)
   }
@@ -51,6 +53,8 @@ function App() {
 
   return (
     <ThemeProvider theme={theme}>
+    <KeycloakProvider>
+
     <CurrencyProvider>
     <CarritoProvider>
     <BrowserRouter>
@@ -69,7 +73,10 @@ function App() {
     </BrowserRouter>
     </CarritoProvider>
     </CurrencyProvider>
+
+    </KeycloakProvider>
     </ThemeProvider>
+   
   );
 }
 
