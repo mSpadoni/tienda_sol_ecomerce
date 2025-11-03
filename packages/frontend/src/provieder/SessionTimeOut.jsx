@@ -1,39 +1,42 @@
-// import { useEffect, useRef } from "react";
-// //import { useKeycloak } from "./keyCloak";
-// import react from "react";
-// import PropTypes from "prop-types";
+import { useEffect, useRef } from "react";
+import { useKeycloak } from "./keyCloak";
+import PropTypes from "prop-types";
 
-// export default function SessionTimeout({ timeout = 30 * 60 * 1000 }) {
-//   // timeout en ms, ej: 30 minutos
-//   const { logout } = useKeycloak();
-//   const timerRef = useRef(null);
+export default function SessionTimeout({ timeout = 30 * 60 * 1000 }) {
+  const { logout, isAuthenticated } = useKeycloak();
+  const timerRef = useRef(null);
 
-//   // Función que resetea el timer
-//   const resetTimer = () => {
-//     if (timerRef.current) clearTimeout(timerRef.current);
-//     timerRef.current = setTimeout(() => {
-//       logout(); // cierra sesión al expirar el timeout
-//     }, timeout);
-//   };
+  // Función que resetea el timer
+  const resetTimer = () => {
+    if (!isAuthenticated) return; // si no está logueado, no hace nada
+    if (timerRef.current) clearTimeout(timerRef.current);
 
-//   useEffect(() => {
-//     // eventos que consideramos actividad del usuario
-//     const events = ["mousemove", "keydown", "click", "scroll", "touchstart"];
+    timerRef.current = setTimeout(() => {
+      // solo hace logout si el usuario sigue logueado
+      
+        logout();
+        console.log("Sesión cerrada por inactividad");
+      
+    }, timeout);
+  };
 
-//     events.forEach(e => window.addEventListener(e, resetTimer));
+  useEffect(() => {
+    if (!isAuthenticated) return; // solo activa si está logueado
 
-//     // iniciar timer al montar
-//     resetTimer();
+    const events = ["mousemove", "keydown", "click", "scroll", "touchstart"];
+    events.forEach((e) => window.addEventListener(e, resetTimer));
 
-//     return () => {
-//       events.forEach(e => window.removeEventListener(e, resetTimer));
-//       if (timerRef.current) clearTimeout(timerRef.current);
-//     };
-//   }, []);
+    resetTimer(); // iniciar timer al montar
 
-//   return null; // este componente no renderiza nada
-// }
+    return () => {
+      events.forEach((e) => window.removeEventListener(e, resetTimer));
+      if (timerRef.current) clearTimeout(timerRef.current);
+    };
+  }, [isAuthenticated, timeout, logout]);
 
-// SessionTimeout.propTypes = {
-//   timeout: PropTypes.number,
-// };
+  return null;
+}
+
+SessionTimeout.propTypes = {
+  timeout: PropTypes.number,
+};

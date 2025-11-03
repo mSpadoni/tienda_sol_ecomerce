@@ -13,13 +13,12 @@ const keycloak = new Keycloak({
   clientId: "tp_desarollo",
 });
 
-// --- Provider
 export const KeycloakProvider = ({ children }) => {
   const keycloakRef = useRef(keycloak);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [keycloakReady, setKeycloakReady] = useState(false);
 
-  // --- Función para limpiar #state, #code y #error del URL
+  // --- Limpiar #state, #code y #error del URL
   const cleanUrlHash = () => {
     try {
       if (
@@ -35,15 +34,29 @@ export const KeycloakProvider = ({ children }) => {
     }
   };
 
-  
+  // --- Refrescar token periódicamente usando async/await
+  const startTokenRefresh = () => {
+    const refreshInterval = setInterval(async () => {
+      if (keycloakRef.current.authenticated) {
+        try {
+          const refreshed = await keycloakRef.current.updateToken(60); // refresca si expira en <60s
+          if (refreshed) console.log("Token refrescado");
+        } catch (err) {
+          console.error("Error al refrescar token:", err);
+        }
+      }
+    }, 30 * 1000); // revisar cada 30 segundos
+
+    return refreshInterval;
+  };
 
   // --- Inicializar Keycloak
   useEffect(() => {
     cleanUrlHash();
-  
+
     keycloakRef.current
       .init({
-        onLoad: "check-sso", // solo revisa sesión existente
+        onLoad: "check-sso",
         checkLoginIframe: false,
         pkceMethod: "S256",
         silentCheckSsoRedirectUri: `${window.location.origin}/silent-check-sso.html`,
@@ -51,20 +64,23 @@ export const KeycloakProvider = ({ children }) => {
       .then((authenticated) => {
         setIsAuthenticated(authenticated);
         setKeycloakReady(true);
-        cleanUrlHash(); // limpiar hash después de init
+        cleanUrlHash();
+
+        if (authenticated) {
+          const interval = startTokenRefresh();
+          return () => clearInterval(interval); // limpiar al desmontar
+        }
       })
       .catch((err) => {
         console.error("Keycloak init error:", err);
         setKeycloakReady(true);
-        cleanUrlHash(); // limpiar hash incluso si hay error
+        cleanUrlHash();
       });
   }, []);
 
   const login = () => {
     try {
-      keycloakRef.current.login({
-        redirectUri: window.location.origin,
-      });
+      keycloakRef.current.login({ redirectUri: window.location.origin });
       cleanUrlHash();
     } catch (err) {
       console.error("Error al iniciar login:", err);
@@ -73,14 +89,10 @@ export const KeycloakProvider = ({ children }) => {
 
   const logout = () => {
     try {
-      keycloakRef.current.logout({
-        redirectUri: window.location.origin,
-
-      });
+      keycloakRef.current.logout({ redirectUri: window.location.origin });
       cleanUrlHash();
     } catch (err) {
       console.error("Error al hacer logout:", err);
-
     }
   };
 

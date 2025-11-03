@@ -54,7 +54,7 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
     <KeycloakProvider>
-
+    <SessionTimeout />
     <CurrencyProvider>
     <CarritoProvider>
     <BrowserRouter>
@@ -73,7 +73,7 @@ function App() {
     </BrowserRouter>
     </CarritoProvider>
     </CurrencyProvider>
-
+    
     </KeycloakProvider>
     </ThemeProvider>
    
