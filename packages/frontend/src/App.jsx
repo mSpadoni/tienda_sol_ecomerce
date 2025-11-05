@@ -12,8 +12,10 @@ import ListaPedidos from "./components/Pedidos/pedido.jsx";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import {KeycloakProvider} from "./provieder/keyCloak.jsx";
 import SessionTimeout from "./provieder/SessionTimeOut.jsx";
-import Store from "./components/mockData/Pedidos.js";
+import RegistroUsuario from "./features/Registro/registro.jsx";
 import ListaNotificaciones from "./components/Notificacion/notificacion.jsx";
+import ProtectedRoute from "./protecciones/ProtectedRoute.jsx"
+import { VisibleProvider } from "./provieder/visibleHook.jsx";
 
 const theme = createTheme({
   palette: {
@@ -57,23 +59,27 @@ function App() {
     <SessionTimeout />
     <CurrencyProvider>
     <CarritoProvider>
+    <VisibleProvider>
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Layout/>}>
-          <Route index element={<Home />} />
+    <Route path="/" element={<Layout/>}> 
+          <Route path="/" element={<Home />} />
+          <Route path="/sig-on" element={<RegistroUsuario/>} />
+          <Route element={<ProtectedRoute/>}>
           <Route path="/productos/:id" element={<ProductDetailPage/>} />
           <Route path="/checkout" element={<Checkout/>} />
           <Route path="/pedidos/hechos" element={<ListaPedidos funcionDeFiltrado={pedidosHechos} estadoACambiar="cancelado" mensaje="Todavía no has hechos ningún pedido ..."/>} />
           <Route path="/pedidos/recibidos" element={<ListaPedidos funcionDeFiltrado={pedidosRecibidos} estadoACambiar="enviado" mensaje="No te hicieron ningún pedido aún ..."/>} />
           <Route path="/notificacionesNoLeidas" element={<ListaNotificaciones   mensaje="No se recibieron notificaciones ..."/>} />
           <Route path="/notificacionesLeidas" element={<ListaNotificaciones   mensaje="No se recibieron notificaciones ..."/>} />
+          </Route>
           <Route path="*" element={<div>404 Not Found</div>} />
-        </Route>
+       </Route> 
       </Routes>
     </BrowserRouter>
+    </VisibleProvider>
     </CarritoProvider>
     </CurrencyProvider>
-    
     </KeycloakProvider>
     </ThemeProvider>
    

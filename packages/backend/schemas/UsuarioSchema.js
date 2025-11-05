@@ -4,7 +4,7 @@ import Usuario from "../models/entities/Usuario.js";
 
 const UsuarioSchema = new mongoose.Schema(
   { 
-    idKeycloark: {
+    idKeycloak: {
       type: String,
       required: true,
       unique: true,

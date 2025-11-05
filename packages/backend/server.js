@@ -12,7 +12,7 @@ export default class Server {
     this.controllers = {};
     this.app.use(express.json());
     this.app.use(cors({
-    origin: 'http://localhost:3001', // frontend React
+    origin: 'http://localhost:3000', // frontend React
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true
 }));

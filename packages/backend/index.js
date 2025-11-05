@@ -9,9 +9,11 @@ import NotificacionesRepository from "./models/repository/notificacionesReposito
 import PedidoService from "./service/pedidoService.js";
 import NotificacionService from "./service/notificacionesService.js";
 import ProductosService from "./service/productosService.js";
+import UsuarioService from "./service/usuarioService.js"
 import ControllerPedido from "./controller/ControllerPedidos.js";
 import NotificacionesController from "./controller/notificacionesController.js";
 import ProductosController from "./controller/productosController.js";
+import UsuarioControler from "./controller/usuarioControler.js";
 import routes from "./routes/routes.js";
 import { MongoDBClient } from "./config/database.js";
 // import axios from "axios";
@@ -45,11 +47,13 @@ const servicePedido = new PedidoService(
   usuarioRepository,
   productosRepository,
 );
+const usuarioService=new UsuarioService(usuarioRepository)
 
 const productosController = new ProductosController(productosService);
 const notificacionesController = new NotificacionesController(
   serviceNotificaciones,
 );
+const usuarioControler=new UsuarioControler(usuarioService)
 
 const controllerPedido = new ControllerPedido(
   servicePedido,
@@ -84,6 +88,7 @@ server.setController(NotificacionesController, notificacionesController);
 server.setController(ProductosController, productosController);
 server.setController(NotificacionesController, notificacionesController);
 server.setController(ProductosController, productosController);
+server.setController(UsuarioControler, usuarioControler);
 
 routes.forEach((route) => server.addRoute(route));
 server.configureRoutes();
