@@ -4,7 +4,7 @@ import Categoria from "./Categoria.js";
 import { Moneda } from "./Moneda.js";
 
 export default class Producto {
-  id;
+  _id;
   constructor(
     vendedor,
     titulo,

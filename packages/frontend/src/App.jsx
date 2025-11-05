@@ -20,7 +20,7 @@ import { VisibleProvider } from "./provieder/visibleHook.jsx";
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#ffd1dc',
+      main: '#272323ff',
     },
   },
 });
@@ -28,7 +28,7 @@ const theme = createTheme({
 function App() {
   const [message, setMessage] = useState("");
   
-
+  
   useEffect(() => {
     fetch("http://localhost:8000/hello")
       .then((response) => response.json())

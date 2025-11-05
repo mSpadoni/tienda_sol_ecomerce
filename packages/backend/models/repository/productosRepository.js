@@ -83,6 +83,7 @@ export default class ProductosRepository {
     // Ejecutar consulta en MongoDB (paginada y ordenada)
     const productos = await this.model
       .find(query)
+      .sort({ [sortField]: sortOrder })
       .skip(skip)
       .limit(elementosXPagina);
 

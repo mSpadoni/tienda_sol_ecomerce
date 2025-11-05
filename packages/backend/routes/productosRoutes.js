@@ -18,6 +18,14 @@ export default function productosRoutes(getController) {
     }
   });
 
+  router.get(pathProductos + "/:id", async (req, res, next) => {
+    try {
+      await controller.getProductoById(req, res, next);
+    } catch (err) {
+      next(err);
+    }
+  });
+
   router.use(productosErrorHandler);
   return router;
 }

@@ -22,6 +22,7 @@ export default class ProductosController {
         ...filtros
       } = req.query;
       const activoFinal = activoHandler[activo];
+    
       const ProductosPaginados = await this.productosService.getProductos(
         filtros,
         activoFinal,
@@ -34,6 +35,19 @@ export default class ProductosController {
         throw new ErrorProductosNoEncontrados();
       }
       return res.status(200).json(ProductosPaginados);
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  async getProductoById(req, res, next) {
+    try {
+      const { id } = req.params;
+      const producto = await this.productosService.getProductoById(id);
+      if (!producto) {
+        throw new ErrorProductosNoEncontrados();
+      }
+      return res.status(200).json(producto);
     } catch (err) {
       next(err);
     }

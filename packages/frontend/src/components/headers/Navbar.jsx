@@ -35,9 +35,7 @@ const Navbar = () => {
       <nav className="navbar">
         {/* Sección izquierda */}
         <div className="navbar-section left">
-          <button onClick={volverAHome} className="logo">
-            TiendaSol.com
-          </button>
+          <button onClick={volverAHome} className="logo">TiendaSol.com</button>
         </div>
 
         {/* Sección central */}
