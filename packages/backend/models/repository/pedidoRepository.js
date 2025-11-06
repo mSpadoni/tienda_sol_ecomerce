@@ -11,6 +11,7 @@ export default class pedidoRepository {
   }
 
   async findByUsuarioId(idUsuario) {
+    logger.info(idUsuario)
     const idABuscar = idUsuario._id.toString();
   logger.info(`Buscando pedidos donde participa el usuario con id: ${idABuscar}`);
 

@@ -12,7 +12,9 @@ export default class UsuarioControler {
 
   async crear(req, res) {
       logger.info("creando usuario en el controler")
-      const resultadoBody=createUserSchema.parse(req.body);
+      const resultadoBody = createUserSchema.parse(req.body);
+
+ 
       logger.info("usuario validado correctamente")
       await this.serviceUsuario.crear(resultadoBody)
       logger.http("usuario creado con exito")

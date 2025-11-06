@@ -8,14 +8,15 @@ import Layout from "./features/Layout/layout.jsx";
 import { CarritoProvider } from "./provieder/carritoProvider.jsx";
 import {CurrencyProvider} from "./provieder/CurrencyProvider.jsx";
 import Checkout from "./features/Checkuot/checkout.jsx";
-import ListaPedidos from "./components/Pedidos/pedido.jsx";
+import ListaPedidos from "./features/Pedidos/pedido.jsx";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import {KeycloakProvider} from "./provieder/keyCloak.jsx";
 import SessionTimeout from "./provieder/SessionTimeOut.jsx";
 import RegistroUsuario from "./features/Registro/registro.jsx";
-import ListaNotificaciones from "./components/Notificacion/notificacion.jsx";
+import ListaNotificaciones from "./features/Notificacion/notificacion.jsx";
 import ProtectedRoute from "./protecciones/ProtectedRoute.jsx"
 import { VisibleProvider } from "./provieder/visibleHook.jsx";
+import { MensajeProvider } from "./provieder/mensajeDeExito.jsx";
 
 const theme = createTheme({
   palette: {
@@ -54,12 +55,16 @@ function App() {
   }
 
   return (
+           
     <ThemeProvider theme={theme}>
     <KeycloakProvider>
+     
     <SessionTimeout />
+
     <CurrencyProvider>
     <CarritoProvider>
     <VisibleProvider>
+      <MensajeProvider>
     <BrowserRouter>
       <Routes>
     <Route path="/" element={<Layout/>}> 
@@ -68,20 +73,22 @@ function App() {
           <Route element={<ProtectedRoute/>}>
           <Route path="/productos/:id" element={<ProductDetailPage/>} />
           <Route path="/checkout" element={<Checkout/>} />
-          <Route path="/pedidos/hechos" element={<ListaPedidos funcionDeFiltrado={pedidosHechos} estadoACambiar="cancelado" mensaje="Todavía no has hechos ningún pedido ..."/>} />
-          <Route path="/pedidos/recibidos" element={<ListaPedidos funcionDeFiltrado={pedidosRecibidos} estadoACambiar="enviado" mensaje="No te hicieron ningún pedido aún ..."/>} />
-          <Route path="/notificacionesNoLeidas" element={<ListaNotificaciones   mensaje="No se recibieron notificaciones ..."/>} />
-          <Route path="/notificacionesLeidas" element={<ListaNotificaciones   mensaje="No se recibieron notificaciones ..."/>} />
+          <Route path="/pedidos/hechos" element={<ListaPedidos funcionDeFiltrado={pedidosHechos} estadoACambiar="cancelado" mensaje="Todavía no has hechos ningún pedido ..." existoMessage="Se cancelo el pedido correctamente..."/>} />
+          <Route path="/pedidos/recibidos" element={<ListaPedidos funcionDeFiltrado={pedidosRecibidos} estadoACambiar="enviado" mensaje="No te hicieron ningún pedido aún ..."  existoMessage="Se envio el pedido correctamente..."/>} />
+          <Route path="/notificaciones" element={<ListaNotificaciones />}/>
           </Route>
           <Route path="*" element={<div>404 Not Found</div>} />
        </Route> 
       </Routes>
     </BrowserRouter>
+    </MensajeProvider>
     </VisibleProvider>
     </CarritoProvider>
     </CurrencyProvider>
+  
     </KeycloakProvider>
     </ThemeProvider>
+  
    
   );
 }

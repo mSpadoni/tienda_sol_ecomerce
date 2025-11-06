@@ -17,7 +17,7 @@ export default class UsuarioService {
     const idKeycloack=await createUser(usuario_A_Crear)
 
     const usuarioNuevo=new Usuario(idKeycloack,
-        usuario_A_Crear.nombre+usuario_A_Crear.apellido,
+        usuario_A_Crear.nombre+" "+usuario_A_Crear.apellido,
         usuario_A_Crear.email,
         usuario_A_Crear.telefono,
         usuario_A_Crear.rol,new Date())

@@ -1,92 +1,352 @@
+/* Navbar general */
 .navbar-bg {
-  background: #ffffff;
-  border-bottom: 1px solid #e5e5e5;
-  padding: 10px 0;
-  position: relative;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background: #FFD700;
+  z-index: 30;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
 }
-
-
-.carrito-dropdown {
-  position: absolute;
-  top: 100%;       /* justo debajo del navbar */
-  right: 0;        /* alineado a la derecha */
-  z-index: 1000;
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
-  padding: 12px;
-  width: 350px;
-  max-height: 400px;
-  overflow-y: auto;
-}
-
 
 .navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  max-width: 1200px;
-  margin: auto;
-  padding: 0 20px;
+  padding: 0.8rem 1.5rem;
 }
 
+/* Logo */
 .logo {
+  color: whitesmoke;
+  font-size: 2rem;
   font-weight: bold;
-  font-size: 20px;
-  color: #000;
-  text-decoration: none;
-}
-
-.nav-links {
-  display: flex;
-  gap: 20px;
-}
-
-.nav-link {
-  text-decoration: none;
-  color: #000;
-  font-size: 15px;
-  font-weight: 500;
-  transition: 0.2s;
-}
-
-.nav-link:hover {
-  color: #009EE3;
-}
-
-.right-section {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-}
-
-/* Selector de moneda */
-.currency-select {
-  border: 1px solid #ccc;
-  background: #fff;
-  padding: 5px 8px;
-  border-radius: 6px;
+  border: none;
+  background: none;
   cursor: pointer;
-  font-size: 14px;
+  transition: transform 0.3s, color 0.3s;
+}
+.logo:hover {
+  color: #fff;
+  transform: scale(1.05);
+}
+
+/* Links del navbar */
+.nav-link {
+  color: black;
+  margin: 0 0.5rem;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s, transform 0.2s;
+}
+.nav-link:hover {
+  color: whitesmoke;
+  transform: translateY(-2px);
+}
+
+/* Select de moneda */
+.currency-select {
+  padding: 0.5rem 0.7rem;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-left: 0.5rem;
+}
+@media(min-width: 768px) {
+  .currency-select {
+    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+  }
+}
+.currency-select:hover {
+  color: #020100;
+  transform: translateY(-2px);
+}
+
+/* Botones */
+.nav-button {
+  padding: 0.6rem 1.2rem;
+  margin: 0 0.3rem;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.3s ease;
+  background-color: rgb(245, 248, 244);
+  box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+}
+.nav-button:hover {
+  background-color: rgb(232, 235, 232);
+  transform: translateY(-2px);
+}
+.nav-link:hover {
+  color: #fcfcfb;
+  transform: translateY(-2px);
+}
+
+
+.logout_button {
+  background-color: rgb(206, 2, 2);
+  color: white;
+  padding: 0.6rem 1.2rem;
+  margin-left: 70px ;
+  font-size: 1rem;
+  border-radius: 5px;
+  transition: all 0.3s;
+}
+.logout_button:hover {
+  background-color: #fa0101;
+  transform: translateY(-2px);
 }
 
 /* Carrito */
 .cart {
   position: relative;
-  background: transparent;
+  background: none;
   border: none;
+  padding: 1rem;
   cursor: pointer;
+  font-size: 2rem;
+  transition: color 0.3s, transform 0.2s;
 }
-
+.cart:hover {
+  color: white;
+  transform: scale(1.2) translateY(-2px);
+}
 .cart-count {
   position: absolute;
   top: -5px;
-  right: -8px;
-  background: #009EE3;
+  right: -10px;
+  background: red;
   color: white;
-  font-size: 11px;
-  padding: 2px 6px;
   border-radius: 50%;
+  padding: 0 6px;
+  font-size: 0.9rem;
+  font-weight: bold;
+  transition: transform 0.2s;
+}
+.cart-count:hover {
+  transform: scale(1.2) translateY(-2px);
+}
+
+/* Menú hamburguesa */
+.hamburger {
+  display: none;
+  font-size: 1.8rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+.hamburger:hover {
+  color: whiteSmoke;
+  transform: scale(1.2) translateY(-2px);
+}
+.navbar-center {
+    gap: 20px;
+  }
+/* Drawer Móvil */
+@media(max-width: 900px) {
+  .hamburger {
+    display: block;
+  }
+
+  .navbar-center {
+    display: none;
+  }
+
+  .nav-link:hover {
+  color: #ccae06;
+  transform: translateY(-2px);
+}
+
+  .drawer-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.3);
+    z-index: 998;
+  }
+
+  .drawer-menu {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 240px;
+    height: 100%;
+    background: whitesmoke;
+    display: flex;
+    flex-direction: column;
+    padding: 2rem 1rem;
+    gap: 1rem;
+    z-index: 999;
+    box-shadow: -4px 0 8px rgba(0,0,0,0.2);
+  }
+
+  .drawer-menu .nav-link,
+  .drawer-menu .currency-select,
+  .drawer-menu .nav-button,
+  .drawer-menu .logout_button {
+    width: 100%;
+    margin: 0;
+  }
+
+  .navbar-right {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+  }
+}
+
+/* Ajustes tablets grandes (780px - 900px) */
+@media(max-width: 900px) and (min-width: 780px) {
+  .logo {
+    font-size: 2.2rem;
+  }
+  .cart {
+    font-size: 2rem;
+    padding: 1rem;
+  }
+  .nav-button, .logout_button {
+    font-size: 1.05rem;
+    padding: 0.6rem 1.2rem;
+  }
+  .currency-select {
+    font-size: 1rem;
+    padding: 0.5rem 0.7rem;
+  }
+
+  
+
 }
 
 
+/* Ajustes móviles medianos (480px - 780px) */
+@media(max-width: 780px) and (min-width: 480px) {
+  .logo {
+    font-size: 1.9rem;
+  }
+  .cart {
+    font-size: 1.8rem;
+    padding: 0.8rem;
+  }
+  .nav-button, .logout_button {
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
+  }
+  .currency-select {
+    font-size: 0.95rem;
+    padding: 0.45rem 0.6rem;
+  }
+  .drawer-menu {
+    width: 200px;
+    padding: 2rem 1rem;
+  }
+
+  
+
+}
+
+/* Ajustes extra pequeños (<480px) */
+@media(max-width: 480px) {
+  .navbar {
+    padding: 0.5rem 1rem;
+  }
+  .logo {
+    font-size: 1.6rem;
+  }
+  .cart {
+    font-size: 1.5rem;
+    padding: 0.6rem;
+  }
+  .nav-button, .logout_button {
+    font-size: 0.9rem;
+    padding: 0.4rem;
+  }
+  .currency-select {
+    font-size: 0.8rem;
+    padding: 0.3rem;
+  }
+  .drawer-menu {
+    width: 180px;
+    padding: 1.5rem 0.8rem;
+  }
+}
+
+/* Ajustes para landscape en tablets y móviles */
+@media(max-width: 900px) and (orientation: landscape) {
+  .logo {
+    font-size: 2.3rem;
+  }
+  .cart {
+    font-size: 2.1rem;
+    padding: 1.1rem;
+  }
+  .nav-button, .logout_button {
+    font-size: 1.1rem;
+    padding: 0.65rem 1.3rem;
+  }
+  .currency-select {
+    font-size: 1rem;
+    padding: 0.55rem 0.75rem;
+  }
+  .drawer-menu {
+    width: 250px;
+  }
+}
+
+/* Drawer Carrito desde la izquierda */
+.carrito-drawer.izquierda {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: auto;
+  width: 240px; /* ajustar según diseño */
+  height: 100%;
+  background: whitesmoke;
+  display: flex;
+  flex-direction: column;
+  padding: 2rem 1rem;
+  gap: 1rem;
+  z-index: 999;
+  box-shadow: 4px 0 8px rgba(0,0,0,0.2);
+  transform: translateX(-100%);
+  transition: transform 0.3s ease;
+}
+
+.carrito-drawer.izquierda.abierto {
+  transform: translateX(0);
+}
+
+/* Overlay para el carrito */
+.drawer-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.3);
+  z-index: 998;
+}
+
+/* Ajustes responsivos del carrito */
+@media(max-width: 900px) {
+  .carrito-drawer.izquierda {
+    width: 200px;
+    padding: 2rem 1rem;
+  }
+}
+
+@media(max-width: 780px) {
+  .carrito-drawer.izquierda {
+    width: 180px;
+    padding: 1.5rem 0.8rem;
+  }
+}
+
+@media(max-width: 480px) {
+  .carrito-drawer.izquierda {
+    width: 160px;
+    padding: 1rem 0.6rem;
+  }
+}

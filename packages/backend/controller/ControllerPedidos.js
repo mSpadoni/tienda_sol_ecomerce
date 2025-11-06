@@ -19,8 +19,7 @@ export default class ControllerPedidos {
     const nuevoPedido = await this.servicePedido.crear(resultBody,resultUsuario);
  
      logger.http(`Pedido creado`);
-    const notificacion =
-      await this.serviceNotificaciones.crearNotificacion(nuevoPedido);
+    const notificacion = await this.serviceNotificaciones.crearNotificacion(nuevoPedido);
      logger.http(`Notificacion creada`);
 
     const JSONresponse = {

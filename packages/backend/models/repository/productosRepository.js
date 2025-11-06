@@ -1,6 +1,6 @@
 import { ProductoModel } from "../../schemas/ProductoSchema.js";
 import mongoose from "mongoose";
-
+import logger from "../../../logger/logger.js";
 export default class ProductosRepository {
   constructor() {
     this.model = ProductoModel;
@@ -86,7 +86,7 @@ export default class ProductosRepository {
       .sort({ [sortField]: sortOrder })
       .skip(skip)
       .limit(elementosXPagina);
-
+    logger.info(productos)
     return productos;
   }
 

@@ -1,39 +1,66 @@
-import React, { useState } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 import "./CarritoItem.css";
 import { useCurrency } from "../../provieder/CurrencyProvider.jsx";
 import { CURRENCIES } from "../../provieder/currencies.js";
+import { useCarrito } from "../../provieder/carritoProvider";
+import { FaTrashAlt } from "react-icons/fa"; // 🗑️ Icono de basura
 
-const CarritoItem = ({ item, onEliminarCantidad }) => {
-  const [cantidadEliminar, setCantidadEliminar] = useState(0);
+const CarritoItem = ({ item }) => {
   const { currency } = useCurrency();
-  const aumentar = () => {
-    if (cantidadEliminar < item.cantidad) setCantidadEliminar(cantidadEliminar + 1);
-  };
-  const disminuir = () => {
-    if (cantidadEliminar > 0) setCantidadEliminar(cantidadEliminar - 1);
-  };
+  const {
+    eliminarDelCarrito,
+    aumentarCantidad,
+    disminuirCantidad,
+    obtenerCantidad,
+    carritoVacio,
+  } = useCarrito();
+
+  const longitud = obtenerCantidad(item.producto.id);
 
   return (
     <div className="carrito-item">
-      <img src={item.producto.imagen} alt={item.producto.titulo} className="item-img"/>
+      <img
+        src={item.producto.imagen}
+        alt={item.producto.titulo}
+        className="item-img"
+      />
+
       <div className="item-info">
         <h4 className="item-title">{item.producto.titulo}</h4>
-        <div className="item-price">              Precio: {`${CURRENCIES[currency].symbol}${item.producto.precio.toLocaleString(CURRENCIES[currency].locale)}`}</div>
+        <div className="item-price">
+          Precio:{" "}
+          {`${CURRENCIES[currency].symbol}${item.producto.precio.toLocaleString(
+            CURRENCIES[currency].locale
+          )}`}
+        </div>
 
-        <div className="item-eliminar">
-          <button onClick={disminuir} disabled={cantidadEliminar === 0}>−</button>
-          <span>{cantidadEliminar}</span>
-          <button onClick={aumentar} disabled={cantidadEliminar === item.cantidad}>+</button>
+        <div className="item-eliminar-container">
+          <div className="item-cantidad">
+            <button
+              className="btn-cantidad"
+              onClick={() => disminuirCantidad(item.producto.id, 1)}
+              disabled={carritoVacio()}
+            >
+              −
+            </button>
+            <span>{longitud}</span>
+            <button
+              className="btn-cantidad"
+              onClick={() => aumentarCantidad(item.producto.id, 1)}
+              
+            >
+              +
+            </button>
+          </div>
+
           <button
             className="eliminar"
-            disabled={cantidadEliminar === 0}
-            onClick={() => {
-              onEliminarCantidad(item.producto.id, cantidadEliminar);
-              setCantidadEliminar(0);
-            }}
+            disabled={carritoVacio()}
+            onClick={() => eliminarDelCarrito(item.producto.id)}
+            title="Eliminar producto"
           >
-            Eliminar
+            <FaTrashAlt />
           </button>
         </div>
       </div>
@@ -51,7 +78,6 @@ CarritoItem.propTypes = {
     }).isRequired,
     cantidad: PropTypes.number.isRequired,
   }).isRequired,
-  onEliminarCantidad: PropTypes.func.isRequired,
 };
 
 export default CarritoItem;

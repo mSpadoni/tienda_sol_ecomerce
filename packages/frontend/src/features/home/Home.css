@@ -17,6 +17,7 @@
   display: flex;
   justify-content: center;
   padding: 3.5rem 1rem 2.5rem;
+  padding-top: 100px;
 }
 
 .hero-content {
@@ -41,7 +42,6 @@
 }
 
 .hero-search {
-  margin-top: 1.1rem;
   display: flex;
   justify-content: center;
 }

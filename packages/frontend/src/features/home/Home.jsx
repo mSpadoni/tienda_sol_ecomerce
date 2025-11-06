@@ -7,6 +7,7 @@ import { getProductos } from "../../services/ProductosService.js";
 import Paginacion from "../../components/paginacion/Paginacion.jsx";
 import ProductFilters from "../../components/productFilters/ProductFilters.jsx";
 import "./Home.css";
+import SuccessSnackbar from "../../components/snackBar.jsx"
 
 const Home = () => {
   const [productos, setProductos] = useState([]);
@@ -31,7 +32,7 @@ const Home = () => {
   }, []);
 
   // TODO: esto debería estar en el back
-  const filtrarProductos = (searchText) => {
+  const filtrarProductos = async (searchText) => {
     const newFiltros = { ...filtros };
     if (!searchText || searchText.trim() === "") {
       delete newFiltros.titulo;
@@ -39,17 +40,19 @@ const Home = () => {
       newFiltros.titulo = searchText.trim();
     }
     setFiltros(newFiltros);
-    cargarProductos(1, newFiltros);
+    await cargarProductos(1, newFiltros);
   };
 
-  const aplicarFiltros = (nuevosFiltros) => {
+  const aplicarFiltros = async (nuevosFiltros) => {
     setFiltros(nuevosFiltros);
-    cargarProductos(1, nuevosFiltros);
+    await cargarProductos(1, nuevosFiltros);
   };
 
   return (
     <div className="home-page">
       {/* HERO */}
+
+      <SuccessSnackbar/>
       <header className="home-hero">
         <div className="hero-content">
           <h1 className="hero-title">Encontrá tu próximo producto</h1>

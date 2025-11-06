@@ -1,0 +1,95 @@
+/* Contenedor principal */
+.registro-root {
+  display: flex;
+  justify-content: center;
+  padding: 90px 20px 20px 20px; /* padding top grande */
+}
+
+/* Tarjeta del formulario */
+.registro-card {
+  width: 100%;
+  max-width: 900px;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 6px 25px rgba(0,0,0,0.12);
+  transition: 0.3s;
+}
+
+/* Grid de inputs */
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+/* Inputs con iluminación amarilla al enfocar */
+.input-field .MuiInputBase-root {
+  transition: 0.3s;
+}
+
+.input-field .Mui-focused {
+  background-color: #fff8c4;
+  border-radius: 4px;
+}
+
+/* Contenedor de botones */
+.actions {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+/* Botón cancelar */
+.btn-cancel {
+  background-color: white;
+  color: #1976d2;
+  border: 2px solid #1976d2;
+  transition: 0.3s;
+  flex: 1 1 150px;
+}
+
+.btn-cancel:hover {
+  background-color: #1976d2;
+  color: white;
+}
+
+/* Botón registrar */
+.btn-registrar {
+  background-color: #1976d2;
+  color: white;
+  transition: 0.3s;
+  flex: 1 1 150px;
+}
+
+.btn-registrar:hover {
+  background-color: #1257a1;
+}
+
+/* Mensaje de error */
+.alert-error {
+  grid-column: 1 / -1;
+  margin-bottom: 15px;
+}
+
+/* Responsive avanzado */
+@media (max-width: 600px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .btn-cancel, .btn-registrar {
+    width: 100%;
+  }
+}
+
+.titulo{
+    margin-bottom: 10px;
+}

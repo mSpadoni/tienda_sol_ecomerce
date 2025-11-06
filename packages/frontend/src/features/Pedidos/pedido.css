@@ -1,0 +1,167 @@
+.lista-pedidos-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+  padding: 90px 20px 20px 20px; /* padding top de 25px */
+}
+
+/* Tarjeta de cada pedido */
+.pedido-card {
+  background-color: #f9f9f9;
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s;
+}
+
+.pedido-card:hover {
+  transform: translateY(-3px);
+}
+
+/* Header del pedido */
+.pedido-header {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.pedido-total {
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+/* Body del pedido */
+.pedido-body {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.pedido-items {
+  flex: 1 1 60%;
+}
+
+.pedido-items ul {
+  margin: 5px 0 0 15px;
+  padding: 0;
+}
+
+.pedido-actions {
+  flex: 1 1 35%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: flex-end;
+}
+
+.btn-ver-detalles,
+.btn-cambiar-estado {
+  padding: 10px 15px;
+  border: none;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+/* Botón cambiar estado (amarillo) */
+.btn-cambiar-estado {
+  background-color: #FFD700; /* Amarillo */
+  color: #333;
+}
+
+.btn-cambiar-estado:hover {
+  background-color: #FFC107;
+}
+
+/* Botón ver detalles */
+.btn-ver-detalles {
+  background-color: #ffffff;
+  color: #1976d2;
+  border: 2px solid #1976d2;
+}
+
+.btn-ver-detalles:hover {
+  background-color: #1976d2;
+  color: white;
+}
+
+/* Detalles adicionales */
+.pedido-detalles {
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 1px solid #ddd;
+  font-size: 0.95rem;
+  color: #555;
+}
+
+/* Mensaje cuando no hay pedidos */
+.no-pedidos {
+  padding: 30px;
+  text-align: center;
+  font-size: 1.2rem;
+  color: #555;
+}
+
+/* Responsive avanzado */
+@media (max-width: 700px) {
+  .pedido-body {
+    flex-direction: column;
+  }
+
+  .pedido-actions {
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .pedido-items {
+    flex: 1 1 100%;
+  }
+}
+
+.btn-ver-detalles,
+.btn-cambiar-estado {
+  padding: 10px 15px;
+  border: none;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+/* Botón cambiar estado (amarillo) */
+.btn-cambiar-estado {
+  background-color: #FFD700; /* Amarillo */
+  color: #333;
+}
+
+.btn-cambiar-estado:hover {
+  background-color: #FFC107;
+}
+
+/* Botón ver detalles */
+.btn-ver-detalles {
+  background-color: #ffffff;
+  color: #1976d2;
+  border: 2px solid #1976d2;
+}
+
+.btn-ver-detalles:hover {
+  background-color: #1976d2;
+  color: white;
+}
+
+/* 🔒 Estilo para botones deshabilitados */
+.btn-ver-detalles:disabled,
+.btn-cambiar-estado:disabled {
+  opacity: 0.5;            /* Más opaco */
+  cursor: not-allowed;     /* Cursor de “no disponible” */
+  filter: grayscale(30%);  /* Le da un leve tono apagado */
+  transform: none;         /* Evita efecto hover */
+}
+

@@ -1,14 +1,25 @@
 import React, { useState } from 'react';
-import { Card, TextField, Button, MenuItem, Select, InputLabel, FormControl } from '@mui/material';
+import {
+  Card,
+  TextField,
+  Button,
+  MenuItem,
+  Select,
+  InputLabel,
+  FormControl,
+  Alert
+} from '@mui/material';
 import { useNavigate } from "react-router-dom";
 import { useVisible } from "../../provieder/visibleHook.jsx";
 import { crearUsuario } from '../../services/userServices.js';
+import { useMensajes  } from "../../provieder/mensajeDeExito.jsx";
+import './registro.css';
 
 const RegistroUsuario = () => {
   const navigate = useNavigate();
-  const {ponerVisible}=useVisible()
+  const { ponerVisible } = useVisible();
+  const { setMensajeExito } = useMensajes();
 
-  // Inicialización de campos
   const inicializarCampo = (requerido = true) => ({ valor: '', requerido });
   const [campos, setCampos] = useState({
     nombre: inicializarCampo(),
@@ -20,7 +31,7 @@ const RegistroUsuario = () => {
     username: inicializarCampo(),
   });
 
-  const [error, setError] = useState("");
+  const [errores, setErrores] = useState(null);
 
   const camposCompletos = Object.values(campos)
     .filter(campo => campo.requerido)
@@ -34,99 +45,90 @@ const RegistroUsuario = () => {
   };
 
   const handleRegistrar = async () => {
-  const data = {
-    username: campos.username.valor,
-    nombre: campos.nombre.valor,
-    apellido: campos.apellido.valor,
-    email: campos.email.valor,
-    telefono: campos.telefono.valor,
-    password: campos.password.valor,
-    rol: campos.rol.valor,
+    setErrores(null);
+    const data = {
+      username: campos.username.valor,
+      nombre: campos.nombre.valor,
+      apellido: campos.apellido.valor,
+      email: campos.email.valor,
+      telefono: campos.telefono.valor,
+      password: campos.password.valor,
+      rol: campos.rol.valor,
+    };
+
+    try {
+      const result = await crearUsuario(data);
+      setMensajeExito("Usuario creado exitosamente!");
+      ponerVisible();
+      navigate("/");
+    } catch (err) {
+      setErrores(err);
+    }
   };
 
-  console.log("DATA QUE ENVÍO:", data);
-
-  try {
-    const result = await crearUsuario(data);
-    console.log("Usuario creado:", result);
-
-    ponerVisible();
-    navigate("/");
-  } catch (err) {
-    console.error(err);
-    setError(err?.response?.data?.message || "Error al crear usuario");
-  }
-};
-
-
   return (
-    <div className="root">
-      <Card className="form-container">
-        <h3>Registro de Usuario</h3>
+    <div className="registro-root">
+      <Card className="registro-card">
+        <h3 className="titulo">Registro de Usuario</h3>
 
-        {error && <div className="error-message">{error}</div>}
+        {errores && (
+          <Alert severity="error" className="alert-error">
+            {errores.message}
+          </Alert>
+        )}
 
-        <form>
+        <form className="form-grid">
           <TextField
-  label="UserName"
-  required
-  fullWidth
-  margin="normal"
-  type="text"
-  value={campos.username.valor}
-  onChange={(e) => {
-    console.log("username typed:", e.target.value);
-    setValorDe("username")(e);
-  }}
-/>
-
+            className="input-field"
+            label="UserName"
+            required
+            fullWidth
+            value={campos.username.valor}
+            onChange={setValorDe("username")}
+          />
           <TextField
+            className="input-field"
             label="Nombre"
             required
             fullWidth
-            margin="normal"
-            type='text'
             value={campos.nombre.valor}
             onChange={setValorDe('nombre')}
           />
           <TextField
+            className="input-field"
             label="Apellido"
             required
             fullWidth
-            margin="normal"
-            type='text'
             value={campos.apellido.valor}
             onChange={setValorDe('apellido')}
           />
           <TextField
+            className="input-field"
             label="Email"
             required
             fullWidth
-            margin="normal"
             type='email'
             value={campos.email.valor}
             onChange={setValorDe('email')}
           />
           <TextField
+            className="input-field"
             label="Teléfono"
             fullWidth
-            margin="normal"
-            type='text'
             value={campos.telefono.valor}
             onChange={setValorDe('telefono')}
           />
           <TextField
+            className="input-field"
             label="Contraseña"
             required
             fullWidth
-            margin="normal"
             type='password'
             value={campos.password.valor}
             onChange={setValorDe('password')}
           />
 
-          {/* Selección de rol */}
-          <FormControl fullWidth margin="normal">
+          <FormControl fullWidth className="input-field">
             <InputLabel id="rol-label">Rol</InputLabel>
             <Select
               labelId="rol-label"
@@ -139,13 +141,19 @@ const RegistroUsuario = () => {
             </Select>
           </FormControl>
 
-          <div className="actions" style={{ marginTop: '20px' }}>
-            <Button variant="outlined" onClick={() => navigate("/")}>Cancelar</Button>
-            <Button 
-              variant="contained" 
+          <div className="actions">
+            <Button
+              className="btn-cancel"
+              variant="outlined"
+              onClick={() => navigate("/")}
+            >
+              Cancelar
+            </Button>
+            <Button
+              className="btn-registrar"
+              variant="contained"
               disabled={!camposCompletos}
               onClick={handleRegistrar}
-              style={{ marginLeft: '10px' }}
             >
               Registrar
             </Button>

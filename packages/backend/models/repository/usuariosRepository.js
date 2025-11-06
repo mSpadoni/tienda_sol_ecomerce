@@ -7,14 +7,16 @@ export default class usuarioRepository {
   }
 
   async findById(id) {
-    return await this.model.findOne({ idKeycloark: id });
+    return await this.model.findOne({ idKeycloak: id });
   }
 
   async obtnerId(idKeycloark){
-    return await this.model.findOne({idKeycloark:idKeycloark},"_id");
+    logger.info(idKeycloark)
+    return await this.model.findOne({idKeycloak:idKeycloark},"_id");
   }
 
   async save(usuario){
+    logger.info(JSON.stringify(usuario))
     logger.info("guardando usuario en mongo")
     const nuevoUsuario = new this.model(usuario);
     await nuevoUsuario.save();

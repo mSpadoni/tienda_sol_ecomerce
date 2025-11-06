@@ -10,9 +10,6 @@ import YaEstaEnEseEstado from "../../errors/errorYaEstaEnEseEstado.js";
 export default class Pedido {
   id;
   constructor(usuario, items, moneda, direccionEntrega) {
-    if (usuario.tipo !== TipoUsuario.COMPRADOR) {
-      throw new NoEsTipoUsuarioCorecto(TipoUsuario.COMPRADOR);
-    }
     this.comprador = usuario;
     this.items = items;
     this.moneda = moneda;

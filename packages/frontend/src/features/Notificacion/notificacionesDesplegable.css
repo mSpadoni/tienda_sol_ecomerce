@@ -1,0 +1,61 @@
+/* Contenedor principal */
+.filtro-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin: 1rem 0;
+}
+
+/* Título */
+.filtro-titulo {
+  font-size: 1.2rem;
+  color: #333;
+  font-weight: bold;
+  margin-bottom: 0.8rem;
+  margin-top: 45%;
+  text-align: center;
+}
+
+/* Contenedor del select */
+.filtro-estado {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+/* Select estilizado */
+.filtro-select {
+  width: 100%;
+  max-width: 250px;
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  background: white;
+  color: #050000;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.filtro-select:hover {
+ border: 3px solids #f8cb05;
+  
+}
+
+/* Responsive */
+@media(max-width: 600px) {
+  .filtro-box {
+    width: 95%;
+    padding: 0.8rem 1rem;
+  }
+
+  .filtro-titulo {
+    font-size: 1rem;
+  }
+
+  .filtro-select {
+    font-size: 0.95rem;
+    padding: 0.5rem 0.8rem;
+  }
+}

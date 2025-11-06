@@ -10,7 +10,7 @@ import "./ProductDetailPage.css";
 const ProductDetailPage = () => {
   const { id } = useParams();
   const [producto, setProducto] = useState(null);
-  const { agregarAlCarrito } = useCarrito();
+  const { agregarItem } = useCarrito();
   const [cantidad, setCantidad] = useState(0);
   const { currency } = useCurrency();
 
@@ -90,7 +90,7 @@ const ProductDetailPage = () => {
           <div className="producto-metadata">
             <p>
               <strong>Vendedor:</strong>{" "}
-              {producto.vendedor ? producto.vendedor : "Tienda Sol"}
+              {producto.vendedor.nombre ? producto.vendedor.nombre : "Tienda Sol"}
             </p>
             <p>
               <strong>Estado:</strong>{" "}
@@ -112,7 +112,7 @@ const ProductDetailPage = () => {
             <Button
               className="comprar"
               disabled={!hayStock || cantidad === 0}
-              onClick={() => agregarAlCarrito(producto, cantidad)}
+              onClick={() => agregarItem(producto, cantidad)}
             >
               Agregar al carrito
             </Button>
