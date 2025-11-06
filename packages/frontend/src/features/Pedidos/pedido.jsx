@@ -29,7 +29,7 @@ export default function ListaPedidos({ funcionDeFiltrado, estadoACambiar, mensaj
       setMensajeExito(existoMessage);
 
       // Actualizar lista local para reflejar el cambio visualmente
-      setPedidos([...Store.Pedidos,[...pedidosFiltrados,pedidoEncontrado]]);
+      setPedidos([...pedidosFiltrados,pedidoEncontrado]);
       navigate(ruta)
     }
   };

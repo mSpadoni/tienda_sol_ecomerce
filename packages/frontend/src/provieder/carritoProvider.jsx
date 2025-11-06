@@ -31,7 +31,7 @@ export const CarritoProvider = ({ children }) => {
  const carritoVacio=()=>carrito.length===0
 
 const disminuirCantidad = (id, cantidad) => {
-  setCarrito(prev =>
+  setCarrito(prev =>-
     prev
       .map(item =>
         item.producto.id === id ? { ...item, cantidad: item.cantidad - cantidad } : item
