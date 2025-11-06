@@ -73,8 +73,8 @@ function App() {
           <Route element={<ProtectedRoute/>}>
           <Route path="/productos/:id" element={<ProductDetailPage/>} />
           <Route path="/checkout" element={<Checkout/>} />
-          <Route path="/pedidos/hechos" element={<ListaPedidos funcionDeFiltrado={pedidosHechos} estadoACambiar="cancelado" mensaje="Todavía no has hechos ningún pedido ..." existoMessage="Se cancelo el pedido correctamente..."/>} />
-          <Route path="/pedidos/recibidos" element={<ListaPedidos funcionDeFiltrado={pedidosRecibidos} estadoACambiar="enviado" mensaje="No te hicieron ningún pedido aún ..."  existoMessage="Se envio el pedido correctamente..."/>} />
+          <Route path="/pedidos/hechos" element={<ListaPedidos funcionDeFiltrado={pedidosHechos} estadoACambiar="cancelado" mensaje="Todavía no has hechos ningún pedido ..." existoMessage="Se cancelo el pedido correctamente..." ruta="/pedidos/hechos"/>} />
+          <Route path="/pedidos/recibidos" element={<ListaPedidos funcionDeFiltrado={pedidosRecibidos} estadoACambiar="enviado" mensaje="No te hicieron ningún pedido aún ..."  existoMessage="Se envio el pedido correctamente..." ruta="/pedidos/recibidos"/>} />
           <Route path="/notificaciones" element={<ListaNotificaciones />}/>
           </Route>
           <Route path="*" element={<div>404 Not Found</div>} />

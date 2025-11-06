@@ -8,6 +8,7 @@ import Store from "../../components/mockData/Pedidos.js";
 import './checkout.css';
 import { CURRENCIES } from '../../provieder/currencies.js';
 import { useForm} from "../../provieder/fromHook.js"
+import { useVisible } from "../../provieder/visibleHook.jsx";
 
 
 const Checkout = () => {
@@ -16,7 +17,13 @@ const Checkout = () => {
   const { carrito, setCarrito, totalPrecio , limpiarCarrito} = useCarrito();
   const { currency } = useCurrency();
   const { setMensajeExito} = useMensajes();
+  const {ponerVisible}=useVisible()
 
+  const cancelarPedido=()=>{
+    limpiarCarrito()
+    ponerVisible()
+    navigate("/")
+  }
   const inicializarCampos = () => ({
     calle: inicializarCampo(),
     altura: inicializarCampo(),
@@ -75,6 +82,7 @@ const Checkout = () => {
       limpiarCarrito()
       id++;
       setMensajeExito("Compra realizada con éxito");
+      ponerVisible()
       navigate("/");
   };
 
@@ -182,7 +190,7 @@ const Checkout = () => {
             </div>
 
             <div className="actions">
-              <Button onClick={() => navigate("/")}>Cancelar</Button>
+              <Button onClick={() => cancelarPedido()}>Cancelar</Button>
               <Button 
                 variant="contained" 
                 disabled={!camposCompletos}

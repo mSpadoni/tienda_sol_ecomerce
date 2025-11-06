@@ -9,7 +9,7 @@ import "./pedido.css";
 import { Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
-export default function ListaPedidos({ funcionDeFiltrado, estadoACambiar, mensaje, existoMessage }) {
+export default function ListaPedidos({ funcionDeFiltrado, estadoACambiar, mensaje, existoMessage,ruta }) {
   const [openId, setOpenId] = useState(null);
   const [pedidos, setPedidos] = useState([]);
   const { currency } = useCurrency();
@@ -21,15 +21,16 @@ export default function ListaPedidos({ funcionDeFiltrado, estadoACambiar, mensaj
 
   const cambiarEstado = (idPedido) => {
     // Buscar el pedido dentro del store
-    const pedidoEncontrado = Store.Pedidos.find(p => p.id === idPedido);
+    const pedidoEncontrado=Store.Pedidos.find(p => p.id === idPedido);
+    const pedidosFiltrados = Store.Pedidos.filter(p => p.id !== idPedido);
 
     if (pedidoEncontrado) {
       pedidoEncontrado.estado = estadoACambiar;
       setMensajeExito(existoMessage);
 
       // Actualizar lista local para reflejar el cambio visualmente
-      setPedidos([...Store.Pedidos,pedidoEncontrado]);
-      navigate(`pedidos/hechos`)
+      setPedidos([...Store.Pedidos,[...pedidosFiltrados,pedidoEncontrado]]);
+      navigate(ruta)
     }
   };
 
@@ -107,6 +108,7 @@ ListaPedidos.propTypes = {
   estadoACambiar: PropTypes.string.isRequired,
   mensaje: PropTypes.string.isRequired,
   existoMessage: PropTypes.string.isRequired,
+  ruta: PropTypes.string.isRequired,
 };
 
 const botonesNombreSegunEstado = Object.freeze({

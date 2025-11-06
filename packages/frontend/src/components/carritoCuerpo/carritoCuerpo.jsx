@@ -5,15 +5,18 @@ import { useNavigate } from "react-router-dom";
 import "./carritoCuerpo.css";
 import { Button } from "react-bootstrap";
 import PropTypes from "prop-types";
+import { useVisible } from "../../provieder/visibleHook.jsx";
 
 const CarritoCuerpo = ({onClose}) => {
   const { carrito, carritoVacio,totalPrecio } = useCarrito();
   const navigate = useNavigate();
   const [total,setTotal]=useState(0)
+  const {ponerInvisible}=useVisible()
   
   const comprar=()=>{
     onClose()
     navigate("/checkout")
+    ponerInvisible()
   }
   
   useEffect(() => {
