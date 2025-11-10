@@ -9,7 +9,6 @@ export default class NotificacionesService {
 
   async getNotificaciones(filtros) {
     return await this.notificacionesRepository.getNotificaciones(filtros);
-    
   }
 
   async marcarNotificacionComoLeida(id) {
@@ -22,5 +21,3 @@ export default class NotificacionesService {
     return notificacion;
   }
 }
-
-

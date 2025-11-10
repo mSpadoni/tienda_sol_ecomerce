@@ -1,10 +1,6 @@
-
-import {
- createUser
-} from "./funcionesDelService.js";
+import { createUser } from "./funcionesDelService.js";
 import Usuario from "../models/entities/Usuario.js";
 import logger from "../../logger/logger.js";
-
 
 export default class UsuarioService {
   constructor(repositorioUsuario) {
@@ -12,18 +8,19 @@ export default class UsuarioService {
   }
 
   async crear(usuario_A_Crear) {
-    logger.info("creando usuario en el service")
-    
-    const idKeycloack=await createUser(usuario_A_Crear)
+    logger.info("creando usuario en el service");
 
-    const usuarioNuevo=new Usuario(idKeycloack,
-        usuario_A_Crear.nombre+" "+usuario_A_Crear.apellido,
-        usuario_A_Crear.email,
-        usuario_A_Crear.telefono,
-        usuario_A_Crear.rol,new Date())
+    const idKeycloack = await createUser(usuario_A_Crear);
 
-    await this.repositorioUsuario.save(usuarioNuevo)
+    const usuarioNuevo = new Usuario(
+      idKeycloack,
+      usuario_A_Crear.nombre + " " + usuario_A_Crear.apellido,
+      usuario_A_Crear.email,
+      usuario_A_Crear.telefono,
+      usuario_A_Crear.rol,
+      new Date(),
+    );
+
+    await this.repositorioUsuario.save(usuarioNuevo);
   }
-
-
 }

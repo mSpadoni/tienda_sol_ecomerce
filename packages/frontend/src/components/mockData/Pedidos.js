@@ -1,6 +1,6 @@
 // Un solo objeto exportado, no el array directo
 const store = {
-  Pedidos: []
+  Pedidos: [],
 };
 
 export default store;

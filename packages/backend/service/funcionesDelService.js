@@ -6,9 +6,9 @@ import ErrorEstadoNoValido from "../errors/errorEstadoNoValido.js";
 import { obtenerMoneda } from "../models/entities/Moneda.js";
 import ErrorMonedaNoPermitida from "../errors/errorMonedaNoPernitida.js";
 import { TipoUsuario } from "../models/entities/TipoUsuario.js";
-import axios from 'axios';
+import axios from "axios";
 import NoEsCompradorOVendedor from "../errors/errorDebeSerVendedorOComprador.js";
-import dotenv from 'dotenv';
+import dotenv from "dotenv";
 dotenv.config(); // carga las variables de .env
 
 const {
@@ -19,20 +19,17 @@ const {
   CLIENT_ID,
   CLIENT_SECRET,
   VENDEDOR_ID,
-  COMPRADOR_ID
+  COMPRADOR_ID,
 } = process.env;
 
-
-
-
-export function reducirStocks(items){
-  items.forEach(item=>item.producto.reducirStock(item.cantidad))
-  return items
+export function reducirStocks(items) {
+  items.forEach((item) => item.producto.reducirStock(item.cantidad));
+  return items;
 }
 
-export function aumentarStocks(items){
-  items.forEach(item=>item.producto.aumentarStock(item.cantidad))
-  return items
+export function aumentarStocks(items) {
+  items.forEach((item) => item.producto.aumentarStock(item.cantidad));
+  return items;
 }
 
 export function obtenerEstado(estado) {
@@ -73,22 +70,23 @@ export function obtenerDireccion(pedido) {
 }
 
 // Función para obtener token de admin
- const getAdminToken = async () => {
+const getAdminToken = async () => {
   const params = new URLSearchParams();
-  params.append('grant_type', 'password');
-  params.append('client_id', CLIENT_ID);
-  params.append('client_secret', CLIENT_SECRET); // <-- agregado
-  params.append('username', ADMIN_USERNAME);
-  params.append('password', ADMIN_PASSWORD);
-  
-  logger.info("obteniendo token")
+  params.append("grant_type", "password");
+  params.append("client_id", CLIENT_ID);
+  params.append("client_secret", CLIENT_SECRET); // <-- agregado
+  params.append("username", ADMIN_USERNAME);
+  params.append("password", ADMIN_PASSWORD);
+
+  logger.info("obteniendo token");
   const response = await axios.post(
     `${KEYCLOAK_BASE_URL}/realms/${REALM}/protocol/openid-connect/token`,
-    params,{
-    headers: { "Content-Type": "application/x-www-form-urlencoded" }
-  }
+    params,
+    {
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    },
   );
-logger.info("obteneido el token")
+  logger.info("obteneido el token");
   return response.data.access_token;
 };
 
@@ -99,14 +97,10 @@ const validarQueNoEsAdmin = (tipo) => {
   return tipo;
 };
 
-
-
 export const createUser = async (userData) => {
-  
   let rol;
-  
-    rol = validarQueNoEsAdmin(userData.rol); // validar que no sea admin
- 
+
+  rol = validarQueNoEsAdmin(userData.rol); // validar que no sea admin
 
   const token = await getAdminToken();
 
@@ -120,26 +114,26 @@ export const createUser = async (userData) => {
       enabled: true,
       credentials: [
         {
-          type: 'password',
+          type: "password",
           value: userData.password,
-          temporary: false
-        }
-      ]
+          temporary: false,
+        },
+      ],
     },
     {
       headers: {
         Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json'
-      }
-    }
+        "Content-Type": "application/json",
+      },
+    },
   );
-  logger.info("usuario creado en keycloak correctamente")
+  logger.info("usuario creado en keycloak correctamente");
 
   // Extraer ID de Keycloak desde el header Location
-  const locationHeader = createResponse.headers['location'];
-  const userId = locationHeader.split('/').pop();
+  const locationHeader = createResponse.headers["location"];
+  const userId = locationHeader.split("/").pop();
 
-  logger.info(`user id obtenido: ${userId}`)
+  logger.info(`user id obtenido: ${userId}`);
 
   // Asignar rol
   let rolId;
@@ -154,16 +148,15 @@ export const createUser = async (userData) => {
     [
       {
         id: rolId,
-        name: rol
-      }
+        name: rol,
+      },
     ],
     {
-      headers: { Authorization: `Bearer ${token}` }
-    }
+      headers: { Authorization: `Bearer ${token}` },
+    },
   );
 
-  logger.info("asignacion del rol correcta")
+  logger.info("asignacion del rol correcta");
 
   return userId; // Retornamos el ID de Keycloak
 };
-

@@ -32,9 +32,7 @@ export default class Producto {
   }
 
   reducirStock(cantidad) {
-
     this.stock -= cantidad;
-
   }
 
   aumentarStock(cantidad) {
@@ -52,7 +50,7 @@ export default class Producto {
   getTitulo() {
     return this.titulo;
   }
- 
+
   getDescripcion() {
     return this.descripcion;
   }

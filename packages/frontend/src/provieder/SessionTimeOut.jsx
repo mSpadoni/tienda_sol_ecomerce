@@ -13,10 +13,9 @@ export default function SessionTimeout({ timeout = 30 * 60 * 1000 }) {
 
     timerRef.current = setTimeout(() => {
       // solo hace logout si el usuario sigue logueado
-      
-        logout();
-        console.log("Sesión cerrada por inactividad");
-      
+
+      logout();
+      console.log("Sesión cerrada por inactividad");
     }, timeout);
   };
 

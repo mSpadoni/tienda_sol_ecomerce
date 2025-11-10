@@ -1,121 +1,183 @@
-/* CONTENEDOR GENERAL */
-/* CONTENEDOR GENERAL */
+
+/* ======== CONTENEDOR PRINCIPAL ======== */
+.notificaciones-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;       /* Ocupa toda la altura de la ventana */
+  width: 100%;
+  background-color: #FFE066; /* fondo solar cálido */
+  overflow-y: auto;
+  padding: clamp(1.2rem, 3vw, 2.5rem);
+  box-sizing: border-box;
+}
+
+
+/* ======== CONTENEDOR CENTRAL ======== */
 .notificaciones-container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
-  min-height: 100vh;
-  background: #f8fafc;
-  padding: 1rem;
+  width: min(100%, 950px);
+  min-height: 90vh;
+  background: #fffefb; /* blanco cálido */
+  border-radius: 16px;
+  padding: clamp(1.8rem, 3.2vw, 3rem);
   box-sizing: border-box;
+  box-shadow: 0 6px 20px rgba(255, 179, 0, 0.25);
 }
 
-/* FILTRO */
+/* ======== FILTRO ======== */
 .filtro-estado {
-  margin-bottom: 1.5rem;
+  margin-bottom: 2.2rem;
   width: 100%;
-  max-width: 650px;
   display: flex;
   justify-content: center;
+  gap: 1rem;
 }
 
-/* LISTA DE NOTIFICACIONES */
+.filtro-estado label,
+.filtro-estado select {
+  font-size: clamp(1rem, 2vw, 1.4rem);
+  font-weight: 700;
+  color: #1e1e1e;
+}
+
+.filtro-estado select {
+  padding: 0.6rem 1rem;
+  border-radius: 10px;
+  border: 2px solid #FF8C00;
+  background: #fff;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.filtro-estado select:hover {
+  background: #fff3cd;
+  border-color: #FF8C00;
+}
+
+/* ======== LISTA DE NOTIFICACIONES ======== */
 .notificaciones-lista {
   display: flex;
   flex-direction: column;
-  gap: clamp(0.5rem, 2vw, 1rem);
+  gap: clamp(1rem, 2vw, 1.5rem);
   width: 100%;
-  max-width: 650px;
 }
 
-/* TARJETA DE NOTIFICACIÓN */
+/* ======== TARJETA DE NOTIFICACIÓN ======== */
 .notificacion-card {
-  width: 100%;
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-  padding: clamp(0.5rem, 1vw, 1rem);
   display: flex;
-  flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  transition: all 0.2s ease;
+  background: #ffffff;
+  color: #1e1e1e;
+  border-radius: 14px;
+  padding: clamp(1rem, 2vw, 1.6rem);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
 .notificacion-card:hover {
-  box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
-/* ESTADO DE LECTURA */
+/* ======== ESTADO ======== */
 .estado_lectura {
-  font-weight: 600;
-  padding: clamp(0.2rem, 0.5vw, 0.5rem) clamp(0.4rem, 1vw, 0.6rem);
-  border-radius: 6px;
-  color: white;
+  font-weight: 800;
+  padding: 0.5rem 0.9rem;
+  border-radius: 8px;
+  color: #fff;
   text-align: center;
-  margin-right: clamp(0.5rem, 2vw, 1rem);
-  min-width: 60px;
-  flex-shrink: 0;
+  min-width: 85px;
   text-transform: uppercase;
-  font-size: clamp(0.7rem, 1.5vw, 0.9rem);
+  font-size: clamp(1rem, 1.8vw, 1.2rem);
+  flex-shrink: 0;
+  letter-spacing: 0.5px;
 }
 
 .estado_lectura.leida {
-  background-color: #4caf50;
-  box-shadow: 0 0 5px rgba(76, 175, 80, 0.7);
+  background: #ecfdf3;
+  color: #166534;
+  border: 4px solid #bbf7d0;
+  border-radius: 30px;
 }
 
 .estado_lectura.no-leida {
-  background-color: #e53935;
-  box-shadow: 0 0 5px rgba(229, 57, 53, 0.7);
+  background: #fef2f2;
+  color: #b91c1c;
+  border: 4px solid #fecaca;
+  border-radius: 30px;
 }
 
-/* CONTENIDO DE LA NOTIFICACIÓN */
+/* ======== CONTENIDO ======== */
 .contenido-notificacion {
   display: flex;
+  justify-content: space-between;
   align-items: center;
   flex: 1;
-  gap: clamp(0.3rem, 2vw, 0.6rem);
-  font-size: clamp(0.85rem, 2vw, 1rem);
-  color: #334155;
-  word-break: break-word;
+  gap: clamp(0.8rem, 2vw, 1rem);
+  margin-left: 1.2rem;
 }
 
-/* BOTONES */
+.mensaje {
+  flex: 1;
+  color: #0f172a;
+}
+
+.mensaje h4 {
+  margin: 0 0 0.4rem;
+  font-size: clamp(1.3rem, 2.2vw, 1.6rem);
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.mensaje p {
+  margin: 0;
+  font-size: clamp(1rem, 1.8vw, 1.2rem);
+  line-height: 1.6;
+  color: #334155;
+}
+
+/* ======== BOTONES ======== */
 .acciones {
-  margin-left: 1rem;
-  flex-shrink: 0;
+  display: flex;
+  justify-content: flex-end;
 }
 
 .btn-cambiar {
-  padding: clamp(0.3rem, 1vw, 0.5rem) clamp(0.6rem, 2vw, 0.8rem);
   border: none;
-  border-radius: 6px;
-  font-weight: 600;
-  color: white;
+  border-radius: 10px;
+  font-weight: 700;
+  padding: 0.7rem 1.4rem;
   cursor: pointer;
-  transition: all 0.2s ease;
-  font-size: clamp(0.75rem, 1.5vw, 0.85rem);
+  transition: all 0.25s ease;
+  font-size: clamp(0.9rem, 1.6vw, 1.1rem);
+  letter-spacing: 0.5px;
 }
 
 .btn-cambiar.verde {
-  background-color: #4caf50;
+  background: #0f172a !important;
+  color: #fff;
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.3);
 }
 
 .btn-cambiar.verde:hover {
-  background-color: #66bb6a;
+  background-color: #141b2e !important;
 }
 
 .btn-cambiar.rojo {
-  background-color: #e53935;
+  background: #0f172a !important;
+  color: #fff;
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.3);
 }
 
 .btn-cambiar.rojo:hover {
-  background-color: #ff5252;
+  background-color: #131b2e !important;
 }
 
-/* RESPONSIVE: CELULARES Y TABLETS */
+/* ======== RESPONSIVE ======== */
 @media (max-width: 900px) {
   .notificacion-card {
     flex-direction: column;
@@ -123,38 +185,58 @@
   }
 
   .contenido-notificacion {
-    margin-bottom: 0.5rem;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-left: 0;
+    width: 100%;
   }
 
   .acciones {
-    align-self: flex-end;
     width: 100%;
-    display: flex;
     justify-content: flex-end;
-  }
-
-  .estado_lectura {
-    margin-bottom: 0.3rem;
+    margin-top: 1rem;
   }
 }
 
-/* RESPONSIVE EXTREMO: CELULARES PEQUEÑOS / TABLETS VOLTEADAS */
-@media (max-width: 480px) {
-  .notificacion-card {
-    padding: clamp(0.4rem, 1vw, 0.6rem);
+@media (max-width: 600px) {
+  .notificaciones-container {
+    border-radius: 0;
+    min-height: 100vh;
+    padding: 1.2rem;
   }
 
-  .contenido-notificacion {
-    font-size: clamp(0.8rem, 2.5vw, 0.9rem);
+  .mensaje h4 {
+    font-size: 1.8rem;
   }
 
-  .estado_lectura {
-    font-size: clamp(0.65rem, 2.5vw, 0.75rem);
-    min-width: 50px;
+  .mensaje p {
+    font-size: 1.3rem;
   }
 
   .btn-cambiar {
-    font-size: clamp(0.7rem, 2vw, 0.8rem);
-    padding: clamp(0.25rem, 1vw, 0.4rem) clamp(0.5rem, 1.5vw, 0.7rem);
+    width: 100%;
+    text-align: center;
+    padding: 1rem;
+    font-size: 1.2rem;
+  }
+}
+
+/* ======== REDUCCIÓN EN ESCRITORIO GRANDE ======== */
+@media (min-width: 1200px) {
+  .mensaje h4 {
+    font-size: 1.4rem;
+  }
+  .mensaje p {
+    font-size: 1.1rem;
+  }
+  .estado_lectura {
+    font-size: 1rem;
+  }
+  .btn-cambiar {
+    font-size: 1rem;
+  }
+  .filtro-estado label,
+  .filtro-estado select {
+    font-size: 1.2rem;
   }
 }

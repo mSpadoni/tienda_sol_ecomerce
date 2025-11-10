@@ -1,11 +1,11 @@
 import jwt from "jsonwebtoken";
 import jwksClient from "jwks-rsa";
-import logger  from "../../logger/logger.js";
+import logger from "../../logger/logger.js";
 
 const client = jwksClient({
-  jwksUri: "http://localhost:8080/realms/ecomerce/protocol/openid-connect/certs",
+  jwksUri:
+    "http://localhost:8080/realms/ecomerce/protocol/openid-connect/certs",
 });
-
 
 async function getKey(kid) {
   return new Promise((resolve, reject) => {
@@ -24,8 +24,7 @@ export async function validarToken(req, res, next) {
 
     const token = authHeader.split(" ")[1];
     const decoded = jwt.decode(token, { complete: true });
-    if (!decoded)
-      return res.status(401).json({ mensaje: "Token inválido" });
+    if (!decoded) return res.status(401).json({ mensaje: "Token inválido" });
 
     const key = await getKey(decoded.header.kid);
 
@@ -38,7 +37,6 @@ export async function validarToken(req, res, next) {
   }
 }
 
-
 export function soloRol(rolRequerido) {
   return (req, res, next) => {
     const roles = req.user?.realm_access?.roles || [];
@@ -50,4 +48,3 @@ export function soloRol(rolRequerido) {
     next();
   };
 }
-

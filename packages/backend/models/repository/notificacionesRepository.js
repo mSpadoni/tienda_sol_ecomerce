@@ -4,7 +4,7 @@ export default class NotificacionesRepository {
   constructor() {
     this.model = NotificacionModel;
   }
-  
+
   async findById(id) {
     return await NotificacionModel.findById(id);
   }
@@ -15,7 +15,9 @@ export default class NotificacionesRepository {
       query.leida = filtros.leida;
     }
     const notificacionesUsuario = await NotificacionModel.find(query).lean();
-    return notificacionesUsuario.filter((notificacion)=>notificacion.usuario.idKeycloak===filtros.usuario);
+    return notificacionesUsuario.filter(
+      (notificacion) => notificacion.usuario.idKeycloak === filtros.usuario,
+    );
   }
 
   async marcarNotificacionComoLeida(id) {

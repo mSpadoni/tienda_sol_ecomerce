@@ -19,7 +19,14 @@ export default class ProductosService {
     };
   }
 
-  async getProductos(filtros, activo, page, limit, sort = "ventas", order = "desc") {
+  async getProductos(
+    filtros,
+    activo,
+    page,
+    limit,
+    sort = "ventas",
+    order = "desc",
+  ) {
     const numeroPagina = Math.max(Number(page), 1);
     const elementosXPagina = Math.min(Math.max(Number(limit), 1), 100);
 

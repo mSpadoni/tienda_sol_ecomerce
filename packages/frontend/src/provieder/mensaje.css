@@ -7,7 +7,7 @@
   color: #006400; /* Verde oscuro */
   padding: 12px 16px;
   border-radius: 6px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -34,13 +34,19 @@
   padding: 16px 24px;
   border-radius: 8px;
   font-weight: bold;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
   z-index: 9999;
   animation: fadeIn 0.3s;
 }
 
 /* Animación de entrada */
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(-10px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

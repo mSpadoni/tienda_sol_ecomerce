@@ -18,10 +18,11 @@ export const getProductos = async (page = 1, filtros = {}) => {
                 params.append(key, String(value));
             }
         });
-
+           
         const url = `${API_BASE_URL}/productos?${params.toString()}`;
         const response = await axios.get(url, {headers: {'Cache-Control': 'no-cache'}});
         return response.data;
+
     } catch (error) {
         console.error("Error obteniendo los productos:", error);
         throw error;
@@ -32,6 +33,7 @@ export const getProductoById = async (id) => {
     try {
         const response = await axios.get(`${API_BASE_URL}/productos/${id}`, { headers: { 'Cache-Control': 'no-cache' } });
         return response.data;
+        
     } catch (error) {
         console.error("Error obteniendo el producto:", error);
         throw error;

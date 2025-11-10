@@ -3,7 +3,7 @@ import {
   pedidoPatchSchema,
   pedidoSchema,
   objectIdSchema,
-  validadIdkecloark
+  validadIdkecloark,
 } from "./validacionesZOD.js";
 import { adaptarPedidoToJson, adaptarNotificacion } from "./adaptadoresJSON.js";
 
@@ -16,11 +16,15 @@ export default class ControllerPedidos {
   async crear(req, res) {
     const resultUsuario = validadIdkecloark.parse(req.user.sub);
     const resultBody = pedidoSchema.parse(req.body);
-    const nuevoPedido = await this.servicePedido.crear(resultBody,resultUsuario);
- 
-     logger.http(`Pedido creado`);
-    const notificacion = await this.serviceNotificaciones.crearNotificacion(nuevoPedido);
-     logger.http(`Notificacion creada`);
+    const nuevoPedido = await this.servicePedido.crear(
+      resultBody,
+      resultUsuario,
+    );
+
+    logger.http(`Pedido creado`);
+    const notificacion =
+      await this.serviceNotificaciones.crearNotificacion(nuevoPedido);
+    logger.http(`Notificacion creada`);
 
     const JSONresponse = {
       pedido: adaptarPedidoToJson(nuevoPedido),
@@ -36,8 +40,9 @@ export default class ControllerPedidos {
       `Buscando pedidos del usuario con id: ${resultUsuario} en el controlador`,
     );
 
-    const pedidos = await this.servicePedido.findPedidosByUsuariosId(resultUsuario);
-     
+    const pedidos =
+      await this.servicePedido.findPedidosByUsuariosId(resultUsuario);
+
     logger.info(`Pedidos encontrados`);
 
     const pedidosAPTJ = pedidos.map((pedido) => adaptarPedidoToJson(pedido));
@@ -57,7 +62,7 @@ export default class ControllerPedidos {
     const pedidosActualizados = await this.servicePedido.actualizar(
       usuarioId,
       pedidoID,
-      resultBody
+      resultBody,
     );
 
     const notificacion =

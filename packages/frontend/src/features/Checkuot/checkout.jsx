@@ -1,226 +1,227 @@
-import React, { useState } from 'react';
-import { Card, TextField, Button } from '@mui/material';
+import React, { useEffect, useState } from "react";
+import { Card, TextField, Button, LinearProgress } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { useCarrito } from '../../provieder/carritoProvider.jsx';
-import { useCurrency } from '../../provieder/CurrencyProvider.jsx';
-import { useMensajes } from '../../provieder/mensajeDeExito.jsx';
+import { useCarrito } from "../../provieder/carritoProvider.jsx";
+import { useCurrency } from "../../provieder/CurrencyProvider.jsx";
+import { useMensajes } from "../../provieder/mensajeDeExito.jsx";
 import Store from "../../components/mockData/Pedidos.js";
-import './checkout.css';
-import { CURRENCIES } from '../../provieder/currencies.js';
-import { useForm} from "../../provieder/fromHook.js"
+import "./checkout.css";
+import { CURRENCIES } from "../../provieder/currencies.js";
+import { useForm } from "../../provieder/formHook.js";
 import { useVisible } from "../../provieder/visibleHook.jsx";
 
-
 const Checkout = () => {
-  const inicializarCampo = (requerido = true) => ({ valor: '', requerido });
   const navigate = useNavigate();
-  const { carrito, setCarrito, totalPrecio , limpiarCarrito} = useCarrito();
+  const { carrito, limpiarCarrito } = useCarrito();
   const { currency } = useCurrency();
-  const { setMensajeExito} = useMensajes();
-  const {ponerVisible}=useVisible()
+  const { setMensajeExito } = useMensajes();
+  const { ponerVisible, ponerInvisible } = useVisible();
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 600);
+  const [step, setStep] = useState(0);
 
-  const cancelarPedido=()=>{
-    limpiarCarrito()
-    ponerVisible()
-    navigate("/")
-  }
-  const inicializarCampos = () => ({
-    calle: inicializarCampo(),
-    altura: inicializarCampo(),
-    piso: inicializarCampo(false),
-    departamento: inicializarCampo(false),
-    codigoPostal: inicializarCampo(),
-    ciudad: inicializarCampo(),
-    provincia: inicializarCampo(),
-    pais: inicializarCampo(),
-    lat: inicializarCampo(false),
-    lon: inicializarCampo(false),
-  });
+  useEffect(() => {
+    ponerInvisible();
+    const handleResize = () => setIsMobile(window.innerWidth <= 600);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
-  const [campos, setCampos] = useState(inicializarCampos());
-
-  const camposCompletos = Object.values(campos)
-    .filter(campo => campo.requerido)
-    .every(campo => campo.valor.trim() !== '');
-
-  const setValorDe = (campo) => (event) => {
-    setCampos(prev => ({
-      ...prev,
-      [campo]: { ...prev[campo], valor: event.target.value }
-    }));
+  const initialValues = {
+    calle: "",
+    altura: "",
+    piso: "",
+    departamento: "",
+    codigoPostal: "",
+    ciudad: "",
+    provincia: "",
+    pais: "",
+    lat: "",
+    lon: "",
   };
 
-  let id = 1;
-
-  const handleGuardar = () => {
-      Store.Pedidos.push({
-        id: id,
-        usuario: 1,
-        vendedor: 2,
-        items: carrito.map(item => ({
-          producto: item.producto,
-          cantidad: item.cantidad,
-        })),
-        direccionEntrega: {
-          calle: campos.calle.valor,
-          altura: campos.altura.valor,
-          piso: campos.piso.valor,
-          departamento: campos.departamento.valor,
-          codigoPostal: campos.codigoPostal.valor,
-          ciudad: campos.ciudad.valor,
-          provincia: campos.provincia.valor,
-          pais: campos.pais.valor,
-          lat: campos.lat.valor,
-          long: campos.lon.valor,
-        },
-        moneda: currency,
-        estado: 'Pendiente',
-        total: totalPrecio(),
-        Fecha: new Date(),
-      });
-
-      limpiarCarrito()
-      id++;
-      setMensajeExito("Compra realizada con éxito");
-      ponerVisible()
-      navigate("/");
+  const validate = (values) => {
+    const errors = {};
+    Object.keys(values).forEach((key) => {
+      if (
+        ["calle", "altura", "codigoPostal", "ciudad", "provincia", "pais"].includes(
+          key
+        ) &&
+        !values[key].trim()
+      ) {
+        errors[key] = "Este campo es obligatorio";
+      }
+    });
+    return errors;
   };
 
-  const obtenerTotalFormateado = (carrito, currency) => {
-    if (!carrito || carrito.length === 0) return `${CURRENCIES[currency].symbol}0`;
-
+  const onSubmit = (values) => {
     const total = carrito.reduce(
       (acc, item) => acc + item.producto.precio * item.cantidad,
       0
     );
+    const id = Store.Pedidos.length + 1;
 
-    return `${CURRENCIES[currency].symbol}${total.toLocaleString(CURRENCIES[currency].locale)}`;
+    Store.Pedidos.push({
+      id,
+      usuario: 1,
+      vendedor: 1,
+      items: carrito.map((item) => ({
+        producto: item.producto,
+        cantidad: item.cantidad,
+      })),
+      direccionEntrega: {
+        calle: values.calle,
+        altura: values.altura,
+        piso: values.piso,
+        departamento: values.departamento,
+        codigoPostal: values.codigoPostal,
+        ciudad: values.ciudad,
+        provincia: values.provincia,
+        pais: values.pais,
+        lat: values.lat,
+        long: values.lon,
+      },
+      moneda: currency,
+      estado: "Pendiente",
+      total,
+      Fecha: new Date(),
+    });
+
+    limpiarCarrito();
+    setMensajeExito("Compra realizada con éxito");
+    ponerVisible();
+    navigate("/");
   };
+
+  const {
+    values,
+    handleChange,
+    handleBlur,
+    handleSubmit,
+    errors,
+    showError,
+  } = useForm(initialValues, onSubmit, validate);
+
+  const fieldKeys = Object.keys(initialValues);
+
+  const handleNext = () => {
+    if (!values[fieldKeys[step]].trim()) return; // no avanzar si vacío
+    setStep(step + 1);
+  };
+
+  const handleBack = () => {
+    if (step === 0 && isMobile) {
+      ponerVisible();
+      navigate(-1);
+    } else if (step > 0) {
+      setStep(step - 1);
+    }
+  };
+
+  const totalFormateado = () => {
+    const total = carrito.reduce(
+      (acc, item) => acc + item.producto.precio * item.cantidad,
+      0
+    );
+    return `${CURRENCIES[currency].symbol}${total.toLocaleString(
+      CURRENCIES[currency].locale
+    )}`;
+  };
+
+  const progress = Math.round(((step + 1) / fieldKeys.length) * 100);
 
   return (
     <div className="root">
       <Card className="form-container">
+        {isMobile && carrito.length > 0 && (
+          <div className="mobile-total">
+            <span>Total: </span>
+            <strong>{totalFormateado()}</strong>
+          </div>
+        )}
+
         <div className="checkout-form">
           <h3>Datos de entrega</h3>
-          <form className="form-grid">
-            <div className="input-wrapper">
-              <TextField
-                label="Calle"
-                required
-                fullWidth
-                value={campos.calle.valor}
-                onChange={setValorDe('calle')}
-              />
-            </div>
-
-            <div className="input-wrapper">
-              <TextField
-                label="Altura"
-                value={campos.altura.valor}
-                onChange={setValorDe('altura')}
-              />
-            </div>
-
-            <div className="input-wrapper">
-              <TextField
-                label="Piso"
-                value={campos.piso.valor}
-                onChange={setValorDe('piso')}
-              />
-            </div>
-
-            <div className="input-wrapper">
-              <TextField
-                label="Departamento"
-                value={campos.departamento.valor}
-                onChange={setValorDe('departamento')}
-              />
-            </div>
-
-            <div className="input-wrapper">
-              <TextField
-                label="Código Postal"
-                required
-                value={campos.codigoPostal.valor}
-                onChange={setValorDe('codigoPostal')}
-              />
-            </div>
-
-            <div className="input-wrapper">
-              <TextField
-                label="Ciudad"
-                required
-                value={campos.ciudad.valor}
-                onChange={setValorDe('ciudad')}
-              />
-            </div>
-
-            <div className="input-wrapper">
-              <TextField
-                label="Provincia"
-                required
-                value={campos.provincia.valor}
-                onChange={setValorDe('provincia')}
-              />
-            </div>
-
-            <div className="input-wrapper">
-              <TextField  
-                label="País"
-                required
-                value={campos.pais.valor}
-                onChange={setValorDe('pais')}
-              />
-            </div>
-
-            <div className="input-wrapper">
-              <TextField
-                label="Latitud"
-                value={campos.lat.valor}
-                onChange={setValorDe('lat')}
-              />
-            </div>
-
-            <div className="input-wrapper">
-              <TextField
-                label="Longitud"
-                value={campos.lon.valor}
-                onChange={setValorDe('lon')}
-              />
-            </div>
+          {isMobile && <LinearProgress variant="determinate" value={progress} />}
+          <form className="form-grid" onSubmit={handleSubmit}>
+            {fieldKeys.map((key, index) => {
+              if (isMobile && index !== step) return null; // mostrar solo paso actual
+              return (
+                <div className="input-wrapper" key={key}>
+                  <TextField
+                    label={key.charAt(0).toUpperCase() + key.slice(1)}
+                    name={key}
+                    value={values[key]}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    fullWidth
+                    required={["calle", "altura", "codigoPostal", "ciudad", "provincia", "pais"].includes(key)}
+                    error={!!showError(key)}
+                    helperText={showError(key)}
+                  />
+                </div>
+              );
+            })}
 
             <div className="actions">
-              <Button onClick={() => cancelarPedido()}>Cancelar</Button>
-              <Button 
-                variant="contained" 
-                disabled={!camposCompletos}
-                onClick={handleGuardar}
-              >
-                Comprar
-              </Button>
+              {isMobile && (
+                <Button onClick={handleBack}>Atrás</Button>
+              )}
+              {isMobile && step < fieldKeys.length - 1 && (
+                <Button
+                  variant="contained"
+                  onClick={handleNext}
+                  disabled={!values[fieldKeys[step]].trim()}
+                >
+                  Siguiente
+                </Button>
+              )}
+              {(!isMobile || step === fieldKeys.length - 1) && (
+                <>
+                  <Button onClick={() => { limpiarCarrito(); ponerVisible(); navigate("/"); }}>
+                    Cancelar
+                  </Button>
+                  <Button
+                    variant="contained"
+                    type="submit"
+                    disabled={
+                      !["calle","altura","codigoPostal","ciudad","provincia","pais"]
+                        .every((key) => values[key].trim() !== "")
+                    }
+                  >
+                    Comprar
+                  </Button>
+                </>
+              )}
             </div>
           </form>
         </div>
 
-        <div className="checkout-summary">
-          <h4>Resumen del carrito</h4>
-          <div className="items-list">
-            {carrito.map((item, index) => (
-              <div className="item-summary" key={index}>
-                <span>{item.producto.titulo} x {item.cantidad}</span>
-                <span>
-                  {CURRENCIES[currency].symbol}
-                  {(item.producto.precio * item.cantidad).toLocaleString(CURRENCIES[currency].locale)}
-                </span>
-              </div>
-            ))}
+        {!isMobile && (
+          <div className="checkout-summary">
+            <h4>Resumen del carrito</h4>
+            <div className="items-list">
+              {carrito.map((item, index) => (
+                <div className="item-summary" key={index}>
+                  <span>
+                    {item.producto.titulo} x {item.cantidad}
+                  </span>
+                  <span>
+                    {CURRENCIES[currency].symbol}
+                    {(item.producto.precio * item.cantidad).toLocaleString(
+                      CURRENCIES[currency].locale
+                    )}
+                  </span>
+                </div>
+              ))}
+            </div>
+            <hr />
+            <div className="item-summary" style={{ fontWeight: "bold" }}>
+              <span>Total</span>
+              <span>{totalFormateado()}</span>
+            </div>
           </div>
-          <hr />
-          <div className="item-summary" style={{ fontWeight: 'bold' }}>
-            <span>Total</span>
-            <span>{obtenerTotalFormateado(carrito, currency)}</span>
-          </div>
-        </div>
+        )}
       </Card>
     </div>
   );

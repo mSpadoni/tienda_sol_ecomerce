@@ -17,7 +17,7 @@ export default class NotificacionesController {
   }
 
   async getNotificaciones(req, res) {
-    const { leida} = req.query;
+    const { leida } = req.query;
     let filtros = {};
     if (leida !== undefined) {
       if (leida === "true") {
@@ -30,8 +30,8 @@ export default class NotificacionesController {
           .send("El parámetro 'leida' debe ser 'true' o 'false'");
       }
     }
-    
-    filtros.usuario=req.user.sub
+
+    filtros.usuario = req.user.sub;
 
     const notificaciones =
       await this.notificacionesService.getNotificaciones(filtros);
@@ -62,5 +62,4 @@ export default class NotificacionesController {
     }
     return { success: true, data: resultId.data };
   }
-  
 }

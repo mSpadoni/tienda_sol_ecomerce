@@ -1,18 +1,18 @@
 .layout {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh; /* Asegura que ocupe al menos toda la altura de la ventana */
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* Asegura que ocupe al menos toda la altura de la ventana */
 }
 
 .main-content {
-    flex: 1; /* Hace que el contenido principal ocupe todo el espacio disponible */
-    padding: 20px;
-    /* Asegura que el contenido no toque los bordes en móviles */
-    padding-left: max(20px, env(safe-area-inset-left));
-    padding-right: max(20px, env(safe-area-inset-right));
+  flex: 1; /* Hace que el contenido principal ocupe todo el espacio disponible */
+  padding: 20px;
+  /* Asegura que el contenido no toque los bordes en móviles */
+  padding-left: max(20px, env(safe-area-inset-left));
+  padding-right: max(20px, env(safe-area-inset-right));
 }
 
 /* Asegura que el footer se mantenga en la parte inferior */
 .layout > footer {
-    margin-top: auto;
+  margin-top: auto;
 }

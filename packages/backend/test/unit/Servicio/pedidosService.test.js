@@ -18,7 +18,9 @@ jest.unstable_mockModule("../../../service/funcionesDelService.js", () => ({
 }));
 
 const funciones = await import("../../../service/funcionesDelService.js");
-const { default: pedidoService } = await import("../../../service/pedidoService.js");
+const { default: pedidoService } = await import(
+  "../../../service/pedidoService.js"
+);
 const { default: Pedido } = await import("../../../models/entities/Pedido.js");
 
 describe("pedidoService (tests adaptados)", () => {
@@ -27,8 +29,18 @@ describe("pedidoService (tests adaptados)", () => {
   let mockRepoProducto;
   let service;
 
-  const usuarioMock = { id: 1, _id: "u-1", nombre: "Juan", tipo: TipoUsuario.COMPRADOR };
-  const vendedorMock = { id: 2, _id: "u-2", nombre: "Vendedor", tipo: TipoUsuario.VENDEDOR };
+  const usuarioMock = {
+    id: 1,
+    _id: "u-1",
+    nombre: "Juan",
+    tipo: TipoUsuario.COMPRADOR,
+  };
+  const vendedorMock = {
+    id: 2,
+    _id: "u-2",
+    nombre: "Vendedor",
+    tipo: TipoUsuario.VENDEDOR,
+  };
   const productoMock = {
     _id: "p-1",
     precio: 1000,
@@ -41,7 +53,13 @@ describe("pedidoService (tests adaptados)", () => {
   const item2 = new ItemPedido(productoMock, 1, productoMock.precio);
 
   const pedidoBase = () =>
-    new Pedido(usuarioMock, [item, item2], "Peso Argentino", { calle: "Falsa 123", altura: "100" }, new Date());
+    new Pedido(
+      usuarioMock,
+      [item, item2],
+      "Peso Argentino",
+      { calle: "Falsa 123", altura: "100" },
+      new Date(),
+    );
 
   beforeEach(() => {
     mockRepoPedido = {
@@ -61,7 +79,11 @@ describe("pedidoService (tests adaptados)", () => {
 
     jest.clearAllMocks();
 
-    service = new pedidoService(mockRepoPedido, mockRepoUsuario, mockRepoProducto);
+    service = new pedidoService(
+      mockRepoPedido,
+      mockRepoUsuario,
+      mockRepoProducto,
+    );
   });
 
   test("crear debe generar y guardar un nuevo pedido correctamente (usar pedidoBase())", async () => {
@@ -75,10 +97,16 @@ describe("pedidoService (tests adaptados)", () => {
     jest.spyOn(service, "obtenerItems").mockResolvedValue([item, item2]);
     jest.spyOn(service, "actualizarStock").mockResolvedValue([item, item2]);
 
-    mockRepoPedido.save.mockImplementation(async (p) => ({ ...p, id: "saved-id" }));
+    mockRepoPedido.save.mockImplementation(async (p) => ({
+      ...p,
+      id: "saved-id",
+    }));
 
     const pedidoData = {
-      items: [{ productoId: productoMock._id, cantidad: 2 }, { productoId: productoMock._id, cantidad: 1 }],
+      items: [
+        { productoId: productoMock._id, cantidad: 2 },
+        { productoId: productoMock._id, cantidad: 1 },
+      ],
       moneda: "Peso Argentino",
       direccionEntrega: pedido.direccionEntrega,
     };
@@ -89,7 +117,10 @@ describe("pedidoService (tests adaptados)", () => {
     expect(service.obtenerItems).toHaveBeenCalledWith(pedidoData);
     expect(funciones.monedaValida).toHaveBeenCalledWith(pedidoData.moneda);
     expect(funciones.validarStock).toHaveBeenCalledWith([item, item2]);
-    expect(service.actualizarStock).toHaveBeenCalledWith([item, item2], expect.anything());
+    expect(service.actualizarStock).toHaveBeenCalledWith(
+      [item, item2],
+      expect.anything(),
+    );
     expect(mockRepoPedido.save).toHaveBeenCalled();
     expect(resultado).toBeDefined();
     expect(resultado.id).toBe("saved-id");
@@ -104,19 +135,25 @@ describe("pedidoService (tests adaptados)", () => {
     const resultado = await service.findPedidosByUsuariosId(usuarioMock.id);
 
     expect(mockRepoUsuario.obtnerId).toHaveBeenCalledWith(usuarioMock.id);
-    expect(mockRepoPedido.findByUsuarioId).toHaveBeenCalledWith({ _id: usuarioMock._id });
+    expect(mockRepoPedido.findByUsuarioId).toHaveBeenCalledWith({
+      _id: usuarioMock._id,
+    });
     expect(resultado).toEqual([pedido]);
   });
 
   test("findPedidosByUsuariosId debe lanzar ErrorNoEncontrado si usuario no existe o no hay pedidos", async () => {
     // usuario no existe
     mockRepoUsuario.obtnerId.mockResolvedValue(null);
-    await expect(service.findPedidosByUsuariosId(999)).rejects.toBeInstanceOf(ErrorNoEncontrado);
+    await expect(service.findPedidosByUsuariosId(999)).rejects.toBeInstanceOf(
+      ErrorNoEncontrado,
+    );
 
     // usuario existe pero no hay pedidos
     mockRepoUsuario.obtnerId.mockResolvedValue({ _id: usuarioMock._id });
     mockRepoPedido.findByUsuarioId.mockResolvedValue([]);
-    await expect(service.findPedidosByUsuariosId(usuarioMock.id)).rejects.toBeInstanceOf(ErrorNoEncontrado);
+    await expect(
+      service.findPedidosByUsuariosId(usuarioMock.id),
+    ).rejects.toBeInstanceOf(ErrorNoEncontrado);
   });
 
   test("actualizar debe modificar un pedido existente (usar pedidoBase())", async () => {
@@ -131,7 +168,11 @@ describe("pedidoService (tests adaptados)", () => {
 
     const pedidoData = { estado: EstadoPedido.ACEPTADO, motivo: "OK" };
 
-    const actualizado = await service.actualizar(vendedorMock.id, pedido.id, pedidoData);
+    const actualizado = await service.actualizar(
+      vendedorMock.id,
+      pedido.id,
+      pedidoData,
+    );
 
     expect(service.obtenerPedido).toHaveBeenCalledWith(pedido.id);
     expect(service.obtenerUsuario).toHaveBeenCalledWith(vendedorMock.id);
@@ -166,9 +207,14 @@ describe("pedidoService (tests adaptados)", () => {
       throw new Error("Stock insuficiente");
     });
 
-    const pedidoData = { items: [{ productoId: productoMock._id, cantidad: 2 }], moneda: "Peso Argentino" };
+    const pedidoData = {
+      items: [{ productoId: productoMock._id, cantidad: 2 }],
+      moneda: "Peso Argentino",
+    };
 
-    await expect(service.crear(pedidoData, usuarioMock.id)).rejects.toThrow("Stock insuficiente");
+    await expect(service.crear(pedidoData, usuarioMock.id)).rejects.toThrow(
+      "Stock insuficiente",
+    );
   });
 
   test("actualizar debe lanzar error si el pedido no existe", async () => {
@@ -176,7 +222,9 @@ describe("pedidoService (tests adaptados)", () => {
       throw new Error("Pedido no encontrado");
     });
 
-    await expect(service.actualizar(usuarioMock.id, 99, {})).rejects.toThrow("Pedido no encontrado");
+    await expect(service.actualizar(usuarioMock.id, 99, {})).rejects.toThrow(
+      "Pedido no encontrado",
+    );
   });
 
   test("actualizar debe lanzar error si el estado es inválido", async () => {
@@ -189,8 +237,8 @@ describe("pedidoService (tests adaptados)", () => {
       throw new Error("Estado inválido");
     });
 
-    await expect(service.actualizar(usuarioMock.id, pedido.id, { estado: "DESCONOCIDO" })).rejects.toThrow(
-      "Estado inválido",
-    );
+    await expect(
+      service.actualizar(usuarioMock.id, pedido.id, { estado: "DESCONOCIDO" }),
+    ).rejects.toThrow("Estado inválido");
   });
 });

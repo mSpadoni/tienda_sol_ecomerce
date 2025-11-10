@@ -9,97 +9,116 @@ import "./pedido.css";
 import { Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
-export default function ListaPedidos({ funcionDeFiltrado, estadoACambiar, mensaje, existoMessage,ruta }) {
+export default function ListaPedidos({
+  funcionDeFiltrado,
+  estadoACambiar,
+  mensaje,
+  existoMessage,
+  ruta,
+}) {
   const [openId, setOpenId] = useState(null);
   const [pedidos, setPedidos] = useState([]);
   const { currency } = useCurrency();
   const { setMensajeExito } = useMensajes();
-  const navigate=useNavigate()
+  const navigate = useNavigate();
   useEffect(() => {
     setPedidos(funcionDeFiltrado(Store.Pedidos));
   }, [funcionDeFiltrado]);
-
+  
   const cambiarEstado = (idPedido) => {
-    // Buscar el pedido dentro del store
-    const pedidoEncontrado=Store.Pedidos.find(p => p.id === idPedido);
-    const pedidosFiltrados = Store.Pedidos.filter(p => p.id !== idPedido);
+  setPedidos((prevPedidos) =>
+    prevPedidos.map((pedido) =>
+      pedido.id === idPedido ? { ...pedido, estado: estadoACambiar } : pedido
+    )
+  );
+  setMensajeExito(existoMessage);
+  navigate(ruta);
+};
 
-    if (pedidoEncontrado) {
-      pedidoEncontrado.estado = estadoACambiar;
-      setMensajeExito(existoMessage);
 
-      // Actualizar lista local para reflejar el cambio visualmente
-      setPedidos([...pedidosFiltrados,pedidoEncontrado]);
-      navigate(ruta)
-    }
-  };
+ 
 
   if (pedidos.length === 0) {
     return <div className="no-pedidos">{mensaje}</div>;
   }
 
   return (
-    
     <div className="lista-pedidos-container">
-      <SuccessSnackbar/>
-      {pedidos.map((pedido) => (
-        <div key={pedido.id} className="pedido-card">
-          <div className="pedido-header">
-            <div className="pedido-total">
-              Total: {`${CURRENCIES[pedido.moneda].symbol} ${pedido.total.toLocaleString(CURRENCIES[pedido.moneda].locale)} `}
-            </div>
-          </div>
-
-          <div className="pedido-body">
-            <div className="pedido-items">
-              <h5>Productos:</h5>
-              <ul>
-                {pedido.items.map((item) => (
-                  <li key={item.producto.id}>
-                    {item.producto.titulo} - Cantidad: {item.cantidad}
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <div className="pedido-actions">
-              <button
-                onClick={() => setOpenId(openId === pedido.id ? null : pedido.id)}
-                className="btn-ver-detalles"
-              >
-                {openId === pedido.id ? "Ocultar info" : "Ver detalles"}
-              </button>
-
-              <Button
-                onClick={() => cambiarEstado(pedido.id)}
-                disabled={pedido.estado === estadoACambiar}
-                className="btn-cambiar-estado"
-              >
-                {botonesNombreSegunEstado[estadoACambiar]}
-              </Button>
-            </div>
-          </div>
-
-          {openId === pedido.id && (
-            <div className="pedido-detalles">
-              <p>
-                <strong>Dirección:</strong>{" "}
-                {`${pedido.direccionEntrega.calle}, ${pedido.direccionEntrega.altura} ${
-                  pedido.direccionEntrega.piso ? "Piso " + pedido.direccionEntrega.piso : ""
-                } ${pedido.direccionEntrega.departamento || ""}, ${pedido.direccionEntrega.ciudad}`}
-              </p>
-              <p>
-                <strong>Estado:</strong> {pedido.estado}
-              </p>
-              <p>
-                <strong>Fecha:</strong>{" "}
-                {pedido.Fecha.toLocaleDateString(CURRENCIES[currency].locale)}
-              </p>
-            </div>
-          )}
+  <SuccessSnackbar />
+  {pedidos.map((pedido) => (
+    <div key={pedido.id} className="pedido-card">
+      <div className="pedido-header">
+        <div className="pedido-total">
+          Total:{" "}
+          {`${CURRENCIES[pedido.moneda].symbol} ${pedido.total.toLocaleString(
+            CURRENCIES[pedido.moneda].locale
+          )} `}
         </div>
-      ))}
+      </div>
+
+      <div className="pedido-body">
+        <div className="pedido-items">
+          <h5>Productos:</h5>
+          <ul>
+            {pedido.items.map((item) => (
+              <li key={item.producto._id}>
+                {item.producto.titulo} - Cantidad: {item.cantidad}
+              </li>
+            ))}
+          </ul>
+
+          {/* Botón ver detalles moderno */}
+          <p
+            className="btn-ver-detalles-text"
+            onClick={() =>
+              setOpenId(openId === pedido.id ? null : pedido.id)
+            }
+          >
+            {openId === pedido.id ? "Ocultar info" : "Ver detalles"}{" "}
+            <span
+              className={`flecha ${openId === pedido.id ? "abierta" : ""}`}
+            >
+              ▼
+            </span>
+          </p>
+        </div>
+
+        <div className="pedido-actions">
+          <Button
+            onClick={() => cambiarEstado(pedido.id)}
+            disabled={pedido.estado === estadoACambiar}
+            className="btn-cambiar-estado"
+          >
+            {botonesNombreSegunEstado[estadoACambiar]}
+          </Button>
+        </div>
+      </div>
+
+      {openId === pedido.id && (
+        <div className="pedido-detalles">
+          <p>
+            <strong>Dirección:</strong>{" "}
+            {`${pedido.direccionEntrega.calle}, ${pedido.direccionEntrega.altura} ${
+              pedido.direccionEntrega.piso
+                ? "Piso " + pedido.direccionEntrega.piso
+                : ""
+            } ${pedido.direccionEntrega.departamento || ""}, ${
+              pedido.direccionEntrega.ciudad
+            }`}
+          </p>
+          <p>
+            <strong>Estado:</strong> {pedido.estado}
+          </p>
+          <p>
+            <strong>Fecha:</strong>{" "}
+            {pedido.Fecha.toLocaleDateString(CURRENCIES[currency].locale)}
+          </p>
+        </div>
+      )}
     </div>
+  ))}
+</div>
+
   );
 }
 

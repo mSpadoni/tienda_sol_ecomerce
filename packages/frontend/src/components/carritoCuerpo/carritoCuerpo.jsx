@@ -1,4 +1,4 @@
-import React, {useEffect,useState} from "react";
+import React, { useEffect, useState } from "react";
 import { useCarrito } from "../../provieder/carritoProvider";
 import CarritoItem from "./CarritoItem.jsx";
 import { useNavigate } from "react-router-dom";
@@ -7,36 +7,31 @@ import { Button } from "react-bootstrap";
 import PropTypes from "prop-types";
 import { useVisible } from "../../provieder/visibleHook.jsx";
 
-const CarritoCuerpo = ({onClose}) => {
-  const { carrito, carritoVacio,totalPrecio } = useCarrito();
+const CarritoCuerpo = ({ onClose }) => {
+  const { carrito, carritoVacio, total } = useCarrito();
   const navigate = useNavigate();
-  const [total,setTotal]=useState(0)
-  const {ponerInvisible}=useVisible()
-  
-  const comprar=()=>{
-    onClose()
-    navigate("/checkout")
-    ponerInvisible()
-  }
-  
-  useEffect(() => {
-  setTotal(totalPrecio());
-  if (carritoVacio()) {
-    onClose();
-  }
-}, [carrito.length, totalPrecio, carritoVacio, onClose]);
+  const { ponerInvisible } = useVisible();
 
+  const comprar = () => {
+    onClose();
+    navigate("/checkout");
+    ponerInvisible();
+  };
+
+  useEffect(() => {
+    if (carritoVacio()) {
+      onClose();
+    }
+
+  }, [carrito.length, total, carritoVacio, onClose]);
 
   return (
     <div className="rappi-carrito">
       <h2>Carrito de compras</h2>
 
       <div className="rappi-items-container">
-        {carrito.map(item => (
-          <CarritoItem
-            key={item.producto.id}
-            item={item}
-          />
+        {carrito.map((item) => (
+          <CarritoItem key={item.producto.id} item={item} />
         ))}
       </div>
 
@@ -45,7 +40,11 @@ const CarritoCuerpo = ({onClose}) => {
           <strong>Total: ${total.toLocaleString("es-AR")}</strong>
         </div>
         <div className="rappi-boton-comprar-container">
-          <Button className="rappi-comprar-button" disable={()=>carrito.length===0} onClick={comprar}>
+          <Button
+            className="rappi-comprar-button"
+            disable={() => carrito.length === 0}
+            onClick={comprar}
+          >
             Comprar
           </Button>
         </div>

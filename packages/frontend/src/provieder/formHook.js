@@ -12,15 +12,12 @@ export function useForm(initialValues, onSubmit, validate) {
     const newValues = { ...values, [name]: value };
     setValues(newValues);
 
-    // Marca como touched en el primer cambio
     setTouched((prev) => ({
       ...prev,
       [name]: true,
     }));
 
-    if (validate) {
-      setErrors(validate(newValues));
-    }
+    if (validate) setErrors(validate(newValues));
   };
 
   const handleBlur = (e) => {
@@ -29,19 +26,20 @@ export function useForm(initialValues, onSubmit, validate) {
       ...prev,
       [name]: true,
     }));
-    if (validate) {
-      setErrors(validate(values));
-    }
+    if (validate) setErrors(validate(values));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setTriedSubmit(true);
+
     const validationErrors = validate ? validate(values) : {};
     setErrors(validationErrors);
+
     setTouched(
       Object.keys(values).reduce((acc, key) => ({ ...acc, [key]: true }), {})
     );
+
     if (Object.keys(validationErrors).length === 0) {
       setIsSubmitting(true);
       await onSubmit(values);
@@ -58,7 +56,6 @@ export function useForm(initialValues, onSubmit, validate) {
     setTriedSubmit(false);
   };
 
-  // Mostrar errores si el campo fue tocado o si intentaste guardar
   const showError = (name) =>
     (touched[name] || triedSubmit) && errors[name] ? errors[name] : '';
 

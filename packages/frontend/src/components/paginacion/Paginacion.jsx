@@ -1,6 +1,6 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import './Paginacion.css';
+import React from "react";
+import PropTypes from "prop-types";
+import "./Paginacion.css";
 
 const Paginacion = ({ currentPage, totalPaginas, onPageChange }) => {
   return (
@@ -9,7 +9,7 @@ const Paginacion = ({ currentPage, totalPaginas, onPageChange }) => {
         <button
           key={num}
           onClick={() => onPageChange(num)}
-          className={num === currentPage ? 'active' : ''}
+          className={num === currentPage ? "active" : ""}
         >
           {num}
         </button>

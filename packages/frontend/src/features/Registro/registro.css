@@ -1,35 +1,58 @@
-/* Contenedor principal */
+/* Contenedor principal centrado */
 .registro-root {
   display: flex;
   justify-content: center;
-  padding: 90px 20px 20px 20px; /* padding top grande */
+  padding: 80px 20px 40px 20px;
+  background-color: #f5f5f5; /* fondo suave */
 }
 
 /* Tarjeta del formulario */
 .registro-card {
   width: 100%;
   max-width: 900px;
-  padding: 30px;
-  border-radius: 15px;
-  box-shadow: 0 6px 25px rgba(0,0,0,0.12);
-  transition: 0.3s;
+  padding: 40px 30px;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+  background-color: #ffffff;
+  transition: all 0.3s ease;
+}
+
+/* Título */
+.titulo {
+  margin-bottom: 25px;
+  text-align: center;
+  color: #333333;
+  font-weight: 600;
+  font-size: 1.8rem;
 }
 
 /* Grid de inputs */
 .form-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-template-columns: repeat(2, 1fr); /* 2 columnas desktop */
   gap: 20px;
 }
 
-/* Inputs con iluminación amarilla al enfocar */
+/* Inputs y selects */
 .input-field .MuiInputBase-root {
-  transition: 0.3s;
+  transition: all 0.3s ease;
+  border: 2px solid #c4c4c4; /* borde inicial */
+  border-radius: 8px;
+  background-color: #fafafa;
+}
+
+.input-field .MuiInputBase-root:hover {
+  background-color: #fffde7; /* hover suave amarillo */
+  border: 2px solid #FF8C00; /* borde amarillo */
 }
 
 .input-field .Mui-focused {
-  background-color: #fff8c4;
-  border-radius: 4px;
+  background-color: #fff8c4; /* foco amarillo */
+  border: 2px solid #FF8C00;
+}
+
+.input-field .MuiInputLabel-root.Mui-focused {
+  color: #FFC300 /* label amarillo intenso */
 }
 
 /* Contenedor de botones */
@@ -38,34 +61,40 @@
   display: flex;
   justify-content: flex-end;
   flex-wrap: wrap;
-  gap: 10px;
-  margin-top: 20px;
+  gap: 15px;
+  margin-top: 30px;
 }
 
 /* Botón cancelar */
 .btn-cancel {
-  background-color: white;
+  background-color: #ffffff;
   color: #1976d2;
   border: 2px solid #1976d2;
-  transition: 0.3s;
+  transition: all 0.3s ease;
   flex: 1 1 150px;
+  font-weight: 500;
 }
 
 .btn-cancel:hover {
   background-color: #1976d2;
-  color: white;
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(25, 118, 210, 0.3);
 }
 
 /* Botón registrar */
 .btn-registrar {
   background-color: #1976d2;
-  color: white;
-  transition: 0.3s;
+  color: #ffffff;
+  transition: all 0.3s ease;
   flex: 1 1 150px;
+  font-weight: 500;
 }
 
 .btn-registrar:hover {
   background-color: #1257a1;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(18, 87, 161, 0.3);
 }
 
 /* Mensaje de error */
@@ -74,22 +103,23 @@
   margin-bottom: 15px;
 }
 
-/* Responsive avanzado */
+/* Responsive: 1 columna móvil */
+/* Responsive: 1 columna móvil */
 @media (max-width: 600px) {
   .form-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr; /* apilado en móvil */
   }
 
   .actions {
     flex-direction: column;
     align-items: stretch;
+    gap: 10px; /* espacio más pequeño entre botones */
   }
 
   .btn-cancel, .btn-registrar {
-    width: 100%;
+    width: 80%;       /* no tan grandes, centrados */
+    max-width: 250px; /* límite máximo */
+    margin: 0 auto;   /* centrar horizontalmente */
+    flex: unset;      /* quitar flex-grow/flex-shrink de desktop */
   }
-}
-
-.titulo{
-    margin-bottom: 10px;
 }

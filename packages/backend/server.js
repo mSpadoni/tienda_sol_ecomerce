@@ -11,19 +11,26 @@ export default class Server {
     this.routes = [];
     this.controllers = {};
     this.app.use(express.json());
-    this.app.use(cors({
-    origin: 'http://localhost:3000', // frontend React
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    credentials: true
-}));
-    const swaggerDocument = YAML.load(new URL("./swagger.yaml", import.meta.url));
-    this.app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+    this.app.use(
+      cors({
+        origin: "http://localhost:3000", // frontend React
+        methods: ["GET", "POST", "PUT", "DELETE"],
+        credentials: true,
+      }),
+    );
+    const swaggerDocument = YAML.load(
+      new URL("./swagger.yaml", import.meta.url),
+    );
+    this.app.use(
+      "/api-docs",
+      swaggerUi.serve,
+      swaggerUi.setup(swaggerDocument),
+    );
   }
 
   app() {
     return this.app;
   }
-
 
   setController(controllerClass, controller) {
     this.controllers[controllerClass.name] = controller;

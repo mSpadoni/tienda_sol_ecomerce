@@ -1,18 +1,29 @@
-// CurrencyProvider.jsx
-import React, { createContext, useState, useEffect, useContext } from "react";
-import axios from "axios";
+import React, { createContext, useContext, useState, useEffect } from "react";
 import PropTypes from "prop-types";
+import { obtenerTasa } from "../services/currenciesService.js";
 
 export const CurrencyContext = createContext();
 export const useCurrency = () => useContext(CurrencyContext);
 
 export const CurrencyProvider = ({ children }) => {
-  const [currency, setCurrency] = useState("ARS"); // moneda base global
+  const [currency, setCurrency] = useState(() => {
+    const stored = localStorage.getItem("moneda");
+    return stored ? JSON.parse(stored) : "USD"; // default USD
+  });
+
+  useEffect(() => {
+    localStorage.setItem("moneda", JSON.stringify(currency));
+  }, [currency]);
+
+  // const convert = async (precio, moneda) => {
+  //   if (moneda === currency) return precio;
+  //   console.log(moneda)
+  //   const tasa = await obtenerTasa(moneda, currency);
+  //   return precio * tasa;
+  // };
 
   return (
-    <CurrencyContext.Provider
-      value={{ currency, setCurrency}}
-    >
+    <CurrencyContext.Provider value={{ currency, setCurrency }}>
       {children}
     </CurrencyContext.Provider>
   );

@@ -2,7 +2,6 @@ import NotificacionesController from "../controller/notificacionesController.js"
 import express from "express";
 import { notificacionesErrorHandler } from "../middleware/NotificacionesMiddleware.js";
 
-
 const pathNotificaciones = "/notificaciones";
 
 export default function notificacionesRoutes(getController) {

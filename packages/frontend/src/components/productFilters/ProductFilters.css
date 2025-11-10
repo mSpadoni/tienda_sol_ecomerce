@@ -27,13 +27,12 @@
   padding: 0.45rem 0.9rem;
   border-radius: var(--radius, 0.25rem);
   border: none;
-  background: #000; 
+  background: #000;
   color: var(--primary-white, #fff);
   cursor: pointer;
   font-size: 0.95rem;
   font-weight: 500;
 }
-
 
 .product-filters button[type="button"] {
   background: #333; /* secundario en gris oscuro */
@@ -49,13 +48,16 @@
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  transition: transform 120ms ease, box-shadow 120ms ease, opacity 120ms ease;
+  transition:
+    transform 120ms ease,
+    box-shadow 120ms ease,
+    opacity 120ms ease;
 }
 
 .product-filters .btn:hover {
   opacity: 0.95;
   transform: translateY(-1px);
-  box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
 }
 
 .product-filters .btn:focus {
@@ -66,7 +68,7 @@
 .product-filters .btn-primary {
   background: #000; /* botón primario en negro */
   color: var(--primary-white, #fff);
-  border: 1px solid rgba(255,255,255,0.04);
+  border: 1px solid rgba(255, 255, 255, 0.04);
 }
 
 .product-filters .btn-secondary {
@@ -88,4 +90,3 @@
     width: 100px;
   }
 }
-    

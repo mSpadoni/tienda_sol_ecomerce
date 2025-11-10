@@ -2,7 +2,12 @@ import "./notificacionesDesplegable.css";
 import React from "react";
 import PropTypes from "prop-types";
 
-const notificacionesDesplegable = ({ setEstadoABuscar, funcionDeFiltrado, estado_lectura, setEstadoLectura }) => {
+const notificacionesDesplegable = ({
+  setEstadoABuscar,
+  funcionDeFiltrado,
+  estado_lectura,
+  setEstadoLectura,
+}) => {
   return (
     <div className="filtro-container">
       <div className="filtro-box">

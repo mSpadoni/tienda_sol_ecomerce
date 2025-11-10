@@ -86,7 +86,7 @@ export default class ProductosRepository {
       .sort({ [sortField]: sortOrder })
       .skip(skip)
       .limit(elementosXPagina);
-    logger.info(productos)
+
     return productos;
   }
 

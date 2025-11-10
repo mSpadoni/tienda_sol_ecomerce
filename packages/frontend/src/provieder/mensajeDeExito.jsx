@@ -10,7 +10,9 @@ export const MensajeProvider = ({ children }) => {
   const limpiarMensajes = () => setMensajeExito("");
 
   return (
-    <MensajeContext.Provider value={{ mensajeExito, setMensajeExito, limpiarMensajes }}>
+    <MensajeContext.Provider
+      value={{ mensajeExito, setMensajeExito, limpiarMensajes }}
+    >
       {children}
     </MensajeContext.Provider>
   );

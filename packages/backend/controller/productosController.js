@@ -1,4 +1,3 @@
-
 import ErrorProductosNoEncontrados from "../errors/errorProductosNoEncontrado.js";
 
 const activoHandler = {
@@ -10,7 +9,7 @@ export default class ProductosController {
   constructor(productosService) {
     this.productosService = productosService;
   }
- 
+
   async getProductos(req, res, next) {
     try {
       const {
@@ -22,7 +21,7 @@ export default class ProductosController {
         ...filtros
       } = req.query;
       const activoFinal = activoHandler[activo];
-    
+
       const ProductosPaginados = await this.productosService.getProductos(
         filtros,
         activoFinal,

@@ -6,6 +6,7 @@ import { CURRENCIES } from "../../provieder/currencies.js";
 import { useCarrito } from "../../provieder/carritoProvider";
 import { FaTrashAlt } from "react-icons/fa"; // 🗑️ Icono de basura
 
+
 const CarritoItem = ({ item }) => {
   const { currency } = useCurrency();
   const {
@@ -15,13 +16,20 @@ const CarritoItem = ({ item }) => {
     obtenerCantidad,
     carritoVacio,
   } = useCarrito();
+   const placeholder = `https://via.placeholder.com/90x90?text=${encodeURIComponent(
+  item.producto.titulo || "Producto",
+)}`
 
-  const longitud = obtenerCantidad(item.producto.id);
-
+  const longitud = obtenerCantidad(item.producto._id);
+  
   return (
     <div className="carrito-item">
       <img
-        src={item.producto.imagen}
+        src={
+                            item.producto.fotos
+                              ? `/images/${item.producto.fotos}`
+                              : placeholder
+                          }
         alt={item.producto.titulo}
         className="item-img"
       />
@@ -31,7 +39,7 @@ const CarritoItem = ({ item }) => {
         <div className="item-price">
           Precio:{" "}
           {`${CURRENCIES[currency].symbol}${item.producto.precio.toLocaleString(
-            CURRENCIES[currency].locale
+            CURRENCIES[currency].locale,
           )}`}
         </div>
 
@@ -39,7 +47,7 @@ const CarritoItem = ({ item }) => {
           <div className="item-cantidad">
             <button
               className="btn-cantidad"
-              onClick={() => disminuirCantidad(item.producto.id, 1)}
+              onClick={() => disminuirCantidad(item.producto._id, 1)}
               disabled={carritoVacio()}
             >
               −
@@ -47,8 +55,7 @@ const CarritoItem = ({ item }) => {
             <span>{longitud}</span>
             <button
               className="btn-cantidad"
-              onClick={() => aumentarCantidad(item.producto.id, 1)}
-              
+              onClick={() => aumentarCantidad(item.producto._id, 1)}
             >
               +
             </button>
@@ -57,7 +64,7 @@ const CarritoItem = ({ item }) => {
           <button
             className="eliminar"
             disabled={carritoVacio()}
-            onClick={() => eliminarDelCarrito(item.producto.id)}
+            onClick={() => eliminarDelCarrito(item.producto._id)}
             title="Eliminar producto"
           >
             <FaTrashAlt />
@@ -71,8 +78,8 @@ const CarritoItem = ({ item }) => {
 CarritoItem.propTypes = {
   item: PropTypes.shape({
     producto: PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      imagen: PropTypes.string,
+      _id: PropTypes.string.isRequired,
+      fotos: PropTypes.string,
       titulo: PropTypes.string,
       precio: PropTypes.number,
     }).isRequired,

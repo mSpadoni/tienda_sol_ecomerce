@@ -5,11 +5,23 @@
 }
 
 body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   background-color: #fbfbfb;
   color: #333;
   line-height: 1.4;
-  padding-top:100px
+  padding-top: 100px;
+}
+
+.producto-image-section-skeleton {
+  position: relative;
+}
+
+.alert-error {
+  padding-top: 120px;
+}
+
+.producto-detail-container {
+  padding-top: 120px;
 }
 
 .producto-detail-container {
@@ -241,4 +253,36 @@ body {
 
 .categoria-pill:hover {
   background-color: #e2e8f0;
+}
+
+/* === Skeleton del detalle de producto === */
+.producto-content.skeleton {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  animation: fadeIn 1s ease-in-out;
+}
+
+.producto-image-section-skeleton {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 320px;
+}
+
+.producto-info-section.skeleton-info {
+  width: 320px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }

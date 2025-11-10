@@ -1,9 +1,15 @@
 // KeycloakProvider.jsx
-import React, { createContext, useContext, useEffect, useRef, useState } from "react";
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import Keycloak from "keycloak-js";
 import PropTypes from "prop-types";
+import {  ClipLoader} from "react-spinners";
 
-// --- Contexto
 const KeycloakContext = createContext();
 export const useKeycloak = () => useContext(KeycloakContext);
 
@@ -15,44 +21,72 @@ const keycloak = new Keycloak({
 
 export const KeycloakProvider = ({ children }) => {
   const keycloakRef = useRef(keycloak);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  const [isAuthenticated, setIsAuthenticated] = useState(() => {
+    const saved = localStorage.getItem("kc_authenticated");
+    return saved === "true"; // si existe, lo convertimos a boolean
+  });
+
   const [keycloakReady, setKeycloakReady] = useState(false);
 
-  // --- Limpiar #state, #code y #error del URL
-  // const cleanUrlHash = () => {
-  //   try {
-  //     if (
-  //       window.location.hash.includes("code") ||
-  //       window.location.hash.includes("state") ||
-  //       window.location.hash.includes("error")
-  //     ) {
-  //       window.history.replaceState({}, document.title, window.location.pathname);
-  //       console.log("URL limpia de #state, #code y #error");
-  //     }
-  //   } catch (err) {
-  //     console.error("Error al limpiar el hash de la URL:", err);
-  //   }
-  // };
+  const cleanUrlHash = () => {
+    try {
+      if (
+        window.location.hash.includes("code") ||
+        window.location.hash.includes("state") ||
+        window.location.hash.includes("error")
+      ) {
+        window.history.replaceState(
+          {},
+          document.title,
+          window.location.pathname,
+        );
+      }
+    } catch (err) {
+      console.error("Error al limpiar el hash de la URL:", err);
+    }
+  };
 
-  // --- Refrescar token periódicamente usando async/await
+  const persistSession = () => {
+    localStorage.setItem("kc_authenticated", "true");
+    localStorage.setItem("kc_token", keycloakRef.current.token);
+    localStorage.setItem("kc_refreshToken", keycloakRef.current.refreshToken);
+  };
+
+  const clearSession = () => {
+    localStorage.removeItem("kc_authenticated");
+    localStorage.removeItem("kc_token");
+    localStorage.removeItem("kc_refreshToken");
+  };
+
   const startTokenRefresh = () => {
     const refreshInterval = setInterval(async () => {
       if (keycloakRef.current.authenticated) {
         try {
-          const refreshed = await keycloakRef.current.updateToken(60); // refresca si expira en <60s
-          if (refreshed) console.log("Token refrescado");
+          const refreshed = await keycloakRef.current.updateToken(60);
+          if (refreshed) {
+            console.log("Token refrescado");
+            persistSession();
+          }
         } catch (err) {
           console.error("Error al refrescar token:", err);
         }
       }
-    }, 30 * 1000); // revisar cada 30 segundos
+    }, 30 * 1000);
 
     return refreshInterval;
   };
 
   // --- Inicializar Keycloak
   useEffect(() => {
-    // cleanUrlHash();
+    cleanUrlHash();
+
+    const storedToken = localStorage.getItem("kc_token");
+    const storedRefresh = localStorage.getItem("kc_refreshToken");
+    if (storedToken && storedRefresh) {
+      keycloakRef.current.token = storedToken;
+      keycloakRef.current.refreshToken = storedRefresh;
+    }
 
     keycloakRef.current
       .init({
@@ -64,24 +98,30 @@ export const KeycloakProvider = ({ children }) => {
       .then((authenticated) => {
         setIsAuthenticated(authenticated);
         setKeycloakReady(true);
-        // cleanUrlHash();
+        cleanUrlHash();
 
         if (authenticated) {
+          persistSession();
           const interval = startTokenRefresh();
-          return () => clearInterval(interval); // limpiar al desmontar
+          return () => clearInterval(interval);
+        } else {
+          clearSession();
         }
       })
       .catch((err) => {
         console.error("Keycloak init error:", err);
         setKeycloakReady(true);
-        // cleanUrlHash();
+        cleanUrlHash();
       });
   }, []);
 
   const login = () => {
     try {
-      keycloakRef.current.login({ redirectUri: window.location.origin });
-      // cleanUrlHash();
+      keycloakRef.current.login({
+        prompt: "login",
+        redirectUri: window.location.href,
+      });
+      cleanUrlHash();
     } catch (err) {
       console.error("Error al iniciar login:", err);
     }
@@ -89,20 +129,38 @@ export const KeycloakProvider = ({ children }) => {
 
   const logout = () => {
     try {
+      clearSession();
       keycloakRef.current.logout({ redirectUri: window.location.origin });
-      // cleanUrlHash();
+      cleanUrlHash();
+      setIsAuthenticated(false);
     } catch (err) {
       console.error("Error al hacer logout:", err);
     }
   };
 
-  const elUsuarioEsUn=(rol)=> keycloakRef.current.hasRealmRole(rol);
-  
+  const elUsuarioEsUn = (rol) => keycloakRef.current.hasRealmRole(rol);
 
-  if (!keycloakReady) return <div>Cargando autenticación...</div>;
+  if (!keycloakReady) return  <div
+    style={{
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      height: "60vh", // ocupa buena parte de la pantalla
+    }}
+  >
+    <ClipLoader color="#1976d2" size={100} />
+  </div>
 
   return (
-    <KeycloakContext.Provider value={{elUsuarioEsUn,  isAuthenticated, login, logout }}>
+    <KeycloakContext.Provider
+      value={{
+        elUsuarioEsUn,
+        isAuthenticated,
+        login,
+        logout,
+        keycloakReady,
+      }}
+    >
       {children}
     </KeycloakContext.Provider>
   );

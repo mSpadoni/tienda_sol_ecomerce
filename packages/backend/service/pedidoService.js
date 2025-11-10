@@ -6,13 +6,11 @@ import {
   obtenerDireccion,
   validarStock,
   obtenerEstado,
-  monedaValida
+  monedaValida,
 } from "./funcionesDelService.js";
 import { EstadoPedido } from "../models/entities/EstadoPedido.js";
 import ItemPedido from "../models/entities/ItemPedido.js";
 import ErrorNoEncontrado from "../errors/errorNoEncontrado.js";
-
-
 
 export default class pedidoService {
   constructor(repositorioPedido, repositorioUsuario, repositorioProducto) {
@@ -21,11 +19,8 @@ export default class pedidoService {
     this.repositorioProducto = repositorioProducto;
   }
 
-  async crear(pedidoData,usuarioId) {
-
+  async crear(pedidoData, usuarioId) {
     const usuario = await this.obtenerUsuario(usuarioId);
-
-  
 
     let items = await this.obtenerItems(pedidoData);
 
@@ -34,11 +29,10 @@ export default class pedidoService {
     validarStock(items);
 
     items = await this.actualizarStock(items, EstadoPedido.PENDIENTE);
-    
 
     const direccionEntrega = obtenerDireccion(pedidoData);
-    const nuevoPedido = new Pedido(usuario, items, moneda, direccionEntrega);  
-    const pedidoRespuesta=await this.repositorioPedido.save(nuevoPedido);                         
+    const nuevoPedido = new Pedido(usuario, items, moneda, direccionEntrega);
+    const pedidoRespuesta = await this.repositorioPedido.save(nuevoPedido);
     return pedidoRespuesta;
   }
 
@@ -47,32 +41,35 @@ export default class pedidoService {
       `Buscando pedidos del usuario con id:  ${idUsuario} en el servicio`,
     );
 
-    const idDeMongo=await this.repositorioUsuario.obtnerId(idUsuario);
-    if(!idDeMongo){
-      throw new ErrorNoEncontrado(idUsuario,"usuario")
+    const idDeMongo = await this.repositorioUsuario.obtnerId(idUsuario);
+    if (!idDeMongo) {
+      throw new ErrorNoEncontrado(idUsuario, "usuario");
     }
 
     const pedidos = await this.repositorioPedido.findByUsuarioId(idDeMongo);
     if (pedidos.length === 0) {
-      throw new ErrorNoEncontrado(idDeMongo._id, "Pedido que tenga un comprador o vendedor");
+      throw new ErrorNoEncontrado(
+        idDeMongo._id,
+        "Pedido que tenga un comprador o vendedor",
+      );
     }
     return pedidos;
   }
 
-  async actualizar(idUsuario,idPedido, pedidoData) {
-
+  async actualizar(idUsuario, idPedido, pedidoData) {
     const pedidoExistente = await this.obtenerPedido(idPedido);
 
     const usuario = await this.obtenerUsuario(idUsuario);
 
     const estado = obtenerEstado(pedidoData.estado);
-    
+
     pedidoExistente.actualizarEstado(estado, usuario, pedidoData.motivo);
     pedidoExistente.items = await this.actualizarStock(
       pedidoExistente.items,
-      pedidoExistente.estado
+      pedidoExistente.estado,
     );
-    const pedidoActualizado=await this.repositorioPedido.save(pedidoExistente);
+    const pedidoActualizado =
+      await this.repositorioPedido.save(pedidoExistente);
 
     return pedidoActualizado;
   }
@@ -116,8 +113,6 @@ export default class pedidoService {
     if (estado === EstadoPedido.PENDIENTE) {
       itemsActualizados = reducirStocks(items);
       await this.actualizarProductosPorCambioDeStock(itemsActualizados);
-
-
     }
     if (
       estado === EstadoPedido.RECHAZADO ||

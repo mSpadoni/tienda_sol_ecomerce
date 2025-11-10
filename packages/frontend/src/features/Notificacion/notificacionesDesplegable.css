@@ -1,61 +1,80 @@
-/* Contenedor principal */
+/* ===== CONTENEDOR PRINCIPAL ===== */
 .filtro-container {
   width: 100%;
   display: flex;
   justify-content: center;
-  margin: 1rem 0;
+  margin: 1.5rem 0;
+  flex-direction: column;
+  align-items: center;
 }
 
-/* Título */
+/* ===== TÍTULO ===== */
 .filtro-titulo {
-  font-size: 1.2rem;
-  color: #333;
-  font-weight: bold;
-  margin-bottom: 0.8rem;
-  margin-top: 45%;
+  font-size: clamp(1.3rem, 2.2vw, 1.8rem);
+  color: #222;
+  font-weight: 800;
+  margin-bottom: 1rem;
   text-align: center;
+  letter-spacing: 0.5px;
 }
 
-/* Contenedor del select */
+/* ===== CONTENEDOR DEL SELECT ===== */
 .filtro-estado {
   width: 100%;
   display: flex;
   justify-content: center;
 }
 
-/* Select estilizado */
+/* ===== SELECT ESTILIZADO ===== */
 .filtro-select {
   width: 100%;
-  max-width: 250px;
-  padding: 0.6rem 1rem;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  background: white;
-  color: #050000;
-  font-size: 1rem;
+  max-width: 280px;
+  padding: 0.9rem 1.3rem;
+  border-radius: 10px;
+  border: 2px solid #FF8C00;
+  color: #111;
+  font-size: clamp(1.1rem, 2vw, 1.4rem);
+  font-weight: 600;
   cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  outline: none;
+  background-color: #fff; /* blanco puro sin efectos */
   transition: all 0.3s ease;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
-.filtro-select:hover {
- border: 3px solids #f8cb05;
-  
+.filtro-select:hover,
+.filtro-select:focus {
+  background-color: #fff !important;; /* mantiene el fondo blanco incluso al enfocar o pasar el mouse */
+  border-color: #FF8C00; /* mantiene solo el borde amarillo */
+  transform: scale(1.05);
 }
 
-/* Responsive */
-@media(max-width: 600px) {
-  .filtro-box {
-    width: 95%;
-    padding: 0.8rem 1rem;
+/* ===== RESPONSIVE ===== */
+@media (max-width: 900px) {
+  .filtro-select {
+    max-width: 240px;
+    padding: 0.8rem 1.1rem;
   }
 
   .filtro-titulo {
-    font-size: 1rem;
+    font-size: clamp(1.1rem, 2.8vw, 1.5rem);
+  }
+}
+
+@media (max-width: 600px) {
+  .filtro-container {
+    width: 100%;
+    padding: 0 1rem;
   }
 
   .filtro-select {
-    font-size: 0.95rem;
-    padding: 0.5rem 0.8rem;
+    width: 95%;
+    max-width: none;
+    padding: 0.8rem 1rem;
+    font-size: clamp(1rem, 3vw, 1.3rem);
+  }
+
+  .filtro-titulo {
+    font-size: clamp(1.1rem, 3.5vw, 1.4rem);
   }
 }

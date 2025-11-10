@@ -9,10 +9,9 @@ export default function productosRoutes(getController) {
   const router = express.Router();
   const controller = getController(ProductosController);
 
-
   router.get(pathProductos, async (req, res, next) => {
     try {
-      logger.info("inicio busqueda de productos")
+      logger.info("inicio busqueda de productos");
       await controller.getProductos(req, res, next);
     } catch (err) {
       next(err);
@@ -30,4 +29,3 @@ export default function productosRoutes(getController) {
   router.use(productosErrorHandler);
   return router;
 }
-

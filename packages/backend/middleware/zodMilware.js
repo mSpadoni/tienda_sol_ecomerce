@@ -10,17 +10,15 @@ export const mensajesConocidos = {
 };
 
 export default function zodErrorHandler(err, _req, res, _next) {
- 
   if (err.constructor.name === ZodError.name) {
     const errores = err.issues.map((issue) => ({
-      ... issue,
-      ... {message: mensajesConocidos[issue.code] || issue.message}
+      ...issue,
+      ...{ message: mensajesConocidos[issue.code] || issue.message },
     }));
     logger.warn(errores);
     res.status(400).json({ errors: errores });
     return;
   }
-  
+
   res.status(500).json({ error: "Ups. Algo sucedio en el servidor." });
 }
-

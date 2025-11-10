@@ -2,12 +2,16 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import AccomodationSearchBar from "../../components/accomodationSearchBar/AccomodationSearchBar.jsx";
 import ProductsCarousel from "../../components/ProductsCarousel.jsx";
-import { Spinner } from "react-bootstrap";
 import { getProductos } from "../../services/ProductosService.js";
 import Paginacion from "../../components/paginacion/Paginacion.jsx";
 import ProductFilters from "../../components/productFilters/ProductFilters.jsx";
 import "./Home.css";
-import SuccessSnackbar from "../../components/snackBar.jsx"
+import SuccessSnackbar from "../../components/snackBar.jsx";
+import { useKeycloak } from "../../provieder/keyCloak.jsx";
+import {  DotLoader } from "react-spinners";
+import { Alert } from "@mui/material";
+import { useCurrency } from "../../provieder/CurrencyProvider.jsx";
+import { CURRENCIES } from "../../provieder/currencies.js";
 
 const Home = () => {
   const [productos, setProductos] = useState([]);
@@ -16,19 +20,29 @@ const Home = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPaginas, setTotalPaginas] = useState(1);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const { ready } = useKeycloak();
 
   const cargarProductos = async (page = 1, filtrosAEnviar = filtros) => {
-    setLoading(true);
     const productosCargados = await getProductos(page, filtrosAEnviar);
     setProductos(productosCargados.data);
     setProductosFiltrados(productosCargados.data);
     setCurrentPage(page);
     setTotalPaginas(productosCargados.totalPaginas);
-    setLoading(false);
   };
 
   useEffect(() => {
-    cargarProductos();
+    const cargar = async () => {
+      try {
+        await cargarProductos();
+        //await new Promise((resolve) => setTimeout(resolve, 10000));
+        setLoading(false);
+      } catch (err) {
+        setError(err);
+      }
+    };
+
+    cargar();
   }, []);
 
   // TODO: esto debería estar en el back
@@ -48,11 +62,19 @@ const Home = () => {
     await cargarProductos(1, nuevosFiltros);
   };
 
+  if (error) {
+    return (
+      <Alert severity="error" className="alert-error">
+        {error.message}
+      </Alert>
+    );
+  }
+
   return (
     <div className="home-page">
       {/* HERO */}
 
-      <SuccessSnackbar/>
+      <SuccessSnackbar />
       <header className="home-hero">
         <div className="hero-content">
           <h1 className="hero-title">Encontrá tu próximo producto</h1>
@@ -67,9 +89,10 @@ const Home = () => {
 
       <main className="home-main">
         {loading ? (
-          <div className="spinner">
-            <Spinner animation="border" />
-          </div>
+           <div className="spinner">
+    <DotLoader color="#1976d2" size={50} />
+    <p >Cargando productos...</p>
+  </div>
         ) : (
           <>
             <section className="home-section">
@@ -78,27 +101,31 @@ const Home = () => {
 
             <section className="home-section">
               <div className="section-header between">
-                  <h2>Todos los productos</h2>
-                  <p className="section-subtitle small">
-                    {productosFiltrados.length} productos encontrados
-                  </p>
-                </div>
+                <h2>Todos los productos</h2>
+                <p className="section-subtitle small">
+                  {productosFiltrados.length} productos encontrados
+                </p>
+              </div>
 
-                <ProductFilters onApply={aplicarFiltros} initial={filtros} />
+              <ProductFilters onApply={aplicarFiltros} initial={filtros} />
 
               <div className="products-grid">
                 {productosFiltrados.map((producto) => {
                   const placeholder = `https://via.placeholder.com/90x90?text=${encodeURIComponent(
-                    producto.titulo || "Producto"
-                  )}`;
+                    producto.titulo || "Producto",
+                  )}`; 
                   return (
                     <article key={producto._id} className="product-card">
                       <div className="product-card-image">
                         <img
-            src={producto.fotos ? `/images/${producto.fotos}` : placeholder}
-            alt={producto.titulo}
-          className="producto-imagen"
-          />
+                          src={
+                            producto.fotos
+                              ? `/images/${producto.fotos}`
+                              : placeholder
+                          }
+                          alt={producto.titulo}
+                          className="producto-imagen"
+                        />
                       </div>
                       <div className="product-card-body">
                         <h3 className="product-card-title">
@@ -109,7 +136,10 @@ const Home = () => {
                         </p>
                       </div>
                       <div className="product-card-actions">
-                        <Link to={`/productos/${producto._id}`} className="product-card-link">
+                        <Link
+                          to={`/productos/${producto._id}`}
+                          className="product-card-link"
+                        >
                           Ver detalle →
                         </Link>
                       </div>

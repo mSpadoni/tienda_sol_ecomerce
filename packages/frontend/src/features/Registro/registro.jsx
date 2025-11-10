@@ -1,18 +1,10 @@
-import React, { useState } from 'react';
-import {
-  Card,
-  TextField,
-  Button,
-  MenuItem,
-  Select,
-  InputLabel,
-  FormControl,
-  Alert
-} from '@mui/material';
+import React, { useState, useEffect } from 'react';
+import { Card, TextField, Button, FormControl, InputLabel, Select, MenuItem, LinearProgress } from '@mui/material';
 import { useNavigate } from "react-router-dom";
 import { useVisible } from "../../provieder/visibleHook.jsx";
 import { crearUsuario } from '../../services/userServices.js';
-import { useMensajes  } from "../../provieder/mensajeDeExito.jsx";
+import { useMensajes } from "../../provieder/mensajeDeExito.jsx";
+import { useForm } from '../../provieder/formHook.js';
 import './registro.css';
 
 const RegistroUsuario = () => {
@@ -20,50 +12,74 @@ const RegistroUsuario = () => {
   const { ponerVisible } = useVisible();
   const { setMensajeExito } = useMensajes();
 
-  const inicializarCampo = (requerido = true) => ({ valor: '', requerido });
-  const [campos, setCampos] = useState({
-    nombre: inicializarCampo(),
-    apellido: inicializarCampo(),
-    email: inicializarCampo(),
-    telefono: inicializarCampo(),
-    password: inicializarCampo(),
-    rol: inicializarCampo(),
-    username: inicializarCampo(),
-  });
-
-  const [errores, setErrores] = useState(null);
-
-  const camposCompletos = Object.values(campos)
-    .filter(campo => campo.requerido)
-    .every(campo => campo.valor.trim() !== '');
-
-  const setValorDe = (campo) => (event) => {
-    setCampos(prev => ({
-      ...prev,
-      [campo]: { ...prev[campo], valor: event.target.value }
-    }));
+  const initialValues = {
+    username: '',
+    nombre: '',
+    apellido: '',
+    email: '',
+    telefono: '',
+    password: '',
+    rol: ''
   };
 
-  const handleRegistrar = async () => {
-    setErrores(null);
-    const data = {
-      username: campos.username.valor,
-      nombre: campos.nombre.valor,
-      apellido: campos.apellido.valor,
-      email: campos.email.valor,
-      telefono: campos.telefono.valor,
-      password: campos.password.valor,
-      rol: campos.rol.valor,
-    };
+  const cancelar=()=>{
+    navigate(-1)
+    ponerVisible()
+  }
 
-    try {
-      const result = await crearUsuario(data);
-      setMensajeExito("Usuario creado exitosamente!");
-      ponerVisible();
-      navigate("/");
-    } catch (err) {
-      setErrores(err);
+  const validate = (values) => {
+    const errors = {};
+    if (!values.username) errors.username = 'Usuario obligatorio';
+    if (!values.nombre) errors.nombre = 'Nombre obligatorio';
+    if (!values.apellido) errors.apellido = 'Apellido obligatorio';
+    if (!values.email) errors.email = 'Email obligatorio';
+    if (!values.password) errors.password = 'Contraseña obligatoria';
+    if (!values.rol) errors.rol = 'Rol obligatorio';
+    return errors;
+  };
+
+  const onSubmit = async (values) => {
+    await crearUsuario(values);
+    setMensajeExito("Usuario creado exitosamente!");
+    ponerVisible();
+    navigate("/");
+  };
+  
+
+  const { values, handleChange, handleBlur, handleSubmit, showError, isSubmitting } = useForm(initialValues, onSubmit, validate);
+
+  const [step, setStep] = useState(0);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 600);
+  const fieldKeys = Object.keys(values);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 600);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const camposCompletos = fieldKeys.every(key => values[key] && !showError(key));
+
+  const handleNext = () => step < fieldKeys.length - 1 && setStep(step + 1);
+
+  const handleBack = () => {
+    if (step === 0 && isMobile) {
+      ponerVisible()
+      navigate(-1);
+    } else if (step > 0) {
+      setStep(step - 1);
     }
+  };
+
+  const opcionesRol = [
+    { value: 'vendedor', label: 'Vendedor' },
+    { value: 'comprador', label: 'Comprador' }
+  ];
+
+  // Bloquea "Siguiente" si el campo actual está vacío o tiene error
+  const isCurrentStepValid = () => {
+    const key = fieldKeys[step];
+    return values[key] && !showError(key);
   };
 
   return (
@@ -71,93 +87,110 @@ const RegistroUsuario = () => {
       <Card className="registro-card">
         <h3 className="titulo">Registro de Usuario</h3>
 
-        {errores && (
-          <Alert severity="error" className="alert-error">
-            {errores.message}
-          </Alert>
-        )}
+        {isSubmitting && <LinearProgress sx={{ mb: 2 }} />}
+        <form onSubmit={handleSubmit} className="form-grid">
 
-        <form className="form-grid">
-          <TextField
-            className="input-field"
-            label="UserName"
-            required
-            fullWidth
-            value={campos.username.valor}
-            onChange={setValorDe("username")}
-          />
-          <TextField
-            className="input-field"
-            label="Nombre"
-            required
-            fullWidth
-            value={campos.nombre.valor}
-            onChange={setValorDe('nombre')}
-          />
-          <TextField
-            className="input-field"
-            label="Apellido"
-            required
-            fullWidth
-            value={campos.apellido.valor}
-            onChange={setValorDe('apellido')}
-          />
-          <TextField
-            className="input-field"
-            label="Email"
-            required
-            fullWidth
-            type='email'
-            value={campos.email.valor}
-            onChange={setValorDe('email')}
-          />
-          <TextField
-            className="input-field"
-            label="Teléfono"
-            fullWidth
-            value={campos.telefono.valor}
-            onChange={setValorDe('telefono')}
-          />
-          <TextField
-            className="input-field"
-            label="Contraseña"
-            required
-            fullWidth
-            type='password'
-            value={campos.password.valor}
-            onChange={setValorDe('password')}
-          />
+          {fieldKeys.map((key, index) => {
+            if (isMobile && step !== index) return null;
 
-          <FormControl fullWidth className="input-field">
-            <InputLabel id="rol-label">Rol</InputLabel>
-            <Select
-              labelId="rol-label"
-              value={campos.rol.valor}
-              onChange={setValorDe('rol')}
-              required
-            >
-              <MenuItem value="vendedor">Vendedor</MenuItem>
-              <MenuItem value="comprador">Comprador</MenuItem>
-            </Select>
-          </FormControl>
+            if (key === 'rol') {
+              return (
+                <FormControl key={key} fullWidth className="input-field" error={!!showError(key)}>
+                  <InputLabel id={`${key}-label`}>Rol</InputLabel>
+                  <Select
+                    labelId={`${key}-label`}
+                    name={key}
+                    value={values[key]}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    required
+                  >
+                    {opcionesRol.map(opt => (
+                      <MenuItem key={opt.value} value={opt.value}>{opt.label}</MenuItem>
+                    ))}
+                  </Select>
+                  {showError(key) && <p style={{ color: 'red', fontSize: '0.8rem' }}>{showError(key)}</p>}
+                </FormControl>
+              );
+            }
+
+            return (
+              <TextField
+                key={key}
+                className="input-field"
+                label={key.charAt(0).toUpperCase() + key.slice(1)}
+                name={key}
+                required
+                fullWidth
+                type={key === 'password' ? 'password' : 'text'}
+                value={values[key]}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                error={!!showError(key)}
+                helperText={showError(key)}
+              />
+            );
+          })}
 
           <div className="actions">
-            <Button
-              className="btn-cancel"
-              variant="outlined"
-              onClick={() => navigate("/")}
-            >
-              Cancelar
-            </Button>
-            <Button
-              className="btn-registrar"
-              variant="contained"
-              disabled={!camposCompletos}
-              onClick={handleRegistrar}
-            >
-              Registrar
-            </Button>
+            {isMobile ? (
+              <>
+                <Button
+                  className="btn-cancel"
+                  variant="outlined"
+                  onClick={handleBack}
+                >
+                  Atrás
+                </Button>
+
+                {step < fieldKeys.length - 1 ? (
+                  <Button
+                    className="btn-registrar"
+                    variant="contained"
+                    onClick={handleNext}
+                    disabled={!isCurrentStepValid()} // Aquí bloquea si el campo actual no tiene valor o tiene error
+                  >
+                    Siguiente
+                  </Button>
+                ) : (
+                  <Button
+                    className="btn-registrar"
+                    type="submit"
+                    variant="contained"
+                    disabled={!camposCompletos || isSubmitting}
+                  >
+                    Registrar
+                  </Button>
+                )}
+              </>
+            ) : (
+              <>
+                <Button
+                  className="btn-cancel"
+                  variant="outlined"
+                  onClick={cancelar}
+                >
+                  Cancelar
+                </Button>
+                <Button
+                  className="btn-registrar"
+                  type="submit"
+                  variant="contained"
+                  disabled={!camposCompletos || isSubmitting}
+                >
+                  Registrar
+                </Button>
+              </>
+            )}
           </div>
+
+          {isMobile && (
+            <LinearProgress
+              variant="determinate"
+              value={((step + 1) / fieldKeys.length) * 100}
+              sx={{ mt: 2 }}
+            />
+          )}
         </form>
       </Card>
     </div>
@@ -165,3 +198,4 @@ const RegistroUsuario = () => {
 };
 
 export default RegistroUsuario;
+

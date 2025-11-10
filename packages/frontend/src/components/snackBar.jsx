@@ -1,7 +1,7 @@
 import React from "react";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
-import { useMensajes } from "../provieder/mensajeDeExito";// ajusta la ruta
+import { useMensajes } from "../provieder/mensajeDeExito"; // ajusta la ruta
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;

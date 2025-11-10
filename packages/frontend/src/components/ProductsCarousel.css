@@ -51,7 +51,10 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease,
+    opacity 0.15s ease;
   font-size: 0.9rem;
   color: #0f172a;
   z-index: 10;
