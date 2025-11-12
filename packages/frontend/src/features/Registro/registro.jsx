@@ -1,7 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import {
-  Card, TextField, Button, FormControl, InputLabel, Select, MenuItem,
-  LinearProgress, Typography, Box, Alert
+  Card,
+  TextField,
+  Button,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  LinearProgress,
+  Typography,
+  Box,
+  Alert
 } from '@mui/material';
 import { useNavigate } from "react-router-dom";
 import { useVisible } from "../../provieder/visibleHook.jsx";
@@ -75,17 +84,25 @@ const RegistroUsuario = () => {
     }
   };
 
-  const { values, handleChange, handleBlur, handleSubmit, showError, isSubmitting, setErrors } =
-    useForm(initialValues, onSubmit, validate);
+  const {
+    values,
+    handleChange,
+    handleBlur,
+    handleSubmit,
+    showError,
+    isSubmitting,
+    setErrors
+  } = useForm(initialValues, onSubmit, validate);
 
+  // Revalidar dinámicamente al modificar valores
   useEffect(() => {
     const validationErrors = validate(values);
-    setErrors(validationErrors);
-  }, [values]);
+    if (typeof setErrors === 'function') setErrors(validationErrors);
+  }, [values, setErrors]);
 
+  // 📱 Detección de móvil y paso actual
   const [step, setStep] = useState(0);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 600);
-  const fieldKeys = Object.keys(values);
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth <= 600);
@@ -93,17 +110,24 @@ const RegistroUsuario = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const camposCompletos = fieldKeys.every(
-    (key) => values[key] && !showError(key)
+  const fieldKeysAll = Object.keys(values);
+  const fieldKeys = fieldKeysAll.filter((k) => k !== 'password');
+  const totalSteps = fieldKeys.length + 1;
+
+  const camposCompletos = fieldKeysAll.every(
+    (key) => values[key] && !validate(values)[key]
   );
 
-  const handleNext = () => step < fieldKeys.length - 1 && setStep(step + 1);
+  const handleNext = () => {
+    if (step < totalSteps - 1) setStep((s) => s + 1);
+  };
+
   const handleBack = () => {
     if (step === 0 && isMobile) {
       ponerVisible();
       navigate(-1);
     } else if (step > 0) {
-      setStep(step - 1);
+      setStep((s) => s - 1);
     }
   };
 
@@ -121,8 +145,11 @@ const RegistroUsuario = () => {
   ];
 
   const isCurrentStepValid = () => {
+    if (isMobile && step === fieldKeys.length) {
+      return values.password && !validate(values).password;
+    }
     const key = fieldKeys[step];
-    return values[key] && !showError(key);
+    return key ? (values[key] && !validate(values)[key]) : true;
   };
 
   return (
@@ -139,14 +166,12 @@ const RegistroUsuario = () => {
 
         {isSubmitting && <LinearProgress sx={{ mb: 2 }} />}
 
-        {/* ✅ FORMULARIO */}
         <form onSubmit={handleSubmit}>
-          {/* GRID: todos menos password */}
-          <div className="form-grid">
-            {fieldKeys
-              .filter((key) => key !== "password")
-              .map((key, index) => {
-                if (isMobile && step !== index) return null;
+          {/* 🧩 GRID: todos menos password */}
+          {(!isMobile || step < fieldKeys.length) && (
+            <div className="form-grid">
+              {fieldKeys.map((key, index) => {
+                if (isMobile && index !== step) return null;
 
                 if (key === "rol") {
                   return (
@@ -163,10 +188,7 @@ const RegistroUsuario = () => {
                         label="Rol"
                         name={key}
                         value={values[key]}
-                        onChange={(e) => {
-  handleChange(e);
-  setErrors(validate({ ...values, password: e.target.value }));
-}}
+                        onChange={handleChange}
                         onBlur={handleBlur}
                         required
                       >
@@ -185,7 +207,6 @@ const RegistroUsuario = () => {
                   );
                 }
 
-                // Campos normales
                 return (
                   <TextField
                     key={key}
@@ -202,35 +223,36 @@ const RegistroUsuario = () => {
                   />
                 );
               })}
-          </div>
-
-          {/* 🔐 Campo de contraseña aparte del grid */}
-          <Box key="password" className="password-container">
-            <TextField
-              label="Contraseña"
-              name="password"
-              required
-              fullWidth
-              type="password"
-              value={values.password}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              error={!!showError("password")}
-              helperText={showError("password")}
-            />
-            <div className="password-rules">
-              {passwordChecks.map((check) => (
-                <Typography
-                  key={check.label}
-                  className={`rule ${
-                    check.test.test(values.password) ? "ok" : "fail"
-                  }`}
-                >
-                  {check.test.test(values.password) ? "✔️" : "❌"} {check.label}
-                </Typography>
-              ))}
             </div>
-          </Box>
+          )}
+
+          {/* 🔐 Campo de contraseña aparte */}
+          {(!isMobile || step === fieldKeys.length) && (
+            <Box key="password" className="password-container">
+              <TextField
+                label="Contraseña"
+                name="password"
+                required
+                fullWidth
+                type="password"
+                value={values.password}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                error={!!showError("password")}
+                helperText={showError("password")}
+              />
+              <div className="password-rules">
+                {passwordChecks.map((check) => (
+                  <Typography
+                    key={check.label}
+                    className={`rule ${check.test.test(values.password) ? "ok" : "fail"}`}
+                  >
+                    {check.test.test(values.password) ? "✔️" : "❌"} {check.label}
+                  </Typography>
+                ))}
+              </div>
+            </Box>
+          )}
 
           {/* ✅ Botones */}
           <div className="actions">
@@ -240,7 +262,7 @@ const RegistroUsuario = () => {
                   Atrás
                 </Button>
 
-                {step < fieldKeys.length - 1 ? (
+                {step < totalSteps - 1 ? (
                   <Button
                     className="btn-registrar"
                     variant="contained"
@@ -277,11 +299,11 @@ const RegistroUsuario = () => {
             )}
           </div>
 
-          {/* Barra de progreso móvil */}
+          {/* 📊 Barra de progreso móvil */}
           {isMobile && (
             <LinearProgress
               variant="determinate"
-              value={((step + 1) / fieldKeys.length) * 100}
+              value={((step + 1) / totalSteps) * 100}
               sx={{ mt: 2 }}
             />
           )}
