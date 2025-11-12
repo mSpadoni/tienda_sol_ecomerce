@@ -12,7 +12,6 @@ const AccomodationSearchBar = ({ filtrarProductos }) => {
     <div className="accommodation-search">
       <div className="search-field">
         <div className="input-wrapper">
-          {/* <FaMapMarkerAlt className='search-icon' /> */}
           <FaSearch className="search-icon" />
 
           <TextField
@@ -31,10 +30,6 @@ const AccomodationSearchBar = ({ filtrarProductos }) => {
         <FaSearch className="button-icon" />
         Buscar
       </Button>
-      {/* <button className='search-button'>
-        <FaSearch className='button-icon' />
-        Buscar
-      </button> */}
     </div>
   );
 };

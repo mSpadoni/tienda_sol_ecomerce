@@ -100,7 +100,7 @@ const validarQueNoEsAdmin = (tipo) => {
 export const createUser = async (userData) => {
   let rol;
 
-  rol = validarQueNoEsAdmin(userData.rol); // validar que no sea admin
+  rol = validarQueNoEsAdmin(userData.rol);
 
   const token = await getAdminToken();
 
@@ -129,13 +129,11 @@ export const createUser = async (userData) => {
   );
   logger.info("usuario creado en keycloak correctamente");
 
-  // Extraer ID de Keycloak desde el header Location
   const locationHeader = createResponse.headers["location"];
   const userId = locationHeader.split("/").pop();
 
   logger.info(`user id obtenido: ${userId}`);
 
-  // Asignar rol
   let rolId;
   if (rol === TipoUsuario.VENDEDOR) {
     rolId = VENDEDOR_ID;
@@ -158,5 +156,5 @@ export const createUser = async (userData) => {
 
   logger.info("asignacion del rol correcta");
 
-  return userId; // Retornamos el ID de Keycloak
+  return userId;
 };

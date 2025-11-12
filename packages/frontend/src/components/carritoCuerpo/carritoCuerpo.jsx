@@ -22,7 +22,6 @@ const CarritoCuerpo = ({ onClose }) => {
     if (carritoVacio()) {
       onClose();
     }
-
   }, [carrito.length, total, carritoVacio, onClose]);
 
   return (

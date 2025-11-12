@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import {
   Card,
   TextField,
@@ -10,14 +10,14 @@ import {
   LinearProgress,
   Typography,
   Box,
-  Alert
-} from '@mui/material';
+  Alert,
+} from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useVisible } from "../../provieder/visibleHook.jsx";
-import { crearUsuario } from '../../services/userServices.js';
+import { crearUsuario } from "../../services/userServices.js";
 import { useMensajes } from "../../provieder/mensajeDeExito.jsx";
-import { useForm } from '../../provieder/formHook.js';
-import './registro.css';
+import { useForm } from "../../provieder/formHook.js";
+import "./registro.css";
 
 const RegistroUsuario = () => {
   const navigate = useNavigate();
@@ -26,13 +26,13 @@ const RegistroUsuario = () => {
   const [error, setError] = useState(null);
 
   const initialValues = {
-    username: '',
-    nombre: '',
-    apellido: '',
-    email: '',
-    telefono: '',
-    password: '',
-    rol: '',
+    username: "",
+    nombre: "",
+    apellido: "",
+    email: "",
+    telefono: "",
+    password: "",
+    rol: "",
   };
 
   const cancelar = () => {
@@ -40,38 +40,36 @@ const RegistroUsuario = () => {
     ponerVisible();
   };
 
-  // ✅ Validaciones
   const validate = (values) => {
     const errors = {};
 
-    if (!values.username) errors.username = 'Usuario obligatorio';
-    if (!values.nombre) errors.nombre = 'Nombre obligatorio';
-    if (!values.apellido) errors.apellido = 'Apellido obligatorio';
+    if (!values.username) errors.username = "Usuario obligatorio";
+    if (!values.nombre) errors.nombre = "Nombre obligatorio";
+    if (!values.apellido) errors.apellido = "Apellido obligatorio";
 
     if (!values.email) {
-      errors.email = 'Email obligatorio';
+      errors.email = "Email obligatorio";
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email)) {
-      errors.email = 'Formato de email inválido';
+      errors.email = "Formato de email inválido";
     }
 
     if (!values.password) {
-      errors.password = 'Contraseña obligatoria';
+      errors.password = "Contraseña obligatoria";
     } else {
       const passwordRegex =
         /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&._-])[A-Za-z\d@$!%*?&._-]{8,}$/;
 
       if (!passwordRegex.test(values.password)) {
         errors.password =
-          'Debe tener al menos 8 caracteres, una mayúscula, una minúscula, un número y un símbolo.';
+          "Debe tener al menos 8 caracteres, una mayúscula, una minúscula, un número y un símbolo.";
       }
     }
 
-    if (!values.rol) errors.rol = 'Rol obligatorio';
+    if (!values.rol) errors.rol = "Rol obligatorio";
 
     return errors;
   };
 
-  
   const onSubmit = async (values) => {
     try {
       await crearUsuario(values);
@@ -91,16 +89,14 @@ const RegistroUsuario = () => {
     handleSubmit,
     showError,
     isSubmitting,
-    setErrors
+    setErrors,
   } = useForm(initialValues, onSubmit, validate);
 
-  // Revalidar dinámicamente al modificar valores
   useEffect(() => {
     const validationErrors = validate(values);
-     setErrors(validationErrors);
+    setErrors(validationErrors);
   }, [values, setErrors]);
 
-  // 📱 Detección de móvil y paso actual
   const [step, setStep] = useState(0);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 600);
 
@@ -111,11 +107,11 @@ const RegistroUsuario = () => {
   }, []);
 
   const fieldKeysAll = Object.keys(values);
-  const fieldKeys = fieldKeysAll.filter((k) => k !== 'password');
+  const fieldKeys = fieldKeysAll.filter((k) => k !== "password");
   const totalSteps = fieldKeys.length + 1;
 
   const camposCompletos = fieldKeysAll.every(
-    (key) => values[key] && !validate(values)[key]
+    (key) => values[key] && !validate(values)[key],
   );
 
   const handleNext = () => {
@@ -132,16 +128,16 @@ const RegistroUsuario = () => {
   };
 
   const opcionesRol = [
-    { value: 'vendedor', label: 'Vendedor' },
-    { value: 'comprador', label: 'Comprador' },
+    { value: "vendedor", label: "Vendedor" },
+    { value: "comprador", label: "Comprador" },
   ];
 
   const passwordChecks = [
-    { label: 'Al menos 8 caracteres', test: /.{8,}/ },
-    { label: 'Una letra mayúscula', test: /[A-Z]/ },
-    { label: 'Una letra minúscula', test: /[a-z]/ },
-    { label: 'Un número', test: /\d/ },
-    { label: 'Un símbolo (@$!%*?&._-)', test: /[@$!%*?&._-]/ },
+    { label: "Al menos 8 caracteres", test: /.{8,}/ },
+    { label: "Una letra mayúscula", test: /[A-Z]/ },
+    { label: "Una letra minúscula", test: /[a-z]/ },
+    { label: "Un número", test: /\d/ },
+    { label: "Un símbolo (@$!%*?&._-)", test: /[@$!%*?&._-]/ },
   ];
 
   const isCurrentStepValid = () => {
@@ -149,7 +145,7 @@ const RegistroUsuario = () => {
       return values.password && !validate(values).password;
     }
     const key = fieldKeys[step];
-    return key ? (values[key] && !validate(values)[key]) : true;
+    return key ? values[key] && !validate(values)[key] : true;
   };
 
   return (
@@ -157,7 +153,6 @@ const RegistroUsuario = () => {
       <Card className="registro-card">
         <h3 className="titulo">Registro de Usuario</h3>
 
-     
         {error && (
           <Alert severity="error" className="alert-error">
             {error.message}
@@ -167,7 +162,6 @@ const RegistroUsuario = () => {
         {isSubmitting && <LinearProgress sx={{ mb: 2 }} />}
 
         <form onSubmit={handleSubmit}>
-
           {(!isMobile || step < fieldKeys.length) && (
             <div className="form-grid">
               {fieldKeys.map((key, index) => {
@@ -226,7 +220,6 @@ const RegistroUsuario = () => {
             </div>
           )}
 
-          {/* 🔐 Campo de contraseña aparte */}
           {(!isMobile || step === fieldKeys.length) && (
             <Box key="password" className="password-container">
               <TextField
@@ -247,18 +240,22 @@ const RegistroUsuario = () => {
                     key={check.label}
                     className={`rule ${check.test.test(values.password) ? "ok" : "fail"}`}
                   >
-                    {check.test.test(values.password) ? "✔️" : "❌"} {check.label}
+                    {check.test.test(values.password) ? "✔️" : "❌"}{" "}
+                    {check.label}
                   </Typography>
                 ))}
               </div>
             </Box>
           )}
 
-          {/* ✅ Botones */}
           <div className="actions">
             {isMobile ? (
               <>
-                <Button className="btn-cancel" variant="outlined" onClick={handleBack}>
+                <Button
+                  className="btn-cancel"
+                  variant="outlined"
+                  onClick={handleBack}
+                >
                   Atrás
                 </Button>
 
@@ -284,7 +281,11 @@ const RegistroUsuario = () => {
               </>
             ) : (
               <>
-                <Button className="btn-cancel" variant="outlined" onClick={cancelar}>
+                <Button
+                  className="btn-cancel"
+                  variant="outlined"
+                  onClick={cancelar}
+                >
                   Cancelar
                 </Button>
                 <Button
@@ -299,7 +300,6 @@ const RegistroUsuario = () => {
             )}
           </div>
 
-          {/* 📊 Barra de progreso móvil */}
           {isMobile && (
             <LinearProgress
               variant="determinate"

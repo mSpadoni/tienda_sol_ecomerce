@@ -12,7 +12,7 @@ const SuccessSnackbar = () => {
 
   const handleClose = (event, reason) => {
     if (reason === "clickaway") return;
-    limpiarMensajes(); // limpia el mensaje cuando se cierra
+    limpiarMensajes();
   };
 
   return (
@@ -20,7 +20,7 @@ const SuccessSnackbar = () => {
       open={!!mensajeExito}
       autoHideDuration={4000}
       onClose={handleClose}
-      anchorOrigin={{ vertical: "top", horizontal: "right" }} // arriba derecha
+      anchorOrigin={{ vertical: "top", horizontal: "right" }}
     >
       <Alert
         onClose={handleClose}

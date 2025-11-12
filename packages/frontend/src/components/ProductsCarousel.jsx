@@ -12,7 +12,7 @@ const ProductsCarousel = ({ productos }) => {
   const [productosConvertidos, setProductosConvertidos] = useState([]);
   const visible = 3;
 
-  const { currency} = useCurrency();
+  const { currency } = useCurrency();
 
   useEffect(() => {
     const convertirPrecios = async () => {
@@ -20,10 +20,10 @@ const ProductsCarousel = ({ productos }) => {
 
       const nuevosProductos = await Promise.all(
         items.map(async (producto) => {
-          const moneda= "ARS" // '"ars"'
-          const precioConvertido = producto.precio
+          const moneda = "ARS"; // '"ars"'
+          const precioConvertido = producto.precio;
           return { ...producto, precioConvertido };
-        })
+        }),
       );
 
       setProductosConvertidos(nuevosProductos);
@@ -42,7 +42,10 @@ const ProductsCarousel = ({ productos }) => {
     if (index > 0) setIndex(index - 1);
   };
 
-  if (!Array.isArray(productosConvertidos) || productosConvertidos.length === 0) {
+  if (
+    !Array.isArray(productosConvertidos) ||
+    productosConvertidos.length === 0
+  ) {
     return <p className="carousel-empty">No hay productos disponibles</p>;
   }
 
@@ -62,7 +65,12 @@ const ProductsCarousel = ({ productos }) => {
                 ? `${CURRENCIES[currency].symbol}${product.precioConvertido.toLocaleString(CURRENCIES[currency].locale)}`
                 : "";
 
-              return <CarouselItem product={{ ...product, precioFormateado }} key={product._id} />;
+              return (
+                <CarouselItem
+                  product={{ ...product, precioFormateado }}
+                  key={product._id}
+                />
+              );
             })}
           </div>
         </div>

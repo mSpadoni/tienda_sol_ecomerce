@@ -8,7 +8,7 @@ import React, {
 } from "react";
 import Keycloak from "keycloak-js";
 import PropTypes from "prop-types";
-import {  ClipLoader} from "react-spinners";
+import { ClipLoader } from "react-spinners";
 
 const KeycloakContext = createContext();
 export const useKeycloak = () => useContext(KeycloakContext);
@@ -140,16 +140,19 @@ export const KeycloakProvider = ({ children }) => {
 
   const elUsuarioEsUn = (rol) => keycloakRef.current.hasRealmRole(rol);
 
-  if (!keycloakReady) return  <div
-    style={{
-      display: "flex",
-      justifyContent: "center",
-      alignItems: "center",
-      height: "60vh", // ocupa buena parte de la pantalla
-    }}
-  >
-    <ClipLoader color="#1976d2" size={100} />
-  </div>
+  if (!keycloakReady)
+    return (
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "60vh",
+        }}
+      >
+        <ClipLoader color="#1976d2" size={100} />
+      </div>
+    );
 
   return (
     <KeycloakContext.Provider

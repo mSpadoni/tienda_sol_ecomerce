@@ -10,26 +10,21 @@ export const useCarrito = () => useContext(CarritoContext);
 export const CarritoProvider = ({ children }) => {
   const { convert } = useCurrency();
 
-  // Inicializar carrito desde localStorage o vacío
   const [carrito, setCarrito] = useState(() => {
     const stored = localStorage.getItem("carrito");
     return stored ? JSON.parse(stored) : [];
   });
 
-  // Guardar carrito en localStorage cada vez que cambia
   useEffect(() => {
     localStorage.setItem("carrito", JSON.stringify(carrito));
   }, [carrito]);
 
-  // Estado para total convertido
   const [total, setTotal] = useState(0);
 
-  // Recalcular total cada vez que el carrito o la moneda cambian
   useEffect(() => {
     const calcularTotal = async () => {
       let t = 0;
       for (const item of carrito) {
-        //const precioConvertido = await convert(item.producto.precio, item.producto.moneda);
         t += item.producto.precio * item.cantidad;
       }
       setTotal(t);
@@ -37,7 +32,6 @@ export const CarritoProvider = ({ children }) => {
     calcularTotal();
   }, [carrito, convert]);
 
-  // Agregar item al carrito
   const agregarItem = (producto, cantidad) => {
     const existe = carrito.some((item) => item.producto._id === producto._id);
     if (existe) {
@@ -47,41 +41,35 @@ export const CarritoProvider = ({ children }) => {
     }
   };
 
-  // Aumentar cantidad
   const aumentarCantidad = (id, cantidad) => {
     setCarrito((prev) =>
       prev.map((item) =>
         item.producto._id === id
           ? { ...item, cantidad: item.cantidad + cantidad }
-          : item
-      )
+          : item,
+      ),
     );
   };
 
-  // Disminuir cantidad, eliminar si llega a 0
   const disminuirCantidad = (id, cantidad) => {
     setCarrito((prev) =>
       prev
         .map((item) =>
           item.producto._id === id
             ? { ...item, cantidad: item.cantidad - cantidad }
-            : item
+            : item,
         )
-        .filter((item) => item.cantidad > 0)
+        .filter((item) => item.cantidad > 0),
     );
   };
 
-  // Eliminar producto
   const eliminarDelCarrito = (id) =>
     setCarrito((prev) => prev.filter((item) => item.producto._id !== id));
 
-  // Limpiar todo el carrito
   const limpiarCarrito = () => setCarrito([]);
 
-  // Chequear si el carrito está vacío
   const carritoVacio = () => carrito.length === 0;
 
-  // Obtener cantidad de un producto específico
   const obtenerCantidad = (id) => {
     const item = carrito.find((i) => i.producto._id === id);
     return item ? item.cantidad : 0;

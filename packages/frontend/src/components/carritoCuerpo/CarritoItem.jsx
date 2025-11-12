@@ -6,7 +6,6 @@ import { CURRENCIES } from "../../provieder/currencies.js";
 import { useCarrito } from "../../provieder/carritoProvider";
 import { FaTrashAlt } from "react-icons/fa"; // 🗑️ Icono de basura
 
-
 const CarritoItem = ({ item }) => {
   const { currency } = useCurrency();
   const {
@@ -16,20 +15,18 @@ const CarritoItem = ({ item }) => {
     obtenerCantidad,
     carritoVacio,
   } = useCarrito();
-   const placeholder = `https://via.placeholder.com/90x90?text=${encodeURIComponent(
-  item.producto.titulo || "Producto",
-)}`
+  const placeholder = `https://via.placeholder.com/90x90?text=${encodeURIComponent(
+    item.producto.titulo || "Producto",
+  )}`;
 
   const longitud = obtenerCantidad(item.producto._id);
-  
+
   return (
     <div className="carrito-item">
       <img
         src={
-                            item.producto.fotos
-                              ? `/images/${item.producto.fotos}`
-                              : placeholder
-                          }
+          item.producto.fotos ? `/images/${item.producto.fotos}` : placeholder
+        }
         alt={item.producto.titulo}
         className="item-img"
       />

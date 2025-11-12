@@ -8,7 +8,7 @@ import ProductFilters from "../../components/productFilters/ProductFilters.jsx";
 import "./Home.css";
 import SuccessSnackbar from "../../components/snackBar.jsx";
 import { useKeycloak } from "../../provieder/keyCloak.jsx";
-import {  DotLoader } from "react-spinners";
+import { DotLoader } from "react-spinners";
 import { Alert } from "@mui/material";
 import { useCurrency } from "../../provieder/CurrencyProvider.jsx";
 import { CURRENCIES } from "../../provieder/currencies.js";
@@ -89,10 +89,10 @@ const Home = () => {
 
       <main className="home-main">
         {loading ? (
-           <div className="spinner">
-    <DotLoader color="#1976d2" size={50} />
-    <p >Cargando productos...</p>
-  </div>
+          <div className="spinner">
+            <DotLoader color="#1976d2" size={50} />
+            <p>Cargando productos...</p>
+          </div>
         ) : (
           <>
             <section className="home-section">
@@ -113,7 +113,7 @@ const Home = () => {
                 {productosFiltrados.map((producto) => {
                   const placeholder = `https://via.placeholder.com/90x90?text=${encodeURIComponent(
                     producto.titulo || "Producto",
-                  )}`; 
+                  )}`;
                   return (
                     <article key={producto._id} className="product-card">
                       <div className="product-card-image">

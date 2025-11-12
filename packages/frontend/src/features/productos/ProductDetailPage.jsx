@@ -14,18 +14,17 @@ const ProductDetailPage = () => {
   const [precioConvertido, setPrecioConvertido] = useState(null);
   const [error, setError] = useState(null);
   const { agregarItem } = useCarrito();
-  const { currency} = useCurrency();
+  const { currency } = useCurrency();
 
-  // Cargar producto
   useEffect(() => {
     const cargarProducto = async (productId) => {
       try {
         const prod = await getProductoById(productId);
         setProducto(prod);
 
-       const moneda= prod.moneda // '"ars"'
-       console.log(moneda)
-        const precio = prod.precio
+        const moneda = prod.moneda;
+        console.log(moneda);
+        const precio = prod.precio;
         setPrecioConvertido(precio);
       } catch (err) {
         setError(err);
@@ -34,7 +33,6 @@ const ProductDetailPage = () => {
     cargarProducto(id);
   }, [id]);
 
-  // Inicializar cantidad
   useEffect(() => {
     if (producto) setCantidad(producto.stock > 0 ? 1 : 0);
   }, [producto]);
@@ -52,17 +50,37 @@ const ProductDetailPage = () => {
       <div className="producto-detail-container">
         <div className="producto-content skeleton">
           <div className="producto-image-section-skeleton">
-            <Skeleton variant="text" width={180} height={30} sx={{ marginBottom: "10px", borderRadius: "4px" }} />
-            <Skeleton variant="rectangular" width={320} height={260} sx={{ borderRadius: "8px" }} />
+            <Skeleton
+              variant="text"
+              width={180}
+              height={30}
+              sx={{ marginBottom: "10px", borderRadius: "4px" }}
+            />
+            <Skeleton
+              variant="rectangular"
+              width={320}
+              height={260}
+              sx={{ borderRadius: "8px" }}
+            />
           </div>
           <div className="producto-info-section skeleton-info">
             <Skeleton variant="text" width="70%" height={40} />
             <Skeleton variant="text" width="40%" height={30} />
-            <Skeleton variant="rectangular" width="60%" height={25} sx={{ borderRadius: "6px", marginTop: "10px" }} />
+            <Skeleton
+              variant="rectangular"
+              width="60%"
+              height={25}
+              sx={{ borderRadius: "6px", marginTop: "10px" }}
+            />
             <Skeleton variant="text" width="80%" height={20} sx={{ mt: 2 }} />
             <Skeleton variant="text" width="85%" height={20} />
             <Skeleton variant="text" width="75%" height={20} />
-            <Skeleton variant="rectangular" width="50%" height={40} sx={{ borderRadius: "8px", mt: 3 }} />
+            <Skeleton
+              variant="rectangular"
+              width="50%"
+              height={40}
+              sx={{ borderRadius: "8px", mt: 3 }}
+            />
           </div>
         </div>
       </div>
@@ -80,7 +98,6 @@ const ProductDetailPage = () => {
   const hayStock = producto.activo && producto.stock > 0;
   const placeholder = `https://via.placeholder.com/480x360?text=${encodeURIComponent(producto.titulo || "Producto")}`;
 
-
   const precioFormateado =
     precioConvertido != null
       ? `${CURRENCIES[currency].symbol}${precioConvertido.toLocaleString(CURRENCIES[currency].locale)}`
@@ -90,10 +107,14 @@ const ProductDetailPage = () => {
     <div className="producto-detail-container">
       <div className="producto-header">
         <div>
-          <p className="producto-mini-badge">{producto.categoria || "Sin categoría"}</p>
+          <p className="producto-mini-badge">
+            {producto.categoria || "Sin categoría"}
+          </p>
           <h1 className="producto-nombre">{producto.titulo}</h1>
         </div>
-        <div className={`producto-stock-badge ${hayStock ? "en-stock" : "sin-stock"}`}>
+        <div
+          className={`producto-stock-badge ${hayStock ? "en-stock" : "sin-stock"}`}
+        >
           {hayStock ? `En stock (${producto.stock})` : "Sin stock"}
         </div>
       </div>
@@ -109,7 +130,8 @@ const ProductDetailPage = () => {
 
         <div className="producto-info-section">
           <p className="producto-description">
-            {producto.descripcion || "Este producto no tiene descripción cargada."}
+            {producto.descripcion ||
+              "Este producto no tiene descripción cargada."}
           </p>
 
           <div className="producto-price-section">
@@ -120,28 +142,54 @@ const ProductDetailPage = () => {
           <div className="producto-categorias">
             <span className="categoria-label">Categoría:</span>
             <div className="categoria-pills">
-              <span className="categoria-pill">{producto.categoria || "Sin categoría"}</span>
+              <span className="categoria-pill">
+                {producto.categoria || "Sin categoría"}
+              </span>
             </div>
           </div>
 
           <div className="producto-metadata">
-            <p><strong>Vendedor:</strong> {producto.vendedor?.nombre || "Tienda Sol"}</p>
-            <p><strong>Estado:</strong> {producto.activo ? "Publicado" : "No disponible"}</p>
+            <p>
+              <strong>Vendedor:</strong>{" "}
+              {producto.vendedor?.nombre || "Tienda Sol"}
+            </p>
+            <p>
+              <strong>Estado:</strong>{" "}
+              {producto.activo ? "Publicado" : "No disponible"}
+            </p>
           </div>
 
           <div className="comprar-container">
             <ButtonGroup variant="outlined" aria-label="cantidad de producto">
-              <Button onClick={disminuirCantidad} disabled={!hayStock || cantidad <= 1}>-</Button>
+              <Button
+                onClick={disminuirCantidad}
+                disabled={!hayStock || cantidad <= 1}
+              >
+                -
+              </Button>
               <Button disabled>{cantidad}</Button>
-              <Button onClick={aumentarCantidad} disabled={!hayStock || cantidad >= producto.stock}>+</Button>
+              <Button
+                onClick={aumentarCantidad}
+                disabled={!hayStock || cantidad >= producto.stock}
+              >
+                +
+              </Button>
             </ButtonGroup>
 
-            <Button className="comprar" disabled={!hayStock || cantidad === 0} onClick={() => agregarItem(producto, cantidad)}>
+            <Button
+              className="comprar"
+              disabled={!hayStock || cantidad === 0}
+              onClick={() => agregarItem(producto, cantidad)}
+            >
               Agregar al carrito
             </Button>
           </div>
 
-          {!hayStock && <p className="producto-warning">Este producto no tiene stock en este momento.</p>}
+          {!hayStock && (
+            <p className="producto-warning">
+              Este producto no tiene stock en este momento.
+            </p>
+          )}
         </div>
       </div>
     </div>

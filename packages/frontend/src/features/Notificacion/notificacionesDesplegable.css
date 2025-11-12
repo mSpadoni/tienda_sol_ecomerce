@@ -31,7 +31,7 @@
   max-width: 280px;
   padding: 0.9rem 1.3rem;
   border-radius: 10px;
-  border: 2px solid #FF8C00;
+  border: 2px solid #ff8c00;
   color: #111;
   font-size: clamp(1.1rem, 2vw, 1.4rem);
   font-weight: 600;
@@ -44,8 +44,8 @@
 
 .filtro-select:hover,
 .filtro-select:focus {
-  background-color: #fff !important;; /* mantiene el fondo blanco incluso al enfocar o pasar el mouse */
-  border-color: #FF8C00; /* mantiene solo el borde amarillo */
+  background-color: #fff !important; /* mantiene el fondo blanco incluso al enfocar o pasar el mouse */
+  border-color: #ff8c00; /* mantiene solo el borde amarillo */
   transform: scale(1.05);
 }
 

@@ -3,8 +3,7 @@
   position: fixed;
   top: 0;
   width: 100%;
-  background: #FFC300
-;
+  background: #ffc300;
   z-index: 30;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   height: 100px;

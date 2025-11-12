@@ -89,7 +89,7 @@ app.get("/", (req, res) => {
 // -----------------------------
 
 const ratesCache = {};
-const CACHE_TIME = 10 * 60 * 1000; // 10 minutos
+const CACHE_TIME = 10 * 60 * 1000;
 
 app.get("/api/rates", async (req, res) => {
   const { base, target } = req.query;
@@ -103,7 +103,6 @@ app.get("/api/rates", async (req, res) => {
   const cacheKey = `${baseLower}_${targetLower}`;
   const now = Date.now();
 
-  // Verificar cache
   if (
     ratesCache[cacheKey] &&
     now - ratesCache[cacheKey].timestamp < CACHE_TIME
@@ -112,14 +111,13 @@ app.get("/api/rates", async (req, res) => {
   }
 
   try {
-    // URL de la API (sin params)
     logger.info(
       `https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/${baseLower}.json`,
     );
     const url = `https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/${baseLower}.json`;
     const response = await axios.get(url);
     logger.info(response.data);
-    // Extraer tasa según el formato que me pasaste
+
     const rate = response.data[baseLower][targetLower];
 
     logger.info(rate);
@@ -128,7 +126,6 @@ app.get("/api/rates", async (req, res) => {
         .status(404)
         .json({ error: `Tasa no encontrada para ${base} → ${target}` });
     }
-
 
     ratesCache[cacheKey] = { rate, timestamp: now };
 
@@ -141,7 +138,6 @@ app.get("/api/rates", async (req, res) => {
   }
 });
 
-// Configurar rutas y controladores en el servidor
 server.setController(ControllerPedido, controllerPedido);
 server.setController(NotificacionesController, notificacionesController);
 server.setController(ProductosController, productosController);
@@ -151,5 +147,4 @@ routes.forEach((route) => server.addRoute(route));
 server.configureRoutes();
 server.launch();
 
-// Conexión a MongoDB
 MongoDBClient.connect();

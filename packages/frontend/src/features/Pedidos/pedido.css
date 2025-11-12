@@ -11,7 +11,9 @@
   border-radius: 14px;
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
   padding: 25px;
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
   display: flex;
   flex-direction: column;
 }
@@ -67,7 +69,9 @@
   gap: 6px;
   font-weight: 500;
   margin-top: 10px;
-  transition: color 0.2s, transform 0.2s;
+  transition:
+    color 0.2s,
+    transform 0.2s;
 }
 
 .btn-ver-detalles-text:hover {
@@ -90,14 +94,16 @@
   font-weight: 600;
   font-size: 1rem; /* más grande */
   cursor: pointer;
-  background-color: #FFE066;
+  background-color: #ffe066;
   color: #333;
   border: none;
-  transition: background-color 0.2s, transform 0.2s;
+  transition:
+    background-color 0.2s,
+    transform 0.2s;
 }
 
 .btn-cambiar-estado:hover {
-  background-color: #FF8C00;
+  background-color: #ff8c00;
   transform: translateY(-1px);
 }
 
@@ -115,7 +121,9 @@
   font-size: 1rem; /* más grande */
   color: #555;
   line-height: 1.6;
-  transition: max-height 0.3s ease, opacity 0.3s ease;
+  transition:
+    max-height 0.3s ease,
+    opacity 0.3s ease;
 }
 
 /* Mensaje cuando no hay pedidos */

@@ -44,60 +44,59 @@ export default function ListaNotificaciones({ mensaje }) {
 
   return (
     <div className="notificaciones-wrapper">
-  <div className="notificaciones-container">
-    <div className="filtro-estado">
-      <NotificacionesDesplegable
-        setEstadoABuscar={setEstadoABuscar}
-        funcionDeFiltrado={funcionDeFiltrado}
-        estado_lectura={estado_lectura}
-        setEstadoLectura={setEstadoL}
-      />
-    </div>
-
-    <div className="notificaciones-lista">
-      {notificaciones.map((notificacion) => (
-        <div
-          key={notificacion.id}
-          className={`notificacion-card ${
-            notificacion.leida ? "leida" : "no-leida"
-          }`}
-        >
-          <div
-            className={`estado_lectura ${
-              notificacion.leida ? "leida" : "no-leida"
-            }`}
-          >
-            {accionesDeLectura(notificacion.leida).textoItem}
-          </div>
-
-          <div className="contenido-notificacion">
-            <div className="mensaje">
-              <h4>Notificación:</h4>
-              <p>{notificacion.mensaje}</p>
-            </div>
-
-            <div className="acciones">
-              <button
-                className={`btn-cambiar ${
-                  notificacion.leida ? "rojo" : "verde"
-                }`}
-                onClick={() =>
-                  cambiarLeida(
-                    notificacion.id,
-                    accionesDeLectura(notificacion.leida).estado,
-                  )
-                }
-              >
-                {accionesDeLectura(notificacion.leida).textoBotonCambio}
-              </button>
-            </div>
-          </div>
+      <div className="notificaciones-container">
+        <div className="filtro-estado">
+          <NotificacionesDesplegable
+            setEstadoABuscar={setEstadoABuscar}
+            funcionDeFiltrado={funcionDeFiltrado}
+            estado_lectura={estado_lectura}
+            setEstadoLectura={setEstadoL}
+          />
         </div>
-      ))}
-    </div>
-  </div>
-</div>
 
+        <div className="notificaciones-lista">
+          {notificaciones.map((notificacion) => (
+            <div
+              key={notificacion.id}
+              className={`notificacion-card ${
+                notificacion.leida ? "leida" : "no-leida"
+              }`}
+            >
+              <div
+                className={`estado_lectura ${
+                  notificacion.leida ? "leida" : "no-leida"
+                }`}
+              >
+                {accionesDeLectura(notificacion.leida).textoItem}
+              </div>
+
+              <div className="contenido-notificacion">
+                <div className="mensaje">
+                  <h4>Notificación:</h4>
+                  <p>{notificacion.mensaje}</p>
+                </div>
+
+                <div className="acciones">
+                  <button
+                    className={`btn-cambiar ${
+                      notificacion.leida ? "rojo" : "verde"
+                    }`}
+                    onClick={() =>
+                      cambiarLeida(
+                        notificacion.id,
+                        accionesDeLectura(notificacion.leida).estado,
+                      )
+                    }
+                  >
+                    {accionesDeLectura(notificacion.leida).textoBotonCambio}
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
   );
 }
 

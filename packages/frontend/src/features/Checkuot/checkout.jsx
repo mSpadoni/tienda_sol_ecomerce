@@ -12,7 +12,7 @@ import { useVisible } from "../../provieder/visibleHook.jsx";
 
 const Checkout = () => {
   const navigate = useNavigate();
-  const { carrito, limpiarCarrito } = useCarrito();
+  const { carrito, limpiarCarrito, total } = useCarrito();
   const { currency } = useCurrency();
   const { setMensajeExito } = useMensajes();
   const { ponerVisible, ponerInvisible } = useVisible();
@@ -43,9 +43,14 @@ const Checkout = () => {
     const errors = {};
     Object.keys(values).forEach((key) => {
       if (
-        ["calle", "altura", "codigoPostal", "ciudad", "provincia", "pais"].includes(
-          key
-        ) &&
+        [
+          "calle",
+          "altura",
+          "codigoPostal",
+          "ciudad",
+          "provincia",
+          "pais",
+        ].includes(key) &&
         !values[key].trim()
       ) {
         errors[key] = "Este campo es obligatorio";
@@ -55,10 +60,6 @@ const Checkout = () => {
   };
 
   const onSubmit = (values) => {
-    const total = carrito.reduce(
-      (acc, item) => acc + item.producto.precio * item.cantidad,
-      0
-    );
     const id = Store.Pedidos.length + 1;
 
     Store.Pedidos.push({
@@ -83,7 +84,7 @@ const Checkout = () => {
       },
       moneda: currency,
       estado: "Pendiente",
-      total,
+      total: total,
       Fecha: new Date(),
     });
 
@@ -93,14 +94,8 @@ const Checkout = () => {
     navigate("/");
   };
 
-  const {
-    values,
-    handleChange,
-    handleBlur,
-    handleSubmit,
-    errors,
-    showError,
-  } = useForm(initialValues, onSubmit, validate);
+  const { values, handleChange, handleBlur, handleSubmit, errors, showError } =
+    useForm(initialValues, onSubmit, validate);
 
   const fieldKeys = Object.keys(initialValues);
 
@@ -121,10 +116,10 @@ const Checkout = () => {
   const totalFormateado = () => {
     const total = carrito.reduce(
       (acc, item) => acc + item.producto.precio * item.cantidad,
-      0
+      0,
     );
     return `${CURRENCIES[currency].symbol}${total.toLocaleString(
-      CURRENCIES[currency].locale
+      CURRENCIES[currency].locale,
     )}`;
   };
 
@@ -142,7 +137,9 @@ const Checkout = () => {
 
         <div className="checkout-form">
           <h3>Datos de entrega</h3>
-          {isMobile && <LinearProgress variant="determinate" value={progress} />}
+          {isMobile && (
+            <LinearProgress variant="determinate" value={progress} />
+          )}
           <form className="form-grid" onSubmit={handleSubmit}>
             {fieldKeys.map((key, index) => {
               if (isMobile && index !== step) return null; // mostrar solo paso actual
@@ -155,7 +152,14 @@ const Checkout = () => {
                     onChange={handleChange}
                     onBlur={handleBlur}
                     fullWidth
-                    required={["calle", "altura", "codigoPostal", "ciudad", "provincia", "pais"].includes(key)}
+                    required={[
+                      "calle",
+                      "altura",
+                      "codigoPostal",
+                      "ciudad",
+                      "provincia",
+                      "pais",
+                    ].includes(key)}
                     error={!!showError(key)}
                     helperText={showError(key)}
                   />
@@ -164,9 +168,7 @@ const Checkout = () => {
             })}
 
             <div className="actions">
-              {isMobile && (
-                <Button onClick={handleBack}>Atrás</Button>
-              )}
+              {isMobile && <Button onClick={handleBack}>Atrás</Button>}
               {isMobile && step < fieldKeys.length - 1 && (
                 <Button
                   variant="contained"
@@ -178,15 +180,27 @@ const Checkout = () => {
               )}
               {(!isMobile || step === fieldKeys.length - 1) && (
                 <>
-                  <Button onClick={() => { limpiarCarrito(); ponerVisible(); navigate("/"); }}>
+                  <Button
+                    onClick={() => {
+                      limpiarCarrito();
+                      ponerVisible();
+                      navigate("/");
+                    }}
+                  >
                     Cancelar
                   </Button>
                   <Button
                     variant="contained"
                     type="submit"
                     disabled={
-                      !["calle","altura","codigoPostal","ciudad","provincia","pais"]
-                        .every((key) => values[key].trim() !== "")
+                      ![
+                        "calle",
+                        "altura",
+                        "codigoPostal",
+                        "ciudad",
+                        "provincia",
+                        "pais",
+                      ].every((key) => values[key].trim() !== "")
                     }
                   >
                     Comprar
@@ -209,7 +223,7 @@ const Checkout = () => {
                   <span>
                     {CURRENCIES[currency].symbol}
                     {(item.producto.precio * item.cantidad).toLocaleString(
-                      CURRENCIES[currency].locale
+                      CURRENCIES[currency].locale,
                     )}
                   </span>
                 </div>

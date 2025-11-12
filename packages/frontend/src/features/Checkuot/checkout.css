@@ -125,14 +125,14 @@
 }
 
 .actions button.MuiButton-contained {
-  background-color: #FFE066 !important;
+  background-color: #ffe066 !important;
   color: #333 !important;
   border: none !important;
 }
 
 .actions button.MuiButton-contained:hover {
-  background-color: #FFE066 !important;
-  box-shadow: 0 0 15px #FF8C00;
+  background-color: #ffe066 !important;
+  box-shadow: 0 0 15px #ff8c00;
   transform: translateY(-2px) scale(1.05);
 }
 

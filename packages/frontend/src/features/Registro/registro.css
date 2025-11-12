@@ -60,16 +60,16 @@
 
 .input-field .MuiInputBase-root:hover {
   background-color: #fffde7;
-  border: 2px solid #FF8C00;
+  border: 2px solid #ff8c00;
 }
 
 .input-field .Mui-focused {
   background-color: #fff8c4;
-  border: 2px solid #FF8C00;
+  border: 2px solid #ff8c00;
 }
 
 .input-field .MuiInputLabel-root.Mui-focused {
-  color: #FFC300;
+  color: #ffc300;
 }
 
 /* Campo contraseña fuera del grid */
@@ -168,7 +168,8 @@
     gap: 10px;
   }
 
-  .btn-cancel, .btn-registrar {
+  .btn-cancel,
+  .btn-registrar {
     width: 80%;
     max-width: 250px;
     margin: 0 auto;

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState } from "react";
 
 export function useForm(initialValues, onSubmit, validate) {
   const [values, setValues] = useState(initialValues);
@@ -37,7 +37,7 @@ export function useForm(initialValues, onSubmit, validate) {
     setErrors(validationErrors);
 
     setTouched(
-      Object.keys(values).reduce((acc, key) => ({ ...acc, [key]: true }), {})
+      Object.keys(values).reduce((acc, key) => ({ ...acc, [key]: true }), {}),
     );
 
     if (Object.keys(validationErrors).length === 0) {
@@ -57,7 +57,7 @@ export function useForm(initialValues, onSubmit, validate) {
   };
 
   const showError = (name) =>
-    (touched[name] || triedSubmit) && errors[name] ? errors[name] : '';
+    (touched[name] || triedSubmit) && errors[name] ? errors[name] : "";
 
   return {
     values,

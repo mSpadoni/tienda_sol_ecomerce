@@ -1,17 +1,15 @@
-
 /* ======== CONTENEDOR PRINCIPAL ======== */
 .notificaciones-wrapper {
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  min-height: 100vh;       /* Ocupa toda la altura de la ventana */
+  min-height: 100vh; /* Ocupa toda la altura de la ventana */
   width: 100%;
-  background-color: #FFE066; /* fondo solar cálido */
+  background-color: #ffe066; /* fondo solar cálido */
   overflow-y: auto;
   padding: clamp(1.2rem, 3vw, 2.5rem);
   box-sizing: border-box;
 }
-
 
 /* ======== CONTENEDOR CENTRAL ======== */
 .notificaciones-container {
@@ -46,7 +44,7 @@
 .filtro-estado select {
   padding: 0.6rem 1rem;
   border-radius: 10px;
-  border: 2px solid #FF8C00;
+  border: 2px solid #ff8c00;
   background: #fff;
   cursor: pointer;
   transition: all 0.25s ease;
@@ -54,7 +52,7 @@
 
 .filtro-estado select:hover {
   background: #fff3cd;
-  border-color: #FF8C00;
+  border-color: #ff8c00;
 }
 
 /* ======== LISTA DE NOTIFICACIONES ======== */
@@ -75,7 +73,9 @@
   border-radius: 14px;
   padding: clamp(1rem, 2vw, 1.6rem);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
 }
 
 .notificacion-card:hover {

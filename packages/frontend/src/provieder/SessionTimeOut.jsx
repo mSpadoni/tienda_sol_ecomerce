@@ -6,26 +6,23 @@ export default function SessionTimeout({ timeout = 30 * 60 * 1000 }) {
   const { logout, isAuthenticated } = useKeycloak();
   const timerRef = useRef(null);
 
-  // Función que resetea el timer
   const resetTimer = () => {
-    if (!isAuthenticated) return; // si no está logueado, no hace nada
+    if (!isAuthenticated) return;
     if (timerRef.current) clearTimeout(timerRef.current);
 
     timerRef.current = setTimeout(() => {
-      // solo hace logout si el usuario sigue logueado
-
       logout();
       console.log("Sesión cerrada por inactividad");
     }, timeout);
   };
 
   useEffect(() => {
-    if (!isAuthenticated) return; // solo activa si está logueado
+    if (!isAuthenticated) return;
 
     const events = ["mousemove", "keydown", "click", "scroll", "touchstart"];
     events.forEach((e) => window.addEventListener(e, resetTimer));
 
-    resetTimer(); // iniciar timer al montar
+    resetTimer();
 
     return () => {
       events.forEach((e) => window.removeEventListener(e, resetTimer));

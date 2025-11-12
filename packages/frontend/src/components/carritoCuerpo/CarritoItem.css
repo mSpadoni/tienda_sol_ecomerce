@@ -84,7 +84,7 @@
 
 .btn-cantidad:hover {
   background: #fff8e1;
-  border-color: #FFB000;
+  border-color: #ffb000;
   box-shadow: 0 0 10px rgba(255, 202, 40, 0.6);
   transform: scale(1.08);
 }
@@ -111,8 +111,8 @@
 }
 
 .eliminar:hover {
-  color: #FFB000;
-  border-color: #FF8C00;
+  color: #ffb000;
+  border-color: #ff8c00;
   box-shadow: 0 0 8px rgba(255, 215, 64, 0.7);
   transform: scale(1.1);
 }
