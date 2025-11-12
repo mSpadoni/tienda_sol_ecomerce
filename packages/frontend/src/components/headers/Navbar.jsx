@@ -19,7 +19,7 @@ const Navbar = () => {
 
   const { carrito, carritoVacio } = useCarrito();
   const { currency, setCurrency } = useCurrency();
-  const { isAuthenticated, login, logout, elUsuarioEsUn, ready } =
+  const { isAuthenticated, login, logout, elUsuarioEsUn, keycloakReady } =
     useKeycloak();
   const { isVisible, ponerInvisible, ponerVisible } = useVisible();
 
@@ -35,13 +35,13 @@ const Navbar = () => {
   }, []);
 
   useEffect(() => {
-    if (ready) {
+    if (keycloakReady) {
       setShowSkeleton(false);
       return;
     }
-    const timer = setTimeout(() => setShowSkeleton(false), 1500);
+    const timer = setTimeout(() => setShowSkeleton(false), 2000);
     return () => clearTimeout(timer);
-  }, [ready]);
+  }, [keycloakReady]);
 
   const registrar = () => {
     ponerInvisible();

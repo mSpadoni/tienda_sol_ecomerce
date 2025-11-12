@@ -21,7 +21,7 @@ const keycloak = new Keycloak({
 
 export const KeycloakProvider = ({ children }) => {
   const keycloakRef = useRef(keycloak);
-
+  const [, forceRender] = useState(0);
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
     const saved = localStorage.getItem("kc_authenticated");
     return saved === "true"; // si existe, lo convertimos a boolean

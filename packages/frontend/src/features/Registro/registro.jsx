@@ -71,7 +71,7 @@ const RegistroUsuario = () => {
     return errors;
   };
 
-  // ✅ Envío
+  
   const onSubmit = async (values) => {
     try {
       await crearUsuario(values);
@@ -97,7 +97,7 @@ const RegistroUsuario = () => {
   // Revalidar dinámicamente al modificar valores
   useEffect(() => {
     const validationErrors = validate(values);
-    if (typeof setErrors === 'function') setErrors(validationErrors);
+     setErrors(validationErrors);
   }, [values, setErrors]);
 
   // 📱 Detección de móvil y paso actual
@@ -157,7 +157,7 @@ const RegistroUsuario = () => {
       <Card className="registro-card">
         <h3 className="titulo">Registro de Usuario</h3>
 
-        {/* 🔴 Mensaje de error global */}
+     
         {error && (
           <Alert severity="error" className="alert-error">
             {error.message}
@@ -167,7 +167,7 @@ const RegistroUsuario = () => {
         {isSubmitting && <LinearProgress sx={{ mb: 2 }} />}
 
         <form onSubmit={handleSubmit}>
-          {/* 🧩 GRID: todos menos password */}
+
           {(!isMobile || step < fieldKeys.length) && (
             <div className="form-grid">
               {fieldKeys.map((key, index) => {
@@ -181,11 +181,11 @@ const RegistroUsuario = () => {
                       className="input-field"
                       error={!!showError(key)}
                       variant="outlined"
+                      label="Rol"
                     >
                       <InputLabel id={`${key}-label`}>Rol</InputLabel>
                       <Select
                         labelId={`${key}-label`}
-                        label="Rol"
                         name={key}
                         value={values[key]}
                         onChange={handleChange}
