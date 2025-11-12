@@ -108,7 +108,7 @@ app.get("/api/rates", async (req, res) => {
     ratesCache[cacheKey] &&
     now - ratesCache[cacheKey].timestamp < CACHE_TIME
   ) {
-    return res.json({ rate: ratesCache[cacheKey].rate, cached: true });
+    return res.json({ rate: ratesCache[cacheKey].rate });
   }
 
   try {
@@ -129,7 +129,7 @@ app.get("/api/rates", async (req, res) => {
         .json({ error: `Tasa no encontrada para ${base} → ${target}` });
     }
 
-    // Guardar en cache
+
     ratesCache[cacheKey] = { rate, timestamp: now };
 
     return res.status(200).json({ rate });

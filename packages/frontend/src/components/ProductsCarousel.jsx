@@ -12,7 +12,7 @@ const ProductsCarousel = ({ productos }) => {
   const [productosConvertidos, setProductosConvertidos] = useState([]);
   const visible = 3;
 
-  const { currency, convert } = useCurrency();
+  const { currency} = useCurrency();
 
   useEffect(() => {
     const convertirPrecios = async () => {

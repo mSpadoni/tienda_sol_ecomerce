@@ -14,7 +14,7 @@ const ProductDetailPage = () => {
   const [precioConvertido, setPrecioConvertido] = useState(null);
   const [error, setError] = useState(null);
   const { agregarItem } = useCarrito();
-  const { currency, convert } = useCurrency();
+  const { currency} = useCurrency();
 
   // Cargar producto
   useEffect(() => {
@@ -23,8 +23,8 @@ const ProductDetailPage = () => {
         const prod = await getProductoById(productId);
         setProducto(prod);
 
-       const moneda= "ARS" // '"ars"'
-     
+       const moneda= prod.moneda // '"ars"'
+       console.log(moneda)
         const precio = prod.precio
         setPrecioConvertido(precio);
       } catch (err) {
@@ -32,7 +32,7 @@ const ProductDetailPage = () => {
       }
     };
     cargarProducto(id);
-  }, [id, currency, convert]);
+  }, [id]);
 
   // Inicializar cantidad
   useEffect(() => {
