@@ -3,7 +3,7 @@
   display: flex;
   justify-content: center;
   padding: 80px 20px 40px 20px;
-  background-color: #f5f5f5; /* fondo suave */
+  background-color: #f5f5f5;
 }
 
 /* Tarjeta del formulario */
@@ -12,7 +12,7 @@
   max-width: 900px;
   padding: 40px 30px;
   border-radius: 20px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
   background-color: #ffffff;
   transition: all 0.3s ease;
 }
@@ -26,33 +26,87 @@
   font-size: 1.8rem;
 }
 
-/* Grid de inputs */
+/* Grid de inputs (sin la contraseña) */
 .form-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr); /* 2 columnas desktop */
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 20px;
+  align-items: start;
+}
+
+.input-field {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  margin-bottom: 1rem;
 }
 
 /* Inputs y selects */
+.input-field .MuiFormControl-root,
+.input-field .MuiTextField-root {
+  width: 100%;
+}
+
+.input-field .MuiFormHelperText-root {
+  min-height: 22px;
+}
+
 .input-field .MuiInputBase-root {
   transition: all 0.3s ease;
-  border: 2px solid #c4c4c4; /* borde inicial */
+  border: 2px solid #c4c4c4;
   border-radius: 8px;
   background-color: #fafafa;
 }
 
 .input-field .MuiInputBase-root:hover {
-  background-color: #fffde7; /* hover suave amarillo */
-  border: 2px solid #FF8C00; /* borde amarillo */
+  background-color: #fffde7;
+  border: 2px solid #FF8C00;
 }
 
 .input-field .Mui-focused {
-  background-color: #fff8c4; /* foco amarillo */
+  background-color: #fff8c4;
   border: 2px solid #FF8C00;
 }
 
 .input-field .MuiInputLabel-root.Mui-focused {
-  color: #FFC300 /* label amarillo intenso */
+  color: #FFC300;
+}
+
+/* Campo contraseña fuera del grid */
+.password-container {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  width: 100%;
+}
+
+/* Reglas de contraseña */
+.password-rules {
+  margin-top: 8px;
+  padding: 8px 12px;
+  border: 1px dashed #ddd;
+  border-radius: 8px;
+  background-color: #fffef6;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 0.8rem;
+  color: gray;
+}
+
+.password-rules span {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.password-rules .ok {
+  color: green;
+}
+
+.password-rules .fail {
+  color: #999;
 }
 
 /* Contenedor de botones */
@@ -65,7 +119,7 @@
   margin-top: 30px;
 }
 
-/* Botón cancelar */
+/* Botones */
 .btn-cancel {
   background-color: #ffffff;
   color: #1976d2;
@@ -82,7 +136,6 @@
   box-shadow: 0 4px 12px rgba(25, 118, 210, 0.3);
 }
 
-/* Botón registrar */
 .btn-registrar {
   background-color: #1976d2;
   color: #ffffff;
@@ -103,23 +156,37 @@
   margin-bottom: 15px;
 }
 
-/* Responsive: 1 columna móvil */
-/* Responsive: 1 columna móvil */
+/* Responsive */
 @media (max-width: 600px) {
   .form-grid {
-    grid-template-columns: 1fr; /* apilado en móvil */
+    grid-template-columns: 1fr;
   }
 
   .actions {
     flex-direction: column;
     align-items: stretch;
-    gap: 10px; /* espacio más pequeño entre botones */
+    gap: 10px;
   }
 
   .btn-cancel, .btn-registrar {
-    width: 80%;       /* no tan grandes, centrados */
-    max-width: 250px; /* límite máximo */
-    margin: 0 auto;   /* centrar horizontalmente */
-    flex: unset;      /* quitar flex-grow/flex-shrink de desktop */
+    width: 80%;
+    max-width: 250px;
+    margin: 0 auto;
+    flex: unset;
   }
+
+  .password-rules {
+    font-size: 0.9rem;
+    padding: 10px;
+  }
+}
+
+/* Corrige label del select */
+.MuiInputLabel-root {
+  top: -5px;
+}
+
+.MuiSelect-select {
+  padding-top: 14px !important;
+  padding-bottom: 14px !important;
 }

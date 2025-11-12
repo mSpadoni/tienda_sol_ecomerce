@@ -70,5 +70,6 @@ export function useForm(initialValues, onSubmit, validate) {
     resetForm,
     setValues,
     showError,
+    setErrors,
   };
 }
