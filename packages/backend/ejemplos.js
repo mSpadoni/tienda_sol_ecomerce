@@ -12,6 +12,7 @@ import { TipoUsuario } from "./models/entities/TipoUsuario.js";
 
 //usuarios de ejemplo
 export const usuario1 = new Usuario(
+  null,
   "Juan Perez",
   "juanperez@gmail.com",
   " ",
@@ -20,6 +21,7 @@ export const usuario1 = new Usuario(
 );
 
 export const usuario2 = new Usuario(
+  null,
   "Ana Gomez",
   "anaGomez@frba.utn.edu,ar",
   " ",
@@ -28,6 +30,7 @@ export const usuario2 = new Usuario(
 );
 
 export const usuario3 = new Usuario(
+  null,
   "Ana Gomez",
   "anaGomez@frba.utn.edu,ar",
   " ",
@@ -36,6 +39,7 @@ export const usuario3 = new Usuario(
 );
 
 export const usuario4 = new Usuario(
+  null,
   "admin",
   "@gmail.com",
   " ",

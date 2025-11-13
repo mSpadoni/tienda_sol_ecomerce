@@ -69,7 +69,7 @@ describe("NotificacionesService", () => {
     const notificacion = makeNotificacion({ _id: "nidX" });
     repoMock.findById.mockResolvedValue(notificacion);
 
-    const res = await svc.getNotificacionById("nidX");
+    const res = await svc.notificacionesRepository.findById("nidX");
 
     expect(repoMock.findById).toHaveBeenCalledWith("nidX");
     expect(res).toBe(notificacion);
