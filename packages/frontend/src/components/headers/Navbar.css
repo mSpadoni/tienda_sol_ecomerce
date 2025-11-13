@@ -6,19 +6,19 @@
   background: #ffc300;
   z-index: 30;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  height: 100px;
+  height: 75px;
 }
 
 .navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.7rem 1.8rem 1.5rem; /* ⬆️ más alto */
+  padding: 0.1rem 1.8rem 1.5rem; /* ⬆️ más alto */
 }
 
 /* Logo */
 .logo {
-  color: whitesmoke;
+  color: rgb(10, 0, 97);
   font-size: 2.4rem; /* ⬆️ más grande */
   font-weight: bold;
   border: none;
@@ -42,6 +42,7 @@
   transition:
     color 0.3s,
     transform 0.2s;
+  font-size: 87rem; 
 }
 .nav-link:hover {
   color: whitesmoke;
@@ -126,18 +127,27 @@
   color: black;
   border: none;
   padding: 0.4rem 0.8rem;
-  font-weight: bold;
+
   cursor: pointer;
   font-size: 1rem;
   transition:
     color 0.3s,
     transform 0.2s;
+
 }
 .nav-button:hover,
 .logout_button:hover {
-  color: whitesmoke;
   transform: translateY(-2px);
 }
+
+/* Shared typography for nav links and buttons */
+.nav-link,
+.nav-button,
+.logout_button {
+  font-family: "Inter", "Helvetica Neue", Arial, sans-serif;
+  font-size: 1.2rem; /* ensure same size for links and nav buttons (desktop) */
+}
+
 
 /* Carrito */
 .cart {

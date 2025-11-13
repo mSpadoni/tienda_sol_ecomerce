@@ -19,7 +19,7 @@ const CarritoItem = ({ item }) => {
     item.producto.titulo || "Producto",
   )}`;
 
-  const longitud = obtenerCantidad(item.producto._id);
+  const cantidadProducto = obtenerCantidad(item.producto._id);
 
   return (
     <div className="carrito-item">
@@ -49,10 +49,11 @@ const CarritoItem = ({ item }) => {
             >
               −
             </button>
-            <span>{longitud}</span>
+            <span className="cantidad">{cantidadProducto}</span>
             <button
               className="btn-cantidad"
               onClick={() => aumentarCantidad(item.producto._id, 1)}
+              disabled={item.producto.stock <= cantidadProducto}
             >
               +
             </button>
@@ -79,6 +80,7 @@ CarritoItem.propTypes = {
       fotos: PropTypes.string,
       titulo: PropTypes.string,
       precio: PropTypes.number,
+      stock: PropTypes.number,
     }).isRequired,
     cantidad: PropTypes.number.isRequired,
   }).isRequired,

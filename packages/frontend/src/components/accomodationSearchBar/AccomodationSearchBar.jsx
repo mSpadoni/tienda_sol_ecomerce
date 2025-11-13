@@ -9,10 +9,10 @@ const AccomodationSearchBar = ({ filtrarProductos }) => {
   const [searchText, setSearchText] = useState("");
 
   return (
-    <div className="accommodation-search">
+    <div className="accommodation-search" role="search">
       <div className="search-field">
         <div className="input-wrapper">
-          <FaSearch className="search-icon" />
+          <FaSearch className="search-icon" aria-hidden="true" />
 
           <TextField
             value={searchText}
@@ -22,12 +22,17 @@ const AccomodationSearchBar = ({ filtrarProductos }) => {
             fullWidth
             variant="standard"
             placeholder="Buscar productos..."
+            aria-label="Buscar productos por título"
           />
         </div>
       </div>
 
-      <Button variant="outlined" onClick={() => filtrarProductos(searchText)}>
-        <FaSearch className="button-icon" />
+      <Button 
+        variant="outlined" 
+        onClick={() => filtrarProductos(searchText)}
+        aria-label="Ejecutar búsqueda de productos"
+      >
+        <FaSearch className="button-icon" aria-hidden="true" />
         Buscar
       </Button>
     </div>

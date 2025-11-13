@@ -25,17 +25,19 @@ const CarritoCuerpo = ({ onClose }) => {
   }, [carrito.length, total, carritoVacio, onClose]);
 
   return (
-    <div className="rappi-carrito">
+    <aside className="rappi-carrito" role="region" aria-label="Carrito de compras">
       <h2>Carrito de compras</h2>
 
-      <div className="rappi-items-container">
+      <div className="rappi-items-container" role="list">
         {carrito.map((item) => (
-          <CarritoItem key={item.producto.id} item={item} />
+          <div key={item.producto.id} role="listitem">
+            <CarritoItem item={item} />
+          </div>
         ))}
       </div>
 
       <div className="rappi-footer">
-        <div className="rappi-total">
+        <div className="rappi-total" aria-live="polite" aria-atomic="true">
           <strong>Total: ${total.toLocaleString("es-AR")}</strong>
         </div>
         <div className="rappi-boton-comprar-container">
@@ -43,12 +45,13 @@ const CarritoCuerpo = ({ onClose }) => {
             className="rappi-comprar-button"
             disable={() => carrito.length === 0}
             onClick={comprar}
+            aria-label={`Proceder a comprar - ${carrito.length} artículos en el carrito`}
           >
             Comprar
           </Button>
         </div>
       </div>
-    </div>
+    </aside>
   );
 };
 

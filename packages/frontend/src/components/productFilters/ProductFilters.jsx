@@ -41,60 +41,92 @@ const ProductFilters = ({ onApply, initial = {} }) => {
 
   return (
     <div className="product-filters-wrapper">
-      <form className="product-filters" onSubmit={handleApply}>
-        <input
-          placeholder="Buscar título"
-          value={titulo}
-          onChange={(e) => setTitulo(e.target.value)}
-        />
+      <form 
+        className="product-filters" 
+        onSubmit={handleApply}
+        aria-label="Filtros de búsqueda de productos"
+        role="search"
+      >
+        <fieldset>
+          <legend className="sr-only">Filtros de productos</legend>
 
-        <input
-          placeholder="Categoría"
-          value={categoria}
-          onChange={(e) => setCategoria(e.target.value)}
-        />
+          <input
+            placeholder="Buscar título"
+            value={titulo}
+            onChange={(e) => setTitulo(e.target.value)}
+            aria-label="Buscar por título del producto"
+          />
 
-        <input
-          type="number"
-          placeholder="Precio min"
-          value={precioMin}
-          onChange={(e) => setPrecioMin(e.target.value)}
-        />
+          <input
+            placeholder="Categoría"
+            value={categoria}
+            onChange={(e) => setCategoria(e.target.value)}
+            aria-label="Filtrar por categoría"
+          />
 
-        <input
-          type="number"
-          placeholder="Precio max"
-          value={precioMax}
-          onChange={(e) => setPrecioMax(e.target.value)}
-        />
+          <input
+            type="number"
+            placeholder="Precio min"
+            value={precioMin}
+            onChange={(e) => setPrecioMin(e.target.value)}
+            aria-label="Precio mínimo"
+          />
 
-        <select value={activo} onChange={(e) => setActivo(e.target.value)}>
-          <option value="">Todos</option>
-          <option value="true">Activos</option>
-          <option value="false">No activos</option>
-        </select>
+          <input
+            type="number"
+            placeholder="Precio max"
+            value={precioMax}
+            onChange={(e) => setPrecioMax(e.target.value)}
+            aria-label="Precio máximo"
+          />
 
-        <select value={sort} onChange={(e) => setSort(e.target.value)}>
-          <option value="ventas">Ventas</option>
-          <option value="precio">Precio</option>
-        </select>
+          <select 
+            value={activo} 
+            onChange={(e) => setActivo(e.target.value)}
+            aria-label="Filtrar por estado del producto"
+          >
+            <option value="">Todos</option>
+            <option value="true">Activos</option>
+            <option value="false">No activos</option>
+          </select>
 
-        <select value={order} onChange={(e) => setOrder(e.target.value)}>
-          <option value="desc">Descendente</option>
-          <option value="asc">Ascendente</option>
-        </select>
+          <select 
+            value={sort} 
+            onChange={(e) => setSort(e.target.value)}
+            aria-label="Ordenar por"
+          >
+            <option value="ventas">Ventas</option>
+            <option value="precio">Precio</option>
+          </select>
 
-        <button type="submit" className="btn btn-primary">
-          <span>Aplicar</span>
-          <FiArrowRight className="icon" />
-        </button>
-        <button
-          type="button"
-          className="btn btn-secondary"
-          onClick={handleReset}
-        >
-          Limpiar
-        </button>
+          <select 
+            value={order} 
+            onChange={(e) => setOrder(e.target.value)}
+            aria-label="Orden ascendente o descendente"
+          >
+            <option value="desc">Descendente</option>
+            <option value="asc">Ascendente</option>
+          </select>
+        </fieldset>
+
+        <div className="button-group">
+          <button 
+            type="submit" 
+            className="btn btn-primary"
+            aria-label="Aplicar filtros de búsqueda"
+          >
+            <span>Aplicar</span>
+            <FiArrowRight className="icon" aria-hidden="true" />
+          </button>
+          <button
+            type="button"
+            className="btn btn-secondary"
+            onClick={handleReset}
+            aria-label="Limpiar todos los filtros"
+          >
+            Limpiar
+          </button>
+        </div>
       </form>
     </div>
   );

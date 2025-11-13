@@ -6,10 +6,9 @@ export const CurrencyContext = createContext();
 export const useCurrency = () => useContext(CurrencyContext);
 
 export const CurrencyProvider = ({ children }) => {
-  const [currency, setCurrency] = useState(() => {
-    const stored = localStorage.getItem("moneda");
-    return stored ? JSON.parse(stored) : "USD"; // default USD
-  });
+  const [currency, setCurrency] = useState(
+    "ARS" // default USD
+);
 
   useEffect(() => {
     localStorage.setItem("moneda", JSON.stringify(currency));

@@ -28,6 +28,7 @@ const Navbar = () => {
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 900);
   const [showSkeleton, setShowSkeleton] = useState(true);
   const [textoMoneda, setTextoMoneda] = useState("ARS — Peso Argentino");
+  
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth <= 900);
     window.addEventListener("resize", handleResize);
@@ -66,8 +67,8 @@ const Navbar = () => {
 
   if (showSkeleton) {
     return (
-      <header className="navbar-bg">
-        <nav className="navbar">
+      <header className="navbar-bg" role="banner" aria-label="Navegación principal cargando">
+        <nav className="navbar" aria-busy="true" role="status" aria-label="Cargando navegación">
           <Stack
             direction="row"
             spacing={2}
@@ -80,6 +81,7 @@ const Navbar = () => {
               width={160}
               height={40}
               sx={{ borderRadius: "8px" }}
+              aria-hidden="true"
             />
             {!isMobile ? (
               <Stack direction="row" spacing={2} alignItems="center">
@@ -88,30 +90,35 @@ const Navbar = () => {
                   width={80}
                   height={30}
                   sx={{ borderRadius: "8px" }}
+                  aria-hidden="true"
                 />
                 <Skeleton
                   variant="rectangular"
                   width={80}
                   height={30}
                   sx={{ borderRadius: "8px" }}
+                  aria-hidden="true"
                 />
                 <Skeleton
                   variant="rectangular"
                   width={80}
                   height={30}
                   sx={{ borderRadius: "8px" }}
+                  aria-hidden="true"
                 />
                 <Skeleton
                   variant="rectangular"
                   width={100}
                   height={30}
                   sx={{ borderRadius: "8px" }}
+                  aria-hidden="true"
                 />
                 <Skeleton
                   variant="rectangular"
                   width={120}
                   height={30}
                   sx={{ borderRadius: "8px" }}
+                  aria-hidden="true"
                 />
               </Stack>
             ) : (
@@ -120,9 +127,15 @@ const Navbar = () => {
                 width={40}
                 height={40}
                 sx={{ borderRadius: "8px" }}
+                aria-hidden="true"
               />
             )}
-            <Skeleton variant="circular" width={40} height={40} />
+            <Skeleton 
+              variant="circular" 
+              width={40} 
+              height={40}
+              aria-hidden="true"
+            />
           </Stack>
         </nav>
       </header>
@@ -130,55 +143,80 @@ const Navbar = () => {
   }
 
   return (
-    <header className="navbar-bg">
-      <nav className="navbar">
+    <header className="navbar-bg" role="banner">
+      <nav className="navbar" aria-label="Navegación principal">
         {/* Logo */}
         <div className="navbar-left">
-          <button onClick={volverAHome} className="logo">
+          <button 
+            onClick={volverAHome} 
+            className="logo"
+            aria-label="Ir a inicio - TiendaSol.com"
+          >
             TiendaSol.com
           </button>
         </div>
 
         {/* Menú Desktop */}
         {!isMobile && isVisible && (
-          <div className="navbar-center">
-            <Link to="/" className="nav-link">
+          <div className="navbar-center" role="menubar" aria-label="Menú principal">
+            <Link 
+              to="/" 
+              className="nav-link"
+              role="menuitem"
+              aria-label="Ir a productos"
+            >
               Productos
             </Link>
-            <Link to="/pedidos/hechos" className="nav-link">
+            <Link 
+              to="/pedidos/hechos" 
+              className="nav-link"
+              role="menuitem"
+              aria-label="Ver mis pedidos"
+            >
               Mis pedidos
             </Link>
             {elUsuarioEsUn("vendedor") && isAuthenticated && (
-              <Link to="/pedidos/recibidos" className="nav-link">
+              <Link 
+                to="/pedidos/recibidos" 
+                className="nav-link"
+                role="menuitem"
+                aria-label="Ver pedidos recibidos"
+              >
                 Pedidos Recibidos
               </Link>
             )}
-            <Link to="/notificaciones" className="nav-link">
+            <Link 
+              to="/notificaciones" 
+              className="nav-link"
+              role="menuitem"
+              aria-label="Ver notificaciones"
+            >
               Notificaciones
             </Link>
 
-            {/* Moneda con SELECT en desktop */}
-            {/* <select
-              className="currency-select"
-              value={currency}
-              onChange={(e) => seleccionarMoneda(e.target.value)}
-            >
-              <option value="ARS">ARS — Peso Argentino</option>
-              <option value="BRL">BRL — Real Brasileño</option>
-              <option value="USD">USD — Dólar Estadounidense</option>
-            </select> */}
-
             {!isAuthenticated ? (
               <>
-                <button onClick={registrar} className="nav-button">
+                <button 
+                  onClick={registrar} 
+                  className="nav-button"
+                  aria-label="Crear nueva cuenta"
+                >
                   Sign-On
                 </button>
-                <button onClick={login} className="nav-button">
+                <button 
+                  onClick={login} 
+                  className="nav-button"
+                  aria-label="Iniciar sesión"
+                >
                   Login
                 </button>
               </>
             ) : (
-              <button onClick={logout} className="logout_button">
+              <button 
+                onClick={logout} 
+                className="logout_button"
+                aria-label="Cerrar sesión"
+              >
                 Logout
               </button>
             )}
@@ -192,14 +230,31 @@ const Navbar = () => {
               className="cart"
               disabled={carritoVacio()}
               onClick={toggleCarrito}
+              aria-label={`Carrito de compras, ${carritoLongitud} artículos`}
+              aria-expanded={carritoAbierto}
+              aria-controls="carrito-drawer"
+              aria-disabled={carritoVacio()}
             >
-              <FaShoppingCart color="black" />
-              <span className="cart-count">{carritoLongitud}</span>
+              <FaShoppingCart color="black" aria-hidden="true" />
+              {carritoLongitud > 0 && (
+                <span 
+                  className="cart-count"
+                  aria-label={`${carritoLongitud} productos en el carrito`}
+                >
+                  {carritoLongitud}
+                </span>
+              )}
             </button>
           )}
           {isMobile && isVisible && (
-            <button className="hamburger" onClick={toggleMenu}>
-              {menuAbierto ? <FaTimes /> : <FaBars />}
+            <button 
+              className="hamburger" 
+              onClick={toggleMenu}
+              aria-label={menuAbierto ? "Cerrar menú de navegación" : "Abrir menú de navegación"}
+              aria-expanded={menuAbierto}
+              aria-controls="drawer-menu"
+            >
+              {menuAbierto ? <FaTimes aria-hidden="true" /> : <FaBars aria-hidden="true" />}
             </button>
           )}
         </div>
@@ -208,15 +263,33 @@ const Navbar = () => {
       {/* Drawer Móvil */}
       {isMobile && menuAbierto && (
         <>
-          <div className="drawer-overlay" onClick={cerrarMenu}></div>
-          <div className="drawer-menu">
-            <Link to="/" className="nav-link" onClick={cerrarMenu}>
+          <div 
+            className="drawer-overlay" 
+            onClick={cerrarMenu}
+            aria-hidden="true"
+            role="presentation"
+          ></div>
+          <div 
+            className="drawer-menu"
+            id="drawer-menu"
+            role="navigation"
+            aria-label="Menú de navegación móvil"
+          >
+            <Link 
+              to="/" 
+              className="nav-link"
+              onClick={cerrarMenu}
+              role="menuitem"
+              aria-label="Ir a productos desde menú móvil"
+            >
               Productos
             </Link>
             <Link
               to="/pedidos/hechos"
               className="nav-link"
               onClick={cerrarMenu}
+              role="menuitem"
+              aria-label="Ver mis pedidos desde menú móvil"
             >
               Mis pedidos
             </Link>
@@ -225,6 +298,8 @@ const Navbar = () => {
                 to="/pedidos/recibidos"
                 className="nav-link"
                 onClick={cerrarMenu}
+                role="menuitem"
+                aria-label="Ver pedidos recibidos desde menú móvil"
               >
                 Pedidos Recibidos
               </Link>
@@ -233,56 +308,35 @@ const Navbar = () => {
               to="/notificaciones"
               className="nav-link"
               onClick={cerrarMenu}
+              role="menuitem"
+              aria-label="Ver notificaciones desde menú móvil"
             >
               Notificaciones
             </Link>
 
-            {/* Moneda móvil con botón + dropdown */}
-            {/* <div className="currency-wrapper">
-              <button className="currency-button" onClick={toggleDropdown}>
-                {textoMoneda}
-              </button>
-              {dropdownAbierto && (
-                <div className="currency-dropdown mobile">
-                  <div
-                    className={currency === "ARS" ? "selected" : ""}
-                    onClick={() =>
-                      seleccionarMoneda("ARS", "ARS — Peso Argentino")
-                    }
-                  >
-                    ARS — Peso Argentino
-                  </div>
-                  <div
-                    className={currency === "BRL" ? "selected" : ""}
-                    onClick={() =>
-                      seleccionarMoneda("BRL", "BRL — Real Brasileño")
-                    }
-                  >
-                    BRL — Real Brasileño
-                  </div>
-                  <div
-                    className={currency === "USD" ? "selected" : ""}
-                    onClick={() =>
-                      seleccionarMoneda("USD", "USD — Dólar Estadounidense")
-                    }
-                  >
-                    USD — Dólar Estadounidense
-                  </div>
-                </div>
-              )}
-            </div> */}
-
             {!isAuthenticated ? (
               <>
-                <button onClick={registrar} className="nav-button">
+                <button 
+                  onClick={registrar} 
+                  className="nav-button"
+                  aria-label="Crear nueva cuenta desde menú móvil"
+                >
                   Sign-On
                 </button>
-                <button onClick={login} className="nav-button">
+                <button 
+                  onClick={login} 
+                  className="nav-button"
+                  aria-label="Iniciar sesión desde menú móvil"
+                >
                   Login
                 </button>
               </>
             ) : (
-              <button onClick={logout} className="logout_button">
+              <button 
+                onClick={logout} 
+                className="logout_button"
+                aria-label="Cerrar sesión desde menú móvil"
+              >
                 Logout
               </button>
             )}
@@ -293,8 +347,19 @@ const Navbar = () => {
       {/* Drawer Carrito */}
       {carritoAbierto && (
         <>
-          <div className="drawer-overlay" onClick={toggleCarrito}></div>
-          <div className="carrito-drawer izquierda abierto">
+          <div 
+            className="drawer-overlay" 
+            onClick={toggleCarrito}
+            aria-hidden="true"
+            role="presentation"
+          ></div>
+          <div 
+            className="carrito-drawer izquierda abierto"
+            id="carrito-drawer"
+            role="region"
+            aria-label="Panel del carrito de compras"
+            aria-modal="true"
+          >
             <CarritoCuerpo onClose={toggleCarrito} />
           </div>
         </>
