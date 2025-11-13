@@ -1,10 +1,11 @@
-openapi: 3.0.3
+openapi: 3.0.1
 info:
   title: API Pedidos / Productos / Notificaciones
   version: 1.0.0
   description: API del backend (productos, pedidos, notificaciones)
 servers:
-  - url: http://localhost:3001
+  - url: http://localhost:3000
+    description: Desarrollo
 
 paths:
   /notificaciones:
@@ -42,8 +43,8 @@ paths:
     get:
       summary: Obtener notificación por id
       parameters:
-        - name: id
-          in: path
+        - name: usuario
+          in: query
           required: true
           schema:
             $ref: '#/components/schemas/ObjectId'
@@ -110,7 +111,10 @@ paths:
 
   /pedidos:
     post:
-      summary: Crear pedido
+      summary: Crear un pedido (autenticado: el usuario se toma del token)
+      tags: [Pedidos]
+      security:
+        - bearerAuth: []
       requestBody:
         required: true
         content:
@@ -222,6 +226,12 @@ paths:
           $ref: '#/components/responses/InternalError'
 
 components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
   schemas:
     ObjectId:
       type: string
@@ -291,9 +301,12 @@ components:
 
     PedidoInput:
       type: object
+      required: [items, moneda, direccionEntrega]
       properties:
-        usuario:
-          $ref: '#/components/schemas/ObjectId'
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ItemPedidoInput'
         moneda:
           type: string
         direccionEntrega:

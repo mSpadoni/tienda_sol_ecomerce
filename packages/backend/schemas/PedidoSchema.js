@@ -7,7 +7,6 @@ import CambioEstadoPedido from "../models/entities/CambioEstadoPedido.js";
 import Pedido from "../models/entities/Pedido.js";
 import findEstado from "../models/entities/EstadoPedido.js";
 
-
 const DireccionEntregaSchema = new mongoose.Schema(
   {
     calle: { type: String, required: true },
@@ -26,50 +25,54 @@ const DireccionEntregaSchema = new mongoose.Schema(
 
 DireccionEntregaSchema.loadClass(DireccionEntrega);
 
-const ItemPedidoSchema = new mongoose.Schema({
-  producto: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Producto",
-    required: true,
+const ItemPedidoSchema = new mongoose.Schema(
+  {
+    producto: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Producto",
+      required: true,
+    },
+    cantidad: {
+      type: Number,
+      required: true,
+    },
+    precioUnitario: {
+      type: Number,
+      required: true,
+    },
   },
-  cantidad: {
-    type: Number,
-    required: true,
-  },
-  precioUnitario: {
-    type: Number,
-    required: true,
-  },
-},
-  { _id: false });
+  { _id: false },
+);
 
 ItemPedidoSchema.loadClass(ItemPedido);
 
-const cambioEstadoPedidoSchema = new mongoose.Schema({
-  fecha: { type: Date, required: true },
-  estado: {
-  type: String,
-  enum: Object.values(EstadoPedido).map((e) => e.valor),
-  required: true,
-  get: (estado) => findEstado(estado),   // convierte string a objeto al leer
-  set: (estadoObj) => {
-    if (typeof estadoObj === "string") return estadoObj; // si se asigna string, guardar tal cual
-    return estadoObj.valor; // si se asigna objeto, guardar solo el valor
-  }
-},
-  pedido: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Pedido",
-    required: true,
+const cambioEstadoPedidoSchema = new mongoose.Schema(
+  {
+    fecha: { type: Date, required: true },
+    estado: {
+      type: String,
+      enum: Object.values(EstadoPedido).map((e) => e.valor),
+      required: true,
+      get: (estado) => findEstado(estado),
+      set: (estadoObj) => {
+        if (typeof estadoObj === "string") return estadoObj;
+        return estadoObj.valor;
+      },
+    },
+    pedido: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Pedido",
+      required: true,
+    },
+    usuario: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Usuario",
+      required: true,
+    },
+    motivo: { type: String, required: true },
   },
-  usuario: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Usuario",
-    required: true,
-  },
-  motivo: { type: String, required: true },
-},
-  { _id: false });
+  { _id: false },
+);
 
 cambioEstadoPedidoSchema.loadClass(CambioEstadoPedido);
 
@@ -95,15 +98,15 @@ const PedidoSchema = new mongoose.Schema(
       required: true,
     },
     estado: {
-  type: String,
-  enum: Object.values(EstadoPedido).map((e) => e.valor),
-  required: true,
-  get: (estado) => findEstado(estado),   // convierte string a objeto al leer
-  set: (estadoObj) => {
-    if (typeof estadoObj === "string") return estadoObj; // si se asigna string, guardar tal cual
-    return estadoObj.valor; // si se asigna objeto, guardar solo el valor
-  }
-},
+      type: String,
+      enum: Object.values(EstadoPedido).map((e) => e.valor),
+      required: true,
+      get: (estado) => findEstado(estado),
+      set: (estadoObj) => {
+        if (typeof estadoObj === "string") return estadoObj;
+        return estadoObj.valor;
+      },
+    },
     fechaCreacion: {
       type: Date,
       required: true,
@@ -124,12 +127,10 @@ const PedidoSchema = new mongoose.Schema(
 );
 
 PedidoSchema.pre(/^find/, function (next) {
-  this.populate("comprador")
-    .populate("items.producto")
-    .populate({
-      path: "historialEstado.usuario",
-      model: "Usuario",
-    })
+  this.populate("comprador").populate("items.producto").populate({
+    path: "historialEstado.usuario",
+    model: "Usuario",
+  });
   next();
 });
 

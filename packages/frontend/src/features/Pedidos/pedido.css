@@ -1,0 +1,203 @@
+.lista-pedidos-container {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  padding: 25px;
+}
+
+/* Carta de pedido moderna */
+.pedido-card {
+  background-color: #ffffff;
+  border-radius: 14px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+  padding: 25px;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
+  display: flex;
+  flex-direction: column;
+}
+
+.pedido-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+/* Header */
+.pedido-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.pedido-total {
+  font-weight: 700;
+  font-size: 1.2rem; /* más grande */
+  color: #1976d2;
+}
+
+/* Body */
+.pedido-body {
+  display: flex;
+  justify-content: space-between;
+  gap: 25px;
+}
+
+.pedido-items h5 {
+  margin-bottom: 10px;
+  font-weight: 600;
+  font-size: 1.1rem; /* más grande */
+  color: #333;
+}
+
+.pedido-items ul {
+  margin: 0;
+  padding-left: 22px;
+  color: #555;
+  font-size: 1rem; /* más grande */
+  line-height: 1.6;
+}
+
+/* Botón ver detalles como texto pequeño + flecha */
+.btn-ver-detalles-text {
+  font-size: 0.95rem; /* más grande */
+  color: #555;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 500;
+  margin-top: 10px;
+  transition:
+    color 0.2s,
+    transform 0.2s;
+}
+
+.btn-ver-detalles-text:hover {
+  color: #222;
+}
+
+.btn-ver-detalles-text .flecha {
+  font-size: 0.9rem;
+  transition: transform 0.3s;
+}
+
+.btn-ver-detalles-text .flecha.abierta {
+  transform: rotate(180deg);
+}
+
+/* Botones de acción */
+.btn-cambiar-estado {
+  padding: 12px 18px;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 1rem; /* más grande */
+  cursor: pointer;
+  background-color: #ffe066;
+  color: #333;
+  border: none;
+  transition:
+    background-color 0.2s,
+    transform 0.2s;
+}
+
+.btn-cambiar-estado:hover {
+  background-color: #ff8c00;
+  transform: translateY(-1px);
+}
+
+.btn-cambiar-estado:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  filter: grayscale(30%);
+}
+
+/* Detalle del pedido */
+.pedido-detalles {
+  margin-top: 18px;
+  padding-top: 15px;
+  border-top: 1px solid #eee;
+  font-size: 1rem; /* más grande */
+  color: #555;
+  line-height: 1.6;
+  transition:
+    max-height 0.3s ease,
+    opacity 0.3s ease;
+}
+
+/* Mensaje cuando no hay pedidos */
+.no-pedidos {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 35px;
+  width: 90vmin;
+  font-size: 2.6rem; /* más grande */
+  font-weight: bold;
+  text-align-last: center;
+  color: #0a0131;
+  margin: 0 auto;
+}
+
+/* Responsive avanzado */
+@media (max-width: 900px) {
+  .pedido-body {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .pedido-actions {
+    width: 100%;
+    margin-top: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  /* Detalle arriba en mobile */
+  .pedido-detalles {
+    order: -1;
+    margin-bottom: 12px;
+    border-top: none;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 12px;
+  }
+
+  .btn-ver-detalles-text {
+    margin-top: 8px;
+  }
+}
+
+@media (max-width: 500px) {
+  .pedido-card {
+    padding: 20px;
+  }
+
+  .pedido-total {
+    font-size: 1.3rem;
+  }
+
+  .pedido-items h5 {
+    font-size: 1.15rem;
+  }
+
+  .pedido-items ul {
+    font-size: 1.05rem;
+  }
+
+  .btn-cambiar-estado {
+    font-size: 1.05rem;
+    padding: 12px 16px;
+  }
+
+  .btn-ver-detalles-text {
+    font-size: 1rem;
+  }
+
+  .pedido-detalles {
+    font-size: 1.05rem;
+  }
+}

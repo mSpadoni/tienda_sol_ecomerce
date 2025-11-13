@@ -1,0 +1,105 @@
+.accommodation-search {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: #f1f5f9;
+  border: 1px solid rgba(148, 163, 184, 0.3);
+  border-radius: 9999px;
+  padding: 0.5rem 0.6rem 0.5rem 0.9rem;
+  box-shadow: 0 6px 20px rgba(15, 23, 42, 0.04);
+  max-width: 620px;
+  width: 100%;
+}
+
+/* contenedor del input */
+.search-field {
+  flex: 1;
+}
+
+/* caja que tiene el icono y el TextField */
+.input-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  background: transparent;
+  border: none;
+  border-radius: 9999px;
+}
+
+/* icono de lupa */
+.search-icon {
+  color: #64748b;
+  font-size: 1rem;
+}
+
+/* ----------- MUI input reset ----------- */
+
+/* ocultar la línea del TextField standard */
+.accommodation-search .MuiInput-underline:before,
+.accommodation-search .MuiInput-underline:after {
+  border-bottom: none !important;
+}
+
+/* ajustar el root del input */
+.accommodation-search .MuiInputBase-root {
+  background: transparent;
+  font-size: 0.92rem;
+}
+
+/* el input real */
+.accommodation-search .MuiInputBase-input {
+  padding: 0.35rem 0;
+  color: #0f172a;
+}
+
+.accommodation-search .MuiInputBase-input::placeholder {
+  color: #94a3b8;
+  opacity: 1;
+}
+
+/* ----------- BOTÓN MUI ----------- */
+
+.accommodation-search .MuiButton-outlined {
+  border-radius: 9999px;
+  text-transform: none;
+  font-weight: 600;
+  font-size: 0.85rem;
+  padding: 0.45rem 1.1rem;
+  border: 1px solid rgba(15, 23, 42, 0.15);
+  background: #0f172a;
+  color: #fff;
+  display: flex;
+  gap: 0.35rem;
+  align-items: center;
+  line-height: 1.2;
+}
+
+.accommodation-search .MuiButton-outlined:hover {
+  background: #1e293b;
+  border-color: transparent;
+}
+
+/* iconito adentro del botón */
+.button-icon {
+  font-size: 0.85rem;
+}
+
+/* ----------- RESPONSIVE ----------- */
+@media (max-width: 768px) {
+  .accommodation-search {
+    flex-direction: column;
+    align-items: stretch;
+    border-radius: 1.2rem;
+  }
+
+  .input-wrapper {
+    background: white;
+    padding: 0.25rem 0.6rem;
+    border-radius: 9999px;
+  }
+
+  .accommodation-search .MuiButton-outlined {
+    width: 100%;
+    justify-content: center;
+  }
+}

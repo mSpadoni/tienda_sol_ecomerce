@@ -67,10 +67,10 @@ export const prodEjemplo2 = new Producto(
   [],
   true,
 );
-usuario1.id=1
-usuario2.id=2
-usuario3.id=3
-usuario4.id=4
+usuario1.id = 1;
+usuario2.id = 2;
+usuario3.id = 3;
+usuario4.id = 4;
 export const item = new ItemProducto(prodEjemplo2, 2, 1000);
 export const item2 = new ItemProducto(prodEjemplo2, 4, 1000);
 

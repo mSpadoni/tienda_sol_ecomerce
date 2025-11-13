@@ -1,5 +1,5 @@
-import  winston from "winston";
-import  path  from "path";
+import winston from "winston";
+import path from "path";
 import { fileURLToPath } from "url";
 
 // Variables para __dirname en ES Modules

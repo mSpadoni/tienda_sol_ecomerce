@@ -30,7 +30,7 @@ export default function pedidosErrorHandler(err, _req, res, next) {
     return;
   }
 
-  next(err)
+  next(err);
 }
 
 const errores400 = Object.freeze({

@@ -1,7 +1,8 @@
+import logger from "../../logger/logger.js";
 import ErrorProductosNoEncontrados from "../errors/errorProductosNoEncontrado.js";
 
 export function productosErrorHandler(err, _req, res, _next) {
-  console.log(err.message);
+  logger.error("Error en ProductosMiddleware: " + err.message);
 
   if (err.constructor.name === ErrorProductosNoEncontrados.name) {
     res.status(404).json({ error: err.message });

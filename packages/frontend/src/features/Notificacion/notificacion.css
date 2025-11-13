@@ -1,0 +1,242 @@
+/* ======== CONTENEDOR PRINCIPAL ======== */
+.notificaciones-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh; /* Ocupa toda la altura de la ventana */
+  width: 100%;
+  background-color: #ffe066; /* fondo solar cálido */
+  overflow-y: auto;
+  padding: clamp(1.2rem, 3vw, 2.5rem);
+  box-sizing: border-box;
+}
+
+/* ======== CONTENEDOR CENTRAL ======== */
+.notificaciones-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: min(100%, 950px);
+  min-height: 90vh;
+  background: #fffefb; /* blanco cálido */
+  border-radius: 16px;
+  padding: clamp(1.8rem, 3.2vw, 3rem);
+  box-sizing: border-box;
+  box-shadow: 0 6px 20px rgba(255, 179, 0, 0.25);
+}
+
+/* ======== FILTRO ======== */
+.filtro-estado {
+  margin-bottom: 2.2rem;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.filtro-estado label,
+.filtro-estado select {
+  font-size: clamp(1rem, 2vw, 1.4rem);
+  font-weight: 700;
+  color: #1e1e1e;
+}
+
+.filtro-estado select {
+  padding: 0.6rem 1rem;
+  border-radius: 10px;
+  border: 2px solid #ff8c00;
+  background: #fff;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.filtro-estado select:hover {
+  background: #fff3cd;
+  border-color: #ff8c00;
+}
+
+/* ======== LISTA DE NOTIFICACIONES ======== */
+.notificaciones-lista {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1rem, 2vw, 1.5rem);
+  width: 100%;
+}
+
+/* ======== TARJETA DE NOTIFICACIÓN ======== */
+.notificacion-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #ffffff;
+  color: #1e1e1e;
+  border-radius: 14px;
+  padding: clamp(1rem, 2vw, 1.6rem);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.notificacion-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+/* ======== ESTADO ======== */
+.estado_lectura {
+  font-weight: 800;
+  padding: 0.5rem 0.9rem;
+  border-radius: 8px;
+  color: #fff;
+  text-align: center;
+  min-width: 85px;
+  text-transform: uppercase;
+  font-size: clamp(1rem, 1.8vw, 1.2rem);
+  flex-shrink: 0;
+  letter-spacing: 0.5px;
+}
+
+.estado_lectura.leida {
+  background: #ecfdf3;
+  color: #166534;
+  border: 4px solid #bbf7d0;
+  border-radius: 30px;
+}
+
+.estado_lectura.no-leida {
+  background: #fef2f2;
+  color: #b91c1c;
+  border: 4px solid #fecaca;
+  border-radius: 30px;
+}
+
+/* ======== CONTENIDO ======== */
+.contenido-notificacion {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex: 1;
+  gap: clamp(0.8rem, 2vw, 1rem);
+  margin-left: 1.2rem;
+}
+
+.mensaje {
+  flex: 1;
+  color: #0f172a;
+}
+
+.mensaje h4 {
+  margin: 0 0 0.4rem;
+  font-size: clamp(1.3rem, 2.2vw, 1.6rem);
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.mensaje p {
+  margin: 0;
+  font-size: clamp(1rem, 1.8vw, 1.2rem);
+  line-height: 1.6;
+  color: #334155;
+}
+
+/* ======== BOTONES ======== */
+.acciones {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.btn-cambiar {
+  border: none;
+  border-radius: 10px;
+  font-weight: 700;
+  padding: 0.7rem 1.4rem;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  font-size: clamp(0.9rem, 1.6vw, 1.1rem);
+  letter-spacing: 0.5px;
+}
+
+.btn-cambiar.verde {
+  background: #0f172a !important;
+  color: #fff;
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.3);
+}
+
+.btn-cambiar.verde:hover {
+  background-color: #141b2e !important;
+}
+
+.btn-cambiar.rojo {
+  background: #0f172a !important;
+  color: #fff;
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.3);
+}
+
+.btn-cambiar.rojo:hover {
+  background-color: #131b2e !important;
+}
+
+/* ======== RESPONSIVE ======== */
+@media (max-width: 900px) {
+  .notificacion-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .contenido-notificacion {
+    flex-direction: column;
+    align-items: flex-start;
+    margin-left: 0;
+    width: 100%;
+  }
+
+  .acciones {
+    width: 100%;
+    justify-content: flex-end;
+    margin-top: 1rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .notificaciones-container {
+    border-radius: 0;
+    min-height: 100vh;
+    padding: 1.2rem;
+  }
+
+  .mensaje h4 {
+    font-size: 1.8rem;
+  }
+
+  .mensaje p {
+    font-size: 1.3rem;
+  }
+
+  .btn-cambiar {
+    width: 100%;
+    text-align: center;
+    padding: 1rem;
+    font-size: 1.2rem;
+  }
+}
+
+/* ======== REDUCCIÓN EN ESCRITORIO GRANDE ======== */
+@media (min-width: 1200px) {
+  .mensaje h4 {
+    font-size: 1.4rem;
+  }
+  .mensaje p {
+    font-size: 1.1rem;
+  }
+  .estado_lectura {
+    font-size: 1rem;
+  }
+  .btn-cambiar {
+    font-size: 1rem;
+  }
+  .filtro-estado label,
+  .filtro-estado select {
+    font-size: 1.2rem;
+  }
+}

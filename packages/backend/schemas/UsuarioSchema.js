@@ -4,6 +4,11 @@ import Usuario from "../models/entities/Usuario.js";
 
 const UsuarioSchema = new mongoose.Schema(
   {
+    idKeycloak: {
+      type: String,
+      required: true,
+      unique: true,
+    },
     nombre: {
       type: String,
       required: true,
@@ -36,4 +41,4 @@ const UsuarioSchema = new mongoose.Schema(
 );
 UsuarioSchema.loadClass(Usuario);
 
-export const UsuarioModel = mongoose.model('Usuario', UsuarioSchema);
+export const UsuarioModel = mongoose.model("Usuario", UsuarioSchema);

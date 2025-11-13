@@ -4,7 +4,7 @@ import Categoria from "./Categoria.js";
 import { Moneda } from "./Moneda.js";
 
 export default class Producto {
-  id;
+  _id;
   constructor(
     vendedor,
     titulo,
@@ -32,9 +32,7 @@ export default class Producto {
   }
 
   reducirStock(cantidad) {
-    console.log(cantidad);
     this.stock -= cantidad;
-    console.log(this.stock);
   }
 
   aumentarStock(cantidad) {
@@ -52,7 +50,7 @@ export default class Producto {
   getTitulo() {
     return this.titulo;
   }
- 
+
   getDescripcion() {
     return this.descripcion;
   }

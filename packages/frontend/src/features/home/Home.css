@@ -1,0 +1,253 @@
+.home-body {
+  display: flex;
+  position: relative;
+  top: -1.5rem;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+.home-page {
+  min-height: 100vh;
+  background: #f8fafc;
+}
+
+.home-hero {
+  width: 100%;
+  background: radial-gradient(
+    circle at top,
+    #ffffff 0%,
+    #e2e8f0 55%,
+    #f8fafc 100%
+  );
+  display: flex;
+  justify-content: center;
+  padding: 3.5rem 1rem 2.5rem;
+  margin-top: 0rem;
+}
+
+.hero-content {
+  width: min(1100px, 100%);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.hero-title {
+  font-size: clamp(2rem, 4vw, 2.6rem);
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.hero-subtitle {
+  color: #475569;
+  font-size: 0.95rem;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.hero-search {
+  display: flex;
+  justify-content: center;
+}
+
+.home-main {
+  width: min(1100px, 100%);
+  margin: 0 auto;
+  padding: 0 1.25rem 3.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2.2rem;
+}
+
+.spinner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 70rem 0 3.5rem;
+  padding-top: 20px;
+}
+.visually-hidden {
+  font-size: 25px;
+  padding-top: 10px;
+}
+
+.home-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1.4rem;
+}
+
+.section-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.section-header h2 {
+  font-size: 1.38rem;
+  color: #0f172a;
+  font-weight: 700;
+}
+
+.section-subtitle {
+  font-size: 0.8rem;
+  color: #94a3b8;
+}
+
+.section-header.between {
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.section-header.between .section-subtitle.small {
+  font-size: 0.7rem;
+}
+
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.25rem;
+}
+
+.product-card {
+  background: #ffffff;
+  border-radius: 1.1rem;
+  box-shadow: 0 10px 40px rgba(15, 23, 42, 0.04);
+  border: 1px solid rgba(148, 163, 184, 0.15);
+  display: flex;
+  gap: 0.85rem;
+  padding: 1rem 1.1rem;
+  align-items: center;
+  min-height: 120px;
+  position: relative;
+}
+
+.product-card-image {
+  flex: 0 0 72px;
+  height: 72px;
+  border-radius: 1rem;
+  overflow: hidden;
+  background: #e2e8f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.product-card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.product-card-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.product-card-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.product-card-price {
+  font-size: 0.85rem;
+  color: #0f172a;
+  font-weight: 500;
+}
+
+.product-card-categorias {
+  display: flex;
+  gap: 0.4rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.categoria-label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.categoria-pill {
+  background-color: #f1f5f9;
+  color: #1e293b;
+  font-weight: 600;
+  font-size: 0.7rem;
+  border-radius: 9999px;
+  padding: 0.3rem 0.75rem;
+  border: 1px solid #e2e8f0;
+}
+
+.product-card-actions {
+  align-self: flex-start;
+}
+
+.product-card-link {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #0f172a;
+  text-decoration: none;
+  padding: 0.35rem 0.6rem;
+  border-radius: 999px;
+  background: #f8fafc;
+  border: 1px solid rgba(15, 23, 42, 0.05);
+  transition: all 0.15s ease;
+}
+
+.product-card-link:hover {
+  background: #0f172a;
+  color: #fff;
+}
+
+.pagination-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: 1.5rem;
+}
+
+/* responsive */
+@media (max-width: 768px) {
+  .section-header.between {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.4rem;
+  }
+  .product-card {
+    flex-direction: row;
+  }
+  .home-main {
+    padding-bottom: 4.5rem;
+  }
+}
+
+/* === Spinner del detalle de producto === */
+.producto-spinner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 400px;
+  animation: fadeIn 0.6s ease-in-out;
+}
+
+.producto-spinner-text {
+  margin-top: 1rem;
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #475569;
+}
+
+/* Animación de entrada suave */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

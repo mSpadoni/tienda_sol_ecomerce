@@ -1,8 +1,12 @@
 import mongoose from "mongoose";
 import Producto from "../models/entities/Producto.js";
 
-const productoSchema = new mongoose.Schema(
+export const productoSchema = new mongoose.Schema(
   {
+    id: {
+      type: mongoose.Schema.Types.ObjectId,
+      default: () => new mongoose.Types.ObjectId(),
+    },
     vendedor: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Usuario",
@@ -20,7 +24,7 @@ const productoSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
-    categorias: {
+    categoria: {
       type: String,
       required: true,
     },
@@ -56,4 +60,4 @@ productoSchema.pre(/^find/, function (next) {
 
 productoSchema.loadClass(Producto);
 
-export const ProductoModel = mongoose.model("Producto", productoSchema);
+export const ProductoModel = mongoose.model("productos", productoSchema);

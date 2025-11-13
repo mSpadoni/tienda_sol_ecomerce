@@ -3,6 +3,7 @@ import {
   pedidoPatchSchema,
   pedidoSchema,
   objectIdSchema,
+  validadIdkecloark,
 } from "./validacionesZOD.js";
 import { adaptarPedidoToJson, adaptarNotificacion } from "./adaptadoresJSON.js";
 
@@ -10,22 +11,20 @@ export default class ControllerPedidos {
   constructor(servicePedido, serviceNotificaciones) {
     this.servicePedido = servicePedido;
     this.serviceNotificaciones = serviceNotificaciones;
-    logger.info({ servicePedido: this.servicePedido.constructor.name });
-    logger.info({
-      serviceNotificaciones: this.serviceNotificaciones.constructor.name,
-    });
   }
-  parse;
 
   async crear(req, res) {
+    const resultUsuario = validadIdkecloark.parse(req.user.sub);
     const resultBody = pedidoSchema.parse(req.body);
-    const nuevoPedido = await this.servicePedido.crear(resultBody);
-     logger.info(`${JSON.stringify(nuevoPedido)}`)
+    const nuevoPedido = await this.servicePedido.crear(
+      resultBody,
+      resultUsuario,
+    );
+
     logger.http(`Pedido creado`);
     const notificacion =
       await this.serviceNotificaciones.crearNotificacion(nuevoPedido);
-
-    logger.http(`Notificacion creada: ${JSON.stringify(notificacion)}`);
+    logger.http(`Notificacion creada`);
 
     const JSONresponse = {
       pedido: adaptarPedidoToJson(nuevoPedido),
@@ -36,19 +35,15 @@ export default class ControllerPedidos {
   }
 
   async findPedidosByID(req, res) {
+    const resultUsuario = validadIdkecloark.parse(req.user.sub);
     logger.info(
-      `Buscando pedidos del usuario con id: ${req.params.id} en el controlador`,
+      `Buscando pedidos del usuario con id: ${resultUsuario} en el controlador`,
     );
 
-    const resultId = objectIdSchema.parse(req.params.id);
+    const pedidos =
+      await this.servicePedido.findPedidosByUsuariosId(resultUsuario);
 
-    logger.info(`Id del usuario valido: ${resultId}`);
-
-    const pedidos = await this.servicePedido.findPedidosByUsuariosId(resultId);
-
-    logger.http(
-      `Pedidos del usuario con id: ${resultId} encontrados: ${JSON.stringify(pedidos)}`,
-    );
+    logger.info(`Pedidos encontrados`);
 
     const pedidosAPTJ = pedidos.map((pedido) => adaptarPedidoToJson(pedido));
 
@@ -57,7 +52,7 @@ export default class ControllerPedidos {
 
   async actualizar(req, res) {
     logger.info("actualizando pedido");
-
+    const usuarioId = validadIdkecloark.parse(req.user.sub);
     const pedidoID = objectIdSchema.parse(req.params.id);
 
     const resultBody = pedidoPatchSchema.parse(req.body);
@@ -65,6 +60,7 @@ export default class ControllerPedidos {
     logger.info("Datos validados, actualizando pedido");
 
     const pedidosActualizados = await this.servicePedido.actualizar(
+      usuarioId,
       pedidoID,
       resultBody,
     );
@@ -78,7 +74,6 @@ export default class ControllerPedidos {
       notificacion: adaptarNotificacion(notificacion),
     };
 
-    logger.http(`Notificacion creada: ${JSON.stringify(JSONresponse)}`);
     res.status(200).json(JSONresponse);
   }
 }

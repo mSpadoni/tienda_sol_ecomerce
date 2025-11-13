@@ -1,0 +1,333 @@
+/* Navbar general */
+.navbar-bg {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background: #ffc300;
+  z-index: 30;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  height: 75px;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.1rem 1.8rem 1.5rem; /* ⬆️ más alto */
+}
+
+/* Logo */
+.logo {
+  color: rgb(10, 0, 97);
+  font-size: 2.4rem; /* ⬆️ más grande */
+  font-weight: bold;
+  border: none;
+  background: none;
+  cursor: pointer;
+  transition:
+    transform 0.3s,
+    color 0.3s;
+}
+.logo:hover {
+  color: #fff;
+  transform: scale(1.05);
+}
+
+/* Links del navbar */
+.nav-link {
+  color: black;
+  margin: 0 0.5rem;
+  text-decoration: none;
+  font-weight: 500;
+  transition:
+    color 0.3s,
+    transform 0.2s;
+  font-size: 87rem; 
+}
+.nav-link:hover {
+  color: whitesmoke;
+  transform: translateY(-2px);
+}
+
+/* --- Select de moneda (solo desktop) --- */
+.currency-select {
+  padding: 0.5rem 0.7rem;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  cursor: pointer;
+  background: white;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+  margin-left: 0.5rem;
+  color: black;
+  font-weight: 500;
+}
+.currency-select:hover {
+  background: #f8f8f8;
+  color: #000;
+  transform: translateY(-2px);
+}
+
+/* --- Dropdown de moneda (solo móvil) --- */
+.currency-wrapper {
+  position: relative;
+}
+.currency-button {
+  padding: 0.5rem 0.7rem;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  background: white;
+  cursor: pointer;
+  font-weight: 500;
+  color: black;
+  transition: all 0.3s ease;
+}
+.currency-button:hover {
+  background: #f8f8f8;
+  color: #000;
+  transform: translateY(-2px);
+}
+
+.currency-dropdown {
+  position: absolute;
+  top: 110%;
+  left: 0;
+  background: white;
+  border-radius: 6px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  padding: 0.5rem;
+  width: 180px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  z-index: 1000;
+}
+
+.currency-dropdown div {
+  padding: 0.5rem;
+  border-radius: 5px;
+  cursor: pointer;
+  transition:
+    background 0.3s,
+    color 0.3s;
+}
+.currency-dropdown div:hover {
+  background: #f0f0f0;
+  color: #000;
+}
+.currency-dropdown .selected {
+  background: #fdfdfd;
+  color: rgb(0, 0, 0);
+}
+
+/* Botones simples */
+.nav-button,
+.logout_button {
+  background: none;
+  color: black;
+  border: none;
+  padding: 0.4rem 0.8rem;
+
+  cursor: pointer;
+  font-size: 1rem;
+  transition:
+    color 0.3s,
+    transform 0.2s;
+
+}
+.nav-button:hover,
+.logout_button:hover {
+  transform: translateY(-2px);
+}
+
+/* Shared typography for nav links and buttons */
+.nav-link,
+.nav-button,
+.logout_button {
+  font-family: "Inter", "Helvetica Neue", Arial, sans-serif;
+  font-size: 1.2rem; /* ensure same size for links and nav buttons (desktop) */
+}
+
+
+/* Carrito */
+.cart {
+  position: relative;
+  background: none;
+  border: none;
+  padding: 1rem;
+  cursor: pointer;
+  font-size: 2.6rem; /* ⬆️ más grande */
+  transition:
+    color 0.3s,
+    transform 0.2s;
+}
+.cart:hover {
+  color: white;
+  transform: scale(1.2) translateY(-2px);
+}
+.cart-count {
+  position: absolute;
+  top: -5px;
+  right: -10px;
+  background: red;
+  color: white;
+  border-radius: 50%;
+  padding: 0 6px;
+  font-size: 0.9rem;
+  font-weight: bold;
+}
+
+/* Menú hamburguesa */
+.hamburger {
+  display: none;
+  font-size: 2.6rem; /* ⬆️ más grande */
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+.hamburger:hover {
+  color: whiteSmoke;
+  transform: scale(1.2) translateY(-2px);
+}
+
+/* Botón de cerrar menú */
+.close-button {
+  font-size: 2.5rem; /* ⬆️ más grande */
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: black;
+}
+
+/* Navbar center desktop */
+.navbar-center {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+/* Drawer Móvil */
+@media (max-width: 900px) {
+  .hamburger {
+    display: block;
+  }
+  .navbar-center {
+    display: none;
+  }
+
+  .drawer-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.3);
+    z-index: 998;
+  }
+
+  .drawer-menu {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 270px;
+    height: 100%;
+    background: whitesmoke;
+    display: flex;
+    flex-direction: column;
+    padding: 2.5rem 1.5rem;
+    font-size: 1.6rem;
+    gap: 1.2rem;
+    z-index: 999;
+    box-shadow: -4px 0 8px rgba(0, 0, 0, 0.2);
+  }
+
+  .drawer-menu .nav-link,
+  .drawer-menu .nav-button,
+  .drawer-menu .logout_button,
+  .drawer-menu .currency-button {
+    width: 100%;
+    padding-left: 0.8rem;
+    background: none;
+    border: none;
+    color: black;
+    text-align: left;
+    font-size: 1.5rem;
+    font-weight: 500;
+    padding: 0.7rem;
+  }
+
+  .navbar-right {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+  }
+
+  .currency-select {
+    display: none;
+  }
+}
+
+/* Drawer Carrito desde la izquierda */
+.carrito-drawer.izquierda {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 260px;
+  height: 100%;
+  background: whitesmoke;
+  display: flex;
+  flex-direction: column;
+  padding: 2.5rem 1.5rem;
+  gap: 1.2rem;
+  z-index: 999;
+  box-shadow: 4px 0 8px rgba(0, 0, 0, 0.2);
+  transform: translateX(-100%);
+  transition: transform 0.3s ease;
+}
+.carrito-drawer.izquierda.abierto {
+  transform: translateX(0);
+}
+
+/* Responsivo entre 780px y 480px */
+@media (max-width: 780px) and (min-width: 481px) {
+  .logo {
+    font-size: 2rem;
+  }
+  .cart {
+    font-size: 2.4rem;
+    padding: 0.9rem;
+  }
+  .hamburger {
+    font-size: 2.4rem;
+  }
+  .close-button {
+    font-size: 2.3rem;
+  }
+  .drawer-menu {
+    width: 230px;
+    font-size: 1.3rem;
+    padding: 2rem 1rem;
+  }
+}
+
+/* Celulares más pequeños */
+@media (max-width: 480px) {
+  .logo {
+    font-size: 1.9rem;
+  }
+  .cart {
+    font-size: 2.2rem;
+    padding: 0.8rem;
+  }
+  .hamburger {
+    font-size: 2.2rem;
+  }
+  .close-button {
+    font-size: 2rem;
+  }
+  .drawer-menu {
+    width: 200px;
+    padding: 1.8rem 0.8rem;
+    font-size: 1.2rem;
+  }
+}

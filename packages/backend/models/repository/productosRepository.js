@@ -1,6 +1,6 @@
 import { ProductoModel } from "../../schemas/ProductoSchema.js";
 import mongoose from "mongoose";
-
+import logger from "../../../logger/logger.js";
 export default class ProductosRepository {
   constructor() {
     this.model = ProductoModel;

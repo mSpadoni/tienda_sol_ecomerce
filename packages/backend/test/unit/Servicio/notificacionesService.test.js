@@ -52,7 +52,11 @@ describe("NotificacionesService", () => {
   });
 
   test("marcarNotificacionComoLeida llama al repo y devuelve el actualizado", async () => {
-    const updated = makeNotificacion({ _id: "nid123", leida: true, fechaLeida: new Date() });
+    const updated = makeNotificacion({
+      _id: "nid123",
+      leida: true,
+      fechaLeida: new Date(),
+    });
     repoMock.marcarNotificacionComoLeida.mockResolvedValue(updated);
 
     const res = await svc.marcarNotificacionComoLeida("nid123");
@@ -80,7 +84,9 @@ describe("NotificacionesService", () => {
 
     const res = await svc.crearNotificacion(pedido);
 
-    expect(svc.factoryNotificacion.crearSegunPedido).toHaveBeenCalledWith(pedido);
+    expect(svc.factoryNotificacion.crearSegunPedido).toHaveBeenCalledWith(
+      pedido,
+    );
     expect(repoMock.save).toHaveBeenCalledWith(noti);
     expect(res).toBe(noti);
   });
@@ -93,7 +99,9 @@ describe("NotificacionesService", () => {
 
     await expect(svc.crearNotificacion(pedido)).rejects.toThrow("DB fail");
 
-    expect(svc.factoryNotificacion.crearSegunPedido).toHaveBeenCalledWith(pedido);
+    expect(svc.factoryNotificacion.crearSegunPedido).toHaveBeenCalledWith(
+      pedido,
+    );
     expect(repoMock.save).toHaveBeenCalledWith(noti);
   });
 });

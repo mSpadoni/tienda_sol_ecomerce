@@ -31,12 +31,22 @@ describe("ProductosService - getProductos", () => {
   });
 
   test("convierte page/limit (strings) y llama a findByPage y contarTodos", async () => {
-    const productos = [makeProductoRaw({ _id: "p1" }), makeProductoRaw({ _id: "p2" })];
+    const productos = [
+      makeProductoRaw({ _id: "p1" }),
+      makeProductoRaw({ _id: "p2" }),
+    ];
     repoMock.findByPage.mockResolvedValue(productos);
     repoMock.contarTodos.mockResolvedValue(25);
 
     const filtros = { categoria: "Deportes" };
-    const res = await svc.getProductos(filtros, "true", "2", "10", "precio", "asc");
+    const res = await svc.getProductos(
+      filtros,
+      "true",
+      "2",
+      "10",
+      "precio",
+      "asc",
+    );
 
     expect(repoMock.findByPage).toHaveBeenCalledWith(
       filtros,
@@ -56,7 +66,7 @@ describe("ProductosService - getProductos", () => {
     repoMock.contarTodos.mockResolvedValue(1);
 
     const out = await svc.getProductos({}, undefined, 1, 10, "ventas", "desc");
-    
+
     if (out && out.data) {
       expect(out.data[0]).toHaveProperty("titulo", "Remera Negra");
       expect(out.data[0]).toHaveProperty("precio", 1000);

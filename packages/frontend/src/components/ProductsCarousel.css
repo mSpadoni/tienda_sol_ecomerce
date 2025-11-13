@@ -1,0 +1,114 @@
+.carousel-container {
+  position: relative;
+  width: 100%;
+  margin-top: 1.5rem;
+}
+
+.carousel-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 1rem;
+  padding-left: 0.4rem;
+}
+
+.carousel-wrapper {
+  position: relative;
+  background: transparent;
+  padding: 0.25rem 2.5rem; /* espacio para las flechas */
+}
+
+.carousel-viewport {
+  overflow: hidden;
+  width: 100%;
+}
+
+.carousel-track {
+  display: flex;
+  transition: transform 0.3s ease;
+  /* no gap porque calculás en JS el 100/visible */
+}
+
+.carousel-empty {
+  text-align: center;
+  color: #94a3b8;
+  font-size: 0.9rem;
+  padding: 2rem 0;
+}
+
+/* -------- flechas -------- */
+.carousel-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 38px;
+  height: 38px;
+  border-radius: 999px;
+  border: none;
+  background: #ffffff;
+  box-shadow: 0 10px 25px rgba(15, 23, 42, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease,
+    opacity 0.15s ease;
+  font-size: 0.9rem;
+  color: #0f172a;
+  z-index: 10;
+}
+
+.carousel-btn:hover {
+  transform: translateY(-50%) scale(1.03);
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.18);
+}
+
+.left-btn {
+  left: 0.5rem;
+}
+
+.right-btn {
+  right: 0.5rem;
+}
+
+.carousel-btn.disabled,
+.carousel-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: translateY(-50%);
+}
+
+/* -------- responsive -------- */
+@media (max-width: 992px) {
+  .carousel-wrapper {
+    padding: 0.25rem 2.1rem;
+  }
+  .carousel-title {
+    padding-left: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .carousel-wrapper {
+    padding: 0.25rem 1.5rem;
+  }
+  .carousel-btn {
+    width: 32px;
+    height: 32px;
+  }
+}
+
+@media (max-width: 600px) {
+  .carousel-wrapper {
+    padding: 0.25rem 0.6rem;
+  }
+  .left-btn {
+    left: 0rem;
+  }
+  .right-btn {
+    right: 0rem;
+  }
+}

@@ -8,7 +8,6 @@ export const objectIdSchema = z
 
 export const pedidoPatchSchema = z.object({
   estado: z.string().min(1),
-  usuario: objectIdSchema,
   motivo: z.string(),
 });
 
@@ -17,22 +16,37 @@ export const direccionSchema = z.object({
   altura: z.string().min(1),
   piso: z.string(),
   departamento: z.string(),
-  codigoPostal: z.string(),
-  ciudad: z.string(),
-  provincia: z.string(),
-  pais: z.string(),
+  codigoPostal: z.string().min(1),
+  ciudad: z.string().min(1),
+  provincia: z.string().min(1),
+  pais: z.string().min(1),
   lat: z.string(),
   long: z.string(),
 });
 
 export const pedidoSchema = z.object({
-  usuario: objectIdSchema,
   moneda: z.string().min(1),
   direccionEntrega: direccionSchema,
-  items: z.array(
-    z.object({
-      productoId: objectIdSchema,
-      cantidad: z.coerce.number(),
-    }),
-  ),
+  items: z
+    .array(
+      z.object({
+        productoId: objectIdSchema,
+        cantidad: z.coerce.number(),
+      }),
+    )
+    .min(1),
 });
+
+export const validadIdkecloark = z.string().min(1);
+
+export const createUserSchema = z
+  .object({
+    username: z.string().nonempty("El username es obligatorio"),
+    nombre: z.string().nonempty("El nombre es obligatorio"),
+    apellido: z.string().nonempty("El apellido es obligatorio"),
+    email: z.string().email("El email no es válido"),
+    telefono: z.string().nonempty("El teléfono es obligatorio"),
+    password: z.string().nonempty("La contraseña es obligatoria"),
+    rol: z.string().nonempty("El rol es obligatorio"),
+  })
+  .strict(); // <- Esto hace que si viene un campo extra, tire error
