@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { FaShoppingCart, FaBars, FaTimes } from "react-icons/fa";
+import { FaShoppingCart, FaBars, FaTimes, FaBell } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import CarritoCuerpo from "../carritoCuerpo/carritoCuerpo.jsx";
 import { useCarrito } from "../../provieder/carritoProvider.jsx";
@@ -185,15 +185,7 @@ const Navbar = () => {
                 Pedidos Recibidos
               </Link>
             )}
-            <Link 
-              to="/notificaciones" 
-              className="nav-link"
-              role="menuitem"
-              aria-label="Ver notificaciones"
-            >
-              Notificaciones
-            </Link>
-
+            
             {!isAuthenticated ? (
               <>
                 <button 
@@ -225,6 +217,16 @@ const Navbar = () => {
 
         {/* Carrito y hamburguesa */}
         <div className="navbar-right">
+          {isVisible && (
+            <Link
+              to="/notificaciones"
+              className="notification-button"
+              aria-label="Ver notificaciones"
+              role="button"
+            >
+              <FaBell aria-hidden="true" />
+            </Link>
+          )}
           {isVisible && (
             <button
               className="cart"
@@ -356,7 +358,7 @@ const Navbar = () => {
           <div 
             className="carrito-drawer izquierda abierto"
             id="carrito-drawer"
-            role="region"
+            role="dialog"
             aria-label="Panel del carrito de compras"
             aria-modal="true"
           >
