@@ -64,8 +64,6 @@ export function obtenerDireccion(pedido) {
     pedido.direccionEntrega.ciudad,
     pedido.direccionEntrega.provincia,
     pedido.direccionEntrega.pais,
-    pedido.direccionEntrega.lat,
-    pedido.direccionEntrega.long,
   );
 }
 
@@ -134,18 +132,13 @@ export const createUser = async (userData) => {
 
   logger.info(`user id obtenido: ${userId}`);
 
-  let rolId;
-  if (rol === TipoUsuario.VENDEDOR) {
-    rolId = VENDEDOR_ID;
-  } else {
-    rolId = COMPRADOR_ID;
-  }
+ 
 
   await axios.post(
     `http://localhost:8080/admin/realms/${REALM}/users/${userId}/role-mappings/realm`,
     [
       {
-        id: rolId,
+        id: COMPRADOR_ID,
         name: rol,
       },
     ],

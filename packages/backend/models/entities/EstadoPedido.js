@@ -2,8 +2,8 @@ import Notificacion from "./Notificacion.js"; /*
 import { obtenerSimbolo } from "./Moneda.js";*/
 
 export const EstadoPedido = Object.freeze({
-  PENDIENTE: {
-    valor: "pendiente",
+  CONFIRMADO: {
+    valor: "confirmado",
     crearNotificacion: (pedido) => {
       const productos = pedido.items.reduce(
         (mensaje, item) => mensaje + item.producto.titulo,
@@ -16,20 +16,16 @@ export const EstadoPedido = Object.freeze({
       return new Notificacion(pedido.obtenerVendedor(), mensaje, new Date());
     },
   },
-
-  ACEPTADO: {
-    valor: "aceptado",
-    crearNotificacion: (Pedido) => {
-      return null;
-    },
-  },
   RECHAZADO: {
     valor: "rechazado",
-    crearNotificacion: (Pedido) => {
-      return null;
+    crearNotificacion: (pedido) => {
+      return new Notificacion(
+        pedido.comprador,
+        crearMensajeSegunEstado(EstadoPedido.RECHAZADO.valor),
+        new Date(),
+      );
     },
   },
-
   ENVIADO: {
     valor: "enviado",
     crearNotificacion: (pedido) => {
@@ -49,14 +45,7 @@ export const EstadoPedido = Object.freeze({
         new Date(),
       );
     },
-  },
-
-  FINALIZADO: {
-    valor: "finalizado",
-    crearNotificacion: (Pedido) => {
-      return null;
-    },
-  },
+  }
 });
 
 export function crearMensajeSegunEstado(estado) {

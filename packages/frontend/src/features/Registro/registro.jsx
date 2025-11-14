@@ -3,13 +3,8 @@ import {
   Card,
   TextField,
   Button,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
   LinearProgress,
   Typography,
-  Box,
   Alert,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
@@ -32,7 +27,6 @@ const RegistroUsuario = () => {
     email: "",
     telefono: "",
     password: "",
-    rol: "",
   };
 
   const cancelar = () => {
@@ -52,6 +46,12 @@ const RegistroUsuario = () => {
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email)) {
       errors.email = "Formato de email inválido";
     }
+    if (!values.telefono) {
+  errors.telefono = "Teléfono obligatorio";
+} else if (!/^[0-9]{7,15}$/.test(values.telefono)) {
+  errors.telefono = "Formato de teléfono inválido";
+}
+
 
     if (!values.password) {
       errors.password = "Contraseña obligatoria";
@@ -106,11 +106,11 @@ const RegistroUsuario = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const fieldKeysAll = Object.keys(values);
-  const fieldKeys = fieldKeysAll.filter((k) => k !== "password");
-  const totalSteps = fieldKeys.length + 1;
 
-  const camposCompletos = fieldKeysAll.every(
+  const fieldKeys = Object.keys(values);
+  const totalSteps = fieldKeys.length+1;
+
+  const camposCompletos = fieldKeys.every(
     (key) => values[key] && !validate(values)[key],
   );
 
@@ -127,10 +127,7 @@ const RegistroUsuario = () => {
     }
   };
 
-  const opcionesRol = [
-    { value: "vendedor", label: "Vendedor" },
-    { value: "comprador", label: "Comprador" },
-  ];
+ 
 
   const passwordChecks = [
     { label: "Al menos 8 caracteres", test: /.{8,}/ },
@@ -141,11 +138,8 @@ const RegistroUsuario = () => {
   ];
 
   const isCurrentStepValid = () => {
-    if (isMobile && step === fieldKeys.length) {
-      return values.password && !validate(values).password;
-    }
     const key = fieldKeys[step];
-    return key ? values[key] && !validate(values)[key] : true;
+    return values[key] && !validate(values)[key]
   };
 
   return (
@@ -162,46 +156,13 @@ const RegistroUsuario = () => {
         {isSubmitting && <LinearProgress sx={{ mb: 2 }} />}
 
         <form onSubmit={handleSubmit}>
-          {(!isMobile || step < fieldKeys.length) && (
+          {(!isMobile || step <= fieldKeys.length) && (
             <div className="form-grid">
               {fieldKeys.map((key, index) => {
                 if (isMobile && index !== step) return null;
 
-                if (key === "rol") {
-                  return (
-                    <FormControl
-                      key={key}
-                      fullWidth
-                      className="input-field"
-                      error={!!showError(key)}
-                      variant="outlined"
-                      label="Rol"
-                    >
-                      <InputLabel id={`${key}-label`}>Rol</InputLabel>
-                      <Select
-                        labelId={`${key}-label`}
-                        name={key}
-                        value={values[key]}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        required
-                      >
-                        {opcionesRol.map((opt) => (
-                          <MenuItem key={opt.value} value={opt.value}>
-                            {opt.label}
-                          </MenuItem>
-                        ))}
-                      </Select>
-                      {showError(key) && (
-                        <p style={{ color: "red", fontSize: "0.8rem" }}>
-                          {showError(key)}
-                        </p>
-                      )}
-                    </FormControl>
-                  );
-                }
-
                 return (
+                  <>
                   <TextField
                     key={key}
                     className="input-field"
@@ -215,12 +176,24 @@ const RegistroUsuario = () => {
                     error={!!showError(key)}
                     helperText={showError(key)}
                   />
+                 {index===5&& <div className="password-rules">
+                {passwordChecks.map((check) => (
+                  <Typography
+                    key={check.label}
+                    className={`rule ${check.test.test(values.password) ? "ok" : "fail"}`}
+                  >
+                    {check.test.test(values.password) ? "✔️" : "❌"}{" "}
+                    {check.label}
+                  </Typography>
+                ))}
+              </div>}
+                  </>
                 );
               })}
             </div>
           )}
 
-          {(!isMobile || step === fieldKeys.length) && (
+          {/* {(!isMobile || step === fieldKeys.length) && (
             <Box key="password" className="password-container">
               <TextField
                 label="Contraseña"
@@ -246,7 +219,7 @@ const RegistroUsuario = () => {
                 ))}
               </div>
             </Box>
-          )}
+          )} */}
 
           <div className="actions">
             {isMobile ? (

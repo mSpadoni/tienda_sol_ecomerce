@@ -7,9 +7,7 @@ export default class DireccionEntrega {
     codigoPostal,
     ciudad,
     provincia,
-    pais,
-    lat,
-    lon,
+    pais
   ) {
     this.calle = calle;
     this.altura = altura;
@@ -19,7 +17,5 @@ export default class DireccionEntrega {
     this.ciudad = ciudad;
     this.provincia = provincia;
     this.pais = pais;
-    this.lat = lat;
-    this.lon = lon;
   }
 }

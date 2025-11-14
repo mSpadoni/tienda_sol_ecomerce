@@ -35,8 +35,6 @@ const Checkout = () => {
     ciudad: "",
     provincia: "",
     pais: "",
-    lat: "",
-    lon: "",
   };
 
   const validate = (values) => {

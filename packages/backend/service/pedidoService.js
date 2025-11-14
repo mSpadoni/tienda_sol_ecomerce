@@ -110,7 +110,7 @@ export default class pedidoService {
 
   async actualizarStock(items, estado) {
     let itemsActualizados = items;
-    if (estado === EstadoPedido.PENDIENTE) {
+    if (estado === EstadoPedido.CONFIRMADO) {
       itemsActualizados = reducirStocks(items);
       await this.actualizarProductosPorCambioDeStock(itemsActualizados);
     }

@@ -37,6 +37,19 @@
   color: #1976d2;
 }
 
+
+
+
+.puntosMenu {
+  opacity: 0.5;
+  transition: 0.2s;
+}
+
+.puntosMenu:hover {
+  opacity: 1;
+}
+
+
 /* Body */
 .pedido-body {
   display: flex;
@@ -51,6 +64,7 @@
   color: #333;
 }
 
+
 .pedido-items ul {
   margin: 0;
   padding-left: 22px;
@@ -60,32 +74,7 @@
 }
 
 /* Botón ver detalles como texto pequeño + flecha */
-.btn-ver-detalles-text {
-  font-size: 0.95rem; /* más grande */
-  color: #555;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-weight: 500;
-  margin-top: 10px;
-  transition:
-    color 0.2s,
-    transform 0.2s;
-}
 
-.btn-ver-detalles-text:hover {
-  color: #222;
-}
-
-.btn-ver-detalles-text .flecha {
-  font-size: 0.9rem;
-  transition: transform 0.3s;
-}
-
-.btn-ver-detalles-text .flecha.abierta {
-  transform: rotate(180deg);
-}
 
 /* Botones de acción */
 .btn-cambiar-estado {
@@ -120,7 +109,7 @@
   border-top: 1px solid #eee;
   font-size: 1rem; /* más grande */
   color: #555;
-  line-height: 1.6;
+  line-height: 2;
   transition:
     max-height 0.3s ease,
     opacity 0.3s ease;
