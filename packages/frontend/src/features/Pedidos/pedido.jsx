@@ -94,7 +94,7 @@ export default function ListaPedidos({
 
             {/* 🔹 MENU DESPLEGABLE */}
             <Menu anchorEl={anchorEl} open={menuAbierto} onClose={cerrarMenu}>
-              {esComprador && <MenuItem sx={itemStyles} onClick={cancelar}>Cancelar</MenuItem>}
+              {esComprador && <MenuItem sx={itemStyles} onClick={cancelar}>{botonesNombreSegunEstado[estadoACambiar]}</MenuItem>}
               {esVendedor && <MenuItem sx={itemStyles} onClick={rechazar}>Rechazar</MenuItem>}
             </Menu>
           </div>
@@ -111,14 +111,15 @@ export default function ListaPedidos({
               </ul>
             </div>
 
-            {esVendedor && <div className="pedido-actions">
+            {!estadoNegativos.includes(estadoACambiar) && <div className="pedido-actions">
               {/* 🔹 BOTÓN MUI (ENVÍAR O CAMBIAR ESTADO) */}
               <MUIButton
                 variant="contained"
-                color="primary"
+                color='success'
+                sx={enviarStyles}
                 onClick={() => cambiarEstado(pedido.id)}
               >
-                Enviar 
+                {botonesNombreSegunEstado[estadoACambiar]} 
               </MUIButton>
             </div>}
           </div> 
@@ -169,7 +170,16 @@ const itemStyles = {
   },
 };
 
-// const botonesNombreSegunEstado = Object.freeze({
-//   cancelado: "Cancelar Pedido",
-//   enviado: "Marcar como Enviado",
-// });
+const enviarStyles = {
+  fontWeight: 500,
+  fontSize: "0.8rem",
+  transition: "all 0.4s ease",
+};
+
+ const botonesNombreSegunEstado = Object.freeze({
+  cancelado: "Cancelar",
+   enviado: "Enviar",
+    rechazado: "Rechazar",
+ });
+
+const estadoNegativos = ["cancelado", "rechazado"];
