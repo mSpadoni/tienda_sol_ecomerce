@@ -18,7 +18,6 @@ const Navbar = () => {
   const [dropdownAbierto, setDropdownAbierto] = useState(false);
 
   const { carrito, carritoVacio } = useCarrito();
-  const { currency, setCurrency } = useCurrency();
   const { isAuthenticated, login, logout, elUsuarioEsUn, keycloakReady } =
     useKeycloak();
   const { isVisible, ponerInvisible, ponerVisible } = useVisible();
@@ -27,7 +26,6 @@ const Navbar = () => {
   const carritoLongitud = carrito.length;
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 900);
   const [showSkeleton, setShowSkeleton] = useState(true);
-  const [textoMoneda, setTextoMoneda] = useState("ARS — Peso Argentino");
   
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth <= 900);
@@ -46,7 +44,7 @@ const Navbar = () => {
 
   const registrar = () => {
     ponerInvisible();
-    navigate("/sig-on");
+    navigate("/Creá tu cuenta");
     setMenuAbierto(false);
   };
 
@@ -58,15 +56,9 @@ const Navbar = () => {
   const toggleMenu = () => setMenuAbierto(!menuAbierto);
   const cerrarMenu = () => setMenuAbierto(false);
   const toggleCarrito = () => setCarritoAbierto(!carritoAbierto);
-  const toggleDropdown = () => setDropdownAbierto(!dropdownAbierto);
   const [authMenuOpen, setAuthMenuOpen] = useState(false);
   const authRef = useRef(null);
   const toggleAuthMenu = () => setAuthMenuOpen((s) => !s);
-
-  const seleccionarMoneda = (monedaElegida) => {
-    setCurrency(monedaElegida);
-    setDropdownAbierto(false);
-  };
 
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -163,12 +155,11 @@ const Navbar = () => {
           <button 
             onClick={volverAHome} 
             className="logo"
-            aria-label="Ir a inicio - TiendaSol.com"
+            aria-label="Ir a inicio - TiendaSol"
           >
-            TiendaSol.com
+            TiendaSol
           </button>
         </div>
-
         {/* Menú Desktop */}
         {!isMobile && isVisible && (
           <div className="navbar-center" role="menubar" aria-label="Menú principal">
@@ -272,11 +263,11 @@ const Navbar = () => {
                 <div className="auth-dropdown" role="menu" aria-label="Opciones de cuenta">
                   {!isAuthenticated ? (
                     <>
-                      <button className="auth-dropdown-item" onClick={() => { registrar(); setAuthMenuOpen(false); }} role="menuitem">Sign-On</button>
-                      <button className="auth-dropdown-item" onClick={() => { login(); setAuthMenuOpen(false); }} role="menuitem">Login</button>
+                      <button className="auth-dropdown-item" onClick={() => { registrar(); setAuthMenuOpen(false); }} role="menuitem">Creá tu cuenta</button>
+                      <button className="auth-dropdown-item" onClick={() => { login(); setAuthMenuOpen(false); }} role="menuitem">Ingresá</button>
                     </>
                   ) : (
-                    <button className="auth-dropdown-item" onClick={() => { logout(); setAuthMenuOpen(false); }} role="menuitem">Logout</button>
+                    <button className="auth-dropdown-item" onClick={() => { logout(); setAuthMenuOpen(false); }} role="menuitem">Cerrar sesión</button>
                   )}
                 </div>
               )}
@@ -346,14 +337,14 @@ const Navbar = () => {
                   className="nav-button"
                   aria-label="Crear nueva cuenta desde menú móvil"
                 >
-                  Sign-On
+                  Creá tu cuenta
                 </button>
                 <button 
                   onClick={login} 
                   className="nav-button"
                   aria-label="Iniciar sesión desde menú móvil"
                 >
-                  Login
+                  Ingresá
                 </button>
               </>
             ) : (

@@ -3,7 +3,7 @@
   position: fixed;
   top: 0;
   width: 100%;
-  background: #ffc300;
+  background: #1F2937; /* color navbar se puede cambiar je */
   z-index: 30;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   height: 75px;
@@ -21,7 +21,7 @@
 /* Logo */
 .logo {
   color: rgb(10, 0, 97);
-  font-size: 2.4rem; /* ⬆️ más grande */
+  font-size: 1.9rem; /* reducido para que TiendaSol se vea más pequeño */
   font-weight: bold;
   border: none;
   background: none;
@@ -33,6 +33,27 @@
 .logo:hover {
   color: #fff;
   transform: scale(1.05);
+}
+
+/* Ensure navbar items show correctly on dark background */
+.navbar-bg .logo,
+.navbar-bg .nav-link,
+.navbar-bg .nav-button,
+.navbar-bg .logout_button,
+.navbar-bg .cart,
+.navbar-bg .notification-button,
+.navbar-bg .hamburger,
+.navbar-bg .auth-menu-button {
+  color: #ffffff;
+}
+
+.navbar-bg .nav-link:hover,
+.navbar-bg .nav-button:hover,
+.navbar-bg .logout_button:hover,
+.navbar-bg .auth-menu-button:hover,
+.navbar-bg .cart:hover,
+.navbar-bg .notification-button:hover {
+  color: whitesmoke;
 }
 
 /* Links del navbar */
@@ -299,7 +320,7 @@
 /* Responsivo entre 780px y 480px */
 @media (max-width: 780px) and (min-width: 481px) {
   .logo {
-    font-size: 2rem;
+    font-size: 1.7rem;
   }
   .cart {
     font-size: 1.55rem;
@@ -321,7 +342,7 @@
 /* Celulares más pequeños */
 @media (max-width: 480px) {
   .logo {
-    font-size: 1.9rem;
+    font-size: 1.6rem;
   }
   .cart {
     font-size: 1.5rem;

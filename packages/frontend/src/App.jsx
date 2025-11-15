@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 // import logger from "../../logger/logger.js";
 import "./App.css";
 import Home from "./features/home/Home.jsx";
+import About from "./features/About/About.jsx";
+import Contactanos from "./features/Contacto/Contactanos.jsx";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ProductDetailPage from "./features/productos/ProductDetailPage.jsx";
 import Layout from "./features/Layout/layout.jsx";
@@ -67,6 +69,8 @@ function App() {
                     <Route path="/" element={<Layout />}>
                       <Route path="/" element={<Home />} />
                       <Route path="/sig-on" element={<RegistroUsuario />} />
+                      <Route path="/sobre-nosotros" element={<About />} />
+                      <Route path="/contactanos" element={<Contactanos />} />
                       <Route element={<ProtectedRoute />}>
                         <Route
                           path="/productos/:id"

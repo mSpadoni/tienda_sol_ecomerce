@@ -1,61 +1,72 @@
 import React from "react";
+import { FaFacebookF, FaInstagram, FaTwitter, FaApple, FaGooglePlay } from "react-icons/fa";
+import { Link } from "react-router-dom";
 import "./Footer.css";
 
 const Footer = () => {
   return (
-    <footer className="footer" role="contentinfo">
-      <div className="footer-content">
-        {/* Columna 1: Acerca de la empresa y contacto */}
-        <section className="footer-section" aria-labelledby="about-heading">
-          <h4 id="about-heading">Acerca de nosotros</h4>
-          <p>
-            Tienda del Sol es tu destino de compras online, ofreciendo productos
-            de calidad con atención personalizada. Nos apasiona conectar a
-            nuestros clientes con lo mejor del mercado, garantizando confianza y
-            comodidad en cada compra.
-          </p>
-          <h4 className="mt-4" id="contact-heading">Contacto</h4>
-          <ul aria-labelledby="contact-heading">
-            <li>
-              Email:{" "}
-              <a href="mailto:tiendaDelSol@gmail.com" aria-label="Enviar email a tiendaDelSol@gmail.com">
-                tiendaDelSol@gmail.com
-              </a>
-            </li>
-            <li>Teléfono: <a href="tel:+541112345678" aria-label="Llamar al (011) 1234-5678">(011) 1234-5678</a></li>
-          </ul>
-        </section>
+    <footer className="footer compact-footer" role="contentinfo">
+      <div className="footer-inner">
+        <div className="footer-top">
+          <div className="brand">
+            <button className="logo-footer" aria-label="Tienda del Sol - ir a inicio">TiendaSol</button>
+            <div className="app-badges" aria-hidden="true">
+              <span className="badge">App Store</span>
+              <span className="badge">Google Play</span>
+            </div>
+          </div>
 
-        {/* Columna 2: Misión, Visión y Valores */}
-        <section className="footer-section" aria-labelledby="mission-heading">
-          <h4 id="mission-heading">Misión</h4>
-          <p>
-            Brindar productos de alta calidad y un servicio excepcional que haga
-            de cada compra una experiencia única y confiable para nuestros
-            clientes.
-          </p>
+          <div className="social">
+            <a href="#" aria-label="Facebook" className="social-link"><FaFacebookF /></a>
+            <a href="#" aria-label="Instagram" className="social-link"><FaInstagram /></a>
+            <a href="#" aria-label="Twitter" className="social-link"><FaTwitter /></a>
+          </div>
+        </div>
 
-          <h4 className="mt-4" id="vision-heading">Visión</h4>
-          <p>
-            Ser la tienda online líder en satisfacción del cliente, reconocida
-            por innovación, confiabilidad y compromiso con la excelencia.
-          </p>
+        <div className="footer-links">
+          <div className="links-column">
+            <h5>Comprar</h5>
+            <ul>
+              <li><a href="#" onClick={(e)=>e.preventDefault()}>Ofertas</a></li>
+              <li><a href="#" onClick={(e)=>e.preventDefault()}>Categorías</a></li>
+              <li><a href="#" onClick={(e)=>e.preventDefault()}>Historial</a></li>
+            </ul>
+          </div>
 
-          <h4 className="mt-4" id="values-heading">Valores</h4>
-          <ul aria-labelledby="values-heading">
-            <li>Calidad y confianza</li>
-            <li>Atención al cliente</li>
-            <li>Innovación y mejora continua</li>
-            <li>Responsabilidad social</li>
-          </ul>
-        </section>
-      </div>
+          <div className="links-column">
+            <h5>Vender</h5>
+            <ul>
+              <li><a href="#" onClick={(e)=>e.preventDefault()}>Vende en TiendaSol</a></li>
+              <li><a href="#" onClick={(e)=>e.preventDefault()}>Precios y planes</a></li>
+            </ul>
+          </div>
 
-      <div className="footer-bottom">
-        <p>
-          &copy; {new Date().getFullYear()} Tienda del Sol. Todos los derechos
-          reservados.
-        </p>
+          <div className="links-column">
+            <h5>Atención</h5>
+            <ul>
+              <li><a href="#" onClick={(e)=>e.preventDefault()}>Centro de ayuda</a></li>
+              <li><Link to="/contactanos">Contactanos</Link></li>
+            </ul>
+          </div>
+
+          <div className="links-column">
+            <h5>Compañía</h5>
+            <ul>
+              <li><Link to="/sobre-nosotros">Sobre nosotros</Link></li>
+              <li><a href="#" onClick={(e)=>e.preventDefault()}>Trabajo</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div className="footer-bottom">
+          <div className="legal">
+            <p>&copy; {new Date().getFullYear()} Tienda del Sol. Todos los derechos reservados.</p>
+            <div className="legal-links">
+              <a href="#">Términos</a>
+              <a href="#">Privacidad</a>
+            </div>
+          </div>
+        </div>
       </div>
     </footer>
   );
