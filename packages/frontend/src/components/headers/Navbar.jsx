@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { FaShoppingCart, FaBars, FaTimes, FaBell } from "react-icons/fa";
+import React, { useState, useEffect, useRef } from "react";
+import { FaShoppingCart, FaBars, FaTimes, FaBell, FaEllipsisV } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import CarritoCuerpo from "../carritoCuerpo/carritoCuerpo.jsx";
 import { useCarrito } from "../../provieder/carritoProvider.jsx";
@@ -59,11 +59,24 @@ const Navbar = () => {
   const cerrarMenu = () => setMenuAbierto(false);
   const toggleCarrito = () => setCarritoAbierto(!carritoAbierto);
   const toggleDropdown = () => setDropdownAbierto(!dropdownAbierto);
+  const [authMenuOpen, setAuthMenuOpen] = useState(false);
+  const authRef = useRef(null);
+  const toggleAuthMenu = () => setAuthMenuOpen((s) => !s);
 
   const seleccionarMoneda = (monedaElegida) => {
     setCurrency(monedaElegida);
     setDropdownAbierto(false);
   };
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (authRef.current && !authRef.current.contains(e.target)) {
+        setAuthMenuOpen(false);
+      }
+    };
+    if (authMenuOpen) document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [authMenuOpen]);
 
   if (showSkeleton) {
     return (
@@ -186,24 +199,8 @@ const Navbar = () => {
               </Link>
             )}
             
-            {!isAuthenticated ? (
-              <>
-                <button 
-                  onClick={registrar} 
-                  className="nav-button"
-                  aria-label="Crear nueva cuenta"
-                >
-                  Sign-On
-                </button>
-                <button 
-                  onClick={login} 
-                  className="nav-button"
-                  aria-label="Iniciar sesión"
-                >
-                  Login
-                </button>
-              </>
-            ) : (
+            {/* Authentication buttons moved to the right auth menu */}
+            {isAuthenticated && (
               <button 
                 onClick={logout} 
                 className="logout_button"
@@ -237,7 +234,7 @@ const Navbar = () => {
               aria-controls="carrito-drawer"
               aria-disabled={carritoVacio()}
             >
-              <FaShoppingCart color="black" aria-hidden="true" />
+              <FaShoppingCart aria-hidden="true" />
               {carritoLongitud > 0 && (
                 <span 
                   className="cart-count"
@@ -258,6 +255,32 @@ const Navbar = () => {
             >
               {menuAbierto ? <FaTimes aria-hidden="true" /> : <FaBars aria-hidden="true" />}
             </button>
+          )}
+          {/* Auth menu for desktop placed at the far right */}
+          {!isMobile && isVisible && (
+            <div className="auth-wrapper" ref={authRef}>
+              <button
+                className="auth-menu-button"
+                onClick={toggleAuthMenu}
+                aria-haspopup="true"
+                aria-expanded={authMenuOpen}
+                aria-label={authMenuOpen ? "Cerrar menú de cuenta" : "Abrir menú de cuenta"}
+              >
+                <FaEllipsisV aria-hidden="true" />
+              </button>
+              {authMenuOpen && (
+                <div className="auth-dropdown" role="menu" aria-label="Opciones de cuenta">
+                  {!isAuthenticated ? (
+                    <>
+                      <button className="auth-dropdown-item" onClick={() => { registrar(); setAuthMenuOpen(false); }} role="menuitem">Sign-On</button>
+                      <button className="auth-dropdown-item" onClick={() => { login(); setAuthMenuOpen(false); }} role="menuitem">Login</button>
+                    </>
+                  ) : (
+                    <button className="auth-dropdown-item" onClick={() => { logout(); setAuthMenuOpen(false); }} role="menuitem">Logout</button>
+                  )}
+                </div>
+              )}
+            </div>
           )}
         </div>
       </nav>

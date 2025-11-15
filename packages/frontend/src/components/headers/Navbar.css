@@ -159,6 +159,7 @@
   padding: 0.4rem 0.45rem;
   cursor: pointer;
   font-size: 1.6rem; /* tamaño reducido */
+  color: black;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -344,6 +345,52 @@
   display: flex;
   gap: 1rem;
   align-items: center;
+}
+
+/* Auth menu wrapper */
+.auth-wrapper {
+  position: relative;
+}
+
+.auth-menu-button {
+  background: none;
+  border: none;
+  padding: 0.35rem 0.4rem;
+  cursor: pointer;
+  font-size: 1.4rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: black;
+}
+.auth-menu-button:hover {
+  color: whitesmoke;
+}
+
+.auth-dropdown {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  background: white;
+  border-radius: 6px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+  padding: 0.4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  z-index: 1200;
+  min-width: 140px;
+}
+.auth-dropdown-item {
+  background: none;
+  border: none;
+  text-align: left;
+  padding: 0.5rem 0.6rem;
+  cursor: pointer;
+  font-size: 1rem;
+}
+.auth-dropdown-item:hover {
+  background: #f5f5f5;
 }
 
 /* Botón de notificaciones (campana) */
