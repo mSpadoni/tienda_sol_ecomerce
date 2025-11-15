@@ -9,6 +9,7 @@ import "./Home.css";
 import SuccessSnackbar from "../../components/snackBar.jsx";
 import { useKeycloak } from "../../provieder/keyCloak.jsx";
 import { DotLoader } from "react-spinners";
+import { FaBars, FaTimes } from "react-icons/fa";
 import { Alert } from "@mui/material";
 import { useCurrency } from "../../provieder/CurrencyProvider.jsx";
 import { CURRENCIES } from "../../provieder/currencies.js";
@@ -30,6 +31,8 @@ const Home = () => {
     setCurrentPage(page);
     setTotalPaginas(productosCargados.totalPaginas);
   };
+
+  const [filtersOpen, setFiltersOpen] = useState(false);
 
   useEffect(() => {
     const cargar = async () => {
@@ -102,15 +105,24 @@ const Home = () => {
             <section className="home-section">
               <div className="section-header between">
                 <h2>Todos los productos</h2>
-                <p className="section-subtitle small">
-                  {productosFiltrados.length} productos encontrados
-                </p>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                  <p className="section-subtitle small">
+                    {productosFiltrados.length} productos encontrados
+                  </p>
+                  <button
+                    className="filters-toggle"
+                    aria-label="Abrir filtros"
+                    onClick={() => setFiltersOpen(true)}
+                  >
+                    <FaBars />
+                  </button>
+                </div>
               </div>
 
-              <ProductFilters onApply={aplicarFiltros} initial={filtros} />
-
-              <div className="products-grid">
-                {productosFiltrados.map((producto) => {
+              <div className="products-layout">
+                <div className="products-main">
+                  <div className="products-grid">
+                    {productosFiltrados.map((producto) => {
                   const placeholder = `https://via.placeholder.com/90x90?text=${encodeURIComponent(
                     producto.titulo || "Producto",
                   )}`;
@@ -146,16 +158,38 @@ const Home = () => {
                     </article>
                   );
                 })}
+                  </div>
+
+                  {totalPaginas >= 1 && (
+                    <div className="pagination-wrapper">
+                      <Paginacion
+                        currentPage={currentPage}
+                        totalPaginas={totalPaginas}
+                        onPageChange={(page) => cargarProductos(page)}
+                      />
+                    </div>
+                  )}
+                </div>
               </div>
 
-              {totalPaginas >= 1 && (
-                <div className="pagination-wrapper">
-                  <Paginacion
-                    currentPage={currentPage}
-                    totalPaginas={totalPaginas}
-                    onPageChange={(page) => cargarProductos(page)}
+              {/* Drawer para filtros (hamburguesa) */}
+              {filtersOpen && (
+                <>
+                  <div
+                    className="filters-backdrop"
+                    onClick={() => setFiltersOpen(false)}
                   />
-                </div>
+                  <aside className="filters-drawer" role="dialog" aria-modal="true">
+                    <button
+                      className="filters-close"
+                      aria-label="Cerrar filtros"
+                      onClick={() => setFiltersOpen(false)}
+                    >
+                      <FaTimes />
+                    </button>
+                    <ProductFilters onApply={aplicarFiltros} initial={filtros} />
+                  </aside>
+                </>
               )}
             </section>
           </>

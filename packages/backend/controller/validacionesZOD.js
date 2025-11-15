@@ -45,6 +45,6 @@ export const createUserSchema = z
     email: z.string().email("El email no es válido"),
     telefono: z.string().nonempty("El teléfono es obligatorio"),
     password: z.string().nonempty("La contraseña es obligatoria"),
-    rol: z.string().nonempty("El rol es obligatorio"),
+    rol: z.string().optional(),
   })
   .strict(); // <- Esto hace que si viene un campo extra, tire error

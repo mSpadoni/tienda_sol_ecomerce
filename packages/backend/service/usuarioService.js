@@ -10,6 +10,11 @@ export default class UsuarioService {
   async crear(usuario_A_Crear) {
     logger.info("creando usuario en el service");
 
+    // Ensure rol has a default if the frontend doesn't send it
+    if (!usuario_A_Crear.rol) {
+      usuario_A_Crear.rol = "comprador";
+    }
+
     const idKeycloack = await createUser(usuario_A_Crear);
 
     const usuarioNuevo = new Usuario(

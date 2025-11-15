@@ -25,8 +25,8 @@ const RegistroUsuario = () => {
     nombre: "",
     apellido: "",
     email: "",
-    telefono: "",
     password: "",
+    telefono: "",
   };
 
   const cancelar = () => {
@@ -46,12 +46,12 @@ const RegistroUsuario = () => {
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email)) {
       errors.email = "Formato de email inválido";
     }
-    if (!values.telefono) {
-  errors.telefono = "Teléfono obligatorio";
-} else if (!/^[0-9]{7,15}$/.test(values.telefono)) {
-  errors.telefono = "Formato de teléfono inválido";
-}
 
+    if (!values.telefono) {
+      errors.telefono = "Teléfono obligatorio";
+    } else if (!/^[0-9]{7,15}$/.test(values.telefono)) {
+      errors.telefono = "Formato de teléfono inválido";
+    }
 
     if (!values.password) {
       errors.password = "Contraseña obligatoria";
@@ -65,8 +65,6 @@ const RegistroUsuario = () => {
       }
     }
 
-    if (!values.rol) errors.rol = "Rol obligatorio";
-
     return errors;
   };
 
@@ -78,7 +76,7 @@ const RegistroUsuario = () => {
       navigate("/");
     } catch (err) {
       setError(err);
-      navigate("/sig-on");
+      navigate("/registro");
     }
   };
 
@@ -163,19 +161,19 @@ const RegistroUsuario = () => {
 
                 return (
                   <>
-                  <TextField
-                    key={key}
-                    className="input-field"
-                    label={key.charAt(0).toUpperCase() + key.slice(1)}
-                    name={key}
-                    required
-                    fullWidth
-                    value={values[key]}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    error={!!showError(key)}
-                    helperText={showError(key)}
-                  />
+                    <TextField
+                      key={key}
+                      className="input-field"
+                      label={key.charAt(0).toUpperCase() + key.slice(1)}
+                      name={key}
+                      required
+                      fullWidth
+                      value={values[key]}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      error={!!showError(key)}
+                      helperText={showError(key)}
+                    />
                  {index===5&& <div className="password-rules">
                 {passwordChecks.map((check) => (
                   <Typography
@@ -238,15 +236,22 @@ const RegistroUsuario = () => {
                     variant="contained"
                     onClick={handleNext}
                     disabled={!isCurrentStepValid()}
+                    sx={{
+                      backgroundColor: '#16427f',
+                      color: '#ffffff',
+                      '&:hover': { backgroundColor: '#113369' },
+                    }}
                   >
                     Siguiente
                   </Button>
                 ) : (
                   <Button
+                    onClick={() => onSubmit(values)}
                     className="btn-registrar"
                     type="submit"
                     variant="contained"
                     disabled={!camposCompletos || isSubmitting}
+                    sx={{ mt: 2, backgroundColor: '#16427f', color: '#ffffff', '&:hover': { backgroundColor: '#113369' } }}
                   >
                     Registrar
                   </Button>
@@ -262,10 +267,12 @@ const RegistroUsuario = () => {
                   Cancelar
                 </Button>
                 <Button
+                  onClick={() => onSubmit(values)}
                   className="btn-registrar"
                   type="submit"
                   variant="contained"
                   disabled={!camposCompletos || isSubmitting}
+                  sx={{ backgroundColor: '#16427f', color: '#ffffff', '&:hover': { backgroundColor: '#113369' } }}
                 >
                   Registrar
                 </Button>

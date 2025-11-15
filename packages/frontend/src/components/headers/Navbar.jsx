@@ -3,7 +3,6 @@ import { FaShoppingCart, FaBars, FaTimes, FaBell, FaEllipsisV } from "react-icon
 import { Link, useNavigate } from "react-router-dom";
 import CarritoCuerpo from "../carritoCuerpo/carritoCuerpo.jsx";
 import { useCarrito } from "../../provieder/carritoProvider.jsx";
-import { useCurrency } from "../../provieder/CurrencyProvider.jsx";
 import { useKeycloak } from "../../provieder/keyCloak.jsx";
 import { useVisible } from "../../provieder/visibleHook.jsx";
 
@@ -44,7 +43,7 @@ const Navbar = () => {
 
   const registrar = () => {
     ponerInvisible();
-    navigate("/Creá tu cuenta");
+    navigate("/registro");
     setMenuAbierto(false);
   };
 

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-import { FiArrowRight } from "react-icons/fi";
+// import arrow icon removed - button will be text-only
 import "./ProductFilters.css";
 
 const ProductFilters = ({ onApply, initial = {} }) => {
@@ -110,17 +110,16 @@ const ProductFilters = ({ onApply, initial = {} }) => {
         </fieldset>
 
         <div className="button-group">
-          <button 
-            type="submit" 
-            className="btn btn-primary"
+          <button
+            type="submit"
+            className="btn btn-primary contained"
             aria-label="Aplicar filtros de búsqueda"
           >
-            <span>Aplicar</span>
-            <FiArrowRight className="icon" aria-hidden="true" />
+            Aplicar
           </button>
           <button
             type="button"
-            className="btn btn-secondary"
+            className="btn btn-secondary outlined"
             onClick={handleReset}
             aria-label="Limpiar todos los filtros"
           >

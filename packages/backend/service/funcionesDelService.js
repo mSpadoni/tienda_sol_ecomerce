@@ -96,9 +96,6 @@ const validarQueNoEsAdmin = (tipo) => {
 };
 
 export const createUser = async (userData) => {
-  let rol;
-
-  rol = validarQueNoEsAdmin(userData.rol);
 
   const token = await getAdminToken();
 
@@ -139,7 +136,7 @@ export const createUser = async (userData) => {
     [
       {
         id: COMPRADOR_ID,
-        name: rol,
+        name: "comprador",
       },
     ],
     {

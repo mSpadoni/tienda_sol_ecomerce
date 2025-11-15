@@ -38,6 +38,10 @@ app.use(
       return callback(null, false);
     },
     credentials: true,
+    methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization", "Accept", "X-Requested-With"],
+    preflightContinue: false,
+    optionsSuccessStatus: 204,
   }),
 );
 

@@ -44,7 +44,6 @@ const Footer = () => {
           <div className="links-column">
             <h5>Atención</h5>
             <ul>
-              <li><a href="#" onClick={(e)=>e.preventDefault()}>Centro de ayuda</a></li>
               <li><Link to="/contactanos">Contactanos</Link></li>
             </ul>
           </div>
@@ -53,7 +52,6 @@ const Footer = () => {
             <h5>Compañía</h5>
             <ul>
               <li><Link to="/sobre-nosotros">Sobre nosotros</Link></li>
-              <li><a href="#" onClick={(e)=>e.preventDefault()}>Trabajo</a></li>
             </ul>
           </div>
         </div>

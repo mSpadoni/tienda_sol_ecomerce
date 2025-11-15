@@ -68,7 +68,7 @@ function App() {
                   <Routes>
                     <Route path="/" element={<Layout />}>
                       <Route path="/" element={<Home />} />
-                      <Route path="/sig-on" element={<RegistroUsuario />} />
+                      <Route path="/registro" element={<RegistroUsuario />} />
                       <Route path="/sobre-nosotros" element={<About />} />
                       <Route path="/contactanos" element={<Contactanos />} />
                       <Route element={<ProtectedRoute />}>
