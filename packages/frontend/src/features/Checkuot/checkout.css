@@ -52,11 +52,12 @@
 }
 .checkout-summary {
   flex: 1.2;
-  background-color: #fffbea;
+  background-color: #f0f4f8;
   border-radius: 20px;
   padding: 1.5rem;
   box-shadow: -10px 0 20px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
+  position: relative;
 }
 
 .checkout-summary h4 {
@@ -69,10 +70,32 @@
 .items-list {
   display: flex;
   flex-direction: column;
+  margin-bottom: 12px;
+  position: relative;
   gap: 0.6rem;
+}
+
+.item-products {
+   display: flex;
+  margin-top: 10px;
+  justify-content: space-between;
+  font-size: 0.95rem;
+  color: #333;
+}
+
+hr {
+  position: absolute;
+  bottom: 50px;
+  left: 0;
+  right: 0;
+  margin: 0;
 }
 .item-summary {
   display: flex;
+  position: absolute;
+  bottom: 0; 
+  margin-bottom: 10px;
+  margin-top: 10px;
   justify-content: space-between;
   font-size: 0.95rem;
   color: #333;
@@ -99,11 +122,13 @@
 }
 
 .MuiOutlinedInput-root:hover fieldset {
-  border-color: #ffd700 !important;
+  border-color: #16427f !important;
+  border-width: 3px !important;
 }
 .MuiOutlinedInput-root.Mui-focused fieldset {
-  border-color: #ffd700 !important;
-  box-shadow: 0 0 8px #ffeb3b;
+  border-color: #16427f !important;
+  border-width: 2px !important;
+  box-shadow: 0 0 8px rgba(22, 66, 127, 0.3);
 }
 
 /* Botones */
@@ -125,28 +150,28 @@
 }
 
 .actions button.MuiButton-contained {
-  background-color: #ffe066 !important;
-  color: #333 !important;
+  background-color: #16427f !important;
+  color: #ffffff !important;
   border: none !important;
 }
 
 .actions button.MuiButton-contained:hover {
-  background-color: #ffe066 !important;
-  box-shadow: 0 0 15px #ff8c00;
+  background-color: #113369 !important;
+  box-shadow: 0 0 15px rgba(22, 66, 127, 0.5);
   transform: translateY(-2px) scale(1.05);
 }
 
 .actions button:not(.MuiButton-contained) {
-  color: #333 !important;
-  border: 2px solid transparent !important;
+  color: #16427f !important;
+  border: 2px solid #16427f !important;
   background-color: #f9f9f9 !important;
 }
 
 .actions button:not(.MuiButton-contained):hover {
-  color: #007bff !important;
-  border: 2px solid #007bff !important;
-  background-color: #e6f0ff !important;
-  box-shadow: 0 0 8px rgba(0, 123, 255, 0.3);
+  color: #16427f !important;
+  border: 3px solid #16427f !important;
+  background-color: rgba(22, 66, 127, 0.08) !important;
+  box-shadow: 0 0 8px rgba(22, 66, 127, 0.3);
   transform: translateY(-2px) scale(1.05);
 }
 

@@ -27,8 +27,8 @@ const AccomodationSearchBar = ({ filtrarProductos }) => {
         </div>
       </div>
 
-      <Button 
-        variant="outlined" 
+      <Button
+        variant="outlined"
         onClick={() => filtrarProductos(searchText)}
         aria-label="Ejecutar búsqueda de productos"
       >

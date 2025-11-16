@@ -37,9 +37,6 @@
   color: #1976d2;
 }
 
-
-
-
 .puntosMenu {
   opacity: 0.5;
   transition: 0.2s;
@@ -48,7 +45,6 @@
 .puntosMenu:hover {
   opacity: 1;
 }
-
 
 /* Body */
 .pedido-body {
@@ -64,7 +60,6 @@
   color: #333;
 }
 
-
 .pedido-items ul {
   margin: 0;
   padding-left: 22px;
@@ -74,7 +69,6 @@
 }
 
 /* Botón ver detalles como texto pequeño + flecha */
-
 
 /* Botones de acción */
 .btn-cambiar-estado {

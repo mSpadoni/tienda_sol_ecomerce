@@ -1,13 +1,8 @@
 .carrito-item {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   gap: 16px;
-  padding: 16px;
-  border-bottom: 1px solid #eee;
-  background-color: #fff;
-  border-radius: 12px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
   transition: all 0.3s ease;
 }
 
@@ -18,12 +13,14 @@
 
 /* Imagen del producto */
 .item-img {
-  width: 70px;
-  height: 70px;
+  width: 5px;
+  height: 5px;
   object-fit: cover;
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease;
+  margin: 2px 2px 2px 2px;
+  padding: 2px 2px 2px 2px;
 }
 
 .carrito-item:hover .item-img {

@@ -248,7 +248,7 @@
 /* Botón hamburguesa para abrir filtros */
 .filters-toggle {
   background: none;
-  border: 1px solid rgba(15,23,42,0.08);
+  border: 1px solid rgba(15, 23, 42, 0.08);
   padding: 6px 10px;
   border-radius: 8px;
   display: inline-flex;
@@ -265,7 +265,7 @@
 .filters-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.4);
+  background: rgba(0, 0, 0, 0.4);
   z-index: 1200;
 }
 .filters-drawer {
@@ -278,7 +278,7 @@
   background: #ffffff;
   z-index: 1201;
   padding: 1.25rem;
-  box-shadow: 4px 0 20px rgba(2,6,23,0.2);
+  box-shadow: 4px 0 20px rgba(2, 6, 23, 0.2);
   overflow-y: auto;
 }
 .filters-close {

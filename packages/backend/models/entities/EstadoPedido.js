@@ -45,7 +45,7 @@ export const EstadoPedido = Object.freeze({
         new Date(),
       );
     },
-  }
+  },
 });
 
 export function crearMensajeSegunEstado(estado) {

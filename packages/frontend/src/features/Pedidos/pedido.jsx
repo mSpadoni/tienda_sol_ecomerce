@@ -8,15 +8,10 @@ import SuccessSnackbar from "../../components/snackBar.jsx";
 import "./pedido.css";
 import { useNavigate } from "react-router-dom";
 
-import { useKeycloak } from "../../provieder/keyCloak.jsx"
+import { useKeycloak } from "../../provieder/keyCloak.jsx";
 
 // Material UI
-import {
-  IconButton,
-  Menu,
-  MenuItem,
-  Button as MUIButton,
-} from "@mui/material";
+import { IconButton, Menu, MenuItem, Button as MUIButton } from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { Padding } from "@mui/icons-material";
 
@@ -32,12 +27,10 @@ export default function ListaPedidos({
   const { setMensajeExito } = useMensajes();
   const navigate = useNavigate();
 
-  // 🔹 roles del usuario
   const { elUsuarioEsUn } = useKeycloak();
   const esVendedor = elUsuarioEsUn("vendedor");
   const esComprador = elUsuarioEsUn("comprador");
 
-  // 🔹 Menú 3 puntitos
   const [anchorEl, setAnchorEl] = useState(null);
   const menuAbierto = Boolean(anchorEl);
 
@@ -51,8 +44,8 @@ export default function ListaPedidos({
   const cambiarEstado = (idPedido) => {
     setPedidos((prevPedidos) =>
       prevPedidos.map((pedido) =>
-        pedido.id === idPedido ? { ...pedido, estado: estadoACambiar } : pedido
-      )
+        pedido.id === idPedido ? { ...pedido, estado: estadoACambiar } : pedido,
+      ),
     );
 
     setMensajeExito(existoMessage);
@@ -83,19 +76,25 @@ export default function ListaPedidos({
             <div className="pedido-total">
               Total:{" "}
               {`${CURRENCIES[pedido.moneda].symbol} ${pedido.total.toLocaleString(
-                CURRENCIES[pedido.moneda].locale
+                CURRENCIES[pedido.moneda].locale,
               )} `}
             </div>
 
-            {/* 🔹 ICONO DE 3 PUNTITOS */}
             <IconButton onClick={abrirMenu} className="puntosMenu">
               <MoreVertIcon />
             </IconButton>
 
-            {/* 🔹 MENU DESPLEGABLE */}
             <Menu anchorEl={anchorEl} open={menuAbierto} onClose={cerrarMenu}>
-              {esComprador && <MenuItem sx={itemStyles} onClick={cancelar}>{botonesNombreSegunEstado[estadoACambiar]}</MenuItem>}
-              {esVendedor && <MenuItem sx={itemStyles} onClick={rechazar}>Rechazar</MenuItem>}
+              {esComprador && (
+                <MenuItem sx={itemStyles} onClick={cancelar}>
+                  {botonesNombreSegunEstado[estadoACambiar]}
+                </MenuItem>
+              )}
+              {esVendedor && (
+                <MenuItem sx={itemStyles} onClick={rechazar}>
+                  Rechazar
+                </MenuItem>
+              )}
             </Menu>
           </div>
 
@@ -111,29 +110,31 @@ export default function ListaPedidos({
               </ul>
             </div>
 
-            {!estadoNegativos.includes(estadoACambiar) && <div className="pedido-actions">
-              {/* 🔹 BOTÓN MUI (ENVÍAR O CAMBIAR ESTADO) */}
-              <MUIButton
-                variant="contained"
-                color='success'
-                sx={enviarStyles}
-                onClick={() => cambiarEstado(pedido.id)}
-              >
-                {botonesNombreSegunEstado[estadoACambiar]} 
-              </MUIButton>
-            </div>}
-          </div> 
+            {!estadoNegativos.includes(estadoACambiar) && (
+              <div className="pedido-actions">
+                <MUIButton
+                  variant="contained"
+                  color="success"
+                  sx={enviarStyles}
+                  onClick={() => cambiarEstado(pedido.id)}
+                >
+                  {botonesNombreSegunEstado[estadoACambiar]}
+                </MUIButton>
+              </div>
+            )}
+          </div>
 
           <div className="pedido-detalles">
             <p>
               <strong>Dirección:</strong>{" "}
               {`${pedido.direccionEntrega.calle}, ${pedido.direccionEntrega.altura} ${
                 pedido.direccionEntrega.piso
-                  ? "Piso " + pedido.direccionEntrega.piso
-                  : ""
-              } ${pedido.direccionEntrega.departamento || ""}, ${
-                pedido.direccionEntrega.ciudad
-              }`}
+              }
+                Piso ${pedido.direccionEntrega.piso}
+                
+               ${pedido.direccionEntrega.departamento || ""}, ${
+                 pedido.direccionEntrega.ciudad
+               }`}
             </p>
 
             <p>
@@ -163,7 +164,7 @@ const itemStyles = {
   fontWeight: 500,
   fontSize: "1rem",
   transition: "all 0.4s ease",
-  
+
   "&:hover": {
     backgroundColor: "#b71c1c !important",
     color: "whitesmoke",
@@ -176,10 +177,10 @@ const enviarStyles = {
   transition: "all 0.4s ease",
 };
 
- const botonesNombreSegunEstado = Object.freeze({
+const botonesNombreSegunEstado = Object.freeze({
   cancelado: "Cancelar",
-   enviado: "Enviar",
-    rechazado: "Rechazar",
- });
+  enviado: "Enviar",
+  rechazado: "Rechazar",
+});
 
 const estadoNegativos = ["cancelado", "rechazado"];

@@ -1,10 +1,23 @@
 import React from "react";
 import PropTypes from "prop-types";
-import "./CarritoItem.css";
 import { useCurrency } from "../../provieder/CurrencyProvider.jsx";
 import { CURRENCIES } from "../../provieder/currencies.js";
 import { useCarrito } from "../../provieder/carritoProvider";
-import { FaTrashAlt } from "react-icons/fa"; // 🗑️ Icono de basura
+import { FaTrashAlt } from "react-icons/fa";
+import {
+  Card,
+  CardMedia,
+  CardContent,
+  Typography,
+  Box,
+  Button,
+  IconButton,
+  Stack,
+  ButtonGroup,
+} from "@mui/material";
+import AddIcon from "@mui/icons-material/Add";
+import RemoveIcon from "@mui/icons-material/Remove";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 const CarritoItem = ({ item }) => {
   const { currency } = useCurrency();
@@ -15,61 +28,98 @@ const CarritoItem = ({ item }) => {
     obtenerCantidad,
     carritoVacio,
   } = useCarrito();
-  const placeholder = `https://via.placeholder.com/90x90?text=${encodeURIComponent(
-    item.producto.titulo || "Producto",
-  )}`;
 
   const cantidadProducto = obtenerCantidad(item.producto._id);
 
   return (
-    <div className="carrito-item">
-      <img
-        src={
-          item.producto.fotos ? `/images/${item.producto.fotos}` : placeholder
-        }
-        alt={item.producto.titulo}
-        className="item-img"
-      />
+   <Card
+  sx={{
+    display: "flex",
+    flexDirection: { xs: "column", sm: "row" }, // columna en mobile, fila en desktop
+    width: "100%",
+    borderRadius: 2,
+    boxShadow: 2,
+    p: { xs: 1, sm: 2 },
+    gap: { xs: 1, sm: 2 },
+  }}
+>
+  {/* Imagen responsive */}
+  <CardMedia
+    component="img"
+    sx={{
+      width: { xs: "100%", sm: 150 },
+      height: { xs: 200, sm: 150 },
+      objectFit: "contain",
+      objectPosition: "center",
+      backgroundColor: "#f5f5f5",
+      borderRadius: 2,
+      mx: "auto", // centra en mobile
+    }}
+    image={`/images/${item.producto.fotos}`}
+    alt={item.producto.titulo}
+  />
 
-      <div className="item-info">
-        <h4 className="item-title">{item.producto.titulo}</h4>
-        <div className="item-price">
-          Precio:{" "}
-          {`${CURRENCIES[currency].symbol}${item.producto.precio.toLocaleString(
-            CURRENCIES[currency].locale,
-          )}`}
-        </div>
+  {/* Contenido responsive */}
+  <CardContent
+    sx={{
+      flex: 1,
+      display: "flex",
+      flexDirection: "column",
+      justifyContent: "space-between",
+      textAlign: { xs: "center", sm: "left" }, // centra texto en mobile
+      mt: { xs: 1, sm: 0 },
+    }}
+  >
+    <Typography gutterBottom variant="h6">
+      {item.producto.titulo}
+    </Typography>
 
-        <div className="item-eliminar-container">
-          <div className="item-cantidad">
-            <button
-              className="btn-cantidad"
-              onClick={() => disminuirCantidad(item.producto._id, 1)}
-              disabled={carritoVacio()}
-            >
-              −
-            </button>
-            <span className="cantidad">{cantidadProducto}</span>
-            <button
-              className="btn-cantidad"
-              onClick={() => aumentarCantidad(item.producto._id, 1)}
-              disabled={item.producto.stock <= cantidadProducto}
-            >
-              +
-            </button>
-          </div>
+    <Typography variant="body2" sx={{ mb: 2 }}>
+      Precio: {CURRENCIES[currency].symbol}
+      {item.producto.precio.toLocaleString(CURRENCIES[currency].locale)}
+    </Typography>
 
-          <button
-            className="eliminar"
-            disabled={carritoVacio()}
-            onClick={() => eliminarDelCarrito(item.producto._id)}
-            title="Eliminar producto"
-          >
-            <FaTrashAlt />
-          </button>
-        </div>
-      </div>
-    </div>
+    {/* Controles responsive */}
+    <Stack
+      direction="row"
+      spacing={2}
+      alignItems="center"
+      justifyContent={{ xs: "center", sm: "flex-start" }}
+      sx={{ mt: 2 }}
+    >
+      <ButtonGroup variant="outlined">
+        <Button
+          onClick={() => disminuirCantidad(item.producto._id, 1)}
+          disabled={cantidadProducto <= 1}
+        >
+          -
+        </Button>
+
+        <Button disabled>{cantidadProducto}</Button>
+
+        <Button
+          onClick={() => aumentarCantidad(item.producto._id, 1)}
+          disabled={cantidadProducto >= item.producto.stock}
+        >
+          +
+        </Button>
+      </ButtonGroup>
+
+      <IconButton
+        size="small"
+        color="error"
+        disabled={carritoVacio()}
+        onClick={() => eliminarDelCarrito(item.producto._id)}
+        sx={{
+          "&:hover": { transform: "scale(1.2)" },
+        }}
+      >
+        <DeleteIcon />
+      </IconButton>
+    </Stack>
+  </CardContent>
+</Card>
+   
   );
 };
 

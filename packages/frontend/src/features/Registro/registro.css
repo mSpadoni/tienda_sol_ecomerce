@@ -17,6 +17,41 @@
   transition: all 0.3s ease;
 }
 
+input.MuiOutlinedInput-input:-webkit-autofill,
+input.MuiOutlinedInput-input:-webkit-autofill:hover,
+input.MuiOutlinedInput-input:-webkit-autofill:focus,
+input.MuiOutlinedInput-input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 1000px #ffffff inset !important;
+  box-shadow: 0 0 0 1000px #ffffff inset !important;
+  background-color: #ffffff !important;
+  -webkit-text-fill-color: #1f2937 !important;
+  caret-color: #1f2937 !important;
+  transition: background-color 9999s ease-out 0s !important;
+}
+
+.MuiOutlinedInput-root input:-webkit-autofill,
+.MuiOutlinedInput-root input:-webkit-autofill:hover,
+.MuiOutlinedInput-root input:-webkit-autofill:focus,
+.MuiOutlinedInput-root input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 1000px #ffffff inset !important;
+  box-shadow: 0 0 0 1000px #ffffff inset !important;
+  background-color: #ffffff !important;
+  -webkit-text-fill-color: #1f2937 !important;
+  caret-color: #1f2937 !important;
+  border: none !important;
+}
+
+/* 🔥 Chrome aplica el glow en el container, no en el input */
+.MuiOutlinedInput-root:-webkit-autofill,
+.MuiOutlinedInput-root:-webkit-autofill:hover,
+.MuiOutlinedInput-root:-webkit-autofill:focus,
+.MuiOutlinedInput-root:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 1000px #ffffff inset !important;
+  box-shadow: 0 0 0 1000px #ffffff inset !important;
+  
+}
+
+
 /* Título */
 .titulo {
   margin-bottom: 25px;
@@ -32,44 +67,6 @@
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 20px;
   align-items: start;
-}
-
-.input-field {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  margin-bottom: 1rem;
-}
-
-/* Inputs y selects */
-.input-field .MuiFormControl-root,
-.input-field .MuiTextField-root {
-  width: 100%;
-}
-
-.input-field .MuiFormHelperText-root {
-  min-height: 22px;
-}
-
-.input-field .MuiInputBase-root {
-  transition: all 0.3s ease;
-  border: 2px solid #c4c4c4;
-  border-radius: 8px;
-  background-color: #fafafa;
-}
-
-.input-field .MuiInputBase-root:hover {
-  background-color: #ffffff;
-  border: 2px solid #16427f;
-}
-
-.input-field .Mui-focused {
-  background-color: #ffffff;
-  border: 2px solid #16427f;
-}
-
-.input-field .MuiInputLabel-root.Mui-focused {
-  color: #16427f;
 }
 
 /* Campo contraseña fuera del grid */
@@ -88,10 +85,10 @@
   padding: 8px 12px;
   border: 1px dashed #ddd;
   border-radius: 8px;
-  background-color: #fffef6;
+  background-color: #f0f0f5; /* gris frío, nada de amarillo */
   display: flex;
   flex-direction: column;
-   grid-column: 0 / 1;
+  grid-column: 0 / 1;
   align-items: right;
   gap: 4px;
   font-size: 0.8rem;
@@ -113,14 +110,6 @@
 }
 
 /* Contenedor de botones */
-.actions {
-  grid-column: 1 / -1;
-  display: flex;
-  justify-content: flex-end;
-  flex-wrap: wrap;
-  gap: 15px;
-  margin-top: 30px;
-}
 
 /* Botones */
 .btn-cancel {
@@ -140,7 +129,7 @@
 }
 
 .btn-registrar {
-  background-color: #16427f; /* color solicitado */
+  background-color: #16427f;
   color: #ffffff;
   transition: all 0.3s ease;
   flex: 1 1 150px;
@@ -148,7 +137,7 @@
 }
 
 .btn-registrar:hover {
-  background-color: #113369; /* variante más oscura para hover */
+  background-color: #113369;
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(17, 51, 105, 0.28);
 }
@@ -165,11 +154,27 @@
     grid-template-columns: 1fr;
   }
 
-  .actions {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 10px;
-  }
+  .password-container {
+  margin-top: 3px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  width: 100%;
+  text-align: left;
+}
+
+  .password-rules {
+  background-color: rgb(255, 255, 255); /* gris frío, nada de amarillo */
+  font-size: 1px;
+  border: none;
+  
+}
+
+.password-rules span {
+ font-size: 1px;
+}
+
 
   .btn-cancel,
   .btn-registrar {
@@ -179,19 +184,29 @@
     flex: unset;
   }
 
-  .password-rules {
-    font-size: 0.9rem;
-    padding: 10px;
-     align-items: center;
-  }
+
 }
 
 /* Corrige label del select */
-.MuiInputLabel-root {
-  top: -5px;
+
+/* Estilos de hover/focus para inputs */
+.MuiTextField-root {
+  border-radius: 16px;
 }
 
-.MuiSelect-select {
-  padding-top: 14px !important;
-  padding-bottom: 14px !important;
+.MuiOutlinedInput-root {
+  border-radius: 16px !important;
+  border-width: 2px !important;
+  transition: all 0.3s ease;
+}
+
+.MuiOutlinedInput-root:hover fieldset {
+  border-color: #16427f !important;
+  border-width: 3px !important;
+}
+
+.MuiOutlinedInput-root.Mui-focused fieldset {
+  border-color: #16427f !important;
+  border-width: 2px !important;
+  box-shadow: 0 0 8px rgba(22, 66, 127, 0.3);
 }

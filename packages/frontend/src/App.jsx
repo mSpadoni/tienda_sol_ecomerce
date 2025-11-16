@@ -19,6 +19,7 @@ import ListaNotificaciones from "./features/Notificacion/notificacion.jsx";
 import ProtectedRoute from "./protecciones/ProtectedRoute.jsx";
 import { VisibleProvider } from "./provieder/visibleHook.jsx";
 import { MensajeProvider } from "./provieder/mensajeDeExito.jsx";
+import CarritoCuerpo from "./components/carritoCuerpo/carritoCuerpo.jsx";
 
 const theme = createTheme({
   palette: {
@@ -107,6 +108,7 @@ function App() {
                         />
                       </Route>
                       <Route path="*" element={<div>404 Not Found</div>} />
+                      <Route path="/carrito" element={<CarritoCuerpo />} />
                     </Route>
                   </Routes>
                 </BrowserRouter>

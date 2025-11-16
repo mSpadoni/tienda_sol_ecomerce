@@ -96,7 +96,6 @@ const validarQueNoEsAdmin = (tipo) => {
 };
 
 export const createUser = async (userData) => {
-
   const token = await getAdminToken();
 
   const createResponse = await axios.post(
@@ -128,8 +127,6 @@ export const createUser = async (userData) => {
   const userId = locationHeader.split("/").pop();
 
   logger.info(`user id obtenido: ${userId}`);
-
- 
 
   await axios.post(
     `http://localhost:8080/admin/realms/${REALM}/users/${userId}/role-mappings/realm`,

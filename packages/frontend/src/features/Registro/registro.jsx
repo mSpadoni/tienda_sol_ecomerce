@@ -6,6 +6,7 @@ import {
   LinearProgress,
   Typography,
   Alert,
+  ButtonGroup,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useVisible } from "../../provieder/visibleHook.jsx";
@@ -30,7 +31,7 @@ const RegistroUsuario = () => {
   };
 
   const cancelar = () => {
-    navigate(-1);
+    navigate("/");
     ponerVisible();
   };
 
@@ -104,9 +105,8 @@ const RegistroUsuario = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-
   const fieldKeys = Object.keys(values);
-  const totalSteps = fieldKeys.length+1;
+  const totalSteps = fieldKeys.length + 1;
 
   const camposCompletos = fieldKeys.every(
     (key) => values[key] && !validate(values)[key],
@@ -119,13 +119,11 @@ const RegistroUsuario = () => {
   const handleBack = () => {
     if (step === 0 && isMobile) {
       ponerVisible();
-      navigate(-1);
+      navigate("/");
     } else if (step > 0) {
       setStep((s) => s - 1);
     }
   };
-
- 
 
   const passwordChecks = [
     { label: "Al menos 8 caracteres", test: /.{8,}/ },
@@ -137,7 +135,7 @@ const RegistroUsuario = () => {
 
   const isCurrentStepValid = () => {
     const key = fieldKeys[step];
-    return values[key] && !validate(values)[key]
+    return values[key] && !validate(values)[key];
   };
 
   return (
@@ -162,8 +160,8 @@ const RegistroUsuario = () => {
                 return (
                   <>
                     <TextField
+                      variant="outlined"
                       key={key}
-                      className="input-field"
                       label={key.charAt(0).toUpperCase() + key.slice(1)}
                       name={key}
                       required
@@ -173,110 +171,179 @@ const RegistroUsuario = () => {
                       onBlur={handleBlur}
                       error={!!showError(key)}
                       helperText={showError(key)}
+                     sx={{
+  "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
+    borderColor: "#1F2937 !important",
+    borderWidth: "2px !important",
+  },
+  "& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline": {
+    borderColor: "#122744ff !important",
+    borderWidth: "3px !important",
+  },
+  "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline": {
+    borderColor: "#0f1f36ff !important",
+    borderWidth: "3px !important",
+  }
+}}
+
                     />
-                 {index===5&& <div className="password-rules">
-                {passwordChecks.map((check) => (
-                  <Typography
-                    key={check.label}
-                    className={`rule ${check.test.test(values.password) ? "ok" : "fail"}`}
-                  >
-                    {check.test.test(values.password) ? "✔️" : "❌"}{" "}
-                    {check.label}
-                  </Typography>
-                ))}
-              </div>}
+                    {index === 5 && (
+                      <div className="password-rules">
+                        {passwordChecks.map((check) => (
+                          <Typography
+                            key={check.label}
+                            className={`rule ${check.test.test(values.password) ? "ok" : "fail"}`}
+                          >
+                            {check.test.test(values.password) ? "✔️" : "❌"}{" "}
+                            {check.label}
+                          </Typography>
+                        ))}
+                      </div>
+                    )}
                   </>
                 );
               })}
             </div>
           )}
 
-          {/* {(!isMobile || step === fieldKeys.length) && (
-            <Box key="password" className="password-container">
-              <TextField
-                label="Contraseña"
-                name="password"
-                required
-                fullWidth
-                type="password"
-                value={values.password}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                error={!!showError("password")}
-                helperText={showError("password")}
-              />
-              <div className="password-rules">
-                {passwordChecks.map((check) => (
-                  <Typography
-                    key={check.label}
-                    className={`rule ${check.test.test(values.password) ? "ok" : "fail"}`}
-                  >
-                    {check.test.test(values.password) ? "✔️" : "❌"}{" "}
-                    {check.label}
-                  </Typography>
-                ))}
-              </div>
-            </Box>
-          )} */}
-
-          <div className="actions">
+          <div>
             {isMobile ? (
               <>
                 <Button
-                  className="btn-cancel"
                   variant="outlined"
                   onClick={handleBack}
+                  sx={{
+                    "&.MuiButton-outlined": {
+                      borderColor: "#16427f !important",
+                      color: "#16427f !important",
+                      borderRadius: 2,
+                      padding: "6px 16px",
+                      marginRight: 1,
+                      marginTop: 2
+                    },
+                    "&.Mui-disabled": {
+      borderColor: "rgba(22, 66, 127, 0.4) !important",
+      color: "rgba(22, 66, 127, 0.4) !important",
+    },
+                    "&:hover": {
+                      borderColor: "#113369 !important",
+                      backgroundColor: "rgba(22, 66, 127, 0.08) !important",
+                      border: "2px solid #113369 !important" ,
+                    },
+
+                   
+                  }}
                 >
                   Atrás
                 </Button>
 
                 {step < totalSteps - 1 ? (
                   <Button
-                    className="btn-registrar"
                     variant="contained"
                     onClick={handleNext}
                     disabled={!isCurrentStepValid()}
                     sx={{
-                      backgroundColor: '#16427f',
-                      color: '#ffffff',
-                      '&:hover': { backgroundColor: '#113369' },
-                    }}
+                    "&.MuiButton-contained": {
+                      backgroundColor: "#16427f !important",
+                      color: "#ffffff !important",
+                      borderRadius: 2,
+                        marginTop: 2
+                    },
+                    "&.Mui-disabled": {
+      backgroundColor: "rgba(22, 66, 127, 0.4) !important", 
+      color: "rgba(255, 255, 255, 0.6) !important",
+    },
+                    "&:hover": {
+                      backgroundColor: "#113369 !important",
+                    },
+                  }}
                   >
                     Siguiente
                   </Button>
                 ) : (
                   <Button
                     onClick={() => onSubmit(values)}
-                    className="btn-registrar"
                     type="submit"
                     variant="contained"
                     disabled={!camposCompletos || isSubmitting}
-                    sx={{ mt: 2, backgroundColor: '#16427f', color: '#ffffff', '&:hover': { backgroundColor: '#113369' } }}
+                    sx={{
+                    "&.MuiButton-contained": {
+                      backgroundColor: "#16427f !important",
+                      color: "#ffffff !important",
+                      borderRadius: 2,
+                      marginTop: 2,
+                    },
+                    "&.Mui-disabled": {
+      backgroundColor: "rgba(22, 66, 127, 0.4) !important", 
+      color: "rgba(255, 255, 255, 0.6) !important",
+    },
+                    "&:hover": {
+                      backgroundColor: "#113369 !important",
+                    },
+                  }}
                   >
                     Registrar
                   </Button>
                 )}
               </>
             ) : (
-              <>
+              <ButtonGroup
+                sx={{
+                  display: "flex",
+                  gap: 2,
+                  mt: 2,
+                }}
+              >
+                {/* Botón Cancelar */}
                 <Button
-                  className="btn-cancel"
                   variant="outlined"
                   onClick={cancelar}
+                  sx={{
+                    "&.MuiButton-outlined": {
+                      borderColor: "#16427f !important",
+                      color: "#16427f !important",
+                      borderRadius: 2,
+                       marginTop: 2,
+                      marginRight: 1
+                    },
+                    "&.Mui-disabled": {
+      borderColor: "rgba(22, 66, 127, 0.4) !important",
+      color: "rgba(22, 66, 127, 0.4) !important",
+    },
+                    "&:hover": {
+                      borderColor: "#113369 !important",
+                      backgroundColor: "rgba(22, 66, 127, 0.08) !important",
+                    },
+                  }}
                 >
                   Cancelar
                 </Button>
+
+                {/* Botón Registrar */}
                 <Button
                   onClick={() => onSubmit(values)}
-                  className="btn-registrar"
                   type="submit"
                   variant="contained"
                   disabled={!camposCompletos || isSubmitting}
-                  sx={{ backgroundColor: '#16427f', color: '#ffffff', '&:hover': { backgroundColor: '#113369' } }}
+                  sx={{
+                    "&.MuiButton-contained": {
+                      backgroundColor: "#16427f !important",
+                      color: "#ffffff !important",
+                      borderRadius:2.5,
+                      marginTop: 2,
+                    },
+                    "&.Mui-disabled": {
+      backgroundColor: "rgba(22, 66, 127, 0.4) !important", 
+      color: "rgba(255, 255, 255, 0.6) !important",
+    },
+                    "&:hover": {
+                      backgroundColor: "#113369 !important",
+                    },
+                  }}
                 >
                   Registrar
                 </Button>
-              </>
+              </ButtonGroup>
             )}
           </div>
 

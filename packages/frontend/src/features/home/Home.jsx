@@ -105,7 +105,9 @@ const Home = () => {
             <section className="home-section">
               <div className="section-header between">
                 <h2>Todos los productos</h2>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                <div
+                  style={{ display: "flex", alignItems: "center", gap: "1rem" }}
+                >
                   <p className="section-subtitle small">
                     {productosFiltrados.length} productos encontrados
                   </p>
@@ -123,41 +125,42 @@ const Home = () => {
                 <div className="products-main">
                   <div className="products-grid">
                     {productosFiltrados.map((producto) => {
-                  const placeholder = `https://via.placeholder.com/90x90?text=${encodeURIComponent(
-                    producto.titulo || "Producto",
-                  )}`;
-                  return (
-                    <article key={producto._id} className="product-card">
-                      <div className="product-card-image">
-                        <img
-                          src={
-                            producto.fotos
-                              ? `/images/${producto.fotos}`
-                              : placeholder
-                          }
-                          alt={producto.titulo}
-                          className="producto-imagen"
-                        />
-                      </div>
-                      <div className="product-card-body">
-                        <h3 className="product-card-title">
-                          {producto.titulo}
-                        </h3>
-                        <p className="product-card-price">
-                          Precio: ${producto.precio?.toLocaleString("es-AR")}
-                        </p>
-                      </div>
-                      <div className="product-card-actions">
-                        <Link
-                          to={`/productos/${producto._id}`}
-                          className="product-card-link"
-                        >
-                          Ver detalle →
-                        </Link>
-                      </div>
-                    </article>
-                  );
-                })}
+                      const placeholder = `https://via.placeholder.com/90x90?text=${encodeURIComponent(
+                        producto.titulo || "Producto",
+                      )}`;
+                      return (
+                        <article key={producto._id} className="product-card">
+                          <div className="product-card-image">
+                            <img
+                              src={
+                                producto.fotos
+                                  ? `/images/${producto.fotos}`
+                                  : placeholder
+                              }
+                              alt={producto.titulo}
+                              className="producto-imagen"
+                            />
+                          </div>
+                          <div className="product-card-body">
+                            <h3 className="product-card-title">
+                              {producto.titulo}
+                            </h3>
+                            <p className="product-card-price">
+                              Precio: $
+                              {producto.precio?.toLocaleString("es-AR")}
+                            </p>
+                          </div>
+                          <div className="product-card-actions">
+                            <Link
+                              to={`/productos/${producto._id}`}
+                              className="product-card-link"
+                            >
+                              Ver detalle →
+                            </Link>
+                          </div>
+                        </article>
+                      );
+                    })}
                   </div>
 
                   {totalPaginas >= 1 && (
@@ -179,7 +182,11 @@ const Home = () => {
                     className="filters-backdrop"
                     onClick={() => setFiltersOpen(false)}
                   />
-                  <aside className="filters-drawer" role="dialog" aria-modal="true">
+                  <aside
+                    className="filters-drawer"
+                    role="dialog"
+                    aria-modal="true"
+                  >
                     <button
                       className="filters-close"
                       aria-label="Cerrar filtros"
@@ -187,7 +194,10 @@ const Home = () => {
                     >
                       <FaTimes />
                     </button>
-                    <ProductFilters onApply={aplicarFiltros} initial={filtros} />
+                    <ProductFilters
+                      onApply={aplicarFiltros}
+                      initial={filtros}
+                    />
                   </aside>
                 </>
               )}

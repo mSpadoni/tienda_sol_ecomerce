@@ -50,7 +50,7 @@
 }
 
 .filtro-estado select:hover {
-  border-color: rgb(252, 251, 250)
+  border-color: rgb(252, 251, 250);
 }
 
 /* ======== LISTA DE NOTIFICACIONES ======== */

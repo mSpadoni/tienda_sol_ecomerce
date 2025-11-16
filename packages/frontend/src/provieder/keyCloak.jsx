@@ -117,8 +117,8 @@ export const KeycloakProvider = ({ children }) => {
 
   const login = () => {
     try {
+      clearSession();
       keycloakRef.current.login({
-        prompt: "login",
         redirectUri: window.location.href,
       });
       cleanUrlHash();

@@ -19,7 +19,7 @@ export const direccionSchema = z.object({
   codigoPostal: z.string().min(1),
   ciudad: z.string().min(1),
   provincia: z.string().min(1),
-  pais: z.string().min(1)
+  pais: z.string().min(1),
 });
 
 export const pedidoSchema = z.object({

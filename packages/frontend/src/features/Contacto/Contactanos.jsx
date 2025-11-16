@@ -20,7 +20,9 @@ const Contactanos = () => {
   return (
     <main className="contact-page">
       <h1>Contáctanos</h1>
-      <p className="lead">¿Tienes una duda o necesitas ayuda? Envíanos un mensaje.</p>
+      <p className="lead">
+        ¿Tienes una duda o necesitas ayuda? Envíanos un mensaje.
+      </p>
 
       <form className="contact-form" onSubmit={handleSubmit}>
         <label>
@@ -29,13 +31,25 @@ const Contactanos = () => {
         </label>
         <label>
           Email
-          <input name="email" type="email" value={form.email} onChange={handleChange} />
+          <input
+            name="email"
+            type="email"
+            value={form.email}
+            onChange={handleChange}
+          />
         </label>
         <label>
           Mensaje
-          <textarea name="mensaje" value={form.mensaje} onChange={handleChange} rows={6} />
+          <textarea
+            name="mensaje"
+            value={form.mensaje}
+            onChange={handleChange}
+            rows={6}
+          />
         </label>
-        <button type="submit" className="btn-primary">Enviar</button>
+        <button type="submit" className="btn-primary">
+          Enviar
+        </button>
       </form>
     </main>
   );

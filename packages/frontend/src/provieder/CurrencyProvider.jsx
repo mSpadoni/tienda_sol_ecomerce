@@ -7,8 +7,8 @@ export const useCurrency = () => useContext(CurrencyContext);
 
 export const CurrencyProvider = ({ children }) => {
   const [currency, setCurrency] = useState(
-    "ARS" // default USD
-);
+    "ARS", // default USD
+  );
 
   useEffect(() => {
     localStorage.setItem("moneda", JSON.stringify(currency));

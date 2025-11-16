@@ -23,14 +23,14 @@
 /*       HERO AREA       */
 /* --------------------- */
 .about-hero {
-  background: linear-gradient(135deg, #ffb84d, #ff8c42);
+  background: linear-gradient(135deg, #526d94, #1f2937);
   color: white;
   text-align: center;
   padding: 6rem 2rem;
   border-radius: 12px;
   margin: 2rem auto;
   max-width: 900px;
-  box-shadow: 0 4px 20px rgba(255, 140, 66, 0.4);
+  box-shadow: 0 4px 20px #10161d;
 }
 
 .about-hero h1 {
@@ -70,7 +70,7 @@
   bottom: -6px;
   width: 60%;
   height: 4px;
-  background: #ff8c42;
+  background: #1f2937;
   border-radius: 4px;
 }
 

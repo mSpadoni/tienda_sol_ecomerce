@@ -41,8 +41,8 @@ const ProductFilters = ({ onApply, initial = {} }) => {
 
   return (
     <div className="product-filters-wrapper">
-      <form 
-        className="product-filters" 
+      <form
+        className="product-filters"
         onSubmit={handleApply}
         aria-label="Filtros de búsqueda de productos"
         role="search"
@@ -80,8 +80,8 @@ const ProductFilters = ({ onApply, initial = {} }) => {
             aria-label="Precio máximo"
           />
 
-          <select 
-            value={activo} 
+          <select
+            value={activo}
             onChange={(e) => setActivo(e.target.value)}
             aria-label="Filtrar por estado del producto"
           >
@@ -90,8 +90,8 @@ const ProductFilters = ({ onApply, initial = {} }) => {
             <option value="false">No activos</option>
           </select>
 
-          <select 
-            value={sort} 
+          <select
+            value={sort}
             onChange={(e) => setSort(e.target.value)}
             aria-label="Ordenar por"
           >
@@ -99,8 +99,8 @@ const ProductFilters = ({ onApply, initial = {} }) => {
             <option value="precio">Precio</option>
           </select>
 
-          <select 
-            value={order} 
+          <select
+            value={order}
             onChange={(e) => setOrder(e.target.value)}
             aria-label="Orden ascendente o descendente"
           >

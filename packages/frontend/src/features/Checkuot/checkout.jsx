@@ -77,8 +77,6 @@ const Checkout = () => {
         ciudad: values.ciudad,
         provincia: values.provincia,
         pais: values.pais,
-        lat: values.lat,
-        long: values.lon,
       },
       moneda: currency,
       estado: "Pendiente",
@@ -160,18 +158,73 @@ const Checkout = () => {
                     ].includes(key)}
                     error={!!showError(key)}
                     helperText={showError(key)}
+                    sx={{
+                      "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
+                        borderColor: "#1F2937 !important",
+                        borderWidth: "2px !important",
+                      },
+                      "& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline": {
+                        borderColor: "#122744ff !important",
+                        borderWidth: "3px !important",
+                      },
+                      "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                        borderColor: "#0f1f36ff !important",
+                        borderWidth: "3px !important",
+                      }
+                    }}
                   />
                 </div>
               );
             })}
 
-            <div className="actions">
-              {isMobile && <Button onClick={handleBack}>Atrás</Button>}
+            <div >
+              {isMobile && (
+                <Button
+                  onClick={handleBack}
+                  sx={{
+                    "&.MuiButton-outlined": {
+                      borderColor: "#16427f !important",
+                      color: "#16427f !important",
+                      borderRadius: 2,
+                      padding: "6px 16px",
+                      marginRight: 1,
+                      marginTop: 2
+                    },
+                    "&.Mui-disabled": {
+                      borderColor: "rgba(22, 66, 127, 0.4) !important",
+                      color: "rgba(22, 66, 127, 0.4) !important",
+                    },
+                    "&:hover": {
+                      borderColor: "#113369 !important",
+                      backgroundColor: "rgba(22, 66, 127, 0.08) !important",
+                      border: "3px solid #113369 !important" ,
+                    },
+                  }}
+                  variant="outlined"
+                >
+                  Atrás
+                </Button>
+              )}
               {isMobile && step < fieldKeys.length - 1 && (
                 <Button
                   variant="contained"
                   onClick={handleNext}
                   disabled={!values[fieldKeys[step]].trim()}
+                  sx={{
+                    "&.MuiButton-contained": {
+                      backgroundColor: "#16427f !important",
+                      color: "#ffffff !important",
+                      borderRadius: 2,
+                      marginTop: 2
+                    },
+                    "&.Mui-disabled": {
+                      backgroundColor: "rgba(22, 66, 127, 0.4) !important", 
+                      color: "rgba(255, 255, 255, 0.6) !important",
+                    },
+                    "&:hover": {
+                      backgroundColor: "#113369 !important",
+                    },
+                  }}
                 >
                   Siguiente
                 </Button>
@@ -183,6 +236,25 @@ const Checkout = () => {
                       limpiarCarrito();
                       ponerVisible();
                       navigate("/");
+                    }}
+                    variant="outlined"
+                    sx={{
+                      "&.MuiButton-outlined": {
+                        borderColor: "#16427f !important",
+                        color: "#16427f !important",
+                        borderRadius: 2,
+                        marginTop: 2,
+                        marginRight: 1
+                      },
+                      "&.Mui-disabled": {
+                        borderColor: "rgba(22, 66, 127, 0.4) !important",
+                        color: "rgba(22, 66, 127, 0.4) !important",
+                      },
+                      "&:hover": {
+                        borderColor: "#113369 !important",
+                        backgroundColor: "rgba(22, 66, 127, 0.08) !important",
+                        border: "3px solid #113369 !important",
+                      },
                     }}
                   >
                     Cancelar
@@ -200,6 +272,21 @@ const Checkout = () => {
                         "pais",
                       ].every((key) => values[key].trim() !== "")
                     }
+                    sx={{
+                      "&.MuiButton-contained": {
+                        backgroundColor: "#16427f !important",
+                        color: "#ffffff !important",
+                        borderRadius: 2,
+                        marginTop: 2,
+                      },
+                      "&.Mui-disabled": {
+                        backgroundColor: "rgba(22, 66, 127, 0.4) !important", 
+                        color: "rgba(255, 255, 255, 0.6) !important",
+                      },
+                      "&:hover": {
+                        backgroundColor: "#113369 !important",
+                      },
+                    }}
                   >
                     Comprar
                   </Button>
@@ -214,7 +301,7 @@ const Checkout = () => {
             <h4>Resumen del carrito</h4>
             <div className="items-list">
               {carrito.map((item, index) => (
-                <div className="item-summary" key={index}>
+                <div className="item-products" key={index}>
                   <span>
                     {item.producto.titulo} x {item.cantidad}
                   </span>
@@ -229,8 +316,7 @@ const Checkout = () => {
             </div>
             <hr />
             <div className="item-summary" style={{ fontWeight: "bold" }}>
-              <span>Total</span>
-              <span>{totalFormateado()}</span>
+              <span>{`Total: ${totalFormateado()}`}</span>
             </div>
           </div>
         )}
