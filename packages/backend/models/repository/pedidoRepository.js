@@ -9,7 +9,7 @@ export default class pedidoRepository {
     this.modelo = PedidoModel;
   }
 
-  async findByUsuarioId(idUsuario) {
+  async findByUsuarioId(idUsuario,funcionDeFiltrado) {
     logger.info(idUsuario);
     const idABuscar = idUsuario._id.toString();
     logger.info(
@@ -22,11 +22,7 @@ export default class pedidoRepository {
       .populate("items.producto")
       .populate("historialEstado.usuario");
 
-    return pedidos.filter((pedido) => {
-      const compradorId = pedido.comprador._id.toString();
-      const vendedorId = pedido.items[0].producto.vendedor._id.toString();
-      return compradorId === idABuscar || vendedorId === idABuscar;
-    });
+    return pedidos.filter((pedido) => funcionDeFiltrado(pedido, idABuscar));
   }
 
   async save(pedido) {

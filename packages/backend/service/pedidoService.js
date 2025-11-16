@@ -11,6 +11,7 @@ import {
 import { EstadoPedido } from "../models/entities/EstadoPedido.js";
 import ItemPedido from "../models/entities/ItemPedido.js";
 import ErrorNoEncontrado from "../errors/errorNoEncontrado.js";
+import { TipoUsuario } from "../models/entities/TipoUsuario.js";
 
 export default class pedidoService {
   constructor(repositorioPedido, repositorioUsuario, repositorioProducto) {
@@ -36,7 +37,7 @@ export default class pedidoService {
     return pedidoRespuesta;
   }
 
-  async findPedidosByUsuariosId(idUsuario) {
+  async findPedidosByUsuariosId(idUsuario,funcionDeFiltrado) {
     logger.info(
       `Buscando pedidos del usuario con id:  ${idUsuario} en el servicio`,
     );
@@ -46,7 +47,8 @@ export default class pedidoService {
       throw new ErrorNoEncontrado(idUsuario, "usuario");
     }
 
-    const pedidos = await this.repositorioPedido.findByUsuarioId(idDeMongo);
+    const pedidos = await this.repositorioPedido.findByUsuarioId(idDeMongo,funcionDeFiltrado);
+
     if (pedidos.length === 0) {
       throw new ErrorNoEncontrado(
         idDeMongo._id,

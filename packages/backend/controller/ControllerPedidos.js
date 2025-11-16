@@ -34,14 +34,14 @@ export default class ControllerPedidos {
     res.status(201).json(JSONresponse);
   }
 
-  async findPedidosByID(req, res) {
+  async findPedidosByID(req, res, funcionDeFiltrado) {
     const resultUsuario = validadIdkecloark.parse(req.user.sub);
     logger.info(
       `Buscando pedidos del usuario con id: ${resultUsuario} en el controlador`,
     );
 
     const pedidos =
-      await this.servicePedido.findPedidosByUsuariosId(resultUsuario);
+      await this.servicePedido.findPedidosByUsuariosId(resultUsuario,funcionDeFiltrado);
 
     logger.info(`Pedidos encontrados`);
 

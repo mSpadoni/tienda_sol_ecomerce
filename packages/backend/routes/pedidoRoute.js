@@ -40,7 +40,7 @@ export default function pedidoRoute(getController) {
     async (req, res, next) => {
       try {
         logger.http("Solicitud de pedidos del usuario id: " + req.params.id);
-        await controler.findPedidosByID(req, res);
+        await controler.findPedidosByID(req, res, (pedido, idABuscar) => pedido.comprador._id.toString() === idABuscar);
       } catch (err) {
         next(err);
       }
@@ -54,7 +54,7 @@ export default function pedidoRoute(getController) {
     async (req, res, next) => {
       try {
         logger.http("Solicitud de pedidos del usuario id: " + req.params.id);
-        await controler.findPedidosByID(req, res);
+        await controler.findPedidosByID(req, res,(pedido, idABuscar) => pedido.items[0].producto.vendedor._id.toString() === idABuscar);
       } catch (err) {
         next(err);
       }
