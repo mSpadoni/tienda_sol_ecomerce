@@ -19,6 +19,8 @@ const keycloak = new Keycloak({
   clientId: "tp_desarollo",
 });
 
+export var keyCloakToken = "";
+
 export const KeycloakProvider = ({ children }) => {
   const keycloakRef = useRef(keycloak);
   const [, forceRender] = useState(0);
@@ -85,6 +87,7 @@ export const KeycloakProvider = ({ children }) => {
     const storedRefresh = localStorage.getItem("kc_refreshToken");
     if (storedToken && storedRefresh) {
       keycloakRef.current.token = storedToken;
+      keyCloakToken = storedToken;
       keycloakRef.current.refreshToken = storedRefresh;
     }
 

@@ -60,4 +60,4 @@ productoSchema.pre(/^find/, function (next) {
 
 productoSchema.loadClass(Producto);
 
-export const ProductoModel = mongoose.model("productos", productoSchema);
+export const ProductoModel = mongoose.model("Producto", productoSchema);

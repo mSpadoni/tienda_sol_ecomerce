@@ -14,7 +14,7 @@ export default class Pedido {
     this.items = items;
     this.moneda = moneda;
     this.direccionEntrega = direccionEntrega;
-    this.estado = EstadoPedido.PENDIENTE;
+    this.estado = EstadoPedido.CONFIRMADO;
     this.fechaCreacion = new Date();
     this.historialEstado = [];
   }

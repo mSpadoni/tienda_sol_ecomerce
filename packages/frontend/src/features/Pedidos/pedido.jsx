@@ -7,8 +7,9 @@ import { useMensajes } from "../../provieder/mensajeDeExito.jsx";
 import SuccessSnackbar from "../../components/snackBar.jsx";
 import "./pedido.css";
 import { useNavigate } from "react-router-dom";
-
+import {getPedidos} from "../../services/pedidoService.js";
 import { useKeycloak } from "../../provieder/keyCloak.jsx"
+
 
 // Material UI
 import {
@@ -19,6 +20,7 @@ import {
 } from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { Padding } from "@mui/icons-material";
+import { get } from "mongoose";
 
 export default function ListaPedidos({
   funcionDeFiltrado,
@@ -45,7 +47,8 @@ export default function ListaPedidos({
   const cerrarMenu = () => setAnchorEl(null);
 
   useEffect(() => {
-    setPedidos(funcionDeFiltrado(Store.Pedidos));
+    let pedidos = getPedidos();
+    setPedidos(funcionDeFiltrado(pedidos));
   }, [funcionDeFiltrado]);
 
   const cambiarEstado = (idPedido) => {

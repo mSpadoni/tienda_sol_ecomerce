@@ -36,7 +36,7 @@ export default function pedidoRoute(getController) {
   router.get(
     pathPedidos + "/hechos",
     validarToken,
-    soloRol(TipoUsuario.COMPRADOR),
+    // soloRol(TipoUsuario.COMPRADOR),
     async (req, res, next) => {
       try {
         logger.http("Solicitud de pedidos del usuario id: " + req.params.id);
@@ -50,7 +50,7 @@ export default function pedidoRoute(getController) {
   router.get(
     pathPedidos + "/recibidos",
     validarToken,
-    soloRol(TipoUsuario.VENDEDOR),
+    // soloRol(TipoUsuario.VENDEDOR),
     async (req, res, next) => {
       try {
         logger.http("Solicitud de pedidos del usuario id: " + req.params.id);

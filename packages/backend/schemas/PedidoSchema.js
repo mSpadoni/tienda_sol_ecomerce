@@ -17,8 +17,9 @@ const DireccionEntregaSchema = new mongoose.Schema(
     ciudad: { type: String, required: true },
     provincia: { type: String, required: true },
     pais: { type: String, required: true },
-    lat: { type: String, required: true },
-    lon: { type: String, required: true },
+    //to do: si se implementa un servicio de mapas, agregar validacion de lat y lon
+    lat: { type: String, required: false },
+    lon: { type: String, required: false },
   },
   { _id: false },
 );
