@@ -1,4 +1,3 @@
-import { SiAxios } from "react-icons/si";
 import productos from "../components/mockData/Productos.js";
 import axios from "axios";
 import procesarErrorAxios from "./errorsAdapter.js";
