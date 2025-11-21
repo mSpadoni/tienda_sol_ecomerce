@@ -1,37 +1,69 @@
 import "./notificacion.css";
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import notis from "../../components/mockData/Notificaciones.js";
+// import notis from "../../components/mockData/Notificaciones.js"; // Ya no lo usás
 import NotificacionesDesplegable from "./notificacionesDesplegable.jsx";
+import { Alert } from "@mui/material";
+import { getNotificaciones } from "../../services/notificacionesServiceFront.js"; // Ajustá el path si es necesario
 
 export default function ListaNotificaciones({ mensaje }) {
-  const [openId, setOpenId] = useState(null);
   const [notificaciones, setNotificaciones] = useState([]);
   const [estadoABuscar, setEstadoABuscar] = useState(null);
   const [estado_lectura, setEstadoL] = useState("");
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  // Traer notificaciones del backend
+  useEffect(() => {
+    setLoading(true);
+    const token = localStorage.getItem("kc_token");
+    getNotificaciones({}, token)
+      .then((data) => {
+        setNotificaciones(data);
+        setLoading(false);
+      })
+      .catch((e) => {
+        setError(e);
+        setLoading(false);
+      });
+  }, [mensaje]);
 
   const funcionDeFiltrado = (eleccion) => {
     if (eleccion === "") {
-      setNotificaciones(notis);
+      // Volver a cargar todas las notificaciones
+      const token = localStorage.getItem("kc_token");
+      getNotificaciones({}, token)
+        .then((data) => setNotificaciones(data))
+        .catch((e) => setError(e));
     } else {
-      setNotificaciones(notis.filter((n) => n.leida === eleccion));
+      setNotificaciones((prev) => prev.filter((n) => n.leida === eleccion));
     }
   };
-
-  useEffect(() => {
-    setNotificaciones(notis);
-  }, [mensaje]);
 
   const cambiarLeida = (idnotificacion, estado) => {
     setNotificaciones((prev) =>
       prev.map((n) => (n.id === idnotificacion ? { ...n, leida: estado } : n)),
     );
+    // Si querés persistir el cambio en el backend, llamá a un método acá
   };
+
+  if (loading) {
+    return <div>Cargando notificaciones...</div>;
+  }
+
+  if (error) {
+    return (
+      <Alert severity="error" className="alert-error">
+        {error.message}
+      </Alert>
+    );
+  }
 
   if (notificaciones.length === 0) {
     return (
       <div className="notificaciones-container">
         <NotificacionesDesplegable
+          token={localStorage.getItem("kc_token")}
           setEstadoABuscar={setEstadoABuscar}
           funcionDeFiltrado={funcionDeFiltrado}
           estado_lectura={estado_lectura}
@@ -47,13 +79,13 @@ export default function ListaNotificaciones({ mensaje }) {
       <div className="notificaciones-container">
         <div className="filtro-estado">
           <NotificacionesDesplegable
+            token={localStorage.getItem("kc_token")}
             setEstadoABuscar={setEstadoABuscar}
             funcionDeFiltrado={funcionDeFiltrado}
             estado_lectura={estado_lectura}
             setEstadoLectura={setEstadoL}
           />
         </div>
-
         <div className="notificaciones-lista">
           {notificaciones.map((notificacion) => (
             <div
@@ -69,13 +101,11 @@ export default function ListaNotificaciones({ mensaje }) {
               >
                 {accionesDeLectura(notificacion.leida).textoItem}
               </div>
-
               <div className="contenido-notificacion">
                 <div className="mensaje">
                   <h4>Notificación:</h4>
                   <p>{notificacion.mensaje}</p>
                 </div>
-
                 <div className="acciones">
                   <button
                     className={`btn-cambiar ${

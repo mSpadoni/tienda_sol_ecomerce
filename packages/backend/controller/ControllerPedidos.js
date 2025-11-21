@@ -22,6 +22,7 @@ export default class ControllerPedidos {
     );
 
     logger.http(`Pedido creado`);
+    logger.info(nuevoPedido)
     const notificacion =
       await this.serviceNotificaciones.crearNotificacion(nuevoPedido);
     logger.http(`Notificacion creada`);

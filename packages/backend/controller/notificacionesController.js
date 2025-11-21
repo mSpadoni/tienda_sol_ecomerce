@@ -36,7 +36,7 @@ export default class NotificacionesController {
     const notificaciones =
       await this.notificacionesService.getNotificaciones(filtros);
     if (notificaciones === null) {
-      return res.status(404).send("No se encontraron notificaciones");
+      return res.status(204).send([]);
     }
     return res.status(200).json(notificaciones);
   }
