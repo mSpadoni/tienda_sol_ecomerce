@@ -30,16 +30,15 @@ import {
   Button as MUIButton,
 } from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import { Padding } from "@mui/icons-material";
-import { get } from "mongoose";
+
 
 export default function ListaPedidos({
   pathBackend,
   tipoDePedidos,
-  estadoACambiar,
+  estadoParaAvanzar,
+  estadoParaAbortar,
+  estadoParaMostrar,
   mensaje,
-  existoMessage,
-  ruta,
 }) {
   const [pedidos, setPedidos] = useState([]);
   const { currency } = useCurrency();
@@ -77,21 +76,17 @@ useEffect(() => {
   cargar();
 }, [pathBackend]);
 
-const cancelar = () => {
-  setAccionActual("cancelado");
+const desplegar = (estado,pedidoId) => {
+  setPedidoACambiar(pedidoId);
+  console.log("pedidoId",pedidoId);
+  setAccionActual(estado);
   setDialogOpen(true);
   cerrarMenu();
-};
-
-const rechazar = () => {
-  setAccionActual("rechazado");
-  setDialogOpen(true);
-  cerrarMenu();
-};
+}
 
 
 const confirmarMotivo = () => {
-  const motivoFinal =
+  const motivoFinal = 
     motivoSeleccionado === "otro" ? motivo : motivoSeleccionado;
 
   if (!motivoFinal.trim()) return;
@@ -206,8 +201,7 @@ const confirmarMotivo = () => {
 
             {/* MENU DESPLEGABLE */}
             <Menu anchorEl={anchorEl} open={menuAbierto} onClose={cerrarMenu}>
-              {esComprador && <MenuItem sx={itemStyles} onClick={() => { setPedidoACambiar(pedido.id); cancelar(); }}>{botonesNombreSegunEstado[estadoACambiar]}</MenuItem>}
-              {esVendedor && <MenuItem sx={itemStyles} onClick={() => { setPedidoACambiar(pedido.id); rechazar(); }}>Rechazar</MenuItem>}
+              <MenuItem sx={itemStyles} onClick={() => { desplegar(estadoParaAbortar,pedido.id) }}>{botonesNombreSegunEstado[estadoParaAbortar]}</MenuItem>
             </Menu>
           </div>
 
@@ -224,15 +218,15 @@ const confirmarMotivo = () => {
               </ul>
             </div>
 
-            {!estadoNegativos.includes(estadoACambiar) && <div className="pedido-actions">
+            {pedido.estado.valor == estadoParaMostrar && <div className="pedido-actions">
               {/*  BOTÓN MUI (ENVÍAR O CAMBIAR ESTADO) */}
               <MUIButton
                 variant="contained"
                 color='success'
                 sx={enviarStyles}
-                onClick={() => cambiarEstado(pedido.id,estadoACambiar,"")}
+                onClick={() => cambiarEstado(pedido.id,estadoParaAvanzar,"El pedido fue enviado")}
               >
-                {botonesNombreSegunEstado[estadoACambiar]} 
+                {botonesNombreSegunEstado[estadoParaAvanzar]} 
               </MUIButton>
             </div>}
           </div> 
@@ -267,7 +261,9 @@ const confirmarMotivo = () => {
 ListaPedidos.propTypes = {
   pathBackend: PropTypes.string.isRequired,
   tipoDePedidos: PropTypes.string.isRequired,
-  estadoACambiar: PropTypes.string.isRequired,
+  estadoParaAvanzar: PropTypes.string,
+  estadoParaAbortar: PropTypes.string,
+  estadoParaMostrar: PropTypes.string,
   mensaje: PropTypes.string.isRequired,
   existoMessage: PropTypes.string.isRequired,
   ruta: PropTypes.string.isRequired,
@@ -294,9 +290,10 @@ const enviarStyles = {
   cancelado: "Cancelar",
    enviado: "Enviar",
     rechazado: "Rechazar",
- });
+    confirmado: "Confirmar",
+    finalizado: "Finalizar",
+});
 
-const estadoNegativos = ["cancelado", "rechazado"];
 
 
 const motivosComprador = [

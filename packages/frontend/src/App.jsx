@@ -83,7 +83,9 @@ function App() {
                             <ListaPedidos
                               tipoDePedidos = "hechos"
                               pathBackend = "/pedidos/hechos"
-                              estadoACambiar="cancelado"
+                              estadoParaAvanzar="finalizado"
+                              estadoParaAbortar="cancelado"
+                              estadoParaMostrar="enviado"
                               mensaje="Todavía no has hechos ningún pedido ..."
                               existoMessage="Se cancelo el pedido correctamente..."
                               ruta="/pedidos/hechos"
@@ -96,7 +98,9 @@ function App() {
                             <ListaPedidos
                               tipoDePedidos = "recibidos"
                               pathBackend = "/pedidos/recibidos"
-                              estadoACambiar="enviado"
+                              estadoParaAvanzar="enviado"
+                              estadoParaAbortar="rechazado"
+                              estadoParaMostrar="confirmado"
                               mensaje="No te hicieron ningún pedido aún ..."
                               existoMessage="Se envio el pedido correctamente..."
                               ruta="/pedidos/recibidos"

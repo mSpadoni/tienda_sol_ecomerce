@@ -24,15 +24,6 @@ export default function pedidoRoute(getController) {
     }
   });
 
-  router.patch(pathPedidos + "/:id", validarToken, async (req, res, next) => {
-    logger.http("Solicitud PATCH a /pedidos");
-    try {
-      await controler.actualizar(req, res);
-    } catch (err) {
-      next(err);
-    }
-  });
-
   router.get(
     pathPedidos + "/hechos",
     validarToken,
@@ -60,6 +51,15 @@ export default function pedidoRoute(getController) {
       }
     },
   );
+
+  router.patch(pathPedidos + "/:id", validarToken, async (req, res, next) => {
+    logger.http("Solicitud PATCH a /pedidos");
+    try {
+      await controler.actualizar(req, res);
+    } catch (err) {
+      next(err);
+    }
+  });
 
   router.use(pedidosErrorHandler);
   router.use(zodErrorHandler);

@@ -45,7 +45,17 @@ export const EstadoPedido = Object.freeze({
         new Date(),
       );
     },
-  }
+  },
+    FINALIZADO: {
+    valor: "finalizado",
+    crearNotificacion: (pedido) => {
+      return new Notificacion(
+        pedido.obtenerVendedor(),
+        crearMensajeSegunEstado(EstadoPedido.FINALIZADO.valor),
+        new Date(),
+      );
+    },
+  },
 });
 
 export function crearMensajeSegunEstado(estado) {

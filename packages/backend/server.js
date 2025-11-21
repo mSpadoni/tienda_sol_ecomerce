@@ -14,7 +14,7 @@ export default class Server {
     this.app.use(
       cors({
         origin: "http://localhost:3000", // frontend React
-        methods: ["GET", "POST", "PUT", "DELETE"],
+        methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
         credentials: true,
       }),
     );
