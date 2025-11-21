@@ -9,6 +9,7 @@ import "./pedido.css";
 import { useNavigate } from "react-router-dom";
 import {getPedidos} from "../../services/pedidoService.js";
 import { useKeycloak } from "../../provieder/keyCloak.jsx"
+import { ClipLoader } from "react-spinners";
 import {
   Dialog,
   DialogTitle,
@@ -30,6 +31,7 @@ import {
   Button as MUIButton,
 } from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
+import { createTheme } from '@mui/material/styles';
 
 
 export default function ListaPedidos({
@@ -41,12 +43,13 @@ export default function ListaPedidos({
   mensaje,
 }) {
   const [pedidos, setPedidos] = useState([]);
+  const [loading, setLoading] = useState(false);
   const { currency } = useCurrency();
   const { setMensajeExito } = useMensajes();
   const navigate = useNavigate();
 
   // 🔹 roles del usuario
-  const { elUsuarioEsUn } = useKeycloak();
+  const { elUsuarioEsUn, isAuthenticated } = useKeycloak();
   const esVendedor = elUsuarioEsUn("vendedor");
   const esComprador = elUsuarioEsUn("comprador");
 
@@ -63,18 +66,22 @@ export default function ListaPedidos({
   const abrirMenu = (event) => setAnchorEl(event.currentTarget);
   const cerrarMenu = () => setAnchorEl(null);
 
-useEffect(() => {
-  const cargar = async () => {
-    try {
-      const pedidos = await getPedidos(pathBackend);
-      setPedidos(pedidos);
-    } catch (err) {
-      console.error(err);
-    }
-  };
+const cargarPedidos = async () => {
+  setLoading(true);
+  try {
+    const pedidos = await getPedidos(pathBackend);
+    setPedidos(pedidos);
+  } catch (err) {
+    console.error(err);
+  } finally {
+    setLoading(false);
+  }
+};
 
-  cargar();
-}, [pathBackend]);
+useEffect(() => {
+  // recargar cuando cambia la ruta o el estado de autenticación
+  cargarPedidos();
+}, [pathBackend, isAuthenticated]);
 
 const desplegar = (estado,pedidoId) => {
   setPedidoACambiar(pedidoId);
@@ -85,14 +92,19 @@ const desplegar = (estado,pedidoId) => {
 }
 
 
-const confirmarMotivo = () => {
+const confirmarMotivo = async () => {
   const motivoFinal = 
     motivoSeleccionado === "otro" ? motivo : motivoSeleccionado;
 
   if (!motivoFinal.trim()) return;
 
-
-  cambiarEstado(pedidoACambiar,accionActual,motivoFinal);
+  try {
+    await cambiarEstado(pedidoACambiar, accionActual, motivoFinal);
+    setMensajeExito("Pedido actualizado correctamente");
+    await cargarPedidos();
+  } catch (err) {
+    console.error("Error al cambiar estado:", err);
+  }
 
   setDialogOpen(false);
   setMotivo("");
@@ -100,12 +112,26 @@ const confirmarMotivo = () => {
 };
 
 
+  if (loading) {
+    return (
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "200px",
+        }}
+      >
+        <ClipLoader color="#0D47A1" size={48} />
+      </div>
+    );
+  }
+
   if (pedidos.length === 0) {
     return <div className="no-pedidos">{mensaje}</div>;
   }
 
   return (
-    
     <div className="lista-pedidos-container">
 
       {/* PopUp de ingreso de motivo */}
@@ -222,9 +248,23 @@ const confirmarMotivo = () => {
               {/*  BOTÓN MUI (ENVÍAR O CAMBIAR ESTADO) */}
               <MUIButton
                 variant="contained"
-                color='success'
-                sx={enviarStyles}
-                onClick={() => cambiarEstado(pedido.id,estadoParaAvanzar,"El pedido fue enviado")}
+                sx={{
+                    ...enviarStyles,
+                    backgroundColor: '#0D47A1',
+                    '&:hover': {
+                      backgroundColor: '#0D3A8E',
+                    }
+                  }}
+
+                onClick={async () => {
+                  try {
+                    await cambiarEstado(pedido.id, estadoParaAvanzar, "El pedido fue enviado");
+                    setMensajeExito("Pedido actualizado correctamente");
+                    await cargarPedidos();
+                  } catch (err) {
+                    console.error("Error al cambiar estado:", err);
+                  }
+                }}
               >
                 {botonesNombreSegunEstado[estadoParaAvanzar]} 
               </MUIButton>
@@ -296,6 +336,8 @@ const enviarStyles = {
 
 
 
+//se prodria pasar por parametro
+
 const motivosComprador = [
   "No confío en el vendedor",
   "Me arrepentí de comprar el producto",
@@ -310,3 +352,12 @@ const motivosVendedor = [
   "La informacion de entrega esta mal completada",
   "El comprador nunca estuvo presente para recibir el pedido",
 ];
+
+
+const theme = createTheme({
+  palette: {
+   azul: {
+      main: '#051770',
+    },
+  },
+});
