@@ -9,6 +9,7 @@ import "./checkout.css";
 import { CURRENCIES } from "../../provieder/currencies.js";
 import { useForm } from "../../provieder/formHook.js";
 import { useVisible } from "../../provieder/visibleHook.jsx";
+import { crearPedido } from "../../services/pedidoService.js";
 
 const Checkout = () => {
   const navigate = useNavigate();
@@ -58,14 +59,10 @@ const Checkout = () => {
   };
 
   const onSubmit = (values) => {
-    const id = Store.Pedidos.length + 1;
 
-    Store.Pedidos.push({
-      id,
-      usuario: 1,
-      vendedor: 1,
+    crearPedido({
       items: carrito.map((item) => ({
-        producto: item.producto,
+        productoId: item.producto._id,
         cantidad: item.cantidad,
       })),
       direccionEntrega: {
@@ -79,9 +76,6 @@ const Checkout = () => {
         pais: values.pais,
       },
       moneda: currency,
-      estado: "Pendiente",
-      total: total,
-      Fecha: new Date(),
     });
 
     limpiarCarrito();
