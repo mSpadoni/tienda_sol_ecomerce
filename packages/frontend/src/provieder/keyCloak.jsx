@@ -23,6 +23,7 @@ export var keyCloakToken = "";
 
 export const KeycloakProvider = ({ children }) => {
   const keycloakRef = useRef(keycloak);
+  const [, forceRender] = useState(0);
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
     const saved = localStorage.getItem("kc_authenticated");
     return saved === "true"; // si existe, lo convertimos a boolean
@@ -52,12 +53,23 @@ export const KeycloakProvider = ({ children }) => {
     localStorage.setItem("kc_authenticated", "true");
     localStorage.setItem("kc_token", keycloakRef.current.token);
     localStorage.setItem("kc_refreshToken", keycloakRef.current.refreshToken);
+    try {
+      keyCloakToken = keycloakRef.current.token;
+    } catch (err) {
+    }
   };
 
   const clearSession = () => {
     localStorage.removeItem("kc_authenticated");
     localStorage.removeItem("kc_token");
     localStorage.removeItem("kc_refreshToken");
+    try {
+      // limpiar la variable exportada
+      // eslint-disable-next-line no-undef
+      keyCloakToken = "";
+    } catch (err) {
+      // ignore
+    }
   };
 
   const startTokenRefresh = () => {
@@ -119,8 +131,8 @@ export const KeycloakProvider = ({ children }) => {
 
   const login = () => {
     try {
-      clearSession();
       keycloakRef.current.login({
+        prompt: "login",
         redirectUri: window.location.href,
       });
       cleanUrlHash();
@@ -132,7 +144,7 @@ export const KeycloakProvider = ({ children }) => {
   const logout = () => {
     try {
       clearSession();
-      keycloakRef.current.logout({ redirectUri: window.location.href });
+      keycloakRef.current.logout({ redirectUri: window.location.origin });
       cleanUrlHash();
       setIsAuthenticated(false);
     } catch (err) {
