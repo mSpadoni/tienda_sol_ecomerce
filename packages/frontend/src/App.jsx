@@ -42,6 +42,28 @@ function App() {
     return pedidos.filter((pedido) => pedido.usuario === 1);
   };
 
+  const sortPedidosVendedor = (pedidos) => {
+    const estadoOrdenPrioridad = {
+      confirmado: 1,
+      enviado: 2,
+      cancelado: 3,
+      rechazado: 4,
+      finalizado: 5,
+    };
+    return pedidos.sort((a, b) => estadoOrdenPrioridad[a.estado] - estadoOrdenPrioridad[b.estado]);
+  }
+
+    const sortPedidosComprador = (pedidos) => {
+    const estadoOrdenPrioridad = {
+      confirmado: 2,
+      enviado: 1,
+      rechazado: 3,
+      cancelado: 4,
+      finalizado: 5,
+    };
+    return pedidos.sort((a, b) => estadoOrdenPrioridad[a.estado] - estadoOrdenPrioridad[b.estado]);
+  }
+
   const pedidosRecibidos = (pedidos) => {
     return pedidos.filter((pedido) => pedido.vendedor === 1);
   };
@@ -81,6 +103,7 @@ function App() {
                           path="/pedidos/hechos"
                           element={
                             <ListaPedidos
+                              funcionDeOrdenamiento={sortPedidosComprador}
                               tipoDePedidos = "hechos"
                               pathBackend = "/pedidos/hechos"
                               estadoParaAvanzar="finalizado"
@@ -96,6 +119,7 @@ function App() {
                           path="/pedidos/recibidos"
                           element={
                             <ListaPedidos
+                              funcionDeOrdenamiento={sortPedidosVendedor}
                               tipoDePedidos = "recibidos"
                               pathBackend = "/pedidos/recibidos"
                               estadoParaAvanzar="enviado"

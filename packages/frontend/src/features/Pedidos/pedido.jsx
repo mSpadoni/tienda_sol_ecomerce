@@ -41,6 +41,7 @@ export default function ListaPedidos({
   estadoParaAbortar,
   estadoParaMostrar,
   mensaje,
+  funcionDeOrdenamiento,
 }) {
   const [pedidos, setPedidos] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -70,7 +71,7 @@ const cargarPedidos = async () => {
   setLoading(true);
   try {
     const pedidos = await getPedidos(pathBackend);
-    setPedidos(pedidos);
+    setPedidos(funcionDeOrdenamiento(pedidos));
   } catch (err) {
     console.error(err);
   } finally {
@@ -307,6 +308,7 @@ ListaPedidos.propTypes = {
   mensaje: PropTypes.string.isRequired,
   existoMessage: PropTypes.string.isRequired,
   ruta: PropTypes.string.isRequired,
+  funcionDeOrdenamiento: PropTypes.func.isRequired,
 };
 
 const itemStyles = {
