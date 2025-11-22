@@ -132,7 +132,7 @@ export const KeycloakProvider = ({ children }) => {
   const logout = () => {
     try {
       clearSession();
-      keycloakRef.current.logout({ redirectUri: window.location.origin });
+      keycloakRef.current.logout({ redirectUri: window.location.href });
       cleanUrlHash();
       setIsAuthenticated(false);
     } catch (err) {

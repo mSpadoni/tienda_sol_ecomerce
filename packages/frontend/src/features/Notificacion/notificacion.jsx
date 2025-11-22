@@ -6,13 +6,16 @@ import NotificacionesDesplegable from "./notificacionesDesplegable.jsx";
 import { Alert } from "@mui/material";
 import { getNotificaciones } from "../../services/notificacionesServiceFront.js"; // Ajustá el path si es necesario
 import { status } from "nprogress";
+import { useNavigate } from "react-router-dom";
 
-export default function ListaNotificaciones() {
+export default function ListaNotificaciones({}) {
   const [notificaciones, setNotificaciones] = useState([]);
   const [estadoABuscar, setEstadoABuscar] = useState(null);
   const [estado_lectura, setEstadoL] = useState("");
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [mensaje,setMensaje]=useState("Usted no ha recibido notificaciones todavía...");
+  const navigate = useNavigate();
 
   // Traer notificaciones del backend
   useEffect(() => {
@@ -31,15 +34,21 @@ export default function ListaNotificaciones() {
       console.log(notificaciones)
   }, []);
 
+  useEffect(()=>(!(typeof estadoABuscar === "boolean"))?navigate("/notificaciones"):navigate(`/notificaciones?leida=${estadoABuscar}`),
+  [estadoABuscar,navigate]);
+
   const funcionDeFiltrado = (eleccion) => {
+    const token = localStorage.getItem("kc_token");
     if (eleccion === "") {
       // Volver a cargar todas las notificaciones
-      const token = localStorage.getItem("kc_token");
+      
       getNotificaciones({}, token)
         .then((data) => {setNotificaciones(data)})
         .catch((e) => setError(e));
     } else {
-      setNotificaciones((prev) => prev.filter((n) => n.leida === eleccion));
+      getNotificaciones({leida:eleccion}, token)
+        .then((data) => {setNotificaciones(data)})
+        .catch((e) => setError(e));
     }
   };
 
@@ -70,8 +79,9 @@ export default function ListaNotificaciones() {
             funcionDeFiltrado={funcionDeFiltrado}
             estado_lectura={estado_lectura}
             setEstadoLectura={setEstadoL}
+            setMensaje={setMensaje}
           />
-        <div className="Notificaciones_mensaje">Usted no ha recibido notificaciones todavía...</div>
+        <div className="Notificaciones_mensaje">{mensaje}</div>
       </>
     );
   }
@@ -86,6 +96,7 @@ export default function ListaNotificaciones() {
             funcionDeFiltrado={funcionDeFiltrado}
             estado_lectura={estado_lectura}
             setEstadoLectura={setEstadoL}
+            setMensaje={setMensaje}
           />
         </div>
         <div className="notificaciones-lista">

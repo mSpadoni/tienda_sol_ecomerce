@@ -15,6 +15,7 @@ const NotificacionesDesplegable = ({
   funcionDeFiltrado,
   estado_lectura,
   setEstadoLectura,
+  setMensaje
 }) => {
   const [notificaciones, setNotificaciones] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -44,6 +45,7 @@ const NotificacionesDesplegable = ({
     const value = e.target.value;
     setEstadoLectura(value);
     const booleano = pasajeAboolean(value);
+    booleano===""?setMensaje("Usted no ha recibido notificaciones todavía..."):setMensaje(`Usted no ha recibido notificaciones ${booleano?"leídas":"no leídas"} todavía...`);
     setEstadoABuscar(booleano);
     funcionDeFiltrado(booleano);
   };
@@ -72,6 +74,7 @@ NotificacionesDesplegable.propTypes = {
   funcionDeFiltrado: PropTypes.func.isRequired,
   estado_lectura: PropTypes.string.isRequired,
   setEstadoLectura: PropTypes.func.isRequired,
+  setMensaje: PropTypes.func.isRequired,
 };
 
 export default NotificacionesDesplegable;
