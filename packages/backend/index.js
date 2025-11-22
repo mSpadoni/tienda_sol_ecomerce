@@ -37,6 +37,7 @@ app.use(
       if (allowedOrigins.includes(origin)) return callback(null, true);
       return callback(null, false);
     },
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
     credentials: true,
     methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE", "OPTIONS"],
     allowedHeaders: [

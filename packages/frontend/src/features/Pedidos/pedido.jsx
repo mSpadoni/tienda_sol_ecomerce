@@ -9,6 +9,7 @@ import "./pedido.css";
 import { useNavigate } from "react-router-dom";
 import {getPedidos} from "../../services/pedidoService.js";
 import { useKeycloak } from "../../provieder/keyCloak.jsx"
+import { ClipLoader } from "react-spinners";
 import {
   Dialog,
   DialogTitle,
@@ -25,23 +26,26 @@ import { cambiarEstado }from "../../services/pedidoService.js"
 // Material UI
 import { IconButton, Menu, MenuItem, Button as MUIButton } from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import { Padding } from "@mui/icons-material";
-import { get } from "mongoose";
+import { createTheme } from '@mui/material/styles';
+
 
 export default function ListaPedidos({
   pathBackend,
   tipoDePedidos,
-  estadoACambiar,
+  estadoParaAvanzar,
+  estadoParaAbortar,
+  estadoParaMostrar,
   mensaje,
-  existoMessage,
-  ruta,
+  funcionDeOrdenamiento,
 }) {
   const [pedidos, setPedidos] = useState([]);
+  const [loading, setLoading] = useState(false);
   const { currency } = useCurrency();
   const { setMensajeExito } = useMensajes();
   const navigate = useNavigate();
 
-  const { elUsuarioEsUn } = useKeycloak();
+  // 🔹 roles del usuario
+  const { elUsuarioEsUn, isAuthenticated } = useKeycloak();
   const esVendedor = elUsuarioEsUn("vendedor");
   const esComprador = elUsuarioEsUn("comprador");
 
@@ -57,40 +61,45 @@ export default function ListaPedidos({
   const abrirMenu = (event) => setAnchorEl(event.currentTarget);
   const cerrarMenu = () => setAnchorEl(null);
 
+const cargarPedidos = async () => {
+  setLoading(true);
+  try {
+    const pedidos = await getPedidos(pathBackend);
+    setPedidos(funcionDeOrdenamiento(pedidos));
+  } catch (err) {
+    console.error(err);
+  } finally {
+    setLoading(false);
+  }
+};
+
 useEffect(() => {
-  const cargar = async () => {
-    try {
-      const pedidos = await getPedidos(pathBackend);
-      setPedidos(pedidos);
-    } catch (err) {
-      console.error(err);
-    }
-  };
+  // recargar cuando cambia la ruta o el estado de autenticación
+  cargarPedidos();
+}, [pathBackend, isAuthenticated]);
 
-  cargar();
-}, [pathBackend]);
-
-const cancelar = () => {
-  setAccionActual("cancelado");
+const desplegar = (estado,pedidoId) => {
+  setPedidoACambiar(pedidoId);
+  console.log("pedidoId",pedidoId);
+  setAccionActual(estado);
   setDialogOpen(true);
   cerrarMenu();
-};
-
-const rechazar = () => {
-  setAccionActual("rechazado");
-  setDialogOpen(true);
-  cerrarMenu();
-};
+}
 
 
-const confirmarMotivo = () => {
-  const motivoFinal =
+const confirmarMotivo = async () => {
+  const motivoFinal = 
     motivoSeleccionado === "otro" ? motivo : motivoSeleccionado;
 
   if (!motivoFinal.trim()) return;
 
-
-  cambiarEstado(pedidoACambiar,accionActual,motivoFinal);
+  try {
+    await cambiarEstado(pedidoACambiar, accionActual, motivoFinal);
+    setMensajeExito("Pedido actualizado correctamente");
+    await cargarPedidos();
+  } catch (err) {
+    console.error("Error al cambiar estado:", err);
+  }
 
   setDialogOpen(false);
   setMotivo("");
@@ -98,12 +107,26 @@ const confirmarMotivo = () => {
 };
 
 
+  if (loading) {
+    return (
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "200px",
+        }}
+      >
+        <ClipLoader color="#0D47A1" size={48} />
+      </div>
+    );
+  }
+
   if (pedidos.length === 0) {
     return <div className="no-pedidos">{mensaje}</div>;
   }
 
   return (
-    
     <div className="lista-pedidos-container">
 
       {/* PopUp de ingreso de motivo */}
@@ -199,8 +222,7 @@ const confirmarMotivo = () => {
 
             {/* MENU DESPLEGABLE */}
             <Menu anchorEl={anchorEl} open={menuAbierto} onClose={cerrarMenu}>
-              {esComprador && <MenuItem sx={itemStyles} onClick={() => { setPedidoACambiar(pedido.id); cancelar(); }}>{botonesNombreSegunEstado[estadoACambiar]}</MenuItem>}
-              {esVendedor && <MenuItem sx={itemStyles} onClick={() => { setPedidoACambiar(pedido.id); rechazar(); }}>Rechazar</MenuItem>}
+              <MenuItem sx={itemStyles} onClick={() => { desplegar(estadoParaAbortar,pedido.id) }}>{botonesNombreSegunEstado[estadoParaAbortar]}</MenuItem>
             </Menu>
           </div>
 
@@ -217,15 +239,29 @@ const confirmarMotivo = () => {
               </ul>
             </div>
 
-            {!estadoNegativos.includes(estadoACambiar) && <div className="pedido-actions">
+            {pedido.estado.valor == estadoParaMostrar && <div className="pedido-actions">
               {/*  BOTÓN MUI (ENVÍAR O CAMBIAR ESTADO) */}
               <MUIButton
                 variant="contained"
-                color='success'
-                sx={enviarStyles}
-                onClick={() => cambiarEstado(pedido.id,estadoACambiar,"")}
+                sx={{
+                    ...enviarStyles,
+                    backgroundColor: '#0D47A1',
+                    '&:hover': {
+                      backgroundColor: '#0D3A8E',
+                    }
+                  }}
+
+                onClick={async () => {
+                  try {
+                    await cambiarEstado(pedido.id, estadoParaAvanzar, "El pedido fue enviado");
+                    setMensajeExito("Pedido actualizado correctamente");
+                    await cargarPedidos();
+                  } catch (err) {
+                    console.error("Error al cambiar estado:", err);
+                  }
+                }}
               >
-                {botonesNombreSegunEstado[estadoACambiar]} 
+                {botonesNombreSegunEstado[estadoParaAvanzar]} 
               </MUIButton>
             </div>}
           </div> 
@@ -261,10 +297,13 @@ const confirmarMotivo = () => {
 ListaPedidos.propTypes = {
   pathBackend: PropTypes.string.isRequired,
   tipoDePedidos: PropTypes.string.isRequired,
-  estadoACambiar: PropTypes.string.isRequired,
+  estadoParaAvanzar: PropTypes.string,
+  estadoParaAbortar: PropTypes.string,
+  estadoParaMostrar: PropTypes.string,
   mensaje: PropTypes.string.isRequired,
   existoMessage: PropTypes.string.isRequired,
   ruta: PropTypes.string.isRequired,
+  funcionDeOrdenamiento: PropTypes.func.isRequired,
 };
 
 const itemStyles = {
@@ -286,12 +325,15 @@ const enviarStyles = {
 
 const botonesNombreSegunEstado = Object.freeze({
   cancelado: "Cancelar",
-  enviado: "Enviar",
-  rechazado: "Rechazar",
+   enviado: "Enviar",
+    rechazado: "Rechazar",
+    confirmado: "Confirmar",
+    finalizado: "Finalizar",
 });
 
-const estadoNegativos = ["cancelado", "rechazado"];
 
+
+//se prodria pasar por parametro
 
 const motivosComprador = [
   "No confío en el vendedor",
@@ -307,3 +349,12 @@ const motivosVendedor = [
   "La informacion de entrega esta mal completada",
   "El comprador nunca estuvo presente para recibir el pedido",
 ];
+
+
+const theme = createTheme({
+  palette: {
+   azul: {
+      main: '#051770',
+    },
+  },
+});
