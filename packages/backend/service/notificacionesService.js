@@ -11,8 +11,8 @@ export default class NotificacionesService {
     return await this.notificacionesRepository.getNotificaciones(filtros);
   }
 
-  async marcarNotificacionComoLeida(id) {
-    return await this.notificacionesRepository.marcarNotificacionComoLeida(id);
+  async marcarNotificacionComoLeida(id,leida) {
+    return await this.notificacionesRepository.marcarNotificacionComoLeida(id,leida);
   }
 
   async crearNotificacion(pedido) {

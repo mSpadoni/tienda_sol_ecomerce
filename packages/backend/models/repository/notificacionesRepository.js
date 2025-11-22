@@ -1,5 +1,5 @@
 import { NotificacionModel } from "../../schemas/NotificacionSchema.js";
-
+import logger from "../../../logger/logger.js";
 export default class NotificacionesRepository {
   constructor() {
     this.model = NotificacionModel;
@@ -14,16 +14,17 @@ export default class NotificacionesRepository {
     if (filtros.leida !== undefined) {
       query.leida = filtros.leida;
     }
-    const notificacionesUsuario = await NotificacionModel.find(query).lean();
+  
+    const notificacionesUsuario = await NotificacionModel.find(query).populate("usuario");
     return notificacionesUsuario.filter(
       (notificacion) => notificacion.usuario.idKeycloak === filtros.usuario,
     );
   }
 
-  async marcarNotificacionComoLeida(id) {
+  async marcarNotificacionComoLeida(id,leida) {
     const notificacion = await NotificacionModel.findById(id);
     if (notificacion) {
-      notificacion.leida = true;
+      notificacion.leida = leida;
       notificacion.fechaLeida = new Date();
       await notificacion.save();
       return notificacion;

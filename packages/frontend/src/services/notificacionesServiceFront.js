@@ -10,6 +10,7 @@ export const getNotificaciones = async (filtros = {}, token) => {
 
     const headers = token ? { Authorization: `Bearer ${token}` } : {};
     const response = await axios.get(url, { headers });
+    console.log(response);
     return response.data;
   } catch (error) {
     throw procesarErrorAxios(error);

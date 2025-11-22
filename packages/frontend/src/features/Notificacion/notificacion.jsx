@@ -5,8 +5,9 @@ import PropTypes from "prop-types";
 import NotificacionesDesplegable from "./notificacionesDesplegable.jsx";
 import { Alert } from "@mui/material";
 import { getNotificaciones } from "../../services/notificacionesServiceFront.js"; // Ajustá el path si es necesario
+import { status } from "nprogress";
 
-export default function ListaNotificaciones({ mensaje }) {
+export default function ListaNotificaciones() {
   const [notificaciones, setNotificaciones] = useState([]);
   const [estadoABuscar, setEstadoABuscar] = useState(null);
   const [estado_lectura, setEstadoL] = useState("");
@@ -21,19 +22,21 @@ export default function ListaNotificaciones({ mensaje }) {
       .then((data) => {
         setNotificaciones(data);
         setLoading(false);
+        console.log(data)
       })
       .catch((e) => {
         setError(e);
         setLoading(false);
       });
-  }, [mensaje]);
+      console.log(notificaciones)
+  }, []);
 
   const funcionDeFiltrado = (eleccion) => {
     if (eleccion === "") {
       // Volver a cargar todas las notificaciones
       const token = localStorage.getItem("kc_token");
       getNotificaciones({}, token)
-        .then((data) => setNotificaciones(data))
+        .then((data) => {setNotificaciones(data)})
         .catch((e) => setError(e));
     } else {
       setNotificaciones((prev) => prev.filter((n) => n.leida === eleccion));
@@ -60,17 +63,16 @@ export default function ListaNotificaciones({ mensaje }) {
   }
 
   if (notificaciones.length === 0) {
-    return (
-      <div className="notificaciones-container">
+    return (<>
         <NotificacionesDesplegable
-          token={localStorage.getItem("kc_token")}
-          setEstadoABuscar={setEstadoABuscar}
-          funcionDeFiltrado={funcionDeFiltrado}
-          estado_lectura={estado_lectura}
-          setEstadoLectura={setEstadoL}
-        />
-        <div style={{ padding: 20 }}>{mensaje}</div>
-      </div>
+            token={localStorage.getItem("kc_token")}
+            setEstadoABuscar={setEstadoABuscar}
+            funcionDeFiltrado={funcionDeFiltrado}
+            estado_lectura={estado_lectura}
+            setEstadoLectura={setEstadoL}
+          />
+        <div className="Notificaciones_mensaje">Usted no ha recibido notificaciones todavía...</div>
+      </>
     );
   }
 
@@ -130,9 +132,6 @@ export default function ListaNotificaciones({ mensaje }) {
   );
 }
 
-ListaNotificaciones.propTypes = {
-  mensaje: PropTypes.string,
-};
 
 const accionesDeLectura = Object.freeze((Leida) => {
   if (Leida) {

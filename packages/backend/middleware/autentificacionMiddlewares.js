@@ -30,6 +30,7 @@ export async function validarToken(req, res, next) {
 
     const payload = jwt.verify(token, key, { algorithms: ["RS256"] });
     req.user = payload;
+    logger.info("Token validado para el usuario: " + payload.sub);
     next();
   } catch (err) {
     logger.error("Error al validar token: " + err.message);

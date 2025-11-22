@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { NotificacionDoesNotExist } from "../errors/NotificacionDoesNotExist.js";
 import mongoose from "mongoose";
+import logger from "../../logger/logger.js";
 
 const idTransform = z.string().refine(
   (val) => {
@@ -32,11 +33,12 @@ export default class NotificacionesController {
     }
 
     filtros.usuario = req.user.sub;
-
+    
     const notificaciones =
       await this.notificacionesService.getNotificaciones(filtros);
-    if (notificaciones === null) {
-      return res.status(204).send([]);
+    
+    if (notificaciones.lenght === 0) {
+      return res.status(204).send(notificaciones);
     }
     return res.status(200).json(notificaciones);
   }
@@ -46,9 +48,10 @@ export default class NotificacionesController {
     if (!validationResult.success) {
       return res.status(400).json(validationResult.error);
     }
+    const {leida}=req.query
     const id = validationResult.data;
     const notificacion =
-      await this.notificacionesService.marcarNotificacionComoLeida(id);
+      await this.notificacionesService.marcarNotificacionComoLeida(id,leida);
     if (!notificacion) {
       return res.status(404).send("Notificación no encontrada");
     }

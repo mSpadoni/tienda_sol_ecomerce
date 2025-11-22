@@ -43,14 +43,25 @@
 .filtro-estado select {
   padding: 0.6rem 1rem;
   border-radius: 10px;
-  border: 2px solid #ff8c00;
+  border: 2px solid #0f1f36ff;
   background: #fff;
   cursor: pointer;
   transition: all 0.25s ease;
 }
 
 .filtro-estado select:hover {
-  border-color: rgb(252, 251, 250);
+  border-color: rgb(2, 66, 156);
+}
+.Notificaciones_mensaje {
+  font-size: clamp(2rem, 2.2vw, 1.6rem);
+  font-weight: 800;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #222222;
+  font-weight: 600;
+  text-align: center;
+  padding: 2rem;
 }
 
 /* ======== LISTA DE NOTIFICACIONES ======== */
