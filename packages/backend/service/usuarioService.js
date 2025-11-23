@@ -1,6 +1,6 @@
 import { createUser } from "./funcionesDelService.js";
 import Usuario from "../models/entities/Usuario.js";
-import logger from "../../logger/logger.js";
+import logger from "../logger/logger.js";
 
 export default class UsuarioService {
   constructor(repositorioUsuario) {

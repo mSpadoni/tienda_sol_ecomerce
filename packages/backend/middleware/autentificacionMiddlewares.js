@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 import jwksClient from "jwks-rsa";
-import logger from "../../logger/logger.js";
+import logger from "../logger/logger.js";
 
 const client = jwksClient({
   jwksUri:

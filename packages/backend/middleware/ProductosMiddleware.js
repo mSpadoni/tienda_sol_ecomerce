@@ -1,4 +1,4 @@
-import logger from "../../logger/logger.js";
+import logger from "../logger/logger.js";
 import ErrorProductosNoEncontrados from "../errors/errorProductosNoEncontrado.js";
 
 export function productosErrorHandler(err, _req, res, _next) {

@@ -1,5 +1,5 @@
 import Pedido from "../models/entities/Pedido.js";
-import logger from "../../logger/logger.js";
+import logger from "../logger/logger.js";
 import {
   reducirStocks,
   aumentarStocks,

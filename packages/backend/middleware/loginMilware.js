@@ -1,4 +1,4 @@
-import logger from "../../logger/logger.js";
+import logger from "../logger/logger.js";
 
 const logAxiosKeycloakError = (error) => {
   logger.error("===== KEYCLOAK/Axios ERROR =====");

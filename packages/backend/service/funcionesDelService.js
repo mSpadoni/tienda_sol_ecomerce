@@ -1,6 +1,6 @@
 import DireccionEntrega from "../models/entities/DireccionEntrega.js";
 import FaltaStock from "../errors/errorFaltaDeStock.js";
-import logger from "../../logger/logger.js";
+import logger from "../logger/logger.js";
 import findEstado from "../models/entities/EstadoPedido.js";
 import ErrorEstadoNoValido from "../errors/errorEstadoNoValido.js";
 import { obtenerMoneda } from "../models/entities/Moneda.js";

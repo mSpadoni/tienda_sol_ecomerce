@@ -1,5 +1,5 @@
 import ErrorPedidoNoEncontrado from "../errors/errorNoEncontrado.js";
-import logger from "../../logger/logger.js";
+import logger from "../logger/logger.js";
 import NoSePuedeCancelarUnPedidoEnviado from "../errors/errorNoSePuedeCancelarUnPedidoEnviado.js";
 import NoSePuedeEnviarUnPedidoCancelado from "../errors/errorNoSePuedeEnviarUnPedidoCancelado.js";
 import SoloElCompradorPuedeCancelarUnPedido from "../errors/errorSoloElCompradorPuedeCancelarUnPedido.js";

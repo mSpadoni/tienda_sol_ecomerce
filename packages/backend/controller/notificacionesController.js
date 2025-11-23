@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { NotificacionDoesNotExist } from "../errors/NotificacionDoesNotExist.js";
 import mongoose from "mongoose";
-import logger from "../../logger/logger.js";
+import logger from "../logger/logger.js";
 
 
 const idTransform = z.string().refine(

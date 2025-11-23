@@ -1,4 +1,4 @@
-import logger from "../../logger/logger.js";
+import logger from "../logger/logger.js";
 import FactoryNotificacion from "../models/entities/FactoryNotificacion.js";
 
 export default class NotificacionesService {

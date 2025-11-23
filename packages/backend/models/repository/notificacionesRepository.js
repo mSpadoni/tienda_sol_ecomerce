@@ -1,5 +1,5 @@
 import { NotificacionModel } from "../../schemas/NotificacionSchema.js";
-import logger from "../../../logger/logger.js";
+//import logger from "../../logger/logger.js";
 export default class NotificacionesRepository {
   constructor() {
     this.model = NotificacionModel;

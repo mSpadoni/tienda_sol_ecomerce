@@ -2,7 +2,7 @@ import express from "express";
 import usuarioControler from "../controller/usuarioControler.js";
 import keycloakErrorHandler from "../middleware/loginMilware.js";
 import zodErrorHandler from "../middleware/zodMilware.js";
-import logger from "../../logger/logger.js";
+import logger from "../logger/logger.js";
 
 export default function usuarioRoute(getController) {
   const router = express.Router();

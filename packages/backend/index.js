@@ -17,7 +17,7 @@ import ProductosController from "./controller/productosController.js";
 import UsuarioControler from "./controller/usuarioControler.js";
 import routes from "./routes/routes.js";
 import { MongoDBClient } from "./config/database.js";
-import logger from "../logger/logger.js";
+import logger from "./logger/logger.js";
 
 dotenv.config();
 
@@ -39,15 +39,6 @@ app.use(
     },
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
     credentials: true,
-    methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE", "OPTIONS"],
-    allowedHeaders: [
-      "Content-Type",
-      "Authorization",
-      "Accept",
-      "X-Requested-With",
-    ],
-    preflightContinue: false,
-    optionsSuccessStatus: 204,
   }),
 );
 

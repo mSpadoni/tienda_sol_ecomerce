@@ -1,4 +1,4 @@
-import logger from "../../../logger/logger.js";
+import logger from "../../logger/logger.js";
 import { UsuarioModel } from "../../schemas/UsuarioSchema.js";
 
 export default class usuarioRepository {
