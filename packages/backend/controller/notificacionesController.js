@@ -1,6 +1,8 @@
 import { z } from "zod";
 import { NotificacionDoesNotExist } from "../errors/NotificacionDoesNotExist.js";
 import mongoose from "mongoose";
+import logger from "../logger/logger.js";
+
 
 const idTransform = z.string().refine(
   (val) => {
@@ -32,11 +34,12 @@ export default class NotificacionesController {
     }
 
     filtros.usuario = req.user.sub;
-
+    
     const notificaciones =
       await this.notificacionesService.getNotificaciones(filtros);
-    if (notificaciones === null) {
-      return res.status(204).send([]);
+    
+    if (notificaciones.lenght === 0) {
+      return res.status(204).send(notificaciones);
     }
     return res.status(200).json(notificaciones);
   }
@@ -46,13 +49,17 @@ export default class NotificacionesController {
     if (!validationResult.success) {
       return res.status(400).json(validationResult.error);
     }
+    
+    const bodyValidation = bodyCorecto.parse(req.body);
+    const leida = bodyValidation.leida;
+    logger.info(`Marcar notificación ${validationResult.data} como leída: ${leida}`);
     const id = validationResult.data;
     const notificacion =
-      await this.notificacionesService.marcarNotificacionComoLeida(id);
+      await this.notificacionesService.marcarNotificacionComoLeida(id,leida);
     if (!notificacion) {
-      return res.status(404).send("Notificación no encontrada");
+      return res.status(204).send([]);
     }
-    res.status(200).json(notificacion);
+    res.status(200).json([notificacion]);
   }
 
   validarId(id) {
@@ -63,3 +70,7 @@ export default class NotificacionesController {
     return { success: true, data: resultId.data };
   }
 }
+
+const bodyCorecto= z.object({
+      leida:z.boolean()
+    })

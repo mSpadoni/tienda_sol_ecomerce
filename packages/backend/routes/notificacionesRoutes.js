@@ -17,7 +17,7 @@ export default function notificacionesRoutes(getController) {
     }
   });
 
-  router.patch(pathNotificaciones + "/:idNotificacion/lectura", (req, res) =>
+  router.patch(pathNotificaciones + "/:idNotificacion", (req, res) =>
     controller.marcarNotificacionComoLeida(req, res),
   );
 

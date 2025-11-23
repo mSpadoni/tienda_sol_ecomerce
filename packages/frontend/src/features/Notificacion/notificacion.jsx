@@ -4,14 +4,18 @@ import PropTypes from "prop-types";
 // import notis from "../../components/mockData/Notificaciones.js"; // Ya no lo usás
 import NotificacionesDesplegable from "./notificacionesDesplegable.jsx";
 import { Alert } from "@mui/material";
-import { getNotificaciones } from "../../services/notificacionesServiceFront.js"; // Ajustá el path si es necesario
+import { getNotificaciones,marcarNotificacionComoLeida } from "../../services/notificacionesServiceFront.js"; // Ajustá el path si es necesario
+import { status } from "nprogress";
+import { useNavigate } from "react-router-dom";
 
-export default function ListaNotificaciones({ mensaje }) {
+export default function ListaNotificaciones({}) {
   const [notificaciones, setNotificaciones] = useState([]);
   const [estadoABuscar, setEstadoABuscar] = useState(null);
   const [estado_lectura, setEstadoL] = useState("");
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [mensaje,setMensaje]=useState("Usted no ha recibido notificaciones todavía...");
+  const navigate = useNavigate();
 
   // Traer notificaciones del backend
   useEffect(() => {
@@ -21,31 +25,53 @@ export default function ListaNotificaciones({ mensaje }) {
       .then((data) => {
         setNotificaciones(data);
         setLoading(false);
+        console.log(data)
       })
       .catch((e) => {
         setError(e);
         setLoading(false);
       });
-  }, [mensaje]);
+      console.log(notificaciones)
+  }, []);
+
+  useEffect(()=>(!(typeof estadoABuscar === "boolean"))?navigate("/notificaciones"):navigate(`/notificaciones?leida=${estadoABuscar}`),
+  [estadoABuscar,navigate]);
 
   const funcionDeFiltrado = (eleccion) => {
+    const token = localStorage.getItem("kc_token");
     if (eleccion === "") {
       // Volver a cargar todas las notificaciones
-      const token = localStorage.getItem("kc_token");
+      
       getNotificaciones({}, token)
-        .then((data) => setNotificaciones(data))
+        .then((data) => {setNotificaciones(data)})
         .catch((e) => setError(e));
     } else {
-      setNotificaciones((prev) => prev.filter((n) => n.leida === eleccion));
+      getNotificaciones({leida:eleccion}, token)
+        .then((data) => {setNotificaciones(data)})
+        .catch((e) => setError(e));
     }
   };
 
   const cambiarLeida = (idnotificacion, estado) => {
-    setNotificaciones((prev) =>
-      prev.map((n) => (n.id === idnotificacion ? { ...n, leida: estado } : n)),
-    );
-    // Si querés persistir el cambio en el backend, llamá a un método acá
-  };
+  const token = localStorage.getItem("kc_token");
+
+  marcarNotificacionComoLeida(idnotificacion, token, estado)
+    .then(() => {
+      if (typeof estadoABuscar === "boolean") {
+        return getNotificaciones({ leida: estadoABuscar }, token);
+      } else {
+        return getNotificaciones({}, token);
+      }
+    })
+    .then((data) => {
+      setNotificaciones(data);
+      setLoading(false);
+    })
+    .catch((e) => {
+      setError(e);
+      setLoading(false);
+    });
+};
 
   if (loading) {
     return <div>Cargando notificaciones...</div>;
@@ -60,17 +86,17 @@ export default function ListaNotificaciones({ mensaje }) {
   }
 
   if (notificaciones.length === 0) {
-    return (
-      <div className="notificaciones-container">
+    return (<>
         <NotificacionesDesplegable
-          token={localStorage.getItem("kc_token")}
-          setEstadoABuscar={setEstadoABuscar}
-          funcionDeFiltrado={funcionDeFiltrado}
-          estado_lectura={estado_lectura}
-          setEstadoLectura={setEstadoL}
-        />
-        <div style={{ padding: 20 }}>{mensaje}</div>
-      </div>
+            token={localStorage.getItem("kc_token")}
+            setEstadoABuscar={setEstadoABuscar}
+            funcionDeFiltrado={funcionDeFiltrado}
+            estado_lectura={estado_lectura}
+            setEstadoLectura={setEstadoL}
+            setMensaje={setMensaje}
+          />
+        <div className="Notificaciones_mensaje">{mensaje}</div>
+      </>
     );
   }
 
@@ -84,6 +110,7 @@ export default function ListaNotificaciones({ mensaje }) {
             funcionDeFiltrado={funcionDeFiltrado}
             estado_lectura={estado_lectura}
             setEstadoLectura={setEstadoL}
+            setMensaje={setMensaje}
           />
         </div>
         <div className="notificaciones-lista">
@@ -111,11 +138,14 @@ export default function ListaNotificaciones({ mensaje }) {
                     className={`btn-cambiar ${
                       notificacion.leida ? "rojo" : "verde"
                     }`}
-                    onClick={() =>
+                    onClick={() =>{
                       cambiarLeida(
-                        notificacion.id,
+                        notificacion._id,
                         accionesDeLectura(notificacion.leida).estado,
                       )
+                   
+                  }
+                      
                     }
                   >
                     {accionesDeLectura(notificacion.leida).textoBotonCambio}
@@ -130,9 +160,6 @@ export default function ListaNotificaciones({ mensaje }) {
   );
 }
 
-ListaNotificaciones.propTypes = {
-  mensaje: PropTypes.string,
-};
 
 const accionesDeLectura = Object.freeze((Leida) => {
   if (Leida) {

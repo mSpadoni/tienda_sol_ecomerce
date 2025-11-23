@@ -46,6 +46,7 @@ export const crearPedido = async (pedidoData) => {
 
 
 export const cambiarEstado = async (Idpedido,estado,motivo) => {
+      console.log(`${API_BASE_URL}/pedidos/` + Idpedido)
       try {
         const response = await axios.patch(
             `${API_BASE_URL}/pedidos/` + Idpedido,

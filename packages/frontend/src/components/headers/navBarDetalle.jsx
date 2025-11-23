@@ -31,7 +31,7 @@ const NavbarDetalle = () => {
           >
             Mis pedidos
           </Link>
-          {elUsuarioEsUn("vendedor") && (
+          
             <Link
               to="/pedidos/recibidos"
               className="nav-link"
@@ -40,7 +40,6 @@ const NavbarDetalle = () => {
             >
               Pedidos Recibidos
             </Link>
-          )}
         </div>
       )}
     </>
