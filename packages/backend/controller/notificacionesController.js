@@ -3,6 +3,7 @@ import { NotificacionDoesNotExist } from "../errors/NotificacionDoesNotExist.js"
 import mongoose from "mongoose";
 import logger from "../../logger/logger.js";
 
+
 const idTransform = z.string().refine(
   (val) => {
     return mongoose.Types.ObjectId.isValid(val);
@@ -48,14 +49,17 @@ export default class NotificacionesController {
     if (!validationResult.success) {
       return res.status(400).json(validationResult.error);
     }
-    const {leida}=req.query
+    
+    const bodyValidation = bodyCorecto.parse(req.body);
+    const leida = bodyValidation.leida;
+    logger.info(`Marcar notificación ${validationResult.data} como leída: ${leida}`);
     const id = validationResult.data;
     const notificacion =
       await this.notificacionesService.marcarNotificacionComoLeida(id,leida);
     if (!notificacion) {
-      return res.status(404).send("Notificación no encontrada");
+      return res.status(204).send([]);
     }
-    res.status(200).json(notificacion);
+    res.status(200).json([notificacion]);
   }
 
   validarId(id) {
@@ -66,3 +70,7 @@ export default class NotificacionesController {
     return { success: true, data: resultId.data };
   }
 }
+
+const bodyCorecto= z.object({
+      leida:z.boolean()
+    })

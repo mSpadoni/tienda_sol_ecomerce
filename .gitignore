@@ -3,3 +3,6 @@ node_modules/
 /packages/**/node_modules/
 
 *.log
+
+.env
+/packages/**/.env

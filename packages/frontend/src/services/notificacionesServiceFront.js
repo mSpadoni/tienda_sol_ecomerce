@@ -27,12 +27,14 @@ function buildQuery(params) {
     .join('&');
 }
 
-export const marcarNotificacionComoLeida = async (id, token) => {
+export const marcarNotificacionComoLeida = async (id, token,leida) => {
   try {
     const headers = {};
     if (token) headers.Authorization = `Bearer ${token}`;
-    const url = `${API_BASE_URL}/notificaciones/${id}/lectura`;
-    const response = await axios.patch(url, null, { headers });
+    const url = `${API_BASE_URL}/notificaciones/${id}`;
+    const response = await axios.patch(url, {
+              "leida": leida,
+            }, { headers });
     return response.data;
   } catch (error) {
     throw procesarErrorAxios(error);

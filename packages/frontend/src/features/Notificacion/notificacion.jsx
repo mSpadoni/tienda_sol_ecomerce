@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 // import notis from "../../components/mockData/Notificaciones.js"; // Ya no lo usás
 import NotificacionesDesplegable from "./notificacionesDesplegable.jsx";
 import { Alert } from "@mui/material";
-import { getNotificaciones } from "../../services/notificacionesServiceFront.js"; // Ajustá el path si es necesario
+import { getNotificaciones,marcarNotificacionComoLeida } from "../../services/notificacionesServiceFront.js"; // Ajustá el path si es necesario
 import { status } from "nprogress";
 import { useNavigate } from "react-router-dom";
 
@@ -53,11 +53,25 @@ export default function ListaNotificaciones({}) {
   };
 
   const cambiarLeida = (idnotificacion, estado) => {
-    setNotificaciones((prev) =>
-      prev.map((n) => (n.id === idnotificacion ? { ...n, leida: estado } : n)),
-    );
-    // Si querés persistir el cambio en el backend, llamá a un método acá
-  };
+  const token = localStorage.getItem("kc_token");
+
+  marcarNotificacionComoLeida(idnotificacion, token, estado)
+    .then(() => {
+      if (typeof estadoABuscar === "boolean") {
+        return getNotificaciones({ leida: estadoABuscar }, token);
+      } else {
+        return getNotificaciones({}, token);
+      }
+    })
+    .then((data) => {
+      setNotificaciones(data);
+      setLoading(false);
+    })
+    .catch((e) => {
+      setError(e);
+      setLoading(false);
+    });
+};
 
   if (loading) {
     return <div>Cargando notificaciones...</div>;
@@ -124,11 +138,14 @@ export default function ListaNotificaciones({}) {
                     className={`btn-cambiar ${
                       notificacion.leida ? "rojo" : "verde"
                     }`}
-                    onClick={() =>
+                    onClick={() =>{
                       cambiarLeida(
-                        notificacion.id,
+                        notificacion._id,
                         accionesDeLectura(notificacion.leida).estado,
                       )
+                   
+                  }
+                      
                     }
                   >
                     {accionesDeLectura(notificacion.leida).textoBotonCambio}
