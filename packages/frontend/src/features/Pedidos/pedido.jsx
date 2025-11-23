@@ -46,8 +46,6 @@ export default function ListaPedidos({
 
   // 🔹 roles del usuario
   const { elUsuarioEsUn, isAuthenticated } = useKeycloak();
-  const esVendedor = elUsuarioEsUn("vendedor");
-  const esComprador = elUsuarioEsUn("comprador");
 
   const [anchorEl, setAnchorEl] = useState(null);
   const menuAbierto = Boolean(anchorEl);
@@ -74,7 +72,7 @@ const cargarPedidos = async () => {
 };
 
 useEffect(() => {
-  // recargar cuando cambia la ruta o el estado de autenticación
+  setPedidos([]);
   cargarPedidos();
 }, [pathBackend, isAuthenticated]);
 

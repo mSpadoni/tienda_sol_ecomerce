@@ -48,7 +48,11 @@ export default class NotificacionesController {
     if (!validationResult.success) {
       return res.status(400).json(validationResult.error);
     }
-    const {leida}=req.query
+
+   
+    const bodyParse = bodyValidation.parse(req.body);
+    const leida = bodyParse.leida;
+    logger.info(`Marcar notificación ${req.params.idNotificacion} como leida: ${leida}`);
     const id = validationResult.data;
     const notificacion =
       await this.notificacionesService.marcarNotificacionComoLeida(id,leida);
@@ -66,3 +70,7 @@ export default class NotificacionesController {
     return { success: true, data: resultId.data };
   }
 }
+
+ const bodyValidation = z.object({
+      leida: z.boolean(),
+    });

@@ -35,7 +35,7 @@ export default class ControllerPedidos {
     res.status(201).json(JSONresponse);
   }
 
-  async findPedidosByID(req, res, funcionDeFiltrado) {
+  async findPedidosByID(req, res, funcionDeFiltrado,funcionDeOrdenamiento) {
     const resultUsuario = validadIdkecloark.parse(req.user.sub);
     logger.info(
       `Buscando pedidos del usuario con id: ${resultUsuario} en el controlador`,
@@ -48,7 +48,7 @@ export default class ControllerPedidos {
 
     const pedidosAPTJ = pedidos.map((pedido) => adaptarPedidoToJson(pedido));
 
-    res.status(200).json(pedidosAPTJ);
+    res.status(200).json(funcionDeOrdenamiento(pedidosAPTJ));
   }
 
   async actualizar(req, res) {
