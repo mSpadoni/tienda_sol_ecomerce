@@ -56,8 +56,13 @@ export default function ListaPedidos({
   const [accionActual, setAccionActual] = useState(null); // "cancelado" | "rechazado"
   const [pedidoACambiar, setPedidoACambiar] = useState("");
 
-  const abrirMenu = (event) => setAnchorEl(event.currentTarget);
-  const cerrarMenu = () => setAnchorEl(null);
+  const abrirMenu = (event, id) => {
+    setAnchorEl(event.currentTarget);
+    setPedidoACambiar(id);
+  };
+  const cerrarMenu = () => {
+    setAnchorEl(null);
+  };
 
 const cargarPedidos = async () => {
   setLoading(true);
@@ -77,8 +82,8 @@ useEffect(() => {
 }, [pathBackend, isAuthenticated]);
 
 const desplegar = (estado,pedidoId) => {
+  console.log("id",pedidoId);
   setPedidoACambiar(pedidoId);
-  console.log("pedidoId",pedidoId);
   setAccionActual(estado);
   setDialogOpen(true);
   cerrarMenu();
@@ -102,6 +107,7 @@ const confirmarMotivo = async () => {
   setDialogOpen(false);
   setMotivo("");
   setMotivoSeleccionado("");
+  setPedidoACambiar("");
 };
 
 
@@ -183,6 +189,7 @@ const confirmarMotivo = async () => {
             setDialogOpen(false);
             setMotivo("");
             setMotivoSeleccionado("");
+            setPedidoACambiar("");
           }}
         >
           Cancelar
@@ -214,7 +221,7 @@ const confirmarMotivo = async () => {
             </div>
 
             {/* ICONO DE 3 PUNTITOS */}
-            <IconButton onClick={abrirMenu} className="puntosMenu">
+            <IconButton onClick={(e) => abrirMenu(e, pedido.id)} className="puntosMenu">
               <MoreVertIcon />
             </IconButton>
 
