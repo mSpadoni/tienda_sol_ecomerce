@@ -103,12 +103,20 @@ export default class ProductosRepository {
     return await nuevoProducto.save();
   }
 
-  async updateProducto(id, data) {
-    return await this.model.findByIdAndUpdate(id, data, { new: true });
+  async updateProducto(producto) {
+    return await this.model.findByIdAndUpdate(producto._id, producto, { new: true });
   }
 
   async save(producto) {
     const nuevoProducto = new this.model(producto);
     return await nuevoProducto.save();
+  }
+
+  async reducirStock(id, cantidad) {
+    return await this.model.findByIdAndUpdate(
+      id,
+      { $inc: { stock: -cantidad } },
+      { new: true },
+    );
   }
 }

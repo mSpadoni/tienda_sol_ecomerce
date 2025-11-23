@@ -29,7 +29,7 @@ export default class pedidoService {
 
     validarStock(items);
 
-    items = await this.actualizarStock(items, EstadoPedido.PENDIENTE);
+    items = await this.actualizarStock(items, EstadoPedido.CONFIRMADO);
 
     const direccionEntrega = obtenerDireccion(pedidoData);
     const nuevoPedido = new Pedido(usuario, items, moneda, direccionEntrega);
