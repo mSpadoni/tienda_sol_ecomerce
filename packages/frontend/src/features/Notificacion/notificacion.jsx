@@ -53,20 +53,25 @@ export default function ListaNotificaciones({}) {
   };
 
   const cambiarLeida = (idnotificacion, estado) => {
-    setLoading(true);
-    const token = localStorage.getItem("kc_token");
-    marcarNotificacionComoLeida({}, token)
-      .then((data) => {
-        setNotificaciones(data);
-        setLoading(false);
-        console.log(data)
-      })
-      .catch((e) => {
-        setError(e);
-        setLoading(false);
-      });
-      console.log(notificaciones)
-  };
+  const token = localStorage.getItem("kc_token");
+
+  marcarNotificacionComoLeida(idnotificacion, token, estado)
+    .then(() => {
+      if (typeof estadoABuscar === "boolean") {
+        return getNotificaciones({ leida: estadoABuscar }, token);
+      } else {
+        return getNotificaciones({}, token);
+      }
+    })
+    .then((data) => {
+      setNotificaciones(data);
+      setLoading(false);
+    })
+    .catch((e) => {
+      setError(e);
+      setLoading(false);
+    });
+};
 
   if (loading) {
     return <div>Cargando notificaciones...</div>;
@@ -133,11 +138,14 @@ export default function ListaNotificaciones({}) {
                     className={`btn-cambiar ${
                       notificacion.leida ? "rojo" : "verde"
                     }`}
-                    onClick={() =>
+                    onClick={() =>{
                       cambiarLeida(
-                        notificacion.id,
+                        notificacion._id,
                         accionesDeLectura(notificacion.leida).estado,
                       )
+                   
+                  }
+                      
                     }
                   >
                     {accionesDeLectura(notificacion.leida).textoBotonCambio}
