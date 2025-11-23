@@ -1,7 +1,7 @@
 import ProductosController from "../controller/productosController.js";
 import express from "express";
 import { productosErrorHandler } from "../middleware/ProductosMiddleware.js";
-import logger from "../../logger/logger.js";
+import logger from "../logger/logger.js";
 
 const pathProductos = "/productos";
 

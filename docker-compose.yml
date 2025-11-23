@@ -1,0 +1,21 @@
+version: '3'
+services:
+  backend:
+    build:
+      context: ./packages/backend
+    ports:
+      - "3001:3001"
+    environment:
+      SERVER_PORT: 3001
+    volumes:
+      - ./packages/backend/.env:/app/.env
+
+  mongo:
+    image: mongo:7
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/test
+
+volumes:
+  mongo_data:

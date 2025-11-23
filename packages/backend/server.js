@@ -1,5 +1,5 @@
 import express from "express";
-import logger from "../logger/logger.js";
+import logger from "./logger/logger.js";
 import swaggerUi from "swagger-ui-express";
 import YAML from "yamljs";
 import cors from "cors";

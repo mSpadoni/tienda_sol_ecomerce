@@ -1,7 +1,7 @@
 import express from "express";
 import ControllerPedidos from "../controller/ControllerPedidos.js";
 import pedidosErrorHandler from "../middleware/pedidosMiddlewares.js";
-import logger from "../../logger/logger.js";
+import logger from "../logger/logger.js";
 import zodErrorHandler from "../middleware/zodMilware.js";
 import {
   soloRol,

@@ -17,7 +17,7 @@ import ProductosController from "./controller/productosController.js";
 import UsuarioControler from "./controller/usuarioControler.js";
 import routes from "./routes/routes.js";
 import { MongoDBClient } from "./config/database.js";
-import logger from "../logger/logger.js";
+import logger from "./logger/logger.js";
 
 dotenv.config();
 

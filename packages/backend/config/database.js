@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import logger from "../../logger/logger.js";
+import logger from "../logger/logger.js";
 export class MongoDBClient {
   static async connect() {
     try {
