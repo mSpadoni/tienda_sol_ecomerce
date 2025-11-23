@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import { TipoUsuario } from "../models/entities/TipoUsuario.js";
 import Usuario from "../models/entities/Usuario.js";
 
-const UsuarioSchema = new mongoose.Schema(
+export const UsuarioSchema = new mongoose.Schema(
   {
     idKeycloak: {
       type: String,

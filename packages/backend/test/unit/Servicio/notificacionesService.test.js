@@ -59,9 +59,10 @@ describe("NotificacionesService", () => {
     });
     repoMock.marcarNotificacionComoLeida.mockResolvedValue(updated);
 
-    const res = await svc.marcarNotificacionComoLeida("nid123");
+    const res = await svc.marcarNotificacionComoLeida("nid123",true);
 
-    expect(repoMock.marcarNotificacionComoLeida).toHaveBeenCalledWith("nid123");
+    expect(repoMock.marcarNotificacionComoLeida).toHaveBeenCalledWith("nid123",true);
+    
     expect(res).toBe(updated);
   });
 

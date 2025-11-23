@@ -1,5 +1,5 @@
 import FactoryNotification from "../../../models/entities/FactoryNotificacion.js";
-import { jsonPedidosEjemplo1, noti1, noti2, noti3 } from "../../../ejemplos.js";
+import { jsonPedidosEjemplo1, noti1, noti2, noti3,noti4,noti5 } from "../../../ejemplos.js";
 import { EstadoPedido } from "../../../models/entities/EstadoPedido.js";
 
 describe("test factoryNotification", () => {
@@ -12,7 +12,7 @@ describe("test factoryNotification", () => {
     const factoryNuevo = new FactoryNotification();
     expect(factoryNuevo).toBe(factoryOriginal);
   });
-  test(`Existe una notificacion para un pedido pendiente, y me da el siguiente mensaje: ${noti1.mensaje}`, () => {
+  test(`Existe una notificacion para un pedido confirmado, y me da el siguiente mensaje: ${noti1.mensaje}`, () => {
     const factory = new FactoryNotification();
     expect(factory.crearSegunPedido(jsonPedidosEjemplo1)).toEqual({
       ...noti1,
@@ -35,19 +35,20 @@ describe("test factoryNotification", () => {
       fechaAlta: expect.any(Date),
     });
   });
-  test("No existe una notificacion para un pedido aceptado", () => {
-    jsonPedidosEjemplo1.estado = EstadoPedido.ACEPTADO;
-    const factory = new FactoryNotification();
-    expect(factory.crearSegunPedido(jsonPedidosEjemplo1)).toBe(null);
-  });
-  test("No existe una notificacion para un pedido rechazado", () => {
+  test(`Existe una notificacion para un pedido cancelado , y me da el siguiente mensaje: ${noti4.mensaje}`, () => {
     jsonPedidosEjemplo1.estado = EstadoPedido.RECHAZADO;
     const factory = new FactoryNotification();
-    expect(factory.crearSegunPedido(jsonPedidosEjemplo1)).toBe(null);
+    expect(factory.crearSegunPedido(jsonPedidosEjemplo1)).toEqual({
+      ...noti4,
+      fechaAlta: expect.any(Date),
+    });
   });
-  test("No existe una notificacion para un pedido finalizado", () => {
+  test(`Existe una notificacion para un pedido cancelado , y me da el siguiente mensaje: ${noti5.mensaje}`, () => {
     jsonPedidosEjemplo1.estado = EstadoPedido.FINALIZADO;
     const factory = new FactoryNotification();
-    expect(factory.crearSegunPedido(jsonPedidosEjemplo1)).toBe(null);
+   expect(factory.crearSegunPedido(jsonPedidosEjemplo1)).toEqual({
+      ...noti5,
+      fechaAlta: expect.any(Date),
+    });
   });
 });

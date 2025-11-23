@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import Notificacion from "../models/entities/Notificacion.js";
 
-const notificacionSchema = new mongoose.Schema(
+export const notificacionSchema = new mongoose.Schema(
   {
     usuario: {
       type: mongoose.Schema.Types.ObjectId,

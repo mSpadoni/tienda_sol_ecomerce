@@ -3,22 +3,6 @@ export default class ProductosService {
     this.productosRepository = productosRepository;
   }
 
-  toDTO(producto) {
-    return {
-      _id: producto._id,
-      vendedor: producto.vendedor,
-      titulo: producto.titulo,
-      descripcion: producto.descripcion,
-      precio: producto.precio,
-      categoria: producto.categoria,
-      fotos: producto.fotos,
-      stock: producto.stock,
-      activo: producto.activo,
-      moneda: producto.moneda,
-      ventas: producto.ventas,
-    };
-  }
-
   async getProductos(
     filtros,
     activo,
@@ -47,12 +31,12 @@ export default class ProductosService {
       perPage: elementosXPagina,
       total: total,
       totalPaginas: totalPaginas,
-      data: productos.map((producto) => this.toDTO(producto)),
+      data: productos,
     };
   }
 
   async getProductoById(id) {
     const producto = await this.productosRepository.findById(id);
-    return this.toDTO(producto);
+    return producto;
   }
 }

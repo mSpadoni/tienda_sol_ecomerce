@@ -28,7 +28,9 @@
     "eslint-plugin-react": "^7.37.5",
     "globals": "^16.4.0",
     "jest": "^30.2.0",
-    "prettier": "3.6.2"
+    "mongodb-memory-server": "^10.3.0",
+    "prettier": "3.6.2",
+    "supertest": "^7.1.4"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",

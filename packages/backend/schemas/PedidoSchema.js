@@ -77,7 +77,7 @@ const cambioEstadoPedidoSchema = new mongoose.Schema(
 
 cambioEstadoPedidoSchema.loadClass(CambioEstadoPedido);
 
-const PedidoSchema = new mongoose.Schema(
+export const PedidoSchema = new mongoose.Schema(
   {
     comprador: {
       type: mongoose.Schema.Types.ObjectId,
