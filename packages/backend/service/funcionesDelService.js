@@ -99,7 +99,7 @@ export const createUser = async (userData) => {
   const token = await getAdminToken();
 
   const createResponse = await axios.post(
-    `http://localhost:8080/admin/realms/${REALM}/users`,
+    `http://keycloak:8080/admin/realms/${REALM}/users`,
     {
       username: userData.username,
       email: userData.email,
@@ -129,7 +129,7 @@ export const createUser = async (userData) => {
   logger.info(`user id obtenido: ${userId}`);
 
   await axios.post(
-    `http://localhost:8080/admin/realms/${REALM}/users/${userId}/role-mappings/realm`,
+    `http://keycloak:8080/admin/realms/${REALM}/users/${userId}/role-mappings/realm`,
     [
       {
         id: COMPRADOR_ID,

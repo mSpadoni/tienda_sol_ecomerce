@@ -4,7 +4,7 @@ import logger from "../logger/logger.js";
 
 const client = jwksClient({
   jwksUri:
-    "http://localhost:8080/realms/ecomerce/protocol/openid-connect/certs",
+    "http://keycloak:8080/realms/ecomerce/protocol/openid-connect/certs",
 });
 
 async function getKey(kid) {
