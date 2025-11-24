@@ -13,7 +13,7 @@ export default class Server {
     this.app.use(express.json());
     this.app.use(
       cors({
-        origin: "http://localhost:3000", // frontend React
+        origin: process.env.FRONTEND_BASE_URL, // frontend React
         methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
         credentials: true,
       }),
