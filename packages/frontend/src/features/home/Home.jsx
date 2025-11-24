@@ -9,7 +9,7 @@ import "./Home.css";
 import SuccessSnackbar from "../../components/snackBar.jsx";
 import { useKeycloak } from "../../provieder/keyCloak.jsx";
 import { DotLoader } from "react-spinners";
-import { FaBars, FaTimes } from "react-icons/fa";
+import { /* FaBars, FaTimes */ } from "react-icons/fa";
 import { Alert } from "@mui/material";
 import { useCurrency } from "../../provieder/CurrencyProvider.jsx";
 import { CURRENCIES } from "../../provieder/currencies.js";
@@ -32,7 +32,7 @@ const Home = () => {
     setTotalPaginas(productosCargados.totalPaginas);
   };
 
-  const [filtersOpen, setFiltersOpen] = useState(false);
+  
 
   useEffect(() => {
     const cargar = async () => {
@@ -46,6 +46,7 @@ const Home = () => {
     };
 
     cargar();
+    return undefined;
   }, []);
 
   // TODO: esto debería estar en el back
@@ -105,23 +106,17 @@ const Home = () => {
             <section className="home-section">
               <div className="section-header between">
                 <h2>Todos los productos</h2>
-                <div
-                  style={{ display: "flex", alignItems: "center", gap: "1rem" }}
-                >
+                <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
                   <p className="section-subtitle small">
                     {productosFiltrados.length} productos encontrados
                   </p>
-                  <button
-                    className="filters-toggle"
-                    aria-label="Abrir filtros"
-                    onClick={() => setFiltersOpen(true)}
-                  >
-                    <FaBars />
-                  </button>
                 </div>
               </div>
 
               <div className="products-layout">
+                <aside className="filters-sidebar" role="complementary">
+                  <ProductFilters onApply={aplicarFiltros} initial={filtros} />
+                </aside>
                 <div className="products-main">
                   <div className="products-grid">
                     {productosFiltrados.map((producto) => {
@@ -175,32 +170,7 @@ const Home = () => {
                 </div>
               </div>
 
-              {/* Drawer para filtros (hamburguesa) */}
-              {filtersOpen && (
-                <>
-                  <div
-                    className="filters-backdrop"
-                    onClick={() => setFiltersOpen(false)}
-                  />
-                  <aside
-                    className="filters-drawer"
-                    role="dialog"
-                    aria-modal="true"
-                  >
-                    <button
-                      className="filters-close"
-                      aria-label="Cerrar filtros"
-                      onClick={() => setFiltersOpen(false)}
-                    >
-                      <FaTimes />
-                    </button>
-                    <ProductFilters
-                      onApply={aplicarFiltros}
-                      initial={filtros}
-                    />
-                  </aside>
-                </>
-              )}
+              {/* Sidebar de filtros siempre visible en layout */}
             </section>
           </>
         )}

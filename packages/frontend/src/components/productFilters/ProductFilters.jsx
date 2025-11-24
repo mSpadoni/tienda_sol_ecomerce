@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-// import arrow icon removed - button will be text-only
 import "./ProductFilters.css";
 
 const ProductFilters = ({ onApply, initial = {} }) => {
@@ -41,6 +40,9 @@ const ProductFilters = ({ onApply, initial = {} }) => {
 
   return (
     <div className="product-filters-wrapper">
+      <div className="filters-header">
+        <h3>Filtros de productos</h3>
+      </div>
       <form
         className="product-filters"
         onSubmit={handleApply}
@@ -48,37 +50,46 @@ const ProductFilters = ({ onApply, initial = {} }) => {
         role="search"
       >
         <fieldset>
-          <legend className="sr-only">Filtros de productos</legend>
 
-          <input
-            placeholder="Buscar título"
-            value={titulo}
-            onChange={(e) => setTitulo(e.target.value)}
-            aria-label="Buscar por título del producto"
-          />
+          <div className="input-wrapper">
+            <input
+              placeholder="Buscar título"
+              value={titulo}
+              onChange={(e) => setTitulo(e.target.value)}
+              aria-label="Buscar por título del producto"
+            />
+          </div>
 
-          <input
-            placeholder="Categoría"
-            value={categoria}
-            onChange={(e) => setCategoria(e.target.value)}
-            aria-label="Filtrar por categoría"
-          />
+          <div className="input-wrapper">
+            <input
+              placeholder="Categoría"
+              value={categoria}
+              onChange={(e) => setCategoria(e.target.value)}
+              aria-label="Filtrar por categoría"
+            />
+          </div>
 
-          <input
-            type="number"
-            placeholder="Precio min"
-            value={precioMin}
-            onChange={(e) => setPrecioMin(e.target.value)}
-            aria-label="Precio mínimo"
-          />
+          <div className="input-row">
+            <div className="input-wrapper small">
+              <input
+                type="number"
+                placeholder="Precio min"
+                value={precioMin}
+                onChange={(e) => setPrecioMin(e.target.value)}
+                aria-label="Precio mínimo"
+              />
+            </div>
 
-          <input
-            type="number"
-            placeholder="Precio max"
-            value={precioMax}
-            onChange={(e) => setPrecioMax(e.target.value)}
-            aria-label="Precio máximo"
-          />
+            <div className="input-wrapper small">
+              <input
+                type="number"
+                placeholder="Precio max"
+                value={precioMax}
+                onChange={(e) => setPrecioMax(e.target.value)}
+                aria-label="Precio máximo"
+              />
+            </div>
+          </div>
 
           <select
             value={activo}
