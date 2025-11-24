@@ -237,6 +237,62 @@
   margin-top: 1.5rem;
 }
 
+/* .filters-sidebar-fixed {
+  position: sticky;
+  top: 75px; 
+  align-self: flex-start;
+
+  width: 220px;
+  background: #ffffff;
+  border-right: 1px solid rgba(0, 0, 0, 0.08);
+  padding: 1rem;
+  box-shadow: 4px 0 18px rgba(0, 0, 0, 0.05);
+  z-index: 10;
+  margin-left: 0;
+
+  height: auto;
+  max-height: calc(100vh - 130px); 
+  overflow-y: auto;
+} */
+
+/* Contenedor que se pega al header */
+.sidebar-wrapper {
+  position: sticky;
+  top: 80px;  /* altura del header */
+  align-self: flex-start;
+
+  /* Que crezca hasta el footer */
+  height: fit-content;
+  max-height: calc(100vh - 80px);
+}
+
+/* La caja interna que scrollea */
+.filters-sidebar {
+  width: 260px;
+  background: white;
+  border-right: 1px solid rgba(0,0,0,0.08);
+  padding: 1rem;
+  box-shadow: 4px 0 18px rgba(0,0,0,0.05);
+  border-radius: 8px;
+
+  overflow-y: auto;
+  max-height: inherit; /* importante */
+  min-height: 90vh;
+}
+/* Mover el contenido hacia la derecha
+.home-layout,
+.home-main {
+  margin-left: 280px !important;
+} */
+
+.home-layout {
+  display: flex;
+  justify-content: center;  
+  gap: 2rem;                
+  width: 100%;
+}
+
+
 /* responsive */
 @media (max-width: 768px) {
   .section-header.between {

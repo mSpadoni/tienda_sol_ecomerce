@@ -28,7 +28,6 @@ import { cambiarEstado }from "../../services/pedidoService.js"
 import { IconButton, Menu, MenuItem, Button as MUIButton } from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { Padding } from "@mui/icons-material";
-import { createTheme } from '@mui/material/styles';
 //import { get } from "mongoose";
 
 export default function ListaPedidos({
