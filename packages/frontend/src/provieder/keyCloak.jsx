@@ -19,6 +19,7 @@ const keycloak = new Keycloak({
   clientId: "tp_desarollo",
 });
 
+
 export var keyCloakToken = "";
 
 export const KeycloakProvider = ({ children }) => {
