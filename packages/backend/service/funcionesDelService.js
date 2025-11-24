@@ -84,7 +84,7 @@ const getAdminToken = async () => {
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
     },
   );
-  logger.info("obteneido el token");
+  logger.info("obtenido el token");
   return response.data.access_token;
 };
 
@@ -99,7 +99,7 @@ export const createUser = async (userData) => {
   const token = await getAdminToken();
 
   const createResponse = await axios.post(
-    `http://keycloak:8080/admin/realms/${REALM}/users`,
+    process.env.KEYCLOAK_BASE_URL + `/admin/realms/${REALM}/users`,
     {
       username: userData.username,
       email: userData.email,
@@ -129,7 +129,7 @@ export const createUser = async (userData) => {
   logger.info(`user id obtenido: ${userId}`);
 
   await axios.post(
-    `http://keycloak:8080/admin/realms/${REALM}/users/${userId}/role-mappings/realm`,
+    process.env.KEYCLOAK_BASE_URL + `/admin/realms/${REALM}/users/${userId}/role-mappings/realm`,
     [
       {
         id: COMPRADOR_ID,
