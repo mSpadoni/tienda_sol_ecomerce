@@ -26,9 +26,8 @@ import { cambiarEstado }from "../../services/pedidoService.js"
 // Material UI
 import { IconButton, Menu, MenuItem, Button as MUIButton } from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import { Padding } from "@mui/icons-material";
 import { createTheme } from '@mui/material/styles';
-//import { get } from "mongoose";
+
 
 export default function ListaPedidos({
   pathBackend,
@@ -98,6 +97,9 @@ const confirmarMotivo = async () => {
   if (!motivoFinal.trim()) return;
 
   try {
+    console.log("pedido a cambiar:", pedidoACambiar);
+    console.log("motivoFinal:", motivoFinal);
+    console.log("accionActual:", accionActual);
     await cambiarEstado(pedidoACambiar, accionActual, motivoFinal);
     setMensajeExito("Pedido actualizado correctamente");
     await cargarPedidos();
@@ -227,8 +229,8 @@ const confirmarMotivo = async () => {
             </IconButton>
 
             {/* MENU DESPLEGABLE */}
-            <Menu anchorEl={anchorEl} open={menuAbierto} onClose={cerrarMenu}>
-              <MenuItem sx={itemStyles} onClick={() => { desplegar(estadoParaAbortar,pedido.id) }}>{botonesNombreSegunEstado[estadoParaAbortar]}</MenuItem>
+            <Menu anchorEl={anchorEl} open={menuAbierto && pedidoACambiar === pedido.id} onClose={cerrarMenu}>
+              <MenuItem sx={itemStyles} onClick={() => { desplegar(estadoParaAbortar, pedido.id); cerrarMenu(); }}>{botonesNombreSegunEstado[estadoParaAbortar]}</MenuItem>
             </Menu>
           </div>
 

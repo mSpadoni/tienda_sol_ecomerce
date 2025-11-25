@@ -64,11 +64,13 @@ export default class pedidoService {
     const usuario = await this.obtenerUsuario(idUsuario);
 
     const estado = obtenerEstado(pedidoData.estado);
+    
+
 
     pedidoExistente.actualizarEstado(estado, usuario, pedidoData.motivo);
     pedidoExistente.items = await this.actualizarStock(
       pedidoExistente.items,
-      pedidoExistente.estado,
+      estado,
     );
     const pedidoActualizado =
       await this.repositorioPedido.save(pedidoExistente);
@@ -106,7 +108,8 @@ export default class pedidoService {
   }
   async actualizarProductosPorCambioDeStock(items) {
     for (const item of items) {
-      await this.repositorioProducto.updateProducto(item.producto);
+      logger.info(`Actualizando producto con id: ${item.producto} por cambio de stock`);
+      await this.repositorioProducto.save(item.producto);
     }
   }
 

@@ -104,6 +104,7 @@ export default class ProductosRepository {
   }
 
   async updateProducto(producto) {
+    
     return await this.model.findByIdAndUpdate(producto._id, producto, { new: true });
   }
 
