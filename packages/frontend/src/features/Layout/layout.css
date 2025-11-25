@@ -12,6 +12,39 @@
   padding-right: max(20px, env(safe-area-inset-right));
 }
 
+/* Estructura con sidebar persistente y contenido principal */
+.app-shell {
+  display: flex;
+  gap: 1rem;
+  align-items: stretch;
+  flex: 1; /* ocupa el espacio vertical entre header y footer */
+}
+
+.filters-sidebar {
+  width: 240px; /* reducción solicitada */
+  max-width: 24%;
+  min-width: 200px;
+  padding: 0.75rem 0.5rem;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  height: 100%; /* hace que la sidebar llegue hasta el footer */
+}
+
+@media (max-width: 900px) {
+  .app-shell {
+    flex-direction: column;
+  }
+  .filters-sidebar {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    order: -1;
+    height: auto; /* en móvil usar altura natural */
+  }
+}
+
 /* Asegura que el footer se mantenga en la parte inferior */
 .layout > footer {
   margin-top: auto;

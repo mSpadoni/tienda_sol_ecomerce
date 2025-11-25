@@ -111,11 +111,25 @@
   gap: 1.25rem;
 }
 
-/* Layout con sidebar izquierda y contenido principal a la derecha */
 .products-layout {
-  display: block;
-  gap: 1.5rem;
-  align-items: start;
+  display: flex;
+  gap: 2rem;
+  align-items: flex-start;
+}
+
+.filters-sidebar {
+  width: 260px;
+  position: sticky;
+  top: 1rem; 
+  height: fit-content;
+}
+
+.filters-sidebar .product-filters-wrapper {
+  background: #fff;
+  border: 1px solid rgba(0,0,0,0.08);
+  border-radius: 10px;
+  padding: 1rem;
+  box-shadow: 0 6px 20px rgba(2, 6, 23, 0.06);
 }
 
 .products-main {
@@ -223,6 +237,62 @@
   margin-top: 1.5rem;
 }
 
+/* .filters-sidebar-fixed {
+  position: sticky;
+  top: 75px; 
+  align-self: flex-start;
+
+  width: 220px;
+  background: #ffffff;
+  border-right: 1px solid rgba(0, 0, 0, 0.08);
+  padding: 1rem;
+  box-shadow: 4px 0 18px rgba(0, 0, 0, 0.05);
+  z-index: 10;
+  margin-left: 0;
+
+  height: auto;
+  max-height: calc(100vh - 130px); 
+  overflow-y: auto;
+} */
+
+/* Contenedor que se pega al header */
+.sidebar-wrapper {
+  position: sticky;
+  top: 80px;  /* altura del header */
+  align-self: flex-start;
+
+  /* Que crezca hasta el footer */
+  height: fit-content;
+  max-height: calc(100vh - 80px);
+}
+
+/* La caja interna que scrollea */
+.filters-sidebar {
+  width: 260px;
+  background: white;
+  border-right: 1px solid rgba(0,0,0,0.08);
+  padding: 1rem;
+  box-shadow: 4px 0 18px rgba(0,0,0,0.05);
+  border-radius: 8px;
+
+  overflow-y: auto;
+  max-height: inherit; /* importante */
+  min-height: 90vh;
+}
+/* Mover el contenido hacia la derecha
+.home-layout,
+.home-main {
+  margin-left: 280px !important;
+} */
+
+.home-layout {
+  display: flex;
+  justify-content: center;  
+  gap: 2rem;                
+  width: 100%;
+}
+
+
 /* responsive */
 @media (max-width: 768px) {
   .section-header.between {
@@ -241,53 +311,61 @@
 /* Responsive: en pantallas pequeñas el sidebar pasa arriba */
 @media (max-width: 900px) {
   .products-layout {
-    display: block;
+    flex-direction: column;
+  }
+  
+  .filters-sidebar {
+    width: 100%;
+    position: static;
+    top: auto;
   }
 }
 
-/* Botón hamburguesa para abrir filtros */
-.filters-toggle {
-  background: none;
-  border: 1px solid rgba(15, 23, 42, 0.08);
-  padding: 6px 10px;
-  border-radius: 8px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.05rem;
-  cursor: pointer;
-}
-.filters-toggle:hover {
-  background: #f1f5f9;
+/* Vista de escritorio: fijar la sidebar al margen izquierdo, debajo del hero y hasta el footer */
+@media (min-width: 900px) {
+  /* Desktop: keep sidebar in the normal flow (navbar-like visual but not fixed)
+     so it does NOT follow scrolling. It should sit under the hero and alongside products. */
+  .filters-sidebar {
+    position: static; /* in-flow: will scroll away with the page */
+    left: auto;
+    top: auto;
+    bottom: auto;
+    width: 200px; /* narrower */
+    max-width: 22%;
+    padding: 0.5rem 0;
+    overflow: visible;
+    z-index: auto;
+    background: #ffffff00;
+    border-right: none;
+  }
+
+  .filters-sidebar .product-filters-wrapper {
+    background: transparent;
+    padding: 0;
+    border-radius: 0.25rem;
+    box-shadow: none;
+    border: none;
+  }
+
+  /* present the sidebar as a neat card anchored to the left column */
+  .filters-sidebar {
+    background: transparent;
+  }
+
+  .filters-sidebar .product-filters-wrapper > .filters-header {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  .filters-sidebar .product-filters {
+    padding: 12px;
+    background: linear-gradient(180deg,#ffffff 0%, #fbfdff 100%);
+    border-radius: 10px;
+    border: 1px solid rgba(15, 23, 42, 0.06);
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+  }
 }
 
-/* Drawer overlay */
-.filters-backdrop {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.4);
-  z-index: 1200;
-}
-.filters-drawer {
-  position: fixed;
-  top: 0;
-  left: 0;
-  height: 100vh;
-  width: 320px;
-  max-width: 88%;
-  background: #ffffff;
-  z-index: 1201;
-  padding: 1.25rem;
-  box-shadow: 4px 0 20px rgba(2, 6, 23, 0.2);
-  overflow-y: auto;
-}
-.filters-close {
-  background: none;
-  border: none;
-  font-size: 1.2rem;
-  float: right;
-  cursor: pointer;
-}
 
 @media (min-width: 1200px) {
   .filters-drawer {

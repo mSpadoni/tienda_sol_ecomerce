@@ -2,11 +2,29 @@
   margin: 0.75rem 0;
 }
 
+.filters-header {
+  padding: 0.6rem 0.9rem;
+  border-bottom: 1px solid var(--border, #eef2f6);
+  margin-bottom: 0.6rem;
+}
+.filters-header h3 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--foreground, #0f172a);
+}
+
 .product-filters {
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
   align-items: stretch;
+}
+
+.product-filters fieldset {
+  border: none;
+  margin: 0;
+  padding: 0;
 }
 
 .product-filters input,
@@ -21,8 +39,32 @@
   box-sizing: border-box;
 }
 
+/* Input wrappers (no icons) */
+.input-wrapper {
+  width: 100%;
+}
+.input-wrapper.small {
+  flex: 1;
+}
+.input-row {
+  display: flex;
+  gap: 0.6rem;
+}
+
+.product-filters input::placeholder {
+  color: #9aa4ad;
+}
+
 .product-filters input[type="number"] {
   width: 100%;
+}
+
+/* Normalize input sizes */
+.product-filters input,
+.product-filters select {
+  height: 42px;
+  padding: 0 0.75rem;
+  font-size: 0.95rem;
 }
 
 .product-filters button {
@@ -54,6 +96,13 @@
     transform 120ms ease,
     box-shadow 120ms ease,
     opacity 120ms ease;
+}
+
+.product-filters .button-group {
+  display: flex;
+  gap: 0.6rem;
+  justify-content: flex-start;
+  margin-top: 0.5rem;
 }
 
 .product-filters .btn:hover {

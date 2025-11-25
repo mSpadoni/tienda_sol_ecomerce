@@ -7,7 +7,9 @@
     "dev": "node --watch index.js",
     "test": "cross-env NODE_OPTIONS=--experimental-vm-modules jest",
     "test:unit": "cross-env NODE_OPTIONS=--experimental-vm-modules jest --testPathPatterns=unit",
-    "test:integration": "cross-env NODE_OPTIONS=--experimental-vm-modules jest --testPathPatterns=integration"
+    "test:integration": "npm run clone:testdb && cross-env NODE_ENV=test NODE_OPTIONS=--experimental-vm-modules jest --testPathPatterns=integration"
+,
+    "clone:testdb": "node scripts/cloneDb.js"
   },
   "keywords": [],
   "author": "",

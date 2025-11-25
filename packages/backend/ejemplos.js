@@ -120,8 +120,12 @@ const mensaje1 =
   "El usuario Juan Perez a hecho un pedido por los siguientes productos: milanesa a un total de undefined2000 en Calle Falsa en piso 1 departamento A en Ciudad, Provincia, -34.6037";
 const mensaje2 = crearMensajeSegunEstado(EstadoPedido.CANCELADO.valor);
 const mensaje3 = crearMensajeSegunEstado(EstadoPedido.ENVIADO.valor);
+const mensaje4 = crearMensajeSegunEstado(EstadoPedido.RECHAZADO.valor);
+const mensaje5 = crearMensajeSegunEstado(EstadoPedido.FINALIZADO.valor);
 
 //notificaciones de ejemplo
 export const noti1 = new Notificacion(usuario4, mensaje1, new Date());
 export const noti2 = new Notificacion(usuario4, mensaje2, new Date());
 export const noti3 = new Notificacion(usuario1, mensaje3, new Date());
+export const noti4 = new Notificacion(usuario1, mensaje4, new Date());
+export const noti5 = new Notificacion(usuario4, mensaje5, new Date());

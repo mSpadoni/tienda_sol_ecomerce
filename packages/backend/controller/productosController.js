@@ -5,10 +5,30 @@ const activoHandler = {
   false: false,
 };
 
+
+
+
 export default class ProductosController {
   constructor(productosService) {
     this.productosService = productosService;
   }
+
+  toDTO(producto) {
+    return {
+      _id: producto._id,
+      vendedor: producto.vendedor,
+      titulo: producto.titulo,
+      descripcion: producto.descripcion,
+      precio: producto.precio,
+      categoria: producto.categoria,
+      fotos: producto.fotos,
+      stock: producto.stock,
+      activo: producto.activo,
+      moneda: producto.moneda,
+      ventas: producto.ventas,
+    };
+  }
+
 
   async getProductos(req, res, next) {
     try {
@@ -31,9 +51,13 @@ export default class ProductosController {
         order,
       );
       if (ProductosPaginados === null) {
-        throw new ErrorProductosNoEncontrados();
+        return res.sendStatus(204);
       }
-      return res.status(200).json(ProductosPaginados);
+      return res.status(200).json({
+  ...ProductosPaginados,
+  data: ProductosPaginados.data.map((producto) => this.toDTO(producto)),
+});
+
     } catch (err) {
       next(err);
     }
@@ -44,9 +68,9 @@ export default class ProductosController {
       const { id } = req.params;
       const producto = await this.productosService.getProductoById(id);
       if (!producto) {
-        throw new ErrorProductosNoEncontrados();
+        return res.sendStatus(204);
       }
-      return res.status(200).json(producto);
+      return res.status(200).json(this.toDTO(producto));
     } catch (err) {
       next(err);
     }
