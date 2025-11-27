@@ -30,7 +30,8 @@
     "passport-local": "^1.0.0",
     "swagger-ui-express": "^5.0.1",
     "yamljs": "^0.3.0",
-    "zod": "^4.1.8"
+    "zod": "^4.1.8",
+    "supertest": "^7.1.4"
   },
   "type": "module",
   "devDependencies": {

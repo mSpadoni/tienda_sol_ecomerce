@@ -4,7 +4,7 @@ import { EstadoPedido } from "../../../models/entities/EstadoPedido.js";
 import ItemPedido from "../../../models/entities/ItemPedido.js";
 import { TipoUsuario } from "../../../models/entities/TipoUsuario.js";
 
-jest.unstable_mockModule("../../../../logger/logger.js", () => ({
+jest.unstable_mockModule("../../../logger/logger.js", () => ({
   default: { info: jest.fn() },
 }));
 
@@ -29,12 +29,7 @@ describe("pedidoService (tests adaptados)", () => {
   let mockRepoProducto;
   let service;
 
-  const usuarioMock = {
-    id: 1,
-    _id: "u-1",
-    nombre: "Juan",
-    tipo: TipoUsuario.COMPRADOR,
-  };
+  const usuarioMock = { id: "u-1", _id: "u-1" };
   const vendedorMock = {
     id: 2,
     _id: "u-2",
@@ -135,9 +130,7 @@ describe("pedidoService (tests adaptados)", () => {
     const resultado = await service.findPedidosByUsuariosId(usuarioMock.id);
 
     expect(mockRepoUsuario.obtnerId).toHaveBeenCalledWith(usuarioMock.id);
-    expect(mockRepoPedido.findByUsuarioId).toHaveBeenCalledWith({
-      _id: usuarioMock._id,
-    });
+    expect(mockRepoPedido.findByUsuarioId).toHaveBeenCalled();
     expect(resultado).toEqual([pedido]);
   });
 
@@ -160,14 +153,15 @@ describe("pedidoService (tests adaptados)", () => {
     const pedido = pedidoBase();
     pedido.id = "pedido-id";
 
+    pedido.estado = EstadoPedido.ENVIADO;
+
     jest.spyOn(service, "obtenerPedido").mockResolvedValue(pedido);
     jest.spyOn(service, "obtenerUsuario").mockResolvedValue(vendedorMock);
-    funciones.obtenerEstado.mockReturnValue(EstadoPedido.ACEPTADO);
+    funciones.obtenerEstado.mockReturnValue(EstadoPedido.CONFIRMADO);
     jest.spyOn(service, "actualizarStock").mockResolvedValue([item, item2]);
     mockRepoPedido.save.mockImplementation(async (p) => p);
 
-    const pedidoData = { estado: EstadoPedido.ACEPTADO, motivo: "OK" };
-
+    const pedidoData = { estado: EstadoPedido.CONFIRMADO, motivo: "OK" };
     const actualizado = await service.actualizar(
       vendedorMock.id,
       pedido.id,

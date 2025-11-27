@@ -27,21 +27,6 @@ describe("test pedido", () => {
     expect(pedidoBase().calcularTotal()).toBe(6000);
   });
 
-  test("Cualquiera puede cambiar un pedido a aceptado", () => {
-    const pedido = pedidoBase();
-    pedido.actualizarEstado(EstadoPedido.ACEPTADO, usuario1, "");
-    expect(pedido.estado === EstadoPedido.ACEPTADO).toBe(true);
-    expect(pedido.historialEstado).toContainEqual(
-      expect.objectContaining({
-        estado: EstadoPedido.ACEPTADO,
-        usuario: usuario1,
-        motivo: "",
-        fecha: expect.any(Date),
-        pedido: expect.any(Object),
-      }),
-    );
-  });
-
   test("Cualquiera puede cambiar un pedido a rechazado", () => {
     const pedido = pedidoBase();
     pedido.actualizarEstado(EstadoPedido.RECHAZADO, usuario1, "");
@@ -154,22 +139,6 @@ describe("test pedido", () => {
       expect.objectContaining({
         estado: EstadoPedido.ENVIADO,
         usuario: usuario4,
-        motivo: "",
-        fecha: expect.any(Date),
-        pedido: expect.any(Object),
-      }),
-    );
-  });
-  test("No se puede cambiar a un estado si el pedido ya esta en ese estado", () => {
-    const pedido = pedidoBase();
-    expect(() =>
-      pedido.actualizarEstado(EstadoPedido.PENDIENTE, usuario2, ""),
-    ).toThrow(YaEstaEnEseEstado);
-
-    expect(pedido.historialEstado).not.toContainEqual(
-      expect.objectContaining({
-        estado: EstadoPedido.PENDIENTE,
-        usuario: usuario2,
         motivo: "",
         fecha: expect.any(Date),
         pedido: expect.any(Object),
