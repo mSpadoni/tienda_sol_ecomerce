@@ -14,7 +14,7 @@ const KeycloakContext = createContext();
 export const useKeycloak = () => useContext(KeycloakContext);
 
 const keycloak = new Keycloak({
-  url: "http://localhost:8080",
+  url: "https://55f275f648df25.lhr.life",
   realm: "ecomerce",
   clientId: "tp_desarollo",
 });
@@ -93,7 +93,6 @@ export const KeycloakProvider = ({ children }) => {
 
   // --- Inicializar Keycloak
   useEffect(() => {
-    cleanUrlHash();
 
     const storedToken = localStorage.getItem("kc_token");
     const storedRefresh = localStorage.getItem("kc_refreshToken");
@@ -102,6 +101,8 @@ export const KeycloakProvider = ({ children }) => {
       keyCloakToken = storedToken;
       keycloakRef.current.refreshToken = storedRefresh;
     }
+
+    let interval;
 
     keycloakRef.current
       .init({
@@ -128,6 +129,10 @@ export const KeycloakProvider = ({ children }) => {
         setKeycloakReady(true);
         cleanUrlHash();
       });
+
+        return () => {
+        if (interval) clearInterval(interval);
+      };
   }, []);
 
   const login = () => {

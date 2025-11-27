@@ -53,7 +53,7 @@ const Login = () => {
               Cambiar contraseña
             </a>
 
-            <a href="http://localhost:3000" className=" btn-secondary">
+            <a href="https://zesty-cupcake-45dcf9.netlify.app/" className=" btn-secondary">
               Volver
             </a>
           </div>
