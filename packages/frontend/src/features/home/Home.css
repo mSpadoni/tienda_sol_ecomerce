@@ -107,7 +107,7 @@
 
 .products-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); /* permitir que las cards sean más estrechas y dejar más espacio al sidebar */
   gap: 1.25rem;
 }
 
@@ -118,7 +118,7 @@
 }
 
 .filters-sidebar {
-  width: 260px;
+  width: 450px; 
   position: sticky;
   top: 1rem; 
   height: fit-content;
@@ -266,9 +266,8 @@
   max-height: calc(100vh - 80px);
 }
 
-/* La caja interna que scrollea */
 .filters-sidebar {
-  width: 260px;
+  width: 380px; /* aumentado para más espacio de lectura */
   background: white;
   border-right: 1px solid rgba(0,0,0,0.08);
   padding: 1rem;
@@ -321,6 +320,8 @@
   }
 }
 
+/* Mobile: sidebar remains in-flow (no hamburger or slide-in) */
+
 /* Vista de escritorio: fijar la sidebar al margen izquierdo, debajo del hero y hasta el footer */
 @media (min-width: 900px) {
   /* Desktop: keep sidebar in the normal flow (navbar-like visual but not fixed)
@@ -330,8 +331,8 @@
     left: auto;
     top: auto;
     bottom: auto;
-    width: 200px; /* narrower */
-    max-width: 22%;
+    width: 360px; /* aumentar en desktop para mejor lectura */
+    max-width: 28%;
     padding: 0.5rem 0;
     overflow: visible;
     z-index: auto;

@@ -17,7 +17,7 @@
 .product-filters {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 1rem; /* aumentar separación entre campos */
   align-items: stretch;
 }
 
@@ -34,7 +34,7 @@
   border-radius: var(--radius, 0.25rem);
   font-size: 0.95rem;
   color: var(--foreground, #242424);
-  background: var(--input, #fff);
+  background: #ffffff; /* fuerza fondo blanco para inputs/selects */
   width: 100%;
   box-sizing: border-box;
 }
@@ -42,6 +42,7 @@
 /* Input wrappers (no icons) */
 .input-wrapper {
   width: 100%;
+  margin-bottom: 0.45rem; /* separación extra entre cajitas */
 }
 .input-wrapper.small {
   flex: 1;
@@ -49,6 +50,7 @@
 .input-row {
   display: flex;
   gap: 0.6rem;
+  margin-bottom: 0.45rem;
 }
 
 .product-filters input::placeholder {
@@ -65,6 +67,13 @@
   height: 42px;
   padding: 0 0.75rem;
   font-size: 0.95rem;
+  background: #ffffff; /* asegurar blanco también en la regla de normalización */
+}
+
+/* Improve placeholder contrast if needed */
+.product-filters input::placeholder,
+.product-filters select::placeholder {
+  color: #9aa4ad;
 }
 
 .product-filters button {
@@ -78,8 +87,8 @@
   font-weight: 500;
 }
 
-.product-filters button[type="button"] {
-  background: #333; /* secundario en gris oscuro */
+.product-filters button[type="button"]:not(.btn-secondary) {
+  background: #333; /* secundario en gris oscuro para botones que NO sean .btn-secondary */
 }
 
 .product-filters .btn {
@@ -101,8 +110,9 @@
 .product-filters .button-group {
   display: flex;
   gap: 0.6rem;
-  justify-content: flex-start;
+  justify-content: space-between; /* limpiar a la izquierda, aplicar a la derecha */
   margin-top: 0.5rem;
+  align-items: center;
 }
 
 .product-filters .btn:hover {
@@ -123,8 +133,20 @@
 }
 
 .product-filters .btn-secondary {
-  background: #333;
-  color: var(--primary-white, #fff);
+  background: #ffffff; /* fondo blanco */
+  color: #333333; /* texto oscuro */
+  border: 1px solid #9ca3af; /* borde más marcado (outline) */
+  box-shadow: none;
+}
+
+/* Outline behavior: keep background white, remove shadow on hover/focus/active */
+.product-filters .btn-secondary:hover,
+.product-filters .btn-secondary:focus,
+.product-filters .btn-secondary:active {
+  background: #ffffff;
+  color: #111827;
+  box-shadow: none;
+  outline: none;
 }
 
 /* Variant utilities: contained / outlined */
@@ -154,13 +176,13 @@
 }
 
 /* Grupo de botones: alinear a la derecha en desktop, apilar en móvil */
-.product-filters .button-group,
-.product-filters .button-group {
-  display: flex;
-  gap: 0.5rem;
-  justify-content: flex-end;
-  margin-top: 0.25rem;
-}
+  .product-filters .button-group,
+  .product-filters .button-group {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: space-between;
+    margin-top: 0.25rem;
+  }
 
 @media (max-width: 640px) {
   .product-filters {

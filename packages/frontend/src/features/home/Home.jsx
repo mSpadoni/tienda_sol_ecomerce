@@ -9,7 +9,7 @@ import "./Home.css";
 import SuccessSnackbar from "../../components/snackBar.jsx";
 import { useKeycloak } from "../../provieder/keyCloak.jsx";
 import { DotLoader } from "react-spinners";
-import { /* FaBars, FaTimes */ } from "react-icons/fa";
+// no icon imports for sidebar toggle
 import { Alert } from "@mui/material";
 import { useCurrency } from "../../provieder/CurrencyProvider.jsx";
 import { CURRENCIES } from "../../provieder/currencies.js";
@@ -23,7 +23,7 @@ const Home = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const { ready } = useKeycloak();
-  const [mostrarFiltros, setMostrarFiltros] = useState(false);
+  
 
   const cargarProductos = async (page = 1, filtrosAEnviar = filtros) => {
     const productosCargados = await getProductos(page, filtrosAEnviar);
@@ -92,6 +92,7 @@ const Home = () => {
         </div>
       </header>
 
+
       {/* LAYOUT PRINCIPAL */}
       <div className="home-layout">
         {/* SIDEBAR FIJO */}
@@ -100,6 +101,9 @@ const Home = () => {
           <ProductFilters onApply={aplicarFiltros} initial={filtros} />
           </div>
         </aside>
+
+        {/* Backdrop for mobile when filters open */}
+        
 
         {/* CONTENIDO PRINCIPAL */}
         <main className="home-main">

@@ -91,50 +91,56 @@ const ProductFilters = ({ onApply, initial = {} }) => {
             </div>
           </div>
 
-          <select
-            value={activo}
-            onChange={(e) => setActivo(e.target.value)}
-            aria-label="Filtrar por estado del producto"
-          >
-            <option value="">Todos</option>
-            <option value="true">Activos</option>
-            <option value="false">No activos</option>
-          </select>
+          <div className="input-wrapper">
+            <select
+              value={activo}
+              onChange={(e) => setActivo(e.target.value)}
+              aria-label="Filtrar por estado del producto"
+            >
+              <option value="">Todos</option>
+              <option value="true">Activos</option>
+              <option value="false">No activos</option>
+            </select>
+          </div>
 
-          <select
-            value={sort}
-            onChange={(e) => setSort(e.target.value)}
-            aria-label="Ordenar por"
-          >
-            <option value="ventas">Ventas</option>
-            <option value="precio">Precio</option>
-          </select>
+          <div className="input-wrapper">
+            <select
+              value={sort}
+              onChange={(e) => setSort(e.target.value)}
+              aria-label="Ordenar por"
+            >
+              <option value="ventas">Ventas</option>
+              <option value="precio">Precio</option>
+            </select>
+          </div>
 
-          <select
-            value={order}
-            onChange={(e) => setOrder(e.target.value)}
-            aria-label="Orden ascendente o descendente"
-          >
-            <option value="desc">Descendente</option>
-            <option value="asc">Ascendente</option>
-          </select>
+          <div className="input-wrapper">
+            <select
+              value={order}
+              onChange={(e) => setOrder(e.target.value)}
+              aria-label="Orden ascendente o descendente"
+            >
+              <option value="desc">Descendente</option>
+              <option value="asc">Ascendente</option>
+            </select>
+          </div>
         </fieldset>
 
         <div className="button-group">
+          <button
+            type="button"
+            className="btn btn-secondary"
+            onClick={handleReset}
+            aria-label="Limpiar todos los filtros"
+          >
+            Limpiar
+          </button>
           <button
             type="submit"
             className="btn btn-primary contained"
             aria-label="Aplicar filtros de búsqueda"
           >
             Aplicar
-          </button>
-          <button
-            type="button"
-            className="btn btn-secondary outlined"
-            onClick={handleReset}
-            aria-label="Limpiar todos los filtros"
-          >
-            Limpiar
           </button>
         </div>
       </form>
