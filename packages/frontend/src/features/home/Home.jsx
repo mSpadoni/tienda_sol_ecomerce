@@ -6,7 +6,8 @@ import "./Home.css";
 import SuccessSnackbar from "../../components/snackBar.jsx";
 import { useKeycloak } from "../../provieder/keyCloak.jsx";
 import { DotLoader } from "react-spinners";
-import { Alert } from "@mui/material";
+import { Alert, Divider } from "@mui/material";
+import ProductosCategoria from "../../components/ProductosCategoria.jsx";
 
 const Home = () => {
   const [productos, setProductos] = useState([]);
@@ -84,20 +85,18 @@ const Home = () => {
           ) : (
             <>
               <section className="home-section">
+                <h1>Lo mas vendido</h1>
                 <ProductsCarousel productos={productosFiltrados} />
               </section>
 
               <section className="home-section">
-                <div className="section-header between">
-                  <h2>Explorá nuestros productos</h2>
-                  <p className="section-subtitle small">
-                    {productosFiltrados.length} productos disponibles
-                  </p>
-                </div>
 
                 <section className="categorias-section">
-                  <h3>Deportes</h3>
-                
+                  <h2>Lo mas vendido en Deportes</h2>
+                  <ProductosCategoria cantidad={4} categoria = "Deportes"/>
+                  <h2>Lo mas vendido en Indumentaria</h2>
+                  <ProductosCategoria cantidad={4} categoria = "Ropa"/>
+
                 </section>
                 <p>
                   Para ver el listado completo, aplicar filtros y navegar por los

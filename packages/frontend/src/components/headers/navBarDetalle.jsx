@@ -16,6 +16,14 @@ const NavbarDetalle = () => {
           aria-label="Menú principal"
         >
           <Link
+            to="/"
+            className="nav-link"
+            role="menuitem"
+            aria-label="Ir a inicio"
+          >
+            Inicio
+          </Link>
+          <Link
             to="/productos"
             className="nav-link"
             role="menuitem"

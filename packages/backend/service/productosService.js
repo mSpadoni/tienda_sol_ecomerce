@@ -25,7 +25,7 @@ export default class ProductosService {
 
     const total = await this.productosRepository.contarPorFiltros(filtros, activo);
     const totalPaginas = Math.ceil(total / elementosXPagina);
-
+    
     return {
       pagina: numeroPagina,
       perPage: elementosXPagina,

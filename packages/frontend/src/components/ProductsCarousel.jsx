@@ -51,7 +51,6 @@ const ProductsCarousel = ({ productos }) => {
 
   return (
     <div className="carousel-container">
-      <h2 className="carousel-title">Lo más vendido</h2>
       <div className="carousel-wrapper">
         <div className="carousel-viewport">
           <div
