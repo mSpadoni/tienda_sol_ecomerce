@@ -6,18 +6,25 @@ import Home from "../features/home/Home.jsx";
 
 export default function ProtectedRoute() {
   const { isAuthenticated, keycloakReady, login } = useKeycloak();
-  const navigate = useNavigate();
 
-  // --- Hook siempre llamado
   useEffect(() => {
-    // Esperar a que Keycloak esté listo para decidir si redirigir al login.
-    if (!keycloakReady) return;
-    if (!isAuthenticated) {
-      login(); // solo se ejecuta si no está autenticado
-    }
-  }, [isAuthenticated, login]);
+    if (!keycloakReady) return; // esperar la inicialización real
 
-  // Si no está autenticado, no renderizamos aún las rutas hijas
-  return !isAuthenticated ? <Home /> : <Outlet />;
-  // Está autenticado -> renderiza las rutas hijas
+    if (!isAuthenticated) {
+      login(); // solo llamar login después de init
+    }
+  }, [keycloakReady, isAuthenticated, login]);
+
+  if (!keycloakReady) {
+    return null; // no mostrar nada hasta que keycloak esté OK
+  }
+
+  if (!isAuthenticated) {
+    // login ya se disparó en el effect, NO debemos mostrar nada más
+    return null;
+  }
+
+  return <Outlet />;
 }
+
+

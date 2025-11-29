@@ -91,11 +91,8 @@ function App() {
                       <Route path="/sobre-nosotros" element={<About />} />
                       <Route path="/contactanos" element={<Contactanos />} />
                       <Route path="/productos" element={<ProductsPage />} />
+                      <Route path="/productos/:id" element={<ProductDetailPage />}/>
                       <Route element={<ProtectedRoute />}>
-                        <Route
-                          path="/productos/:id"
-                          element={<ProductDetailPage />}
-                        />
                         <Route path="/checkout" element={<Checkout />} />
                         <Route
                           path="/pedidos/hechos"

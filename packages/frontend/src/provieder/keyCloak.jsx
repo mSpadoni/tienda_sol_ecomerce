@@ -112,9 +112,10 @@ export const KeycloakProvider = ({ children }) => {
         silentCheckSsoRedirectUri: `${window.location.origin}/silent-check-sso.html`,
       })
       .then((authenticated) => {
+        console.log("KC init, authenticated =", authenticated, "en URL", window.location.href);
+
         setIsAuthenticated(authenticated);
         setKeycloakReady(true);
-        cleanUrlHash();
 
         if (authenticated) {
           persistSession();
@@ -127,7 +128,6 @@ export const KeycloakProvider = ({ children }) => {
       .catch((err) => {
         console.error("Keycloak init error:", err);
         setKeycloakReady(true);
-        cleanUrlHash();
       });
 
         return () => {
@@ -135,13 +135,16 @@ export const KeycloakProvider = ({ children }) => {
       };
   }, []);
 
+  useEffect(() => {
+  if (keycloakReady && isAuthenticated) {
+    cleanUrlHash();
+  }
+  }, [keycloakReady, isAuthenticated]);
+
+
   const login = () => {
     try {
-      keycloakRef.current.login({
-        prompt: "login",
-        redirectUri: window.location.href,
-      });
-      cleanUrlHash();
+      keycloakRef.current.login();
     } catch (err) {
       console.error("Error al iniciar login:", err);
     }
