@@ -14,7 +14,7 @@ const KeycloakContext = createContext();
 export const useKeycloak = () => useContext(KeycloakContext);
 
 const keycloak = new Keycloak({
-  url: "https://55f275f648df25.lhr.life",
+  url: "http://localhost:8080",
   realm: "ecomerce",
   clientId: "tp_desarollo",
 });

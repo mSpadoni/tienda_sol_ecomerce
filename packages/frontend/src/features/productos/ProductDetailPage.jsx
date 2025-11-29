@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { ButtonGroup, Button, Alert, Skeleton } from "@mui/material";
 import { getProductoById } from "../../services/ProductosService.js";
 import { useCarrito } from "../../provieder/carritoProvider.jsx";
+import { useMensajes } from "../../provieder/mensajeDeExito.jsx";
 import { useCurrency } from "../../provieder/CurrencyProvider.jsx";
 import { CURRENCIES } from "../../provieder/currencies.js";
 import "./ProductDetailPage.css";
@@ -15,6 +16,7 @@ const ProductDetailPage = () => {
   const [error, setError] = useState(null);
   const { agregarItem } = useCarrito();
   const { currency } = useCurrency();
+  const { setMensajeExito } = useMensajes();
 
   useEffect(() => {
     const cargarProducto = async (productId) => {
@@ -179,7 +181,14 @@ const ProductDetailPage = () => {
             <Button
               className="comprar"
               disabled={!hayStock || cantidad === 0}
-              onClick={() => agregarItem(producto, cantidad)}
+              onClick={() => {
+                agregarItem(producto, cantidad);
+                try {
+                  setMensajeExito("Se agregó al carrito exitosamente");
+                } catch (e) {
+                  // no-op if provider isn't available
+                }
+              }}
             >
               Agregar al carrito
             </Button>
