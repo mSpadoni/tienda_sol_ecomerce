@@ -6,6 +6,7 @@ import About from "./features/About/About.jsx";
 import Contactanos from "./features/Contacto/Contactanos.jsx";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ProductDetailPage from "./features/productos/ProductDetailPage.jsx";
+import ProductsPage from "./features/productos/ProductsPage.jsx";
 import Layout from "./features/Layout/layout.jsx";
 import { CarritoProvider } from "./provieder/carritoProvider.jsx";
 import { CurrencyProvider } from "./provieder/CurrencyProvider.jsx";
@@ -89,6 +90,7 @@ function App() {
                       <Route path="/registro" element={<RegistroUsuario />} />
                       <Route path="/sobre-nosotros" element={<About />} />
                       <Route path="/contactanos" element={<Contactanos />} />
+                      <Route path="/productos" element={<ProductsPage />} />
                       <Route element={<ProtectedRoute />}>
                         <Route
                           path="/productos/:id"

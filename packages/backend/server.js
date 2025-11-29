@@ -1,5 +1,5 @@
 import express from "express";
-import logger from "../logger/logger.js";
+import logger from "./logger/logger.js";
 // El server recibe las rutas y recibe el puerto
 export default class Server {
   constructor(app, port) {

@@ -21,6 +21,7 @@ const SuccessSnackbar = () => {
       autoHideDuration={4000}
       onClose={handleClose}
       anchorOrigin={{ vertical: "top", horizontal: "right" }}
+      sx = {{ mt: 8 }}
       role="status"
       aria-live="polite"
       aria-atomic="true"

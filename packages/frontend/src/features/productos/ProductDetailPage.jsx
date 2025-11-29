@@ -8,9 +8,9 @@ import { useCurrency } from "../../provieder/CurrencyProvider.jsx";
 import { CURRENCIES } from "../../provieder/currencies.js";
 import "./ProductDetailPage.css";
 
-const ProductDetailPage = () => {
+const ProductDetailPage = ({ producto: productoProp = null }) => {
   const { id } = useParams();
-  const [producto, setProducto] = useState(null);
+  const [producto, setProducto] = useState(productoProp);
   const [cantidad, setCantidad] = useState(0);
   const [precioConvertido, setPrecioConvertido] = useState(null);
   const [error, setError] = useState(null);
@@ -19,21 +19,27 @@ const ProductDetailPage = () => {
   const { setMensajeExito } = useMensajes();
 
   useEffect(() => {
+    // If producto was passed as prop, use it; otherwise fetch by id
+    if (productoProp) {
+      setProducto(productoProp);
+      setPrecioConvertido(productoProp.precio);
+      return;
+    }
+
     const cargarProducto = async (productId) => {
       try {
         const prod = await getProductoById(productId);
         setProducto(prod);
 
-        const moneda = prod.moneda;
-        console.log(moneda);
         const precio = prod.precio;
         setPrecioConvertido(precio);
       } catch (err) {
         setError(err);
       }
     };
-    cargarProducto(id);
-  }, [id]);
+
+    if (id) cargarProducto(id);
+  }, [id, productoProp]);
 
   useEffect(() => {
     if (producto) setCantidad(producto.stock > 0 ? 1 : 0);

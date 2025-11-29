@@ -63,9 +63,9 @@ const ProductFilters = ({ onApply, initial = {} }) => {
                 Categorías
               </option>
               <option value="todas">Todas</option>
-              <option value="deportes">Deportes</option>
-              <option value="electronica">Electrónica</option>
-              <option value="indumentaria">Indumentaria</option>
+              <option value="Deportes">Deportes</option>
+              <option value="Electrónica">Electrónica</option>
+              <option value="Ropa">Indumentaria</option>
             </select>
           </div>
 

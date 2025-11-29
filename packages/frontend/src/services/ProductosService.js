@@ -4,11 +4,11 @@ import procesarErrorAxios from "./errorsAdapter.js";
 
 const API_BASE_URL = process.env.REACT_APP_API_URL;
 
-export const getProductos = async (page = 1, filtros = {}) => {
+export const getProductos = async (page = 1, filtros = {}, limit = 4) => {
   try {
     const params = new URLSearchParams();
     params.append("page", page);
-
+    params.append("limit", limit);
     Object.entries(filtros || {}).forEach(([key, value]) => {
       if (value === undefined || value === null) return;
       if (typeof value === "string" && value.trim() === "") return;

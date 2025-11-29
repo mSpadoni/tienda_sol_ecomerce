@@ -83,7 +83,7 @@ export default class ProductosRepository {
     // Ejecutar consulta en MongoDB (paginada y ordenada)
     const productos = await this.model
       .find(query)
-      .sort({ [sortField]: sortOrder })
+      .sort({ [sortField]: sortOrder, _id: 1 })
       .skip(skip)
       .limit(elementosXPagina);
 
@@ -93,6 +93,13 @@ export default class ProductosRepository {
   async contarTodos() {
     return await this.model.countDocuments();
   }
+
+  async contarPorFiltros(filtros = {}, activo) {
+  let query = {};
+  if (activo !== undefined) query.activo = activo;
+  this.metodosFiltros.forEach((metodo) => metodo.call(this, filtros, query));
+  return await this.model.countDocuments(query);
+}
 
   async findById(id) {
     return await this.model.findById(id);

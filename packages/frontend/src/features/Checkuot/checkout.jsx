@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { Card, TextField, Button, LinearProgress } from "@mui/material";
+import { Card, TextField, Button, LinearProgress, CircularProgress } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useCarrito } from "../../provieder/carritoProvider.jsx";
 import { useCurrency } from "../../provieder/CurrencyProvider.jsx";
 import { useMensajes } from "../../provieder/mensajeDeExito.jsx";
-import Store from "../../components/mockData/Pedidos.js";
 import "./checkout.css";
 import { CURRENCIES } from "../../provieder/currencies.js";
 import { useForm } from "../../provieder/formHook.js";
@@ -13,12 +12,15 @@ import { crearPedido } from "../../services/pedidoService.js";
 
 const Checkout = () => {
   const navigate = useNavigate();
-  const { carrito, limpiarCarrito, total } = useCarrito();
+  const { carrito, limpiarCarrito } = useCarrito();
   const { currency } = useCurrency();
   const { setMensajeExito } = useMensajes();
   const { ponerVisible, ponerInvisible } = useVisible();
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 600);
   const [step, setStep] = useState(0);
+  const [loadingCompra, setLoadingCompra] = useState(false);
+  const [resultadoCompra, setResultadoCompra] = useState(null);
+  const [mensajeErrorCompra, setMensajeErrorCompra] = useState("");
 
   useEffect(() => {
     ponerInvisible();
@@ -58,30 +60,52 @@ const Checkout = () => {
     return errors;
   };
 
-  const onSubmit = (values) => {
+  const onSubmit = async (values) => {
+    try {
+      setLoadingCompra(true);
 
-    crearPedido({
-      items: carrito.map((item) => ({
-        productoId: item.producto._id,
-        cantidad: item.cantidad,
-      })),
-      direccionEntrega: {
-        calle: values.calle,
-        altura: values.altura,
-        piso: values.piso,
-        departamento: values.departamento,
-        codigoPostal: values.codigoPostal,
-        ciudad: values.ciudad,
-        provincia: values.provincia,
-        pais: values.pais,
-      },
-      moneda: currency,
-    });
+      await crearPedido({
+        items: carrito.map((item) => ({
+          productoId: item.producto._id,
+          cantidad: item.cantidad,
+        })),
+        direccionEntrega: {
+          calle: values.calle,
+          altura: values.altura,
+          piso: values.piso,
+          departamento: values.departamento,
+          codigoPostal: values.codigoPostal,
+          ciudad: values.ciudad,
+          provincia: values.provincia,
+          pais: values.pais,
+        },
+        moneda: currency,
+      });
 
-    limpiarCarrito();
-    setMensajeExito("Compra realizada con éxito");
-    ponerVisible();
-    navigate("/");
+      limpiarCarrito();
+      setResultadoCompra("ok"); // mostramos pantalla de exito
+      setMensajeExito("Compra realizada con éxito");
+      ponerVisible();
+    } catch (err) {
+      console.error(err);
+      let msg = "No se pudo procesar la compra. Intentá de nuevo más tarde.";
+
+      // casos típicos con axios/fetch:
+      if (err?.response?.data?.message) {
+        msg = err.response.data.message;
+      } else if (err?.response?.data?.error) {
+        msg = err.response.data.error;
+      } else if (err?.message) {
+        msg = err.message;
+      }
+      if (msg.includes("stock")) {msg = 'Algunos productos no tienen stock suficiente. Por favor, revisá tu carrito.';}
+      setMensajeErrorCompra(msg);  // guardamos para la pantalla
+      setResultadoCompra("error"); // mostramos pantalla de error
+      //setMensajeExito("No se pudo procesar la compra. Intentá de nuevo más tarde.");
+      //ponerVisible();
+    } finally {
+      setLoadingCompra(false);
+    }
   };
 
   const { values, handleChange, handleBlur, handleSubmit, errors, showError } =
@@ -90,7 +114,7 @@ const Checkout = () => {
   const fieldKeys = Object.keys(initialValues);
 
   const handleNext = () => {
-    if (!values[fieldKeys[step]].trim()) return; // no avanzar si vacío
+    if (!values[fieldKeys[step]].trim()) return;
     setStep(step + 1);
   };
 
@@ -115,6 +139,85 @@ const Checkout = () => {
 
   const progress = Math.round(((step + 1) / fieldKeys.length) * 100);
 
+  //  Vista de éxito
+  if (resultadoCompra === "ok") {
+    return (
+      <div className="root">
+        <Card className="form-container card">
+          <h2>¡Compra realizada con éxito!</h2>
+          <p>Tu pedido se procesó correctamente.</p>
+          <div style={{ marginTop: "1.5rem", display: "flex", gap: "1rem", justifyContent: "center", flexWrap: "wrap" }}>
+            <Button
+              variant="contained"
+              onClick={() => navigate("/pedidos/hechos")}
+              sx={{
+                "&.MuiButton-contained": {
+                  backgroundColor: "#16427f !important",
+                  color: "#ffffff !important",
+                  borderRadius: 2,
+                },
+                "&:hover": {
+                  backgroundColor: "#113369 !important",
+                },
+              }}
+            >
+              Ver mis pedidos
+            </Button>
+            <Button
+              variant="outlined"
+              onClick={() => navigate("/")}
+              sx={{
+                "&.MuiButton-outlined": {
+                  borderColor: "#16427f !important",
+                  color: "#16427f !important",
+                  borderRadius: 2,
+                },
+                "&:hover": {
+                  borderColor: "#113369 !important",
+                  backgroundColor: "rgba(22, 66, 127, 0.08) !important",
+                  border: "3px solid #113369 !important",
+                },
+              }}
+            >
+              Volver al inicio
+            </Button>
+          </div>
+        </Card>
+      </div>
+    );
+  }
+
+  //  Vista de error
+  if (resultadoCompra === "error") {
+    return (
+      <div className="root">
+        <Card className="form-container card">
+          <h2>Ups... algo salió mal</h2>
+          <p>{mensajeErrorCompra || "No se pudo procesar tu compra. Intentá de nuevo más tarde."}</p>
+          <div style={{ marginTop: "1.5rem" }}>
+            <Button
+              variant="contained"
+              onClick={() => navigate("/")}
+              sx={{
+                "&.MuiButton-contained": {
+                  backgroundColor: "#16427f !important",
+                  color: "#ffffff !important",
+                  borderRadius: 2,
+                },
+                "&:hover": {
+                  backgroundColor: "#113369 !important",
+                },
+              }}
+            >
+              Volver al inicio
+            </Button>
+          </div>
+        </Card>
+      </div>
+    );
+  }
+
+  //  Vista normal (formulario)
   return (
     <div className="root">
       <Card className="form-container">
@@ -132,7 +235,7 @@ const Checkout = () => {
           )}
           <form className="form-grid" onSubmit={handleSubmit}>
             {fieldKeys.map((key, index) => {
-              if (isMobile && index !== step) return null; // mostrar solo paso actual
+              if (isMobile && index !== step) return null;
               return (
                 <div className="input-wrapper" key={key}>
                   <TextField
@@ -171,7 +274,7 @@ const Checkout = () => {
               );
             })}
 
-            <div >
+            <div>
               {isMobile && (
                 <Button
                   onClick={handleBack}
@@ -257,6 +360,7 @@ const Checkout = () => {
                     variant="contained"
                     type="submit"
                     disabled={
+                      loadingCompra ||
                       ![
                         "calle",
                         "altura",
@@ -281,8 +385,9 @@ const Checkout = () => {
                         backgroundColor: "#113369 !important",
                       },
                     }}
+                    startIcon={loadingCompra ? <CircularProgress size={16} /> : null}
                   >
-                    Comprar
+                    {loadingCompra ? "Procesando..." : "Comprar"}
                   </Button>
                 </>
               )}

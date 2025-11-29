@@ -225,15 +225,16 @@ const confirmarMotivo = async () => {
             </div>
 
             {/* ICONO DE 3 PUNTITOS */}
-            <IconButton onClick={(e) => abrirMenu(e, pedido.id)} className="puntosMenu">
+            {!estadosFinales.includes(pedido.estado.valor) && <IconButton onClick={(e) => abrirMenu(e, pedido.id)} className="puntosMenu">
               <MoreVertIcon />
             </IconButton>
-
+            }
             {/* MENU DESPLEGABLE */}
             <Menu anchorEl={anchorEl} open={menuAbierto && pedidoACambiar === pedido.id} onClose={cerrarMenu}>
               <MenuItem sx={itemStyles} onClick={() => { desplegar(estadoParaAbortar, pedido.id); cerrarMenu(); }}>{botonesNombreSegunEstado[estadoParaAbortar]}</MenuItem>
             </Menu>
           </div>
+          
 
           <div className="pedido-body">
             <div className="pedido-items">
@@ -248,7 +249,7 @@ const confirmarMotivo = async () => {
               </ul>
             </div>
 
-            {pedido.estado.valor == estadoParaMostrar && <div className="pedido-actions">
+            {pedido.estado.valor === estadoParaMostrar && <div className="pedido-actions">
               {/*  BOTÓN MUI (ENVÍAR O CAMBIAR ESTADO) */}
               <MUIButton
                 variant="contained"
@@ -331,6 +332,8 @@ const enviarStyles = {
   fontSize: "0.8rem",
   transition: "all 0.4s ease",
 };
+
+const estadosFinales = ["cancelado","rechazado","finalizado"]
 
 const botonesNombreSegunEstado = Object.freeze({
   cancelado: "Cancelar",

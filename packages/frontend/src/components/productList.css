@@ -1,0 +1,23 @@
+.product-list-grid {
+  display: flex;
+  gap: 16px;
+}
+
+.product-card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.product-card img,
+.product-card .MuiCardMedia-root {
+  object-fit: cover;
+}
+
+/* responsive tweaks */
+@media (max-width: 600px) {
+  .product-list-grid {
+    gap: 12px;
+  }
+}

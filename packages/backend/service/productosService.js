@@ -23,7 +23,7 @@ export default class ProductosService {
       order,
     );
 
-    const total = await this.productosRepository.contarTodos();
+    const total = await this.productosRepository.contarPorFiltros(filtros, activo);
     const totalPaginas = Math.ceil(total / elementosXPagina);
 
     return {

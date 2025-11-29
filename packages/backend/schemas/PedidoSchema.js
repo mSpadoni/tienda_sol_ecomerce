@@ -11,8 +11,8 @@ const DireccionEntregaSchema = new mongoose.Schema(
   {
     calle: { type: String, required: true },
     altura: { type: String, required: true },
-    piso: { type: String, required: true },
-    departamento: { type: String, required: true },
+    piso: { type: String, required: false },
+    departamento: { type: String, required: false},
     codigoPostal: { type: String, required: true },
     ciudad: { type: String, required: true },
     provincia: { type: String, required: true },

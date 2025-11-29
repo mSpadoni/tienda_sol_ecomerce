@@ -16,7 +16,7 @@ const NavbarDetalle = () => {
           aria-label="Menú principal"
         >
           <Link
-            to="/"
+            to="/productos"
             className="nav-link"
             role="menuitem"
             aria-label="Ir a productos"
