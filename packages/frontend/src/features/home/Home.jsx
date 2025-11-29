@@ -94,9 +94,11 @@ const Home = () => {
                 <section className="categorias-section">
                   <h2>Lo mas vendido en Deportes</h2>
                   <ProductosCategoria cantidad={4} categoria = "Deportes"/>
+                </section>
+
+                <section className="categorias-section">
                   <h2>Lo mas vendido en Indumentaria</h2>
                   <ProductosCategoria cantidad={4} categoria = "Ropa"/>
-
                 </section>
                 <p>
                   Para ver el listado completo, aplicar filtros y navegar por los
