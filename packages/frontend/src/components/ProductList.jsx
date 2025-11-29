@@ -14,6 +14,7 @@ import { useCurrency } from "../provieder/CurrencyProvider.jsx";
 import { CURRENCIES } from "../provieder/currencies.js";
 import "./productList.css";
 
+// eslint-disable-next-line react/prop-types
 const ProductList = ({ products = [], onAddToCart }) => {
     const { currency } = useCurrency();
     const carrito = useCarrito();

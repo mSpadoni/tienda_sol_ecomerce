@@ -57,7 +57,6 @@ const ProductsPage = () => {
       setCurrentPage(1);
     }
     // Si no hay query param, no hace falta hacer nada, el otro useEffect se encarga
-    // eslint-disable-next-line
   }, []);
 
   // Cuando aplicás filtros desde ProductFilters
@@ -83,8 +82,8 @@ const ProductsPage = () => {
   if (error) return <Alert severity="error">{error.message}</Alert>;
 
   return (
-    <div className="products-layout" style={{ display: "flex", gap: 16 }}>
-      <aside style={{ width: 280 }}>
+    <div className="products-layout">
+      <aside>
         <ProductFilters onApply={aplicarFiltros} initial={filtros} />
       </aside>
 
@@ -100,7 +99,7 @@ const ProductsPage = () => {
         </div>
       </Drawer>
 
-      <main style={{ flex: 1 }}>
+      <main>
         <h1 style={{ textAlign: "center" }}>Productos</h1>
         <div className="products-search">
           <AccomodationSearchBar filtrarProductos={filtrarPorTitulo} />
@@ -122,14 +121,7 @@ const ProductsPage = () => {
           <p>Cargando productos...</p>
         ) : (
           <>
-            <div
-              className="products-grid"
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(4, 1fr)",
-                gap: 24,
-              }}
-            >
+            <div className="products-grid">
               {productos.length === 0 ? (
                 <p style={{ gridColumn: "1 / -1" }}>No se encontraron productos.</p>
               ) : (
