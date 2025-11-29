@@ -1,8 +1,5 @@
 import express from "express";
-import logger from "./logger/logger.js";
-import swaggerUi from "swagger-ui-express";
-import YAML from "yamljs";
-import cors from "cors";
+import logger from "../logger/logger.js";
 // El server recibe las rutas y recibe el puerto
 export default class Server {
   constructor(app, port) {
@@ -11,21 +8,6 @@ export default class Server {
     this.routes = [];
     this.controllers = {};
     this.app.use(express.json());
-    this.app.use(
-      cors({
-        origin: process.env.FRONTEND_BASE_URL, // frontend React
-        methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
-        credentials: true,
-      }),
-    );
-    const swaggerDocument = YAML.load(
-      new URL("./swagger.yaml", import.meta.url),
-    );
-    this.app.use(
-      "/api-docs",
-      swaggerUi.serve,
-      swaggerUi.setup(swaggerDocument),
-    );
   }
 
   app() {

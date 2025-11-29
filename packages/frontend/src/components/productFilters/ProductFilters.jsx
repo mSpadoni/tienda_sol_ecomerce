@@ -10,14 +10,15 @@ const ProductFilters = ({ onApply, initial = {} }) => {
   const [activo, setActivo] = useState(
     initial.activo === undefined ? "" : String(initial.activo),
   );
-  const [sort, setSort] = useState(initial.sort || "ventas");
-  const [order, setOrder] = useState(initial.order || "desc");
+  const [sort, setSort] = useState(initial.sort || "");
+  const [order, setOrder] = useState(initial.order || "");
 
   const handleApply = (e) => {
     e.preventDefault();
     const filtros = {};
     if (titulo && titulo.trim() !== "") filtros.titulo = titulo.trim();
-    if (categoria && categoria.trim() !== "")
+    // Treat empty and 'todas' as no category filter
+    if (categoria && categoria.trim() !== "" && categoria !== "todas")
       filtros.categoria = categoria.trim();
     if (precioMin !== "") filtros.precioMin = precioMin;
     if (precioMax !== "") filtros.precioMax = precioMax;
@@ -33,8 +34,8 @@ const ProductFilters = ({ onApply, initial = {} }) => {
     setPrecioMin("");
     setPrecioMax("");
     setActivo("");
-    setSort("ventas");
-    setOrder("desc");
+    setSort("");
+    setOrder("");
     onApply({});
   };
 
@@ -52,21 +53,20 @@ const ProductFilters = ({ onApply, initial = {} }) => {
         <fieldset>
 
           <div className="input-wrapper">
-            <input
-              placeholder="Buscar título"
-              value={titulo}
-              onChange={(e) => setTitulo(e.target.value)}
-              aria-label="Buscar por título del producto"
-            />
-          </div>
-
-          <div className="input-wrapper">
-            <input
-              placeholder="Categoría"
+            <select
+              id="categoria-select"
               value={categoria}
               onChange={(e) => setCategoria(e.target.value)}
               aria-label="Filtrar por categoría"
-            />
+            >
+              <option value="" disabled>
+                Categorías
+              </option>
+              <option value="todas">Todas</option>
+              <option value="deportes">Deportes</option>
+              <option value="electronica">Electrónica</option>
+              <option value="indumentaria">Indumentaria</option>
+            </select>
           </div>
 
           <div className="input-row">
@@ -89,19 +89,7 @@ const ProductFilters = ({ onApply, initial = {} }) => {
                 aria-label="Precio máximo"
               />
             </div>
-          </div>
-
-          <div className="input-wrapper">
-            <select
-              value={activo}
-              onChange={(e) => setActivo(e.target.value)}
-              aria-label="Filtrar por estado del producto"
-            >
-              <option value="">Todos</option>
-              <option value="true">Activos</option>
-              <option value="false">No activos</option>
-            </select>
-          </div>
+          </div>  
 
           <div className="input-wrapper">
             <select
@@ -109,6 +97,9 @@ const ProductFilters = ({ onApply, initial = {} }) => {
               onChange={(e) => setSort(e.target.value)}
               aria-label="Ordenar por"
             >
+              <option value="" disabled>
+                Ordenar por
+              </option>
               <option value="ventas">Ventas</option>
               <option value="precio">Precio</option>
             </select>
@@ -120,6 +111,9 @@ const ProductFilters = ({ onApply, initial = {} }) => {
               onChange={(e) => setOrder(e.target.value)}
               aria-label="Orden ascendente o descendente"
             >
+              <option value="" disabled>
+                Orden
+              </option>
               <option value="desc">Descendente</option>
               <option value="asc">Ascendente</option>
             </select>
