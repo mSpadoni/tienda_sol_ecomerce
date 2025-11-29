@@ -71,6 +71,7 @@ const Navbar = () => {
 
           {isMobile && isVisible && (
             <IconButton
+              className="hamburger"  
               onClick={toggleMenu}
               aria-label={
                 menuAbierto
@@ -119,67 +120,69 @@ const Navbar = () => {
         </div>
       </nav>
 
-      {/* Mobile Drawer with Auth Options */}
       <MobileDrawer
-        isOpen={isMobile && menuAbierto}
-        onClose={cerrarMenu}
-        id="drawer-menu"
-        ariaLabel="Menú de navegación móvil"
+  isOpen={isMobile && menuAbierto}
+  onClose={cerrarMenu}
+  id="drawer-menu"
+  ariaLabel="Menú de navegación móvil"
+>
+  <Box sx={{ display: "flex", flexDirection: "column", gap: 1, p: 2 }}>
+    {/* Links principales SIEMPRE */}
+    <NavbarDetalle />
+
+    {isAuthenticated ? (
+      <div
+        className="drawer-link"
+        role="button"
+        tabIndex={0}
+        onClick={() => {
+          logout();
+          cerrarMenu();
+        }}
+        onKeyPress={() => {
+          logout();
+          cerrarMenu();
+        }}
       >
-        {isAuthenticated ? (
-          <Box sx={{ display: "flex", flexDirection: "column", gap: 1, p: 2 }}>
-            <NavbarDetalle />
-            <div
-              className="drawer-link"
-              role="button"
-              tabIndex={0}
-              onClick={() => {
-                logout();
-                cerrarMenu();
-              }}
-              onKeyPress={() => {
-                logout();
-                cerrarMenu();
-              }}
-            >
-              Cerrar sesión
-            </div>
-          </Box>
-        ) : (
-          <Box sx={{ display: "flex", flexDirection: "column", gap: 1, p: 2 }}>
-            <div
-              className="drawer-link"
-              role="button"
-              tabIndex={0}
-              onClick={() => {
-                registrar();
-                cerrarMenu();
-              }}
-              onKeyPress={() => {
-                registrar();
-                cerrarMenu();
-              }}
-            >
-              Creá tu cuenta
-            </div>
-            <div
-              className="drawer-link"
-              role="button"
-              tabIndex={0}
-              onClick={() => {
-                login();
-                cerrarMenu();
-              }}
-              onKeyPress={() => {
-                login();
-                cerrarMenu();
-              }}
-            >
-              Ingresá
-            </div>
-          </Box>
-        )}
-      </MobileDrawer>
+        Cerrar sesión
+      </div>
+    ) : (
+      <>
+        <div
+          className="drawer-link"
+          role="button"
+          tabIndex={0}
+          onClick={() => {
+            registrar();
+            cerrarMenu();
+          }}
+          onKeyPress={() => {
+            registrar();
+            cerrarMenu();
+          }}
+        >
+          Creá tu cuenta
+        </div>
+        <div
+          className="drawer-link"
+          role="button"
+          tabIndex={0}
+          onClick={() => {
+            login();
+            cerrarMenu();
+          }}
+          onKeyPress={() => {
+            login();
+            cerrarMenu();
+          }}
+        >
+          Ingresá
+        </div>
+      </>
+    )}
+  </Box>
+</MobileDrawer>
+
     </header>
   );
 };
