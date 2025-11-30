@@ -47,7 +47,7 @@
 }
 
 /* Products grid and cards */
-.products-grid {
+/* .products-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 24px;
@@ -92,7 +92,7 @@
 .product-card-price {
   margin: 0;
   color: #333;
-}
+} */
 
 /* Responsive breakpoints for grid */
 @media (max-width: 1200px) {

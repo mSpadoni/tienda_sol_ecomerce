@@ -8,7 +8,30 @@ const NavbarDetalle = () => {
   const { isVisible } = useVisible();
 
   return (
-    <>
+    <>{!isAuthenticated && isVisible && (
+        <div
+          className="navbar-center"
+          role="menubar"
+          aria-label="Menú principal"
+        >
+          <Link
+            to="/"
+            className="nav-link"
+            role="menuitem"
+            aria-label="Ir a inicio"
+          >
+            Inicio
+          </Link>
+          <Link
+            to="/productos"
+            className="nav-link"
+            role="menuitem"
+            aria-label="Ir a productos"
+          >
+            Productos
+          </Link>
+          </div>
+      )}
       {isAuthenticated && isVisible && (
         <div
           className="navbar-center"

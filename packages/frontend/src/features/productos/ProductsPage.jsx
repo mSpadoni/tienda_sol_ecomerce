@@ -82,8 +82,8 @@ const ProductsPage = () => {
   if (error) return <Alert severity="error">{error.message}</Alert>;
 
   return (
-    <div className="products-layout">
-      <aside>
+    <div className="products-layout" style={{ display: "flex", gap: 16 }}>
+      <aside style={{ width: 280 }}>
         <ProductFilters onApply={aplicarFiltros} initial={filtros} />
       </aside>
 
