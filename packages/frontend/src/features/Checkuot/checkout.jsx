@@ -40,18 +40,21 @@ const Checkout = () => {
     pais: "",
   };
 
+  const requiredFields = [
+  "calle",
+  "altura",
+  "codigoPostal",
+  "ciudad",
+  "provincia",
+  "pais",
+];
+
+
   const validate = (values) => {
     const errors = {};
     Object.keys(values).forEach((key) => {
       if (
-        [
-          "calle",
-          "altura",
-          "codigoPostal",
-          "ciudad",
-          "provincia",
-          "pais",
-        ].includes(key) &&
+        requiredFields.includes(key) &&
         !values[key].trim()
       ) {
         errors[key] = "Este campo es obligatorio";
@@ -114,9 +117,15 @@ const Checkout = () => {
   const fieldKeys = Object.keys(initialValues);
 
   const handleNext = () => {
-    if (!values[fieldKeys[step]].trim()) return;
-    setStep(step + 1);
-  };
+  const currentKey = fieldKeys[step];
+
+  // Solo bloqueo si el campo actual es obligatorio y está vacío
+  if (requiredFields.includes(currentKey) && !values[currentKey].trim()) {
+    return;
+  }
+
+  setStep(step + 1);
+};
 
   const handleBack = () => {
     if (step === 0 && isMobile) {
@@ -231,7 +240,9 @@ const Checkout = () => {
         <div className="checkout-form">
           <h3>Datos de entrega</h3>
           {isMobile && (
-            <LinearProgress variant="determinate" value={progress} />
+            <div style={{ marginBottom: "16px" }} >
+              <LinearProgress variant="determinate" value={progress} />
+            </div>
           )}
           <form className="form-grid" onSubmit={handleSubmit}>
             {fieldKeys.map((key, index) => {
@@ -245,14 +256,7 @@ const Checkout = () => {
                     onChange={handleChange}
                     onBlur={handleBlur}
                     fullWidth
-                    required={[
-                      "calle",
-                      "altura",
-                      "codigoPostal",
-                      "ciudad",
-                      "provincia",
-                      "pais",
-                    ].includes(key)}
+                    required={requiredFields.includes(key)}
                     error={!!showError(key)}
                     helperText={showError(key)}
                     sx={{
@@ -306,7 +310,7 @@ const Checkout = () => {
                 <Button
                   variant="contained"
                   onClick={handleNext}
-                  disabled={!values[fieldKeys[step]].trim()}
+                  disabled={requiredFields.includes(fieldKeys[step]) && !values[fieldKeys[step]].trim()}
                   sx={{
                     "&.MuiButton-contained": {
                       backgroundColor: "#16427f !important",

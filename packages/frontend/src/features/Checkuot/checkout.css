@@ -2,7 +2,7 @@
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  min-height: 100vh;
+  /*min-height: 100vh;*/
   background-color: #fafafa;
   padding-top: 80px;
   animation: fadeIn 0.7s ease-in-out;
