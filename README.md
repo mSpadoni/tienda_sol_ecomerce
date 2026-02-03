@@ -1,38 +1,10 @@
-Este repositorio es la base para el Trabajo Práctico de la materia **Desarrollo de Software (DDS)** de la carrera **Ingeniería en Sistemas de Información** de la **UTN FRBA**. Se trata de un **monorepo** que integra una aplicación frontend con Create React App y un backend con Express, facilitando el desarrollo y la gestión de ambos proyectos en un único entorno.
 
-## 📦 Estructura del Proyecto
 
-El monorepo está organizado de la siguiente manera:
 
-```
-.
-├── packages/
-│   ├── backend/        # Servidor Express.js
-│   └── frontend/       # Aplicación React (Create React App)
-├── package.json        # Configuración del monorepo (root)
-├── README.md           # Este archivo
-└── .env.example        # Ejemplo de configuración de variables de entorno
-```
+# tienda_sol_ecomerce
+Proyecto académico grupal de desarrollo full stack de una plataforma de comercio electrónico, donde los clientes pueden crear una cuenta, explorar productos, gestionar un carrito de compras, realizar pedidos una vez registrados y recibir notificaciones sobre su estado.
+Los vendedores forman parte del sistema y pueden realizar pedidos, así como aceptar o rechazar pedidos, mientras que el cliente puede cancelarlos según el estado dentro del ciclo de vida del pedido.
 
-## ⚙️ Paquetes
-
-Este monorepo utiliza **`npm workspaces`** para gestionar los diferentes paquetes.
-
-### Backend (`packages/backend`)
-
-El backend está construido con Express.js y utiliza las siguientes dependencias:
-
-- **`express`**: El framework web para Node.js, utilizado para construir la API.
-- **`cors`**: Middleware para Express que habilita Cross-Origin Resource Sharing (CORS), necesario para permitir que el frontend acceda al backend desde un origen diferente.
-- **`dotenv`**: Carga variables de entorno desde un archivo `.env` en `process.env`. Es crucial para configurar el puerto del servidor y los orígenes permitidos.
-
-La idea es dar lo mínimo para levantar el servidor, y que durante el desarrollo del TP se vayan agregando las dependencias necesarias.
-
-### Frontend (`packages/frontend`)
-
-El frontend es una aplicación de React generada con Create React App.
-
-## 🚀 Inicio Rápido
 
 Seguí estos pasos para poner en marcha el proyecto:
 
