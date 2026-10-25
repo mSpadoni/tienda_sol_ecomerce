@@ -169,7 +169,7 @@ export const KeycloakProvider = ({ children }) => {
   }, [clearSession]);
 
   const elUsuarioEsUn = (rol) =>
-    keycloakRef.current.hasRealmRole(rol);
+    isAuthenticated && keycloakRef.current.hasRealmRole(rol);
 
   return (
     <KeycloakContext.Provider

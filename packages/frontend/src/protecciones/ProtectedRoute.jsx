@@ -1,9 +1,10 @@
 import React, { useEffect, useRef } from "react";
-import { Outlet } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
+import PropTypes from "prop-types";
 import { useKeycloak } from "../provieder/keyCloak.jsx";
 
-export default function ProtectedRoute() {
-  const { isAuthenticated, keycloakReady, login } = useKeycloak();
+export default function ProtectedRoute({ rol }) {
+  const { isAuthenticated, keycloakReady, login, elUsuarioEsUn } = useKeycloak();
   const loginTriggeredRef = useRef(false);
 
   useEffect(() => {
@@ -39,7 +40,16 @@ export default function ProtectedRoute() {
     return null;
   }
 
+  // Logueado pero sin el rol que pide la ruta (ej. un comprador en "Pedidos recibidos")
+  if (rol && !elUsuarioEsUn(rol)) {
+    return <Navigate to="/" replace />;
+  }
+
   return <Outlet />;
 }
+
+ProtectedRoute.propTypes = {
+  rol: PropTypes.string,
+};
 
 

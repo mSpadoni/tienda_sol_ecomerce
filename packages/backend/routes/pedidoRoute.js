@@ -3,8 +3,10 @@ import ControllerPedidos from "../controller/ControllerPedidos.js";
 import { 
   pedidosMiddleware, 
   zodMiddleware,
-  validarToken
+  validarToken,
+  soloRol
 } from "../middleware/index.js";
+import { TipoUsuario } from "../models/entities/TipoUsuario.js";
 
 import logger from "../logger/logger.js";
 
@@ -50,7 +52,7 @@ export default function pedidoRoute(getController) {
   router.get(
     pathPedidos + "/hechos",
     validarToken,
-    // authMiddleware.soloRol(TipoUsuario.COMPRADOR),
+    soloRol(TipoUsuario.COMPRADOR),
     async (req, res, next) => {
       try {
         logger.http("Solicitud de pedidos del usuario id: " + req.params.id);
@@ -64,7 +66,7 @@ export default function pedidoRoute(getController) {
   router.get(
     pathPedidos + "/recibidos",
     validarToken,
-    // authMiddleware.soloRol(TipoUsuario.VENDEDOR),
+    soloRol(TipoUsuario.VENDEDOR),
     async (req, res, next) => {
       try {
         logger.http("Solicitud de pedidos del usuario id: " + req.params.id);

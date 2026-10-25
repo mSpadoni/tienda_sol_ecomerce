@@ -54,15 +54,17 @@ const NavbarDetalle = () => {
           >
             Productos
           </Link>
-          <Link
-            to="/pedidos/hechos"
-            className="nav-link"
-            role="menuitem"
-            aria-label="Ver mis pedidos"
-          >
-            Mis pedidos
-          </Link>
-          
+          {elUsuarioEsUn("comprador") && (
+            <Link
+              to="/pedidos/hechos"
+              className="nav-link"
+              role="menuitem"
+              aria-label="Ver mis pedidos"
+            >
+              Mis pedidos
+            </Link>
+          )}
+          {elUsuarioEsUn("vendedor") && (
             <Link
               to="/pedidos/recibidos"
               className="nav-link"
@@ -71,6 +73,7 @@ const NavbarDetalle = () => {
             >
               Pedidos Recibidos
             </Link>
+          )}
         </div>
       )}
     </>
