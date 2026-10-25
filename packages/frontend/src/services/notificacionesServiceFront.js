@@ -1,7 +1,7 @@
 import axios from 'axios';
 import procesarErrorAxios from "./errorsAdapter.js";
 
-const API_BASE_URL = process.env.REACT_APP_API_URL || '';
+import { API_BASE_URL } from "./apiConfig.js";
 
 export const getNotificaciones = async (filtros = {}, token) => {
   try {
