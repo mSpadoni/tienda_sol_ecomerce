@@ -23,7 +23,7 @@ Tienda online con compradores y vendedores: carrito, pedidos con estados, notifi
 
 ## Qué hicimos
 
-Construimos en equipo un marketplace estilo Mercado Libre, de punta a punta. Del lado del backend armamos una **API REST en capas** con Node.js, Express y MongoDB, donde el pedido funciona como una **máquina de estados** con reglas de negocio: solo el comprador cancela, solo el vendedor envía, el stock se descuenta y se devuelve, y cada cambio genera una notificación. La seguridad la resolvimos con **Keycloak y JWT**, con permisos por rol en el menú, las rutas y la API. El frontend en **React** tiene catálogo con filtros, carrito, checkout y seguimiento de pedidos, y se adapta al celular. Todo está cubierto con **tests en Jest**, se levanta con **Docker** y está **desplegado en la nube**.
+Construimos en equipo un marketplace estilo Mercado Libre, de punta a punta. Del lado del backend armamos una **API REST en capas** con Node.js, Express y MongoDB, donde el pedido funciona como una **máquina de estados** con reglas de negocio: solo el comprador cancela, solo el vendedor envía, el stock se descuenta y se devuelve, y cada cambio genera una notificación. La seguridad la resolvimos con **Keycloak y JWT**, con permisos por rol en el menú, las rutas y la API. El frontend en **React** tiene catálogo con filtros, carrito, checkout y seguimiento de pedidos, y se adapta al celular. Tiene **tests en Jest**, se levanta con **Docker** y está **desplegado en la nube**.
 
 <details>
 <summary><b>Correrlo en tu máquina</b></summary>
