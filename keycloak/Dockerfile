@@ -2,6 +2,8 @@
 FROM quay.io/keycloak/keycloak:26.4.4 AS builder
 ENV KC_DB=postgres
 ENV KC_HEALTH_ENABLED=true
+# Una sola instancia: caché local en vez de clúster (Infinispan/JGroups), usa mucha menos memoria
+ENV KC_CACHE=local
 COPY themes/ /opt/keycloak/themes/
 RUN /opt/keycloak/bin/kc.sh build
 
@@ -12,6 +14,6 @@ ENV KC_HTTP_ENABLED=true
 ENV KC_PROXY_HEADERS=xforwarded
 ENV KC_HOSTNAME_STRICT=false
 # Menos memoria para entrar en el plan gratis (512 MB)
-ENV JAVA_OPTS_KC_HEAP="-XX:MaxRAMPercentage=65 -XX:InitialRAMPercentage=40"
+ENV JAVA_OPTS_KC_HEAP="-XX:MaxRAMPercentage=50 -XX:InitialRAMPercentage=25 -XX:MaxMetaspaceSize=160m -Xss512k"
 EXPOSE 8080
 ENTRYPOINT ["/opt/keycloak/bin/kc.sh", "start", "--optimized"]
