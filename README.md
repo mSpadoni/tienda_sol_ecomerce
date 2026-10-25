@@ -23,29 +23,7 @@ Tienda online con compradores y vendedores: carrito, pedidos con estados, notifi
 
 ## Qué hicimos
 
-El desafío fue construir, desde cero y en equipo, un marketplace al estilo Mercado Libre: un sistema donde vendedores publican productos y compradores los encuentran, los compran y siguen su pedido hasta que llega. Lo encaramos como un producto real, con backend, frontend, seguridad, tests e infraestructura.
-
-**🧱 Backend: el corazón del negocio**
-- Diseñamos el **modelo de dominio** (usuarios, productos, pedidos y notificaciones) y una **API REST** en Node.js y Express, separada en capas: rutas, controladores, servicios y repositorios.
-- Modelamos el **ciclo de vida del pedido** como una máquina de estados (confirmado → enviado → finalizado, o cancelado / rechazado), con reglas que la API hace cumplir. Por ejemplo: solo el comprador puede cancelar, solo el vendedor puede enviar y no se cancela algo ya enviado.
-- Al confirmar un pedido se **valida y descuenta el stock**, y si se cancela se devuelve. Cada cambio de estado genera una **notificación** para la persona que corresponde.
-- Validamos los datos de entrada con **Zod** y manejamos los errores con **14 excepciones de dominio**, cada una con su respuesta HTTP clara. La API está documentada con **Swagger**.
-
-**🔐 Seguridad: quién puede hacer qué**
-- Integramos **Keycloak** para el login y los roles, con tokens **JWT** que la API valida en cada pedido.
-- Los permisos se controlan en **tres capas**: el menú muestra solo lo que te corresponde, las rutas del frontend lo verifican y la API rechaza lo que no tenés permitido.
-- Personalizamos la pantalla de login con el diseño de la tienda.
-
-**🖥️ Frontend: la experiencia de compra**
-- Hicimos una app en **React** con Material UI: catálogo con **búsqueda, filtros, orden y paginación**, detalle de producto, carrito y checkout.
-- Las vistas **"Mis pedidos"** (comprador) y **"Pedidos recibidos"** (vendedor) permiten seguir y gestionar cada pedido.
-- Es **responsive**: en el celular, los formularios largos se completan paso a paso.
-- Los precios se pueden ver en **distintas monedas**, con cotizaciones que la API consulta y guarda en caché.
-
-**✅ Calidad e infraestructura**
-- Escribimos **tests** unitarios y de integración con **Jest** y **Supertest**.
-- Con un solo `docker compose up` se levanta todo el entorno: MongoDB, Keycloak y PostgreSQL, con datos de ejemplo cargados.
-- Lo **desplegamos en la nube**: el frontend y la API en Vercel, Keycloak en Docker sobre Render, y las bases en Neon y MongoDB Atlas.
+Construimos en equipo un marketplace estilo Mercado Libre, de punta a punta. Del lado del backend armamos una **API REST en capas** con Node.js, Express y MongoDB, donde el pedido funciona como una **máquina de estados** con reglas de negocio: solo el comprador cancela, solo el vendedor envía, el stock se descuenta y se devuelve, y cada cambio genera una notificación. La seguridad la resolvimos con **Keycloak y JWT**, con permisos por rol en el menú, las rutas y la API. El frontend en **React** tiene catálogo con filtros, carrito, checkout y seguimiento de pedidos, y se adapta al celular. Todo está cubierto con **tests en Jest**, se levanta con **Docker** y está **desplegado en la nube**.
 
 <details>
 <summary><b>Correrlo en tu máquina</b></summary>
