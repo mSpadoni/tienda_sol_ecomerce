@@ -15,9 +15,9 @@ const KeycloakContext = createContext();
 export const useKeycloak = () => useContext(KeycloakContext);
 
 const keycloak = new Keycloak({
-  url: "http://localhost:8080",
-  realm: "ecommerce",
-  clientId: "tp_desarrollo",
+  url: process.env.REACT_APP_KEYCLOAK_URL || "http://localhost:8080",
+  realm: process.env.REACT_APP_KEYCLOAK_REALM || "ecommerce",
+  clientId: process.env.REACT_APP_KEYCLOAK_CLIENT_ID || "tp_desarrollo",
 });
 
 export let keyCloakToken = "";

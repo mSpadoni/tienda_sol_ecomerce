@@ -46,10 +46,15 @@ const logger = winston.createLogger({
   levels: customLevels.levels,
   level: "debug",
   transports: [
-    new winston.transports.File({
-      filename: path.join(__dirname, "app.log"),
-      format: baseFormat,
-    }),
+    // En Vercel el disco es de solo lectura: ahí solo se loguea por consola
+    ...(process.env.VERCEL
+      ? []
+      : [
+          new winston.transports.File({
+            filename: path.join(__dirname, "app.log"),
+            format: baseFormat,
+          }),
+        ]),
     new winston.transports.Console({
       format: consoleFormat,
     }),

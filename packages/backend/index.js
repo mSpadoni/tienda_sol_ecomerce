@@ -44,6 +44,16 @@ app.use(
 
 app.use(express.json());
 
+// En Vercel cada función arranca en frío: conectamos a MongoDB una sola vez y reutilizamos la conexión
+app.use(async (req, res, next) => {
+  try {
+    await MongoDBClient.connect();
+    next();
+  } catch (error) {
+    next(error);
+  }
+});
+
 // Repositorios
 const pedidoRepository = new PedidoRepository();
 const usuarioRepository = new UsuarioRepository();
@@ -146,6 +156,11 @@ server.setController(UsuarioControler, usuarioControler);
 
 routes.forEach((route) => server.addRoute(route));
 server.configureRoutes();
-server.launch();
 
-MongoDBClient.connect();
+// En Vercel la app se exporta como función; localmente o en Docker levanta el servidor
+if (!process.env.VERCEL) {
+  server.launch();
+  MongoDBClient.connect();
+}
+
+export default app;

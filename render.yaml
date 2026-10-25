@@ -1,0 +1,21 @@
+# Blueprint de Render: Keycloak de Tienda Sol.
+# Los valores marcados con sync: false se cargan a mano en el panel de Render (son secretos).
+services:
+  - type: web
+    name: tienda-sol-keycloak
+    runtime: docker
+    plan: free
+    rootDir: keycloak
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /realms/master
+    envVars:
+      - key: KC_DB_URL            # jdbc:postgresql://<host>/<db>?sslmode=require (Neon)
+        sync: false
+      - key: KC_DB_USERNAME
+        sync: false
+      - key: KC_DB_PASSWORD
+        sync: false
+      - key: KC_BOOTSTRAP_ADMIN_USERNAME
+        sync: false
+      - key: KC_BOOTSTRAP_ADMIN_PASSWORD
+        sync: false
