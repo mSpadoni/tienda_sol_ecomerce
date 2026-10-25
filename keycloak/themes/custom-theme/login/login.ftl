@@ -21,12 +21,23 @@
       </div>
 
       <div class="field">
-        <label for="password">Contrasena</label>
+        <label for="password">Contraseña</label>
         <input id="password" name="password" type="password" />
       </div>
 
       <input class="login-btn" type="submit" value="Ingresar" />
     </form>
+
+    <#-- La cuenta se crea en la tienda: así se guarda el usuario en Keycloak y en MongoDB con su rol -->
+    <#if client?? && client.baseUrl?has_content>
+      <p class="register-link">
+        ¿No tenés cuenta?
+        <a href="${client.baseUrl}/registro">Creá tu cuenta</a>
+      </p>
+      <p class="register-link">
+        <a href="${client.baseUrl}">Volver a la tienda sin iniciar sesión</a>
+      </p>
+    </#if>
   </div>
 </body>
 </html>
