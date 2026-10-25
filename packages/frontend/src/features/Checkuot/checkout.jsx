@@ -42,6 +42,10 @@ const Checkout = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, [isAuthenticated, login, ponerInvisible, ponerVisible, setMensajeExito]);
 
+  // Si se sale del checkout por otro camino (ej. botón "atrás"), el navbar vuelve a verse.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => () => ponerVisible(), []);
+
   const initialValues = {
     calle: "",
     altura: "",
@@ -101,7 +105,6 @@ const Checkout = () => {
       limpiarCarrito();
       setResultadoCompra("ok"); // mostramos pantalla de exito
       setMensajeExito("Compra realizada con éxito");
-      ponerVisible();
     } catch (err) {
       console.error(err);
       let msg = "No se pudo procesar la compra. Intentá de nuevo más tarde.";
@@ -159,6 +162,12 @@ const Checkout = () => {
     )}`;
   };
 
+  // La pantalla de resultado oculta el navbar; al salir de ella hay que mostrarlo de nuevo.
+  const salirA = (ruta) => {
+    ponerVisible();
+    navigate(ruta);
+  };
+
   const progress = Math.round(((step + 1) / fieldKeys.length) * 100);
 
   //  Vista de éxito
@@ -171,7 +180,7 @@ const Checkout = () => {
           <div style={{ marginTop: "1.5rem", display: "flex", gap: "1rem", justifyContent: "center", flexWrap: "wrap" }}>
             <Button
               variant="contained"
-              onClick={() => navigate("/pedidos/hechos")}
+              onClick={() => salirA("/pedidos/hechos")}
               sx={{
                 "&.MuiButton-contained": {
                   backgroundColor: "#16427f !important",
@@ -187,7 +196,7 @@ const Checkout = () => {
             </Button>
             <Button
               variant="outlined"
-              onClick={() => navigate("/")}
+              onClick={() => salirA("/")}
               sx={{
                 "&.MuiButton-outlined": {
                   borderColor: "#16427f !important",
@@ -219,7 +228,7 @@ const Checkout = () => {
           <div style={{ marginTop: "1.5rem" }}>
             <Button
               variant="contained"
-              onClick={() => navigate("/")}
+              onClick={() => salirA("/")}
               sx={{
                 "&.MuiButton-contained": {
                   backgroundColor: "#16427f !important",
