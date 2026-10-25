@@ -1,8 +1,6 @@
 # Tienda Sol: e-commerce full stack
 
-**Plataforma de compra y venta online con roles de comprador y vendedor, carrito, pedidos con estados y notificaciones.** Proyecto académico de Desarrollo de Software (UTN-FRBA, 2025), en un equipo de 5. Está **desplegada en la nube y se puede probar ahora mismo.**
-
-### [🛒 Probar la tienda en vivo](https://tienda-sol-ecommerce.vercel.app)
+**Plataforma de compra y venta online con roles de comprador y vendedor, carrito, pedidos con estados y notificaciones.** Proyecto académico de Desarrollo de Software (UTN-FRBA, 2025), en un equipo de 5.
 
 ![Node.js](https://img.shields.io/badge/Node.js-339933?style=flat-square&logo=node.js&logoColor=white)
 ![Express](https://img.shields.io/badge/Express-000000?style=flat-square&logo=express&logoColor=white)
@@ -11,20 +9,8 @@
 ![Keycloak](https://img.shields.io/badge/Keycloak-2C3E50?style=flat-square&logo=keycloak&logoColor=white)
 ![Jest](https://img.shields.io/badge/Jest-C21325?style=flat-square&logo=jest&logoColor=white)
 ![Docker](https://img.shields.io/badge/Docker-2496ED?style=flat-square&logo=docker&logoColor=white)
-![Vercel](https://img.shields.io/badge/Vercel-000000?style=flat-square&logo=vercel&logoColor=white)
-![Render](https://img.shields.io/badge/Render-46E3B7?style=flat-square&logo=render&logoColor=black)
 
 ![Inicio de la tienda](docs/img/inicio.jpg)
-
-## Probala en 1 minuto
-
-| Querés ver… | Cómo |
-|---|---|
-| **La tienda como visitante** | Entrá al [link](https://tienda-sol-ecommerce.vercel.app): podés buscar, filtrar y armar el carrito sin cuenta. |
-| **La experiencia del comprador** | Tocá **Iniciar sesión → Creá tu cuenta**. Al registrarte entrás directo, ya con tu sesión, y podés hacer un pedido. |
-| **La experiencia del vendedor** | Iniciá sesión con el usuario de demo **`vendedor`** / contraseña **`Demo-f2PEDewa`** y entrá a **Pedidos Recibidos**. |
-
-> El login corre en el plan gratis de Render. Si nadie lo usó en un rato, la primera vez puede tardar unos segundos más.
 
 ## De qué se trata
 
@@ -43,27 +29,23 @@ Construimos una tienda online completa, de punta a punta:
 | 🖥️ **Frontend** | React 19 con React Router y Material UI |
 | 🔐 **Seguridad** | Login y roles (comprador y vendedor) con **Keycloak + JWT**, con tema de login propio |
 | ✅ **Calidad** | Validación de datos con **Zod**, **14 excepciones de dominio** y tests unitarios y de integración con **Jest + Supertest** |
-| ☁️ **Nube** | Frontend y API en **Vercel** (la API como función serverless), **MongoDB Atlas**, Keycloak en **Docker sobre Render** con base **PostgreSQL en Neon** |
-| 🛠️ **Infra local** | **Docker Compose** (MongoDB, Keycloak y PostgreSQL), documentación de la API con **Swagger**, logs con Winston |
-
-## Arquitectura en la nube
+| 🛠️ **Infra** | **Docker Compose** (MongoDB, Keycloak y PostgreSQL), documentación de la API con **Swagger**, logs con Winston |
 
 ```mermaid
 flowchart LR
-  U[Usuario] --> F[Frontend React<br/>Vercel]
-  F -- login --> K[Keycloak<br/>Docker en Render]
-  F -- REST + JWT --> B[API Express<br/>Vercel serverless]
+  U[Usuario] --> F[Frontend React]
+  F -- login --> K[Keycloak]
+  F -- REST + JWT --> B[API Express]
   B -- valida token --> K
-  B --> M[(MongoDB Atlas)]
-  K --> P[(PostgreSQL<br/>Neon)]
+  B --> M[(MongoDB)]
+  K --> P[(PostgreSQL)]
 ```
 
-<details>
-<summary><b>Cómo correrlo en tu máquina</b></summary>
+## Cómo correrlo
 
 Necesitás **Docker** y **Node.js 20+**.
 
-1. **Levantar MongoDB, Keycloak, PostgreSQL y la API.** Docker crea el realm, los roles, el usuario vendedor y carga los productos:
+1. **Levantar MongoDB, Keycloak, PostgreSQL y la API.** Docker además crea el realm, los roles y el usuario vendedor, y carga los productos:
    ```bash
    cp packages/backend/.env.example packages/backend/.env
    docker compose up -d --build
@@ -76,40 +58,13 @@ Necesitás **Docker** y **Node.js 20+**.
    ```bash
    npm run start:frontend
    ```
-   La tienda queda en `http://localhost:3000`, la API en `http://localhost:3001` y Keycloak en `http://localhost:8080`.
-4. **Correr los tests:**
+4. **Abrir la tienda** en `http://localhost:3000`:
+   - **Como visitante:** podés buscar, filtrar y armar el carrito sin cuenta.
+   - **Como comprador:** tocá **Iniciar sesión → Creá tu cuenta**; al registrarte entrás directo y podés hacer un pedido.
+   - **Como vendedor:** iniciá sesión con **`vendedor`** / **`Vendedor123!`** y entrá a **Pedidos Recibidos**.
+
+   La API queda en `http://localhost:3001` y Keycloak en `http://localhost:8080`.
+5. **Correr los tests:**
    ```bash
    npm test
    ```
-</details>
-
-<details>
-<summary><b>Cómo desplegarlo en la nube (todo en planes gratis)</b></summary>
-
-1. **Base de Keycloak:** creá un proyecto en [Neon](https://neon.tech) (PostgreSQL), en la misma región donde vas a correr Keycloak.
-2. **Keycloak en Render:** creá un *Blueprint* desde este repo; usa [`render.yaml`](render.yaml) y el [`keycloak/Dockerfile`](keycloak/Dockerfile), que ya incluye el tema de login. Cargá las variables secretas:
-   - `KC_DB_URL` → `jdbc:postgresql://<host de Neon>/<base>?sslmode=require`
-   - `KC_DB_USERNAME`, `KC_DB_PASSWORD`
-   - `KC_BOOTSTRAP_ADMIN_USERNAME`, `KC_BOOTSTRAP_ADMIN_PASSWORD`
-3. **MongoDB:** creá una base en MongoDB Atlas (o conectala desde *Storage* en Vercel).
-4. **Configurar el realm y cargar productos:** corré [`scripts/bootstrap/init-stack.mjs`](scripts/bootstrap/init-stack.mjs) contra tu Keycloak. Crea el realm `ecommerce`, los roles, los clientes, el usuario vendedor y los productos:
-   ```bash
-   KEYCLOAK_BASE_URL=https://<tu-keycloak>.onrender.com \
-   KEYCLOAK_ADMIN=<admin> KEYCLOAK_ADMIN_PASSWORD=<contraseña> \
-   KEYCLOAK_BACKEND_CLIENT_SECRET=<un secreto nuevo> \
-   FRONTEND_URLS=https://<tu-tienda>.vercel.app \
-   BACKEND_URLS=https://<tu-api>.vercel.app \
-   MONGODB_URI=<uri de Mongo> MONGODB_DB_NAME=tienda_sol \
-   VENDEDOR_PASSWORD=<contraseña del vendedor> \
-   node scripts/bootstrap/init-stack.mjs
-   ```
-5. **API en Vercel:** proyecto nuevo con *Root Directory* `packages/backend`. Variables:
-   - `KEYCLOAK_BASE_URL`, `REALM=ecommerce`, `CLIENT_ID=backend-clente`
-   - `CLIENT_SECRET` (el mismo del paso 4)
-   - `MONGODB_URI`, `MONGODB_DB_NAME=tienda_sol`
-   - `ALLOWED_ORIGINS=https://<tu-tienda>.vercel.app`
-6. **Frontend en Vercel:** proyecto nuevo con *Root Directory* `packages/frontend`. Variables:
-   - `REACT_APP_API_URL`, `REACT_APP_KEYCLOAK_URL`
-   - `REACT_APP_KEYCLOAK_REALM=ecommerce`, `REACT_APP_KEYCLOAK_CLIENT_ID=tp_desarrollo`
-7. **(Opcional)** Actualizá la URL de Keycloak en [`.github/workflows/keep-alive.yml`](.github/workflows/keep-alive.yml) para que no se duerma.
-</details>
