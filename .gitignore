@@ -8,3 +8,9 @@ node_modules/
 /packages/**/.env
 cookies.txt
 .claude/
+.neon
+.env.local
+.env.*.local
+.neon/
+render-keycloak.env
+cloud-secrets.env

@@ -12,6 +12,10 @@ const BACKEND_CLIENT_SECRET =
   process.env.KEYCLOAK_BACKEND_CLIENT_SECRET || "wWQA7vgOp4CujCmxJ3UdU9iLDE1NGwV7";
 const FRONTEND_CLIENT_ID = process.env.KEYCLOAK_FRONTEND_CLIENT_ID || "tp_desarrollo";
 const THEME_NAME = process.env.KEYCLOAK_THEME_NAME || "custom-theme";
+// URLs públicas (en la nube): se suman a las de localhost para los redirects de Keycloak
+const FRONTEND_URLS = ["http://localhost:3000", ...(process.env.FRONTEND_URLS || "").split(",").map((u) => u.trim()).filter(Boolean)];
+const BACKEND_URLS = ["http://localhost:3001", ...(process.env.BACKEND_URLS || "").split(",").map((u) => u.trim()).filter(Boolean)];
+const SKIP_MONGO_SEED = process.env.SKIP_MONGO_SEED === "true";
 const MONGODB_URI = process.env.MONGODB_URI || "mongodb://mongo:27017/test";
 const IMAGES_DIR =
   process.env.FRONTEND_IMAGES_PATH || "/app/packages/frontend/public/images";
@@ -493,7 +497,7 @@ async function main() {
       // Backend actual uses password grant in current code path.
       directAccessGrantsEnabled: true,
       secret: BACKEND_CLIENT_SECRET,
-      webOrigins: ["http://localhost:3001"],
+      webOrigins: BACKEND_URLS,
     });
 
     await ensureBackendServiceAccountCanCreateUsers(token, backendClient);
@@ -506,14 +510,18 @@ async function main() {
     publicClient: true,
     standardFlowEnabled: true,
     directAccessGrantsEnabled: true,
-    redirectUris: ["http://localhost:3000/*"],
-    webOrigins: ["http://localhost:3000/*"],
-    rootUrl: "http://localhost:3000",
-    baseUrl: "http://localhost:3000",
+    redirectUris: FRONTEND_URLS.map((u) => `${u}/*`),
+    webOrigins: FRONTEND_URLS,
+    rootUrl: FRONTEND_URLS.at(-1),
+    baseUrl: FRONTEND_URLS.at(-1),
   });
 
   const vendedorUser = await ensureVendedorUser(token, vendedorRole);
 
+  if (SKIP_MONGO_SEED) {
+    console.log(`Keycloak listo. ID del vendedor para la carga en Mongo: ${vendedorUser.id}`);
+    return;
+  }
   await waitForMongoReady();
   await upsertMongoSeed(vendedorUser.id);
   await mongoose.disconnect();

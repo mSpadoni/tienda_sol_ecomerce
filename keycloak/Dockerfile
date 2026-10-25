@@ -12,6 +12,6 @@ ENV KC_HTTP_ENABLED=true
 ENV KC_PROXY_HEADERS=xforwarded
 ENV KC_HOSTNAME_STRICT=false
 # Menos memoria para entrar en el plan gratis (512 MB)
-ENV JAVA_OPTS_KC_HEAP="-XX:MaxRAMPercentage=65 -XX:+UseSerialGC"
+ENV JAVA_OPTS_KC_HEAP="-XX:MaxRAMPercentage=65 -XX:InitialRAMPercentage=40"
 EXPOSE 8080
 ENTRYPOINT ["/opt/keycloak/bin/kc.sh", "start", "--optimized"]
