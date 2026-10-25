@@ -1,7 +1,7 @@
 import logger from "../logger/logger.js";
 import ErrorProductosNoEncontrados from "../errors/errorProductosNoEncontrado.js";
 
-export function productosErrorHandler(err, _req, res, _next) {
+export function productosMiddleware(err, _req, res, _next) {
   logger.error("Error en ProductosMiddleware: " + err.message);
 
   if (err.constructor.name === ErrorProductosNoEncontrados.name) {

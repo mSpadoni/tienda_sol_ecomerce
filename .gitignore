@@ -6,3 +6,12 @@ node_modules/
 
 .env
 /packages/**/.env
+cookies.txt
+.claude/
+.neon
+.env.local
+.env.*.local
+.neon/
+render-keycloak.env
+cloud-secrets.env
+render-keycloak-oregon.env

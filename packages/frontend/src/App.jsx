@@ -94,38 +94,42 @@ function App() {
                       <Route path="/productos/:id" element={<ProductDetailPage />}/>
                       <Route element={<ProtectedRoute />}>
                         <Route path="/checkout" element={<Checkout />} />
-                        <Route
-                          path="/pedidos/hechos"
-                          element={
-                            <ListaPedidos
-                              funcionDeOrdenamiento={sortPedidosComprador}
-                              tipoDePedidos = "hechos"
-                              pathBackend = "/pedidos/hechos"
-                              estadoParaAvanzar="finalizado"
-                              estadoParaAbortar="cancelado"
-                              estadoParaMostrar="enviado"
-                              mensaje="Todavía no has hechos ningún pedido ..."
-                              existoMessage="Se cancelo el pedido correctamente..."
-                              ruta="/pedidos/hechos"
-                            />
-                          }
-                        />
-                        <Route
-                          path="/pedidos/recibidos"
-                          element={
-                            <ListaPedidos
-                              funcionDeOrdenamiento={sortPedidosVendedor}
-                              tipoDePedidos = "recibidos"
-                              pathBackend = "/pedidos/recibidos"
-                              estadoParaAvanzar="enviado"
-                              estadoParaAbortar="rechazado"
-                              estadoParaMostrar="confirmado"
-                              mensaje="No te hicieron ningún pedido aún ..."
-                              existoMessage="Se envio el pedido correctamente..."
-                              ruta="/pedidos/recibidos"
-                            />
-                          }
-                        />
+                        <Route element={<ProtectedRoute rol="comprador" />}>
+                          <Route
+                            path="/pedidos/hechos"
+                            element={
+                              <ListaPedidos
+                                funcionDeOrdenamiento={sortPedidosComprador}
+                                tipoDePedidos = "hechos"
+                                pathBackend = "/pedidos/hechos"
+                                estadoParaAvanzar="finalizado"
+                                estadoParaAbortar="cancelado"
+                                estadoParaMostrar="enviado"
+                                mensaje="Todavía no has hechos ningún pedido ..."
+                                existoMessage="Se cancelo el pedido correctamente..."
+                                ruta="/pedidos/hechos"
+                              />
+                            }
+                          />
+                        </Route>
+                        <Route element={<ProtectedRoute rol="vendedor" />}>
+                          <Route
+                            path="/pedidos/recibidos"
+                            element={
+                              <ListaPedidos
+                                funcionDeOrdenamiento={sortPedidosVendedor}
+                                tipoDePedidos = "recibidos"
+                                pathBackend = "/pedidos/recibidos"
+                                estadoParaAvanzar="enviado"
+                                estadoParaAbortar="rechazado"
+                                estadoParaMostrar="confirmado"
+                                mensaje="No te hicieron ningún pedido aún ..."
+                                existoMessage="Se envio el pedido correctamente..."
+                                ruta="/pedidos/recibidos"
+                              />
+                            }
+                          />
+                        </Route>
                         <Route
                           path="/notificaciones"
                           element={<ListaNotificaciones />}

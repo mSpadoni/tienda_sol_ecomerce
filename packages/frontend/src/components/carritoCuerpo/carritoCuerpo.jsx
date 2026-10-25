@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useCarrito } from "../../provieder/carritoProvider";
 import CarritoItem from "./CarritoItem.jsx";
 import { useNavigate } from "react-router-dom";
 import { useVisible } from "../../provieder/visibleHook.jsx";
+import { useKeycloak } from "../../provieder/keyCloak.jsx";
 import { Container, Box, Typography, Button, Stack, Paper } from "@mui/material";
 import PropTypes from "prop-types";
 import "./carritoCuerpo.css";
@@ -11,8 +12,14 @@ const CarritoCuerpo = () => {
   const { carrito, carritoVacio, total } = useCarrito();
   const navigate = useNavigate();
   const { ponerInvisible } = useVisible();
+  const { isAuthenticated, login } = useKeycloak();
 
   const comprar = () => {
+    if (!isAuthenticated) {
+      // Sin sesión: se pide el login recién al comprar
+      login();
+      return;
+    }
     navigate("/checkout");
     ponerInvisible();
   };
@@ -21,7 +28,7 @@ const CarritoCuerpo = () => {
     if (carritoVacio()) {
       navigate("/")
     }
-  }, [carrito.length, total, carritoVacio]);
+  }, [carrito.length, total, carritoVacio, navigate]);
 
   return (
     <Container maxWidth="md" sx={{ py: 4 }}>

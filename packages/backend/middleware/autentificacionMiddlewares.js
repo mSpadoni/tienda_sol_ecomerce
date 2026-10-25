@@ -4,7 +4,7 @@ import logger from "../logger/logger.js";
 
 const client = jwksClient({
   jwksUri:
-    process.env.KEYCLOAK_BASE_URL + "/realms/ecomerce/protocol/openid-connect/certs",
+    `${process.env.KEYCLOAK_BASE_URL}/realms/${process.env.REALM || "ecommerce"}/protocol/openid-connect/certs`,
 });
 
 async function getKey(kid) {

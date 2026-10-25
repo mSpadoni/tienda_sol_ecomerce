@@ -1,16 +1,32 @@
-import React, { useEffect } from "react";
-import { Outlet } from "react-router-dom";
+import React, { useEffect, useRef } from "react";
+import { Navigate, Outlet } from "react-router-dom";
+import PropTypes from "prop-types";
 import { useKeycloak } from "../provieder/keyCloak.jsx";
-import { useNavigate } from "react-router-dom";
-import Home from "../features/home/Home.jsx";
 
-export default function ProtectedRoute() {
-  const { isAuthenticated, keycloakReady, login } = useKeycloak();
+export default function ProtectedRoute({ rol }) {
+  const { isAuthenticated, keycloakReady, login, elUsuarioEsUn } = useKeycloak();
+  const loginTriggeredRef = useRef(false);
 
   useEffect(() => {
     if (!keycloakReady) return; // esperar la inicialización real
 
-    if (!isAuthenticated) {
+    if (isAuthenticated) {
+      loginTriggeredRef.current = false;
+      return;
+    }
+
+    // If we are in OIDC callback hash processing, avoid retriggering login.
+    const hash = window.location.hash || "";
+    if (
+      hash.includes("code=") ||
+      hash.includes("state=") ||
+      hash.includes("error=")
+    ) {
+      return;
+    }
+
+    if (!loginTriggeredRef.current) {
+      loginTriggeredRef.current = true;
       login(); // solo llamar login después de init
     }
   }, [keycloakReady, isAuthenticated, login]);
@@ -24,7 +40,16 @@ export default function ProtectedRoute() {
     return null;
   }
 
+  // Logueado pero sin el rol que pide la ruta (ej. un comprador en "Pedidos recibidos")
+  if (rol && !elUsuarioEsUn(rol)) {
+    return <Navigate to="/" replace />;
+  }
+
   return <Outlet />;
 }
+
+ProtectedRoute.propTypes = {
+  rol: PropTypes.string,
+};
 
 

@@ -1,13 +1,15 @@
 import express from "express";
 import ControllerPedidos from "../controller/ControllerPedidos.js";
-import pedidosErrorHandler from "../middleware/pedidosMiddlewares.js";
-import logger from "../logger/logger.js";
-import zodErrorHandler from "../middleware/zodMilware.js";
-import {
-  soloRol,
+import { 
+  pedidosMiddleware, 
+  zodMiddleware,
   validarToken,
-} from "../middleware/autentificacionMiddlewares.js";
+  soloRol
+} from "../middleware/index.js";
 import { TipoUsuario } from "../models/entities/TipoUsuario.js";
+
+import logger from "../logger/logger.js";
+
 
 
   const sortPedidosVendedor = (pedidos) => {
@@ -50,7 +52,7 @@ export default function pedidoRoute(getController) {
   router.get(
     pathPedidos + "/hechos",
     validarToken,
-    // soloRol(TipoUsuario.COMPRADOR),
+    soloRol(TipoUsuario.COMPRADOR),
     async (req, res, next) => {
       try {
         logger.http("Solicitud de pedidos del usuario id: " + req.params.id);
@@ -64,7 +66,7 @@ export default function pedidoRoute(getController) {
   router.get(
     pathPedidos + "/recibidos",
     validarToken,
-    // soloRol(TipoUsuario.VENDEDOR),
+    soloRol(TipoUsuario.VENDEDOR),
     async (req, res, next) => {
       try {
         logger.http("Solicitud de pedidos del usuario id: " + req.params.id);
@@ -84,7 +86,7 @@ export default function pedidoRoute(getController) {
     }
   });
 
-  router.use(pedidosErrorHandler);
-  router.use(zodErrorHandler);
+  router.use(pedidosMiddleware);
+  router.use(zodMiddleware);
   return router;
 }

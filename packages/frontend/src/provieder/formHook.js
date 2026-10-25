@@ -31,6 +31,7 @@ export function useForm(initialValues, onSubmit, validate) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (isSubmitting) return;
     setTriedSubmit(true);
 
     const validationErrors = validate ? validate(values) : {};
@@ -42,9 +43,12 @@ export function useForm(initialValues, onSubmit, validate) {
 
     if (Object.keys(validationErrors).length === 0) {
       setIsSubmitting(true);
-      await onSubmit(values);
-      setIsSubmitting(false);
-      setTriedSubmit(false);
+      try {
+        await onSubmit(values);
+        setTriedSubmit(false);
+      } finally {
+        setIsSubmitting(false);
+      }
     }
   };
 

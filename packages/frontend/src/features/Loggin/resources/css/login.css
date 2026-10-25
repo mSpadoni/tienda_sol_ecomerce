@@ -95,6 +95,43 @@ input[type="password"]:focus {
   font-family: Arial, sans-serif;
   color: var(--main-yellow-dark);
 }
+
+.password-input-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-input-container input[type="password"],
+.password-input-container input[type="text"] {
+  width: 100%;
+  padding: 10px 45px 10px 10px;
+  border: 2px solid #ccc;
+  border-radius: 5px;
+  transition: border-color 0.3s;
+  box-sizing: border-box;
+}
+
+.password-toggle {
+  position: absolute;
+  right: 10px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #666;
+  padding: 5px;
+  border-radius: 3px;
+  transition: color 0.3s;
+}
+
+.password-toggle:hover {
+  color: var(--main-yellow);
+}
+
+.password-toggle i {
+  font-size: 16px;
+}
+
 /* MEDIA QUERIES PARA ORIENTACIÓN Y ANCHOS */
 
 /* Móviles portrait */

@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useCarrito } from "../../provieder/carritoProvider.jsx";
 import { useCurrency } from "../../provieder/CurrencyProvider.jsx";
 import { useMensajes } from "../../provieder/mensajeDeExito.jsx";
+import { useKeycloak } from "../../provieder/keyCloak.jsx";
 import "./checkout.css";
 import { CURRENCIES } from "../../provieder/currencies.js";
 import { useForm } from "../../provieder/formHook.js";
@@ -16,6 +17,7 @@ const Checkout = () => {
   const { currency } = useCurrency();
   const { setMensajeExito } = useMensajes();
   const { ponerVisible, ponerInvisible } = useVisible();
+  const { isAuthenticated, login } = useKeycloak();
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 600);
   const [step, setStep] = useState(0);
   const [loadingCompra, setLoadingCompra] = useState(false);
@@ -26,8 +28,19 @@ const Checkout = () => {
     ponerInvisible();
     const handleResize = () => setIsMobile(window.innerWidth <= 600);
     window.addEventListener("resize", handleResize);
+    
+    // Check authentication and redirect to login if not authenticated
+    if (!isAuthenticated) {
+      setMensajeExito("Debes iniciar sesión para continuar con la compra");
+      ponerVisible();
+      setTimeout(() => {
+        login();
+      }, 1500);
+      return;
+    }
+    
     return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  }, [isAuthenticated, login, ponerInvisible, ponerVisible, setMensajeExito]);
 
   const initialValues = {
     calle: "",

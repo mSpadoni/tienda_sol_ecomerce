@@ -1,27 +1,11 @@
-version: '3'
 services:
-  backend:
-    build:
-      context: ./packages/backend
-    ports:
-      - "3001:3001"
-    environment:
-      SERVER_PORT: 3001
-      KEYCLOAK_BASE_URL: http://keycloak:8080
-      REALM: ecomerce
-      CLIENT_ID: backend_cliente
-      CLIENT_SECRET: 4hXDGLEgIqVzE6TqOyHqtacdve7MWJgm
-    volumes:
-      - ./packages/backend/.env:/app/.env
-    depends_on:
-      - keycloak
-      - mongo
   mongo:
     image: mongo:7
     ports:
       - "27017:27017"
     volumes:
-      - mongo_data:/data/test
+      - mongo_data:/data/db
+
   keycloak:
     image: quay.io/keycloak/keycloak:26.4.4
     command: start-dev
@@ -38,7 +22,6 @@ services:
       - "8080:8080"
     depends_on:
       - postgres
-
   postgres:
     image: postgres:16
     environment:
@@ -49,6 +32,56 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+
+  bootstrap:
+    build:
+      context: .
+      dockerfile: Dockerfile.init
+    environment:
+      KEYCLOAK_BASE_URL: http://keycloak:8080
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+      KEYCLOAK_REALM: ecommerce
+      KEYCLOAK_BACKEND_CLIENT_ID: backend-clente
+      KEYCLOAK_BACKEND_CLIENT_SECRET: wWQA7vgOp4CujCmxJ3UdU9iLDE1NGwV7
+      KEYCLOAK_FRONTEND_CLIENT_ID: tp_desarrollo
+      KEYCLOAK_THEME_NAME: custom-theme
+      MONGODB_URI: mongodb://mongo:27017/test
+      MONGODB_DB_NAME: test
+      VENDEDOR_ROLE_ID: d06e5f34-2638-4bf9-a096-a9b5fdfcba35
+      COMPRADOR_ROLE_ID: b1a584a6-fc0f-4da9-a3a4-9bb92060af92
+      VENDEDOR_USERNAME: vendedor
+      VENDEDOR_EMAIL: vendedor@tienda.com
+      VENDEDOR_PASSWORD: Vendedor123!
+      FRONTEND_IMAGES_PATH: /app/packages/frontend/public/images
+    volumes:
+      - ./packages/frontend/public/images:/app/packages/frontend/public/images:ro
+    depends_on:
+      - keycloak
+      - mongo
+
+  backend:
+    build:
+      context: ./packages/backend
+    ports:
+      - "3001:3001"
+    environment:
+      SERVER_PORT: 3001
+      MONGODB_URI: mongodb://mongo:27017/test
+      MONGODB_DB_NAME: test
+      KEYCLOAK_BASE_URL: http://keycloak:8080
+      REALM: ecommerce
+      CLIENT_ID: backend-clente
+      CLIENT_SECRET: wWQA7vgOp4CujCmxJ3UdU9iLDE1NGwV7
+    volumes:
+      - ./packages/backend/.env:/app/.env
+    depends_on:
+      keycloak:
+        condition: service_started
+      mongo:
+        condition: service_started
+      bootstrap:
+        condition: service_completed_successfully
 
 volumes:
   mongo_data:

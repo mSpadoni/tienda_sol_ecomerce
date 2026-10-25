@@ -10,7 +10,7 @@ import NotificationButton from "./NotificationButton.jsx";
 import MobileDrawer from "./MobileDrawer.jsx";
 import { useOutsideClick } from "../../hooks/useOutsideClick.js";
 import { useResponsive } from "../../hooks/useResponsive.js";
-import { IconButton, Box } from "@mui/material";
+import { IconButton, Box, Button } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
 
@@ -84,6 +84,25 @@ const Navbar = () => {
             >
               {menuAbierto ? <CloseIcon /> : <MenuIcon />}
             </IconButton>
+          )}
+
+          {/* Botón visible para iniciar sesión (la tienda se navega sin login) */}
+          {!isMobile && isVisible && !isAuthenticated && (
+            <Button
+              variant="contained"
+              onClick={login}
+              sx={{
+                backgroundColor: "#fff",
+                color: "#1e293b",
+                fontWeight: 700,
+                textTransform: "none",
+                borderRadius: "999px",
+                px: 2.5,
+                "&:hover": { backgroundColor: "#e2e8f0" },
+              }}
+            >
+              Iniciar sesión
+            </Button>
           )}
 
           {/* Auth menu for desktop */}
