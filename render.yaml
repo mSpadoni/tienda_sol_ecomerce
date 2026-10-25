@@ -5,7 +5,7 @@ services:
     name: tienda-sol-keycloak
     runtime: docker
     plan: free
-    region: virginia   # la más cercana a Neon (São Paulo) entre las gratis
+    region: oregon     # misma región que la base de Neon (aws-us-west-2)
     rootDir: keycloak
     dockerfilePath: ./Dockerfile
     healthCheckPath: /realms/master
