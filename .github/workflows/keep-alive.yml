@@ -1,0 +1,17 @@
+name: Mantener despierto Keycloak
+
+# Render (plan gratis) duerme el servicio tras 15 minutos sin tráfico y
+# despertarlo tarda cerca de un minuto. Lo pingueamos cada 10 minutos.
+on:
+  schedule:
+    - cron: "*/10 * * * *"
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Keycloak
+        run: curl -fsS -o /dev/null --max-time 120 https://tienda-sol-keycloak-0pkx.onrender.com/realms/ecommerce
+      - name: Ping API
+        run: curl -fsS -o /dev/null --max-time 60 https://tienda-sol-api.vercel.app/health
