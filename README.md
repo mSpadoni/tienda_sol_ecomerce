@@ -58,21 +58,6 @@ flowchart LR
   K --> P[(PostgreSQL<br/>Neon)]
 ```
 
-Algunas decisiones que tomamos al llevarla a la nube:
-- **La tienda no espera al login:** Keycloak se conecta por detrás, así que la página abre en ~1 segundo aunque el servicio de login esté arrancando.
-- **Keycloak entra en 512 MB:** caché local en vez de clúster y una JVM ajustada (SerialGC y heap fijo) para el plan gratis.
-- **Keycloak y su base en la misma región** (Oregón), para que cada paso del login no cruce el continente.
-- **Conexión a MongoDB reutilizada** entre invocaciones de la función serverless.
-- **Un workflow de GitHub Actions** visita Keycloak cada 10 minutos para que Render no lo duerma.
-
-## Mi rol
-
-- **Gestión de pedidos, de punta a punta:** modelo de dominio, servicio, controlador, validaciones con Zod, persistencia y sus tests.
-- **Integración con Keycloak:** login y control de acceso por rol.
-- **Pantallas del frontend:** carrito, "Pedidos hechos" y "Pedidos recibidos".
-- **Logging del backend** con Winston.
-- **Despliegue en la nube** (Vercel, Render, Neon y MongoDB Atlas).
-
 <details>
 <summary><b>Cómo correrlo en tu máquina</b></summary>
 
