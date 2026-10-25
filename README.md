@@ -2,6 +2,8 @@
 
 **Plataforma de compra y venta online con roles de comprador y vendedor, carrito, pedidos con estados y notificaciones.** Proyecto académico de Desarrollo de Software (UTN-FRBA, 2025), en un equipo de 5.
 
+### [🛒 Probar la tienda en vivo](https://tienda-sol-ecommerce.vercel.app)
+
 ![Node.js](https://img.shields.io/badge/Node.js-339933?style=flat-square&logo=node.js&logoColor=white)
 ![Express](https://img.shields.io/badge/Express-000000?style=flat-square&logo=express&logoColor=white)
 ![React](https://img.shields.io/badge/React-20232A?style=flat-square&logo=react&logoColor=61DAFB)
@@ -11,6 +13,16 @@
 ![Docker](https://img.shields.io/badge/Docker-2496ED?style=flat-square&logo=docker&logoColor=white)
 
 ![Inicio de la tienda](docs/img/inicio.jpg)
+
+## Probala en 1 minuto
+
+| Querés ver… | Cómo |
+|---|---|
+| **La tienda como visitante** | Entrá al [link](https://tienda-sol-ecommerce.vercel.app): podés buscar, filtrar y armar el carrito sin cuenta. |
+| **La experiencia del comprador** | Tocá **Iniciar sesión → Creá tu cuenta**. Al registrarte entrás directo, ya con tu sesión, y podés hacer un pedido. |
+| **La experiencia del vendedor** | Iniciá sesión con el usuario de demo **`vendedor`** / contraseña **`Demo-f2PEDewa`** y entrá a **Pedidos Recibidos**. |
+
+> El servicio de login corre en un plan gratis que se duerme cuando nadie lo usa. Si tarda en aparecer la pantalla de login, esperá alrededor de un minuto: se está despertando.
 
 ## De qué se trata
 
@@ -41,7 +53,8 @@ flowchart LR
   K --> P[(PostgreSQL)]
 ```
 
-## Cómo correrlo
+<details>
+<summary><b>Cómo correrlo en tu máquina</b></summary>
 
 Necesitás **Docker** y **Node.js 20+**.
 
@@ -68,3 +81,5 @@ Necesitás **Docker** y **Node.js 20+**.
    ```bash
    npm test
    ```
+
+</details>
