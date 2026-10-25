@@ -9,18 +9,21 @@ import React, {
 } from "react";
 import Keycloak from "keycloak-js";
 import PropTypes from "prop-types";
-import { ClipLoader } from "react-spinners";
 
 const KeycloakContext = createContext();
 export const useKeycloak = () => useContext(KeycloakContext);
 
-const keycloak = new Keycloak({
+const keycloakConfig = {
   url: process.env.REACT_APP_KEYCLOAK_URL || "http://localhost:8080",
   realm: process.env.REACT_APP_KEYCLOAK_REALM || "ecommerce",
   clientId: process.env.REACT_APP_KEYCLOAK_CLIENT_ID || "tp_desarrollo",
-});
+};
+
+const keycloak = new Keycloak(keycloakConfig);
 
 export let keyCloakToken = "";
+
+const KEYCLOAK_TOKEN_URL = `${keycloakConfig.url}/realms/${keycloakConfig.realm}/protocol/openid-connect/token`;
 
 export const KeycloakProvider = ({ children }) => {
   const keycloakRef = useRef(keycloak);
@@ -29,6 +32,7 @@ export const KeycloakProvider = ({ children }) => {
   const [keycloakReady, setKeycloakReady] = useState(false);
 
   const refreshIntervalRef = useRef(null);
+  const initPromiseRef = useRef(null);
 
   // -----------------------
   // Helpers
@@ -39,6 +43,7 @@ export const KeycloakProvider = ({ children }) => {
     if (kc.token && kc.refreshToken) {
       localStorage.setItem("kc_token", kc.token);
       localStorage.setItem("kc_refreshToken", kc.refreshToken);
+      if (kc.idToken) localStorage.setItem("kc_idToken", kc.idToken);
       keyCloakToken = kc.token;
     }
   }, []);
@@ -46,6 +51,7 @@ export const KeycloakProvider = ({ children }) => {
   const clearSession = useCallback(() => {
     localStorage.removeItem("kc_token");
     localStorage.removeItem("kc_refreshToken");
+    localStorage.removeItem("kc_idToken");
     keyCloakToken = "";
   }, []);
 
@@ -79,23 +85,26 @@ export const KeycloakProvider = ({ children }) => {
   useEffect(() => {
     const kc = keycloakRef.current;
 
-    // Restaurar tokens
+    // Restaurar la sesión guardada: keycloak-js la valida con un refresh,
+    // sin redirigir ni abrir el iframe de check-sso.
     const storedToken = localStorage.getItem("kc_token");
     const storedRefresh = localStorage.getItem("kc_refreshToken");
+    if (storedToken) keyCloakToken = storedToken;
 
-    if (storedToken && storedRefresh) {
-      kc.token = storedToken;
-      kc.refreshToken = storedRefresh;
-      keyCloakToken = storedToken;
+    if (!initPromiseRef.current) {
+      initPromiseRef.current = kc.init({
+        onLoad: "check-sso",
+        checkLoginIframe: false,
+        pkceMethod: "S256",
+        silentCheckSsoRedirectUri:
+          window.location.origin + "/silent-check-sso.html",
+        token: storedToken || undefined,
+        refreshToken: storedRefresh || undefined,
+        idToken: localStorage.getItem("kc_idToken") || undefined,
+      });
     }
 
-    kc.init({
-      onLoad: "check-sso",
-      checkLoginIframe: false,
-      pkceMethod: "S256",
-      silentCheckSsoRedirectUri:
-        window.location.origin + "/silent-check-sso.html",
-    })
+    initPromiseRef.current
       .then((authenticated) => {
         setIsAuthenticated(authenticated);
         setKeycloakReady(true);
@@ -120,10 +129,33 @@ export const KeycloakProvider = ({ children }) => {
   // -----------------------
   // AUTH ACTIONS
   // -----------------------
-  const login = useCallback(() => {
+  const login = useCallback(async () => {
+    // Si Keycloak todavía está despertando, esperamos a que termine el init.
+    await initPromiseRef.current?.catch(() => {});
     keycloakRef.current.login({
       redirectUri: window.location.origin,
     });
+  }, []);
+
+  // Inicia sesión con usuario y contraseña (se usa justo después del registro).
+  const loginConCredenciales = useCallback(async (username, password) => {
+    const response = await fetch(KEYCLOAK_TOKEN_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams({
+        grant_type: "password",
+        client_id: keycloakConfig.clientId,
+        scope: "openid",
+        username,
+        password,
+      }),
+    });
+    if (!response.ok) throw new Error("No se pudo iniciar sesión");
+
+    const tokens = await response.json();
+    localStorage.setItem("kc_token", tokens.access_token);
+    localStorage.setItem("kc_refreshToken", tokens.refresh_token);
+    if (tokens.id_token) localStorage.setItem("kc_idToken", tokens.id_token);
   }, []);
 
   const logout = useCallback(() => {
@@ -139,22 +171,12 @@ export const KeycloakProvider = ({ children }) => {
   const elUsuarioEsUn = (rol) =>
     keycloakRef.current.hasRealmRole(rol);
 
-  // -----------------------
-  // LOADING
-  // -----------------------
-  if (!keycloakReady) {
-    return (
-      <div style={{ display: "flex", justifyContent: "center", height: "60vh", alignItems: "center" }}>
-        <ClipLoader color="#1976d2" size={80} />
-      </div>
-    );
-  }
-
   return (
     <KeycloakContext.Provider
       value={{
         isAuthenticated,
         login,
+        loginConCredenciales,
         logout,
         elUsuarioEsUn,
         keycloakReady,

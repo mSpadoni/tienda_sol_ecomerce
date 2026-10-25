@@ -20,7 +20,7 @@ const RegistroUsuario = () => {
   const navigate = useNavigate();
   const { ponerVisible } = useVisible();
   const { setMensajeExito } = useMensajes();
-  const { login } = useKeycloak();
+  const { login, loginConCredenciales } = useKeycloak();
   const [error, setError] = useState(null);
 
   const initialValues = {
@@ -83,27 +83,17 @@ const RegistroUsuario = () => {
       setError(null); // Clear previous errors
       await crearUsuario(values);
       
-      // Show success message
-      setMensajeExito("Usuario creado exitosamente! Iniciando sesión automáticamente...");
-      ponerVisible();
-      
-      // Immediately trigger login with the same credentials
-      // setTimeout(async () => {
-      //   try {
-      //     // Use the same credentials to login
-      //     await login();
-          // Redirect to home after successful login
-           navigate("/");
-      //   } catch (loginError) {
-      //    console.error("Error en login automático:", loginError);
-      //     // If auto-login fails, show message and redirect to login
-      //     setMensajeExito("Usuario creado exitosamente. Por favor inicia sesión manualmente.");
-      //     setTimeout(() => {
-      //       na vigate("/");
-      //     }, 2000);
-      //   }
-      // }, 1000);
-      
+      // Iniciar sesión automáticamente con las mismas credenciales.
+      // Se recarga la página para que Keycloak tome la sesión nueva.
+      try {
+        await loginConCredenciales(values.username, values.password);
+        window.location.assign("/");
+      } catch (loginError) {
+        console.error("Error en login automático:", loginError);
+        setMensajeExito("Usuario creado exitosamente. Iniciá sesión para continuar.");
+        ponerVisible();
+        login();
+      }
     } catch (err) {
       console.error("Error en registro:", err);
       
@@ -308,7 +298,7 @@ const RegistroUsuario = () => {
                 ) : (
                   <Button
                     onClick={() => onSubmit(values)}
-                    type="submit"
+                    type="button"
                     variant="contained"
                     disabled={!camposCompletos || isSubmitting || isRegistering}
                     sx={{
@@ -367,7 +357,7 @@ const RegistroUsuario = () => {
                 {/* Botón Registrar */}
                 <Button
                   onClick={() => onSubmit(values)}
-                  type="submit"
+                  type="button"
                   variant="contained"
                   disabled={!camposCompletos || isSubmitting || isRegistering}
                   sx={{
