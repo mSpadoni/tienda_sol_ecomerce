@@ -178,11 +178,23 @@ async function waitForKeycloakReady() {
   );
 }
 
+// Versiones viejas dejaban un índice único sobre "keycloakId". Los usuarios que crea
+// la API solo tienen "idKeycloak", así que ese índice choca con null y bloquea el registro.
+async function dropLegacyKeycloakIdIndex() {
+  const usuarios = mongoose.connection.db.collection("usuarios");
+  const indices = await usuarios.indexes().catch(() => []);
+  if (indices.some((indice) => indice.name === "keycloakId_1")) {
+    await usuarios.dropIndex("keycloakId_1");
+    console.log("Índice viejo keycloakId_1 eliminado.");
+  }
+}
+
 async function waitForMongoReady() {
   for (let attempt = 1; attempt <= 30; attempt += 1) {
     try {
       await mongoose.connect(MONGODB_URI, process.env.MONGODB_DB_NAME ? { dbName: process.env.MONGODB_DB_NAME } : {});
       console.log("MongoDB listo.");
+      await dropLegacyKeycloakIdIndex();
       return;
     } catch (error) {
       console.log(`Esperando MongoDB... intento ${attempt}/30`);

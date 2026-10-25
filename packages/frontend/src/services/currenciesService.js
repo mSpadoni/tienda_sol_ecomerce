@@ -1,10 +1,11 @@
 import axios from "axios";
 import procesarErrorAxios from "./errorsAdapter.js";
+import { API_BASE_URL } from "./apiConfig.js";
 
 export const obtenerTasa = async (base, target) => {
   try {
     const response = await axios.get(
-      `http://localhost:3001/api/rates?base=${base.toLowerCase()}&target=${target.toLowerCase()}`,
+      `${API_BASE_URL}/api/rates?base=${base.toLowerCase()}&target=${target.toLowerCase()}`,
     );
 
     return response.data.rate || response.data.rates?.[target];
