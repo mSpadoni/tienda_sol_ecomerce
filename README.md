@@ -20,7 +20,20 @@
 |---|---|
 | **La tienda como visitante** | Entrá al [link](https://tienda-sol-ecommerce.vercel.app): podés buscar, filtrar y armar el carrito sin cuenta. |
 | **La experiencia del comprador** | Tocá **Iniciar sesión → Creá tu cuenta**. Al registrarte entrás directo, ya con tu sesión, y podés hacer un pedido. |
-| **La experiencia del vendedor** | Iniciá sesión con el usuario de demo **`vendedor`** / contraseña **`Demo-f2PEDewa`** y entrá a **Pedidos Recibidos**. |
+| **La experiencia del vendedor** | Iniciá sesión con la cuenta de vendedor (ver abajo) y entrá a **Pedidos Recibidos**: ahí aparecen los pedidos de los compradores y podés enviarlos o rechazarlos. |
+
+### Cuenta de vendedor
+
+Los vendedores no se registran desde la tienda: el registro crea siempre compradores. Para ver el lado del vendedor usá la cuenta de demo, que tiene una contraseña distinta según dónde corra la tienda:
+
+| Dónde | Usuario | Contraseña |
+|---|---|---|
+| **En la nube** ([link](https://tienda-sol-ecommerce.vercel.app)) | `vendedor` | `Demo-f2PEDewa` |
+| **En tu máquina** (`http://localhost:3000`) | `vendedor` | `Vendedor123!` |
+
+1. Si ya iniciaste sesión como comprador, cerrala desde el menú **⋮** (arriba a la derecha) → **Cerrar sesión**.
+2. Tocá **Iniciar sesión** y escribí el usuario y la contraseña. Si el navegador completó otro usuario solo, borralo primero.
+3. En la barra de arriba aparece **Pedidos Recibidos**.
 
 > El servicio de login corre en un plan gratis que se duerme cuando nadie lo usa. Si tarda en aparecer la pantalla de login, esperá alrededor de un minuto: se está despertando.
 
@@ -74,7 +87,7 @@ Necesitás **Docker** y **Node.js 20+**.
 4. **Abrir la tienda** en `http://localhost:3000`:
    - **Como visitante:** podés buscar, filtrar y armar el carrito sin cuenta.
    - **Como comprador:** tocá **Iniciar sesión → Creá tu cuenta**; al registrarte entrás directo y podés hacer un pedido.
-   - **Como vendedor:** iniciá sesión con **`vendedor`** / **`Vendedor123!`** y entrá a **Pedidos Recibidos**.
+   - **Como vendedor:** iniciá sesión con **`vendedor`** / **`Vendedor123!`** (la contraseña local, distinta de la de la nube) y entrá a **Pedidos Recibidos**.
 
    La API queda en `http://localhost:3001` y Keycloak en `http://localhost:8080`.
 5. **Correr los tests:**
