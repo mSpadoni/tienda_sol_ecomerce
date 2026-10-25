@@ -1,6 +1,6 @@
 # Tienda Sol: e-commerce full stack
 
-**Plataforma de compra y venta online con roles de comprador y vendedor, carrito, pedidos con estados y notificaciones.** Proyecto académico de Desarrollo de Software (UTN-FRBA, 2025), en un equipo de 5.
+Tienda online con compradores y vendedores: carrito, pedidos con estados, notificaciones y login por roles. Proyecto académico (UTN-FRBA, 2025), en un equipo de 5.
 
 ### [🛒 Probar la tienda en vivo](https://tienda-sol-ecommerce.vercel.app)
 
@@ -14,85 +14,32 @@
 
 ![Inicio de la tienda](docs/img/inicio.jpg)
 
-## Probala en 1 minuto
+## Probala
 
-| Querés ver… | Cómo |
-|---|---|
-| **La tienda como visitante** | Entrá al [link](https://tienda-sol-ecommerce.vercel.app): podés buscar, filtrar y armar el carrito sin cuenta. |
-| **La experiencia del comprador** | Tocá **Iniciar sesión → Creá tu cuenta**. Al registrarte entrás directo, ya con tu sesión, y podés hacer un pedido. |
-| **La experiencia del vendedor** | Iniciá sesión con la cuenta de vendedor (ver abajo) y entrá a **Pedidos Recibidos**: ahí aparecen los pedidos de los compradores y podés enviarlos o rechazarlos. |
+- **Comprador:** tocá **Iniciar sesión → Creá tu cuenta** y hacé un pedido.
+- **Vendedor:** entrá con **`vendedor`** / **`Demo-f2PEDewa`** y abrí **Pedidos Recibidos**.
 
-### Cuenta de vendedor
+> Si el login tarda en aparecer, esperá un minuto: el servidor gratuito se está despertando.
 
-Los vendedores no se registran desde la tienda: el registro crea siempre compradores. Para ver el lado del vendedor usá la cuenta de demo, que tiene una contraseña distinta según dónde corra la tienda:
+## Qué tiene
 
-| Dónde | Usuario | Contraseña |
-|---|---|---|
-| **En la nube** ([link](https://tienda-sol-ecommerce.vercel.app)) | `vendedor` | `Demo-f2PEDewa` |
-| **En tu máquina** (`http://localhost:3000`) | `vendedor` | `Vendedor123!` |
-
-1. Si ya iniciaste sesión como comprador, cerrala desde el menú **⋮** (arriba a la derecha) → **Cerrar sesión**.
-2. Tocá **Iniciar sesión** y escribí el usuario y la contraseña. Si el navegador completó otro usuario solo, borralo primero.
-3. En la barra de arriba aparece **Pedidos Recibidos**.
-
-> El servicio de login corre en un plan gratis que se duerme cuando nadie lo usa. Si tarda en aparecer la pantalla de login, esperá alrededor de un minuto: se está despertando.
-
-## De qué se trata
-
-Construimos una tienda online completa, de punta a punta:
-- **Compradores:** se registran, buscan productos con filtros y paginación, arman un carrito, hacen pedidos y los siguen.
-- **Vendedores:** reciben esos pedidos y los gestionan.
-- **El pedido** pasa por estados (confirmado, rechazado, enviado, cancelado y finalizado) con reglas de negocio: solo el comprador puede cancelar, solo el vendedor puede enviar, y no se puede cancelar algo ya enviado.
-- **Notificaciones:** cada cambio de estado se le avisa al usuario que corresponde.
-- **Permisos por rol en todas las capas:** cada usuario ve solo su menú, las rutas del frontend lo validan y la API rechaza los pedidos de quien no tiene el rol.
-
-![Pedidos recibidos por el vendedor](docs/img/pedidos-recibidos.jpg)
-
-| | |
-|---|---|
-| 🧱 **Backend** | API REST en Node.js + Express, arquitectura en capas (rutas → controladores → servicios → repositorios), MongoDB con Mongoose |
-| 🖥️ **Frontend** | React 19 con React Router y Material UI |
-| 🔐 **Seguridad** | Login y roles (comprador y vendedor) con **Keycloak + JWT**, con tema de login propio |
-| ✅ **Calidad** | Validación de datos con **Zod**, **14 excepciones de dominio** y tests unitarios y de integración con **Jest + Supertest** |
-| 🛠️ **Infra** | **Docker Compose** (MongoDB, Keycloak y PostgreSQL), documentación de la API con **Swagger**, logs con Winston |
-
-```mermaid
-flowchart LR
-  U[Usuario] --> F[Frontend React]
-  F -- login --> K[Keycloak]
-  F -- REST + JWT --> B[API Express]
-  B -- valida token --> K
-  B --> M[(MongoDB)]
-  K --> P[(PostgreSQL)]
-```
+- **API REST en capas** con Node.js, Express y MongoDB, validada con Zod.
+- **Login y roles** (comprador / vendedor) con Keycloak y JWT, controlados en el menú, en las rutas y en la API.
+- **Pedidos con reglas de negocio:** solo el comprador cancela, solo el vendedor envía.
+- **Tests** unitarios y de integración con Jest y Supertest.
+- **Desplegado en la nube:** Vercel, Render, Neon y MongoDB Atlas.
 
 <details>
-<summary><b>Cómo correrlo en tu máquina</b></summary>
+<summary><b>Correrlo en tu máquina</b></summary>
 
 Necesitás **Docker** y **Node.js 20+**.
 
-1. **Levantar MongoDB, Keycloak, PostgreSQL y la API.** Docker además crea el realm, los roles y el usuario vendedor, y carga los productos:
-   ```bash
-   cp packages/backend/.env.example packages/backend/.env
-   docker compose up -d --build
-   ```
-2. **Instalar las dependencias** desde la raíz del monorepo:
-   ```bash
-   npm install
-   ```
-3. **Iniciar el frontend:**
-   ```bash
-   npm run start:frontend
-   ```
-4. **Abrir la tienda** en `http://localhost:3000`:
-   - **Como visitante:** podés buscar, filtrar y armar el carrito sin cuenta.
-   - **Como comprador:** tocá **Iniciar sesión → Creá tu cuenta**; al registrarte entrás directo y podés hacer un pedido.
-   - **Como vendedor:** iniciá sesión con **`vendedor`** / **`Vendedor123!`** (la contraseña local, distinta de la de la nube) y entrá a **Pedidos Recibidos**.
+```bash
+cp packages/backend/.env.example packages/backend/.env
+docker compose up -d --build
+npm install
+npm run start:frontend
+```
 
-   La API queda en `http://localhost:3001` y Keycloak en `http://localhost:8080`.
-5. **Correr los tests:**
-   ```bash
-   npm test
-   ```
-
+Abrí `http://localhost:3000`. En local, el vendedor es **`vendedor`** / **`Vendedor123!`**. Tests: `npm test`.
 </details>
