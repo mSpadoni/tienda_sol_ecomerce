@@ -5,7 +5,6 @@ import PropTypes from "prop-types";
 import NotificacionesDesplegable from "./notificacionesDesplegable.jsx";
 import { Alert } from "@mui/material";
 import { getNotificaciones,marcarNotificacionComoLeida } from "../../services/notificacionesServiceFront.js"; // Ajustá el path si es necesario
-import { status } from "nprogress";
 import { useNavigate } from "react-router-dom";
 
 export default function ListaNotificaciones({}) {
