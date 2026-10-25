@@ -6,3 +6,5 @@ node_modules/
 
 .env
 /packages/**/.env
+cookies.txt
+.claude/

@@ -1,0 +1,8 @@
+# Ignore everything by default for root build context.
+*
+
+# Allow only files needed by bootstrap image.
+!Dockerfile.init
+!scripts/
+!scripts/bootstrap/
+!scripts/bootstrap/init-stack.mjs

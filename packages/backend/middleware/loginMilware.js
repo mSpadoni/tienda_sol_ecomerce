@@ -21,7 +21,7 @@ const logAxiosKeycloakError = (error) => {
   logger.error("Message: " + error.message);
 };
 
-export default function keycloakErrorHandler(err, req, res, next) {
+export function loginMilware(err, req, res, next) {
   const isAxios = !!err.isAxiosError;
   const response = err?.response;
   const kc = response?.data;

@@ -1,6 +1,5 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { FaEllipsisV } from "react-icons/fa";
 import { IconButton, Menu, MenuItem } from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 
@@ -75,9 +74,7 @@ export default AuthMenu;
 
 AuthMenu.propTypes = {
   children: PropTypes.node,
-  isOpen: PropTypes.bool.isRequired,
   authRef: PropTypes.object.isRequired,
-  toggleAuthMenu: PropTypes.func.isRequired,
   isAuthenticated: PropTypes.bool.isRequired,
   onRegistrar: PropTypes.func.isRequired,
   onLogin: PropTypes.func.isRequired,

@@ -13,12 +13,14 @@ import { useVisible } from "../../provieder/visibleHook.jsx";
 import { crearUsuario } from "../../services/userServices.js";
 import { useMensajes } from "../../provieder/mensajeDeExito.jsx";
 import { useForm } from "../../provieder/formHook.js";
+import { useKeycloak } from "../../provieder/keyCloak.jsx";
 import "./registro.css";
 
 const RegistroUsuario = () => {
   const navigate = useNavigate();
   const { ponerVisible } = useVisible();
   const { setMensajeExito } = useMensajes();
+  const { login } = useKeycloak();
   const [error, setError] = useState(null);
 
   const initialValues = {
@@ -70,14 +72,56 @@ const RegistroUsuario = () => {
   };
 
   const onSubmit = async (values) => {
+    // Prevent multiple submissions
+    if (isRegistering) {
+      console.log("Registro ya en proceso, ignorando envío duplicado");
+      return;
+    }
+
     try {
+      setIsRegistering(true);
+      setError(null); // Clear previous errors
       await crearUsuario(values);
-      setMensajeExito("Usuario creado exitosamente!");
+      
+      // Show success message
+      setMensajeExito("Usuario creado exitosamente! Iniciando sesión automáticamente...");
       ponerVisible();
-      navigate("/");
+      
+      // Immediately trigger login with the same credentials
+      // setTimeout(async () => {
+      //   try {
+      //     // Use the same credentials to login
+      //     await login();
+          // Redirect to home after successful login
+           navigate("/");
+      //   } catch (loginError) {
+      //    console.error("Error en login automático:", loginError);
+      //     // If auto-login fails, show message and redirect to login
+      //     setMensajeExito("Usuario creado exitosamente. Por favor inicia sesión manualmente.");
+      //     setTimeout(() => {
+      //       na vigate("/");
+      //     }, 2000);
+      //   }
+      // }, 1000);
+      
     } catch (err) {
-      setError(err);
-      navigate("/registro");
+      console.error("Error en registro:", err);
+      
+      // Handle different error types
+      let errorMessage = "Error al crear el usuario. Intenta nuevamente.";
+      
+      if (err.response?.data?.error) {
+        errorMessage = err.response.data.error;
+      } else if (err.message) {
+        errorMessage = err.message;
+      } else if (typeof err === 'string') {
+        errorMessage = err;
+      }
+      
+      setError({ message: errorMessage });
+      // Don't navigate away, let user see the error and try again
+    } finally {
+      setIsRegistering(false);
     }
   };
 
@@ -98,6 +142,7 @@ const RegistroUsuario = () => {
 
   const [step, setStep] = useState(0);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 600);
+  const [isRegistering, setIsRegistering] = useState(false);
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth <= 600);
@@ -265,7 +310,7 @@ const RegistroUsuario = () => {
                     onClick={() => onSubmit(values)}
                     type="submit"
                     variant="contained"
-                    disabled={!camposCompletos || isSubmitting}
+                    disabled={!camposCompletos || isSubmitting || isRegistering}
                     sx={{
                     "&.MuiButton-contained": {
                       backgroundColor: "#16427f !important",
@@ -324,7 +369,7 @@ const RegistroUsuario = () => {
                   onClick={() => onSubmit(values)}
                   type="submit"
                   variant="contained"
-                  disabled={!camposCompletos || isSubmitting}
+                  disabled={!camposCompletos || isSubmitting || isRegistering}
                   sx={{
                     "&.MuiButton-contained": {
                       backgroundColor: "#16427f !important",

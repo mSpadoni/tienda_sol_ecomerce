@@ -1,6 +1,6 @@
 import { NotificacionDoesNotExist } from "../errors/NotificacionDoesNotExist.js";
 import logger from "../logger/logger.js";
-export function notificacionesErrorHandler(err, _req, res, _next) {
+export function notificacionesMiddleware(err, _req, res, _next) {
   logger.error("Error en NotificacionesMiddleware: " + err);
 
   if (err.constructor.name === NotificacionDoesNotExist.name) {

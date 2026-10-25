@@ -1,0 +1,10 @@
+FROM node:24-alpine
+
+WORKDIR /app
+ENV NODE_ENV=production
+
+COPY scripts/bootstrap/init-stack.mjs ./scripts/bootstrap/init-stack.mjs
+
+RUN npm install --omit=dev mongoose@latest
+
+CMD ["node", "scripts/bootstrap/init-stack.mjs"]

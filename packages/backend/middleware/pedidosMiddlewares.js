@@ -12,7 +12,7 @@ import FaltaStock from "../errors/errorFaltaDeStock.js";
 import { ZodError } from "zod";
 import YaEstaEnEseEstado from "../errors/errorYaEstaEnEseEstado.js";
 
-export default function pedidosErrorHandler(err, _req, res, next) {
+export function pedidosMiddleware(err, _req, res, next) {
   if (err.constructor.name !== ZodError.name) {
     logger.error(err.message);
   }

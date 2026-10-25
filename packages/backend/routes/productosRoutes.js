@@ -1,6 +1,6 @@
 import ProductosController from "../controller/productosController.js";
 import express from "express";
-import { productosErrorHandler } from "../middleware/ProductosMiddleware.js";
+import { productosMiddleware } from "../middleware/index.js";
 import logger from "../logger/logger.js";
 
 const pathProductos = "/productos";
@@ -26,6 +26,6 @@ export default function productosRoutes(getController) {
     }
   });
 
-  router.use(productosErrorHandler);
+  router.use(productosMiddleware);
   return router;
 }

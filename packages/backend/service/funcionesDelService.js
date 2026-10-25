@@ -14,12 +14,8 @@ dotenv.config(); // carga las variables de .env
 const {
   KEYCLOAK_BASE_URL,
   REALM,
-  ADMIN_USERNAME,
-  ADMIN_PASSWORD,
   CLIENT_ID,
   CLIENT_SECRET,
-  VENDEDOR_ID,
-  COMPRADOR_ID,
 } = process.env;
 
 export function reducirStocks(items) {
@@ -70,11 +66,9 @@ export function obtenerDireccion(pedido) {
 // Función para obtener token de admin
 const getAdminToken = async () => {
   const params = new URLSearchParams();
-  params.append("grant_type", "password");
+  params.append("grant_type", "client_credentials");
   params.append("client_id", CLIENT_ID);
-  params.append("client_secret", CLIENT_SECRET); // <-- agregado
-  params.append("username", ADMIN_USERNAME);
-  params.append("password", ADMIN_PASSWORD);
+  params.append("client_secret", CLIENT_SECRET);
 
   logger.info("obteniendo token");
   const response = await axios.post(
@@ -128,12 +122,20 @@ export const createUser = async (userData) => {
 
   logger.info(`user id obtenido: ${userId}`);
 
+  const compradorRoleResponse = await axios.get(
+    process.env.KEYCLOAK_BASE_URL + `/admin/realms/${REALM}/roles/comprador`,
+    {
+      headers: { Authorization: `Bearer ${token}` },
+    },
+  );
+  const compradorRole = compradorRoleResponse.data;
+
   await axios.post(
     process.env.KEYCLOAK_BASE_URL + `/admin/realms/${REALM}/users/${userId}/role-mappings/realm`,
     [
       {
-        id: COMPRADOR_ID,
-        name: "comprador",
+        id: compradorRole.id,
+        name: compradorRole.name,
       },
     ],
     {
@@ -144,4 +146,24 @@ export const createUser = async (userData) => {
   logger.info("asignacion del rol correcta");
 
   return userId;
+};
+
+export const deleteUserFromKeycloak = async (userId) => {
+  const token = await getAdminToken();
+
+  try {
+    await axios.delete(
+      process.env.KEYCLOAK_BASE_URL + `/admin/realms/${REALM}/users/${userId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      },
+    );
+    logger.info(`Usuario ${userId} eliminado exitosamente de Keycloak`);
+  } catch (error) {
+    logger.error(`Error al eliminar usuario ${userId} de Keycloak:`, error.response?.data || error.message);
+    throw error;
+  }
 };

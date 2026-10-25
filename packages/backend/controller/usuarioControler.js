@@ -8,13 +8,17 @@ export default class UsuarioControler {
 
   async crear(req, res) {
     logger.info("creando usuario en el controler");
+    
     const resultadoBody = createUserSchema.parse(req.body);
-
     logger.info("usuario validado correctamente");
-    await this.serviceUsuario.crear(resultadoBody);
+    
+    const result = await this.serviceUsuario.crear(resultadoBody);
     logger.http("usuario creado con exito");
-    return res
-      .status(200)
-      .json({ mensaje: "El usuario se creo correctamente" });
+    
+    return res.status(201).json({ 
+      success: true,
+      mensaje: result.message || "El usuario se creo correctamente",
+      userId: result.userId 
+    });
   }
 }
