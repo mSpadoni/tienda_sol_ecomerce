@@ -181,7 +181,7 @@ async function waitForKeycloakReady() {
 async function waitForMongoReady() {
   for (let attempt = 1; attempt <= 30; attempt += 1) {
     try {
-      await mongoose.connect(MONGODB_URI);
+      await mongoose.connect(MONGODB_URI, process.env.MONGODB_DB_NAME ? { dbName: process.env.MONGODB_DB_NAME } : {});
       console.log("MongoDB listo.");
       return;
     } catch (error) {
@@ -479,6 +479,14 @@ async function upsertMongoSeed(keycloakUserId) {
 }
 
 async function main() {
+  // Solo carga de MongoDB (para la nube): usa el ID del vendedor que ya existe en Keycloak
+  if (process.env.SEED_ONLY === "true") {
+    await waitForMongoReady();
+    await upsertMongoSeed(process.env.VENDEDOR_KEYCLOAK_ID);
+    await mongoose.disconnect();
+    console.log("Carga de MongoDB finalizada.");
+    return;
+  }
   await waitForKeycloakReady();
   const token = await adminToken();
   await ensureRealm(token);
