@@ -16,8 +16,7 @@ const CarritoCuerpo = () => {
 
   const comprar = () => {
     if (!isAuthenticated) {
-      // Show message and redirect to login
-      alert("Debes iniciar sesión para continuar con la compra");
+      // Sin sesión: se pide el login recién al comprar
       login();
       return;
     }
